@@ -1,0 +1,9 @@
+C:\Users\Chris\Documents\Visual Studio 2008\Projects\NFL2K5Tool\bin\Debug\NFL2K5Tool.exe
+C:\Users\Chris\Documents\Visual Studio 2008\Projects\NFL2K5Tool\bin\Debug\NFL2K5Tool.pdb
+C:\Users\Chris\Documents\Visual Studio 2008\Projects\NFL2K5Tool\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Chris\Documents\Visual Studio 2008\Projects\NFL2K5Tool\obj\Debug\NFL2K5Tool.MainForm.resources
+C:\Users\Chris\Documents\Visual Studio 2008\Projects\NFL2K5Tool\obj\Debug\NFL2K5Tool.Properties.Resources.resources
+C:\Users\Chris\Documents\Visual Studio 2008\Projects\NFL2K5Tool\obj\Debug\NFL2K5Tool.StringInputDlg.resources
+C:\Users\Chris\Documents\Visual Studio 2008\Projects\NFL2K5Tool\obj\Debug\NFL2K5Tool.csproj.GenerateResource.Cache
+C:\Users\Chris\Documents\Visual Studio 2008\Projects\NFL2K5Tool\obj\Debug\NFL2K5Tool.exe
+C:\Users\Chris\Documents\Visual Studio 2008\Projects\NFL2K5Tool\obj\Debug\NFL2K5Tool.pdb

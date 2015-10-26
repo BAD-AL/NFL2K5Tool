@@ -1,0 +1,19 @@
+﻿
+Player data is 84 bytes long (Padded by 2 zero bytes at the end)
+Starts at B288 with Duane Starks (original Base Franchise save).
+
+Name pointer formula looks like: 
+stringLocation = pointerAddress + pointerFalue -1;
+
+Looks like 2317 total players in the save file.
+
+Desired Features:
+1. Read all player and deam data from gamesave to Text
+2. Apply Text (in proper format) to gamesave
+3. Change Team Playbooks
+4. Change team defensive formations (Auto update based on player on roster?)
+5. Assign default Jerseys
+6. Quick view of a player's apperance (GUI where arrow buttons go to the next player)
+7. Auto update Depth chart
+8. Search text in text area
+9. Set Coach data
