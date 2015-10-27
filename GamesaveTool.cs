@@ -177,6 +177,12 @@ namespace NFL2K5Tool
                     builder.Append(GetAttribute(player, PlayerOffsets.Height));
                     builder.Append(",");
                     break;
+                case AppearanceAttributes.RightElbow:
+                    GetRightElbow(player, builder); break;
+                case AppearanceAttributes.College:
+                    builder.Append(GetAttribute(player, PlayerOffsets.College));
+                    builder.Append(",");
+                    break;
             }
         }
 
@@ -250,6 +256,11 @@ namespace NFL2K5Tool
                     int feet = val / 12;
                     int inches = val % 12;
                     retVal = string.Concat(feet, "\'", inches, "\"");
+                    break;
+                case PlayerOffsets.College:
+                    val = val << 8;
+                    val += GameSaveData[loc + 1];
+                    retVal = "COLEGE:" + val.ToString("X4");
                     break;
                 default:
                     retVal += val;
@@ -865,6 +876,24 @@ namespace NFL2K5Tool
 
             SetByte(loc, (byte)val1);
             SetByte(loc + 1, (byte)val2);
+        }
+
+        private void GetRightElbow(int player, StringBuilder builder)
+        {
+            Elbow retVal = Elbow.None;
+            int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.RightElbow;
+            int val = (GameSaveData[loc] & 0x3c) >> 2;
+            retVal = (Elbow)val;
+            builder.Append(retVal.ToString());
+            builder.Append(",");
+        }
+
+        private void SetRightElbow(int player, String w)
+        {
+            Elbow s = (Elbow)Enum.Parse(typeof(Elbow), w);
+            int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.RightElbow;
+            int val = (GameSaveData[loc] & 0xc3 ) + ((int)s << 2);
+            SetByte(loc, (byte)val);
         }
     }
 }

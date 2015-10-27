@@ -18,6 +18,7 @@ namespace NFL2K5Tool
         MouthPiece_LeftGlove_Sleeves_NeckRoll= 0x1c,
         RightGlove_LeftWrist = 0x1d,
         RightWrist_LeftElbow = 0x1e,
+        RightElbow = 0x1f,
         FaceMask = 0x21, // part if Wacko Visor is in this byte too (FaceMask = val & 0x1F >> 1)
         Face = 0x22, // part of Wacko Visor is in this byte too (Face = Val >>1 )
         Weight = 0x2A, // 150 + value
