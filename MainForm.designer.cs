@@ -41,7 +41,7 @@
             // mLoadSaveButton
             // 
             this.mLoadSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mLoadSaveButton.Location = new System.Drawing.Point(13, 352);
+            this.mLoadSaveButton.Location = new System.Drawing.Point(13, 351);
             this.mLoadSaveButton.Name = "mLoadSaveButton";
             this.mLoadSaveButton.Size = new System.Drawing.Size(75, 23);
             this.mLoadSaveButton.TabIndex = 0;
@@ -53,7 +53,7 @@
             // 
             this.mListPlayersButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.mListPlayersButton.Enabled = false;
-            this.mListPlayersButton.Location = new System.Drawing.Point(94, 352);
+            this.mListPlayersButton.Location = new System.Drawing.Point(94, 351);
             this.mListPlayersButton.Name = "mListPlayersButton";
             this.mListPlayersButton.Size = new System.Drawing.Size(75, 23);
             this.mListPlayersButton.TabIndex = 1;
@@ -70,7 +70,7 @@
             this.mTextBox.Location = new System.Drawing.Point(2, 2);
             this.mTextBox.Name = "mTextBox";
             this.mTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.mTextBox.Size = new System.Drawing.Size(550, 344);
+            this.mTextBox.Size = new System.Drawing.Size(743, 343);
             this.mTextBox.TabIndex = 2;
             this.mTextBox.Text = "";
             this.mTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mTextBox_KeyDown);
@@ -78,7 +78,7 @@
             // mClearButton
             // 
             this.mClearButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mClearButton.Location = new System.Drawing.Point(195, 352);
+            this.mClearButton.Location = new System.Drawing.Point(195, 351);
             this.mClearButton.Name = "mClearButton";
             this.mClearButton.Size = new System.Drawing.Size(75, 23);
             this.mClearButton.TabIndex = 3;
@@ -89,7 +89,7 @@
             // numericUpDown1
             // 
             this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.numericUpDown1.Location = new System.Drawing.Point(422, 352);
+            this.numericUpDown1.Location = new System.Drawing.Point(422, 351);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -113,7 +113,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(346, 352);
+            this.label1.Location = new System.Drawing.Point(346, 351);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 13);
             this.label1.TabIndex = 5;
@@ -123,7 +123,7 @@
             // 
             this.statusBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.statusBar1.AutoSize = true;
-            this.statusBar1.Location = new System.Drawing.Point(13, 382);
+            this.statusBar1.Location = new System.Drawing.Point(13, 381);
             this.statusBar1.Name = "statusBar1";
             this.statusBar1.Size = new System.Drawing.Size(59, 13);
             this.statusBar1.TabIndex = 6;
@@ -133,7 +133,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(554, 403);
+            this.ClientSize = new System.Drawing.Size(747, 402);
             this.Controls.Add(this.statusBar1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.numericUpDown1);

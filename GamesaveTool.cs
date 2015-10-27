@@ -44,6 +44,7 @@ namespace NFL2K5Tool
             {
                 StringBuilder builder = new StringBuilder(350);
                 StringBuilder dummy = new StringBuilder(200);
+                StringBuilder stillNeedToDo = new StringBuilder(50);
                 int prevLength = 0;
                 builder.Append("#fname,lname,Number,Pos,");
                 foreach (PlayerOffsets attr in mAttributeOrder)
@@ -60,6 +61,16 @@ namespace NFL2K5Tool
                         builder.Append(app.ToString());
                         builder.Append(",");
                     }
+                    else
+                    {
+                        stillNeedToDo.Append(app.ToString());
+                        stillNeedToDo.Append(",");
+                    }
+                }
+                if (stillNeedToDo.Length > 0)
+                {
+                    builder.Append("\n#Still need to do:");
+                    builder.Append(stillNeedToDo.ToString());
                 }
                 return builder.ToString();
             }
@@ -154,7 +165,18 @@ namespace NFL2K5Tool
                     GetRightGlove(player, builder); break;
                 case AppearanceAttributes.LeftWrist:
                     GetLeftWrist(player, builder); break;
-
+                case AppearanceAttributes.RightWrist:
+                    GetRightWrist(player, builder); break;
+                case AppearanceAttributes.LeftElbow:
+                    GetLeftElbow(player, builder); break;
+                case AppearanceAttributes.Weight:
+                    builder.Append(GetAttribute(player, PlayerOffsets.Weight));
+                    builder.Append(","); 
+                    break;
+                case AppearanceAttributes.Height:
+                    builder.Append(GetAttribute(player, PlayerOffsets.Height));
+                    builder.Append(",");
+                    break;
             }
         }
 
@@ -219,6 +241,15 @@ namespace NFL2K5Tool
                         retVal = string.Concat(new object[] { month, "/", day, "/", msd_year, lsd_year });
                     //else
                     //    retVal = "1/1/1954";
+                    break;
+                case PlayerOffsets.Weight:
+                    val += 150;
+                    retVal = val.ToString();
+                    break;
+                case PlayerOffsets.Height:
+                    int feet = val / 12;
+                    int inches = val % 12;
+                    retVal = string.Concat(feet, "\'", inches, "\"");
                     break;
                 default:
                     retVal += val;
@@ -793,6 +824,47 @@ namespace NFL2K5Tool
             val += ((int)s << 6);
             SetByte(loc, (byte)val);
             SetByte(loc + 1, (byte)(val >> 8));
+        }
+
+        private void GetRightWrist(int player, StringBuilder builder)
+        {
+            Wrist retVal = Wrist.None;
+            int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.RightWrist_LeftElbow;
+            int val = (GameSaveData[loc] & 0x3c) >> 2;
+            retVal = (Wrist)val;
+            builder.Append(retVal.ToString());
+            builder.Append(",");
+        }
+
+        private void SetRightWrist(int player, String w)
+        {
+            Wrist s = (Wrist)Enum.Parse(typeof(Wrist), w);
+            int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.RightWrist_LeftElbow;
+            int val = GameSaveData[loc] & 0xc3;
+            val += ((int)s << 2);
+            SetByte(loc, (byte)val);
+        }
+
+        private void GetLeftElbow(int player, StringBuilder builder)
+        {
+            Elbow retVal = Elbow.None;
+            int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.RightWrist_LeftElbow;
+            int val = ((GameSaveData[loc + 1] << 8) + GameSaveData[loc]) & 0x3c0;
+            val = val >> 6;
+            retVal = (Elbow)val;
+            builder.Append(retVal.ToString());
+            builder.Append(",");
+        }
+
+        private void SetLeftElbow(int player, String w)
+        {
+            Elbow s = (Elbow)Enum.Parse(typeof(Elbow), w);
+            int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.RightWrist_LeftElbow;
+            int val1 = (GameSaveData[loc] & 0x3f) + (((int)s & 3 ) << 6) ;
+            int val2 = (GameSaveData[loc+1] & 0xfc) + ((int)s & 0xfc );
+
+            SetByte(loc, (byte)val1);
+            SetByte(loc + 1, (byte)val2);
         }
     }
 }
