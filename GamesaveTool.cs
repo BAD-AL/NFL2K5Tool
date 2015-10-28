@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace NFL2K5Tool
 {
@@ -14,7 +15,7 @@ namespace NFL2K5Tool
         // Duane starks is the first player in the original roster 
         const int cDuaneStarksFnamePointerLoc = 0xB298;
 
-        private byte[] GameSaveData = null;
+        public byte[] GameSaveData = null;
 
         public GamesaveTool()
         {
@@ -296,11 +297,32 @@ namespace NFL2K5Tool
                 case PlayerOffsets.DOB:
 
                     break;
+                case PlayerOffsets.Weight:
+                    val = Int32.Parse(stringVal);
+                    val -= 150;
+                    SetByte(loc, (byte)val);
+                    break;
+                case PlayerOffsets.Height:
+                    val = GetInches(stringVal);
+                    SetByte(loc, (byte)val);
+                    break;
+                case PlayerOffsets.College:
+                    break;
                 default:
                     val = Int32.Parse(stringVal);
                     SetByte(loc, (byte)val);
                     break;
             }
+        }
+
+        // input like 6'3"
+        private int GetInches(string stringVal)
+        {
+            int feet = stringVal[0] - 30;
+            stringVal = stringVal.Replace("\"", "");
+            int inches = Int32.Parse(stringVal.Substring(2));
+            inches += feet * 12;
+            return inches;
         }
 
         

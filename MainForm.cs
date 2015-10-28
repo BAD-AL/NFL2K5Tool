@@ -24,6 +24,11 @@ namespace NFL2K5Tool
 
         private void mLoadSaveButton_Click(object sender, EventArgs e)
         {
+            LoadSaveFile();
+        }
+
+        private void LoadSaveFile()
+        {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.InitialDirectory = Directory.GetCurrentDirectory();
             dlg.RestoreDirectory = true;
@@ -139,7 +144,7 @@ namespace NFL2K5Tool
             {
                 Regex r;
                 r = new Regex(searchString, RegexOptions.IgnoreCase);
-                Match m = r.Match(mTextBox.Text, mTextBox.SelectionStart);
+                Match m = r.Match(mTextBox.Text, mTextBox.SelectionStart+1);
 
                 if (m.Length == 0)
                 { // continue at the top if not found
@@ -148,7 +153,8 @@ namespace NFL2K5Tool
                 }
                 if (m.Length > 0)
                 {
-                    mTextBox.SelectionStart = m.Index + m.Length;
+                    mTextBox.SelectionStart = m.Index;
+                    mTextBox.SelectionLength = m.Length;
                     ret = true;
                     if (!wrapped)
                         message = "Found";
@@ -223,6 +229,10 @@ namespace NFL2K5Tool
         private bool SetSearchString()
         {
             bool ret = false;
+            if (mTextBox.SelectionLength > 0)
+            {
+                searchString = mTextBox.Text.Substring(mTextBox.SelectionStart, mTextBox.SelectionLength);
+            }
             string result = StringInputDlg.GetString(
                                            "Enter Search String",
                                            "Please enter text (or a regex) to search for.",
@@ -234,6 +244,28 @@ namespace NFL2K5Tool
                 ret = true;
             }
             return ret;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void findToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetSearchString();
+        }
+
+        private void stringToHexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringToHexForm form = new StringToHexForm();
+            form.SaveFile = mTool.GameSaveData;
+            form.Show();
+        }
+
+        private void loadSaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadSaveFile();
         }
     }
 }
