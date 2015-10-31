@@ -14,6 +14,11 @@ namespace NFL2K5Tool
 
         // Duane starks is the first player in the original roster 
         const int cDuaneStarksFnamePointerLoc = 0xB298;
+        const int cNumberOfColleges = 265;
+
+        const int cCollegeStringsStart = 0x7A23C;
+
+        private string[] mColleges;
 
         public byte[] GameSaveData = null;
 
@@ -21,9 +26,68 @@ namespace NFL2K5Tool
         {
         }
 
+        private void PopulateColleges()
+        {
+            mColleges = new string[cNumberOfColleges];
+            int loc = cCollegeStringsStart;
+            //end == 0x7bc50
+            for (int i = 0; i < mColleges.Length; i++)
+            {
+                mColleges[i] = GetString(loc);
+                loc = loc + (mColleges[i].Length +1) * 2 ;
+            }
+        }
+
+        //CollegeIndex(p) = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
+        private string GetCollege(int player)
+        {
+            int loc = GetPlayerDataStart(player);
+            int collegePointerVal = (GameSaveData[loc+3] << 24  )+ (GameSaveData[loc+2] << 16) + (GameSaveData[loc +1] << 8) +GameSaveData[loc];
+            int collegeIndex = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
+            return mColleges[collegeIndex];
+        }
+
+        private void SetCollege(int player, string college)
+        {
+            int loc = GetPlayerDataStart(player);
+            int collegeIndex = GetCollegeIndex(college);
+            int pointerVal = 0;
+            if (collegeIndex > -1)
+            {
+                // check this 
+                pointerVal = ((-2127 /*0xfffff7b1*/) - player * cPlayerDataLength) + collegeIndex * 8;
+                Console.WriteLine("player {0} college pointer {1}", player, pointerVal);
+                byte b1 = (byte)pointerVal; ;
+                byte b2 = (byte) (pointerVal >> 8);
+
+                SetByte(loc, b1);
+                SetByte(loc+1, b2);
+            }
+            else
+            {
+                //Add error 
+            }
+        }
+
+        // could improve this by 
+        private int GetCollegeIndex(string college)
+        {
+            int retVal = -1;
+            for (int i = 0; i < mColleges.Length; i++)
+            {
+                if (college.Equals(mColleges[i], StringComparison.InvariantCultureIgnoreCase))
+                {
+                    retVal = i;
+                    break;
+                }
+            }
+            return retVal;
+        }
+
         public void LoadSaveFile(string fileName)
         {
             GameSaveData = File.ReadAllBytes(fileName);
+            PopulateColleges();
         }
 
         /// <summary>
@@ -259,9 +323,7 @@ namespace NFL2K5Tool
                     retVal = string.Concat(feet, "\'", inches, "\"");
                     break;
                 case PlayerOffsets.College:
-                    val = val << 8;
-                    val += GameSaveData[loc + 1];
-                    retVal = "COLEGE:" + val.ToString("X4");
+                    retVal = GetCollege(player);
                     break;
                 default:
                     retVal += val;
@@ -364,10 +426,29 @@ namespace NFL2K5Tool
             pointer += GameSaveData[namePointerLoc+1] << 8;
             pointer += GameSaveData[namePointerLoc ];
             int dataLocation = namePointerLoc + pointer - 1;
+            /*
             StringBuilder builder = new StringBuilder();
             for (int i = dataLocation; i < dataLocation + 99; i += 2)
             {
                 if( GameSaveData[i] == 0)
+                    break;
+                builder.Append((char)GameSaveData[i]);
+            }
+
+            if (builder.Length > 0)
+                retVal = builder.ToString();
+             * */
+            retVal = GetString(dataLocation);
+            return retVal;
+        }
+
+        public string GetString(int loc)
+        {
+            string retVal = "";
+            StringBuilder builder = new StringBuilder();
+            for (int i = loc; i < loc + 99; i += 2)
+            {
+                if (GameSaveData[i] == 0)
                     break;
                 builder.Append((char)GameSaveData[i]);
             }

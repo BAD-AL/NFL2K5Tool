@@ -4,9 +4,24 @@ using System.Text;
 
 namespace NFL2K5Tool
 {
+    // Addresses are based on a franchise file, not a roster file.
     /// <summary> Code to map player attributes to locations </summary>
     public enum PlayerOffsets
     {
+        /**
+         * College is tricky to calculate.
+         * College strings start at 0x7a23c with Clemson, Duke, Florida State, Georgia Tech...
+         * The college location looks like 4 byte ints which are all negative numbers ( like b1f7ffff; which == -2127).
+         * Player 0 having a clemson pointer would be: fffff7b1 @location 0xb288.
+         * Player 1 having a clemson pointer looks like: fffff75d @location 0xb2dc; this is 0x54 greater than what player 0's clemson pointer is.
+         * The second college is Duke.
+         * Player 0 having a Duke pointer would be: fffff7b9 @location 0xb288.
+         *    The value difference from Clemson to Duke is 8; in fact, it looks like to increase a player's 
+         *    college by 1 college you would add 8.
+         * So the following formula is one we can use to calcualte college:
+         * // p = integer player  (duane starks is the 0th player in the base save file)
+         *  CollegeIndex(p) = (((collegePointerVal - (0xfffff7b1)) + player * 0x54)) / 8;
+         */
         College=0,
         PBP = 4,
         Photo= 6,
