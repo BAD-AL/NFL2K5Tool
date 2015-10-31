@@ -42,5 +42,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.suo
-bin/Debug/NFL2K5Tool.vshost.exe
-bin/Debug/NFL2K5Tool.vshost.exe.manifest
+bin/
+obj/
