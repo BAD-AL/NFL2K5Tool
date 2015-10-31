@@ -73,7 +73,10 @@ namespace NFL2K5Tool
 
     public enum AppearanceAttributes
     {
-        College, DOB, Hand, Weight, Height, BodyType, Skin, Face, Dreads, Helmet, FaceMask, Visor, EyeBlack, MouthPiece, LeftGlove, RightGlove, LeftWrist, RightWrist, LeftElbow, RightElbow, Sleeves, LeftShoe, RightShoe, NeckRoll, Turtleneck
+        College = 100, // starting here so that we have no collisions with the PlayerOffsets enum
+        DOB, Hand, Weight, Height, BodyType, Skin, Face, Dreads, Helmet, FaceMask, Visor, 
+        EyeBlack,  MouthPiece, LeftGlove, RightGlove, LeftWrist, RightWrist, LeftElbow, 
+        RightElbow, Sleeves, LeftShoe, RightShoe, NeckRoll, Turtleneck
     }
     /// <summary> enum for positions </summary>
     public enum Positions

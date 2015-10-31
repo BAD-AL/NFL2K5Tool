@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="EnumDefinitions.cs" />
     <Compile Include="GamesaveTool.cs" />
+    <Compile Include="InputParser.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

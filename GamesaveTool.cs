@@ -26,64 +26,6 @@ namespace NFL2K5Tool
         {
         }
 
-        private void PopulateColleges()
-        {
-            mColleges = new string[cNumberOfColleges];
-            int loc = cCollegeStringsStart;
-            //end == 0x7bc50
-            for (int i = 0; i < mColleges.Length; i++)
-            {
-                mColleges[i] = GetString(loc);
-                loc = loc + (mColleges[i].Length +1) * 2 ;
-            }
-        }
-
-        //CollegeIndex(p) = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
-        private string GetCollege(int player)
-        {
-            int loc = GetPlayerDataStart(player);
-            int collegePointerVal = (GameSaveData[loc+3] << 24  )+ (GameSaveData[loc+2] << 16) + (GameSaveData[loc +1] << 8) +GameSaveData[loc];
-            int collegeIndex = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
-            return mColleges[collegeIndex];
-        }
-
-        private void SetCollege(int player, string college)
-        {
-            int loc = GetPlayerDataStart(player);
-            int collegeIndex = GetCollegeIndex(college);
-            int pointerVal = 0;
-            if (collegeIndex > -1)
-            {
-                // check this 
-                pointerVal = ((-2127 /*0xfffff7b1*/) - player * cPlayerDataLength) + collegeIndex * 8;
-                Console.WriteLine("player {0} college pointer {1}", player, pointerVal);
-                byte b1 = (byte)pointerVal; ;
-                byte b2 = (byte) (pointerVal >> 8);
-
-                SetByte(loc, b1);
-                SetByte(loc+1, b2);
-            }
-            else
-            {
-                //Add error 
-            }
-        }
-
-        // could improve this by 
-        private int GetCollegeIndex(string college)
-        {
-            int retVal = -1;
-            for (int i = 0; i < mColleges.Length; i++)
-            {
-                if (college.Equals(mColleges[i], StringComparison.InvariantCultureIgnoreCase))
-                {
-                    retVal = i;
-                    break;
-                }
-            }
-            return retVal;
-        }
-
         public void LoadSaveFile(string fileName)
         {
             GameSaveData = File.ReadAllBytes(fileName);
@@ -99,7 +41,7 @@ namespace NFL2K5Tool
         {
             GameSaveData[location] = b;
         }
-
+        private int[] mOrder;
         /// <summary>
         /// The attributes key
         /// </summary>
@@ -112,15 +54,23 @@ namespace NFL2K5Tool
                 StringBuilder stillNeedToDo = new StringBuilder(50);
                 int prevLength = 0;
                 builder.Append("#fname,lname,Number,Pos,");
+                mOrder = new int[4 + mAttributeOrder.Length + mApperanceOrder.Length];
+                mOrder[0] = -1;
+                mOrder[1] = -1;
+                mOrder[2] = (int)PlayerOffsets.JerseyNumber;
+                mOrder[3] = (int)PlayerOffsets.Position;
+                int i = 4;
                 foreach (PlayerOffsets attr in mAttributeOrder)
                 {
                     builder.Append(attr.ToString());
                     builder.Append(",");
+                    mOrder[i++] = (int)attr;
                 }
                 foreach (AppearanceAttributes app in mApperanceOrder)
                 {
                     prevLength = dummy.Length;
                     GetPlayerApperanceAttribute(0, app, dummy);
+                    mOrder[i++] = (int)app;
                     if (dummy.Length > prevLength)
                     {
                         builder.Append(app.ToString());
@@ -138,6 +88,37 @@ namespace NFL2K5Tool
                     builder.Append(stillNeedToDo.ToString());
                 }
                 return builder.ToString();
+            }
+        }
+
+        private char[] mComma = new char[] { ',' };
+
+        public void SetPlayerData(int player, string line)
+        {
+            int attr = -1;
+            string[] attributes = line.Split(mComma);
+            if (mOrder == null)
+                Key;// will generate the key; TODO: have this set/reset by the input parser
+            for (int i = 0; i < attributes.Length; i++)
+            {
+                // figure out how to set names
+                attr = mOrder[i];
+                if (attr == 0)
+                {
+                    // set first name
+                }
+                else if (attr == 1)
+                {
+                    // set last name
+                }
+                if (attr > 99)
+                {
+                    SetPlayerApperanceAttribute(player, (AppearanceAttributes)attr, attributes[i]);
+                }
+                else
+                {
+                    SetAttribute(player, (PlayerOffsets)attr, attributes[i]);
+                }
             }
         }
 
@@ -183,6 +164,63 @@ namespace NFL2K5Tool
             foreach (AppearanceAttributes attr in this.mApperanceOrder)
             {
                 GetPlayerApperanceAttribute(player, attr, builder);
+            }
+        }
+        private void SetPlayerApperanceAttribute(int player, AppearanceAttributes attr, string strVal)
+        {
+            switch (attr)
+            {
+                case AppearanceAttributes.BodyType:
+                    SetBody(player, strVal); break;
+                case AppearanceAttributes.Dreads:
+                    SetDreads(player, strVal); break;
+                case AppearanceAttributes.EyeBlack:
+                    SetEyeblack(player, strVal); break;
+                case AppearanceAttributes.Hand:
+                    SetHand(player, strVal); break;
+                case AppearanceAttributes.Turtleneck:
+                    SetTurtleneck(player, strVal); break;
+                case AppearanceAttributes.Face:
+                    SetFace(player, strVal); break;
+                case AppearanceAttributes.FaceMask:
+                    SetFaceMask(player, strVal); break;
+                case AppearanceAttributes.Visor:
+                    SetVisor(player, strVal); break;
+                case AppearanceAttributes.Skin:
+                    SetSkin(player, strVal); break;
+                case AppearanceAttributes.DOB:
+                    
+                    break;
+                case AppearanceAttributes.Helmet:
+                    SetHelmet(player, strVal); break;
+                case AppearanceAttributes.RightShoe:
+                    SetRightShoe(player, strVal); break;
+                case AppearanceAttributes.LeftShoe:
+                    SetLeftShoe(player, strVal); break;
+                case AppearanceAttributes.LeftGlove:
+                    SetLeftGlove(player, strVal); break;
+                case AppearanceAttributes.MouthPiece:
+                    SetMouthPiece(player, strVal); break;
+                case AppearanceAttributes.Sleeves:
+                    SetSleeves(player, strVal); break;
+                case AppearanceAttributes.NeckRoll:
+                    SetNeckRoll(player, strVal); break;
+                case AppearanceAttributes.RightGlove:
+                    SetRightGlove(player, strVal); break;
+                case AppearanceAttributes.LeftWrist:
+                    SetLeftWrist(player, strVal); break;
+                case AppearanceAttributes.RightWrist:
+                    SetRightWrist(player, strVal); break;
+                case AppearanceAttributes.LeftElbow:
+                    SetLeftElbow(player, strVal); break;
+                case AppearanceAttributes.Weight:
+                    SetAttribute(player, PlayerOffsets.Weight, strVal); break;
+                case AppearanceAttributes.Height:
+                    SetAttribute(player, PlayerOffsets.Height, strVal); break;
+                case AppearanceAttributes.RightElbow:
+                    SetRightElbow(player, strVal); break;
+                case AppearanceAttributes.College:
+                    SetCollege(player, strVal); break;
             }
         }
 
@@ -245,7 +283,7 @@ namespace NFL2K5Tool
                 case AppearanceAttributes.RightElbow:
                     GetRightElbow(player, builder); break;
                 case AppearanceAttributes.College:
-                    builder.Append(GetAttribute(player, PlayerOffsets.College));
+                    builder.Append(GetCollege(player));
                     builder.Append(",");
                     break;
             }
@@ -369,31 +407,13 @@ namespace NFL2K5Tool
                     SetByte(loc, (byte)val);
                     break;
                 case PlayerOffsets.College:
+                    SetCollege(player, stringVal);
                     break;
                 default:
                     val = Int32.Parse(stringVal);
                     SetByte(loc, (byte)val);
                     break;
             }
-        }
-
-        // input like 6'3"
-        private int GetInches(string stringVal)
-        {
-            int feet = stringVal[0] - 30;
-            stringVal = stringVal.Replace("\"", "");
-            int inches = Int32.Parse(stringVal.Substring(2));
-            inches += feet * 12;
-            return inches;
-        }
-
-        
-        private string GetPlayerPosition(int player)
-        {
-            int loc = GetPlayerDataStart(player);
-            loc += (int)PlayerOffsets.Position;
-            Positions p = (Positions)GameSaveData[loc];
-            return p.ToString();
         }
 
         /// <summary>
@@ -426,18 +446,7 @@ namespace NFL2K5Tool
             pointer += GameSaveData[namePointerLoc+1] << 8;
             pointer += GameSaveData[namePointerLoc ];
             int dataLocation = namePointerLoc + pointer - 1;
-            /*
-            StringBuilder builder = new StringBuilder();
-            for (int i = dataLocation; i < dataLocation + 99; i += 2)
-            {
-                if( GameSaveData[i] == 0)
-                    break;
-                builder.Append((char)GameSaveData[i]);
-            }
 
-            if (builder.Length > 0)
-                retVal = builder.ToString();
-             * */
             retVal = GetString(dataLocation);
             return retVal;
         }
@@ -458,8 +467,54 @@ namespace NFL2K5Tool
             return retVal;
         }
 
+        private void PopulateColleges()
+        {
+            mColleges = new string[cNumberOfColleges];
+            int loc = cCollegeStringsStart;
+            //end == 0x7bc50
+            for (int i = 0; i < mColleges.Length; i++)
+            {
+                mColleges[i] = GetString(loc);
+                loc = loc + (mColleges[i].Length + 1) * 2;
+            }
+        }
 
-        #region Code that I would like to re-factor into something more common, but can't think of a good way to
+        // could improve this by also ignoring spaces???
+        private int GetCollegeIndex(string college)
+        {
+            int retVal = -1;
+            for (int i = 0; i < mColleges.Length; i++)
+            {
+                if (college.Equals(mColleges[i], StringComparison.InvariantCultureIgnoreCase))
+                {
+                    retVal = i;
+                    break;
+                }
+            }
+            return retVal;
+        }
+
+        #region Get/Set attributes
+
+        // input like 6'3"
+        private int GetInches(string stringVal)
+        {
+            int feet = stringVal[0] - 30;
+            stringVal = stringVal.Replace("\"", "");
+            int inches = Int32.Parse(stringVal.Substring(2));
+            inches += feet * 12;
+            return inches;
+        }
+
+
+        private string GetPlayerPosition(int player)
+        {
+            int loc = GetPlayerDataStart(player);
+            loc += (int)PlayerOffsets.Position;
+            Positions p = (Positions)GameSaveData[loc];
+            return p.ToString();
+        }
+
         //Face is stored in all but last bit 
         private void GetFaceMask(int player, StringBuilder builder)
         {
@@ -657,7 +712,6 @@ namespace NFL2K5Tool
             b += dude;
             SetByte(loc, (byte)b);
         }
-        #endregion
 
         /// <summary>
         /// Visor is really weird, it has 3 states (Clear, Dark, None) but is stored across 2 adjacent bytes
@@ -788,7 +842,7 @@ namespace NFL2K5Tool
             builder.Append(",");
         }
 
-        private void SetLShoe(int player, String shoe)
+        private void SetLeftShoe(int player, String shoe)
         {
             Shoe h = (Shoe)Enum.Parse(typeof(Shoe), shoe);
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.Helmet_LeftShoe_RightShoe;
@@ -810,7 +864,7 @@ namespace NFL2K5Tool
             builder.Append(",");
         }
 
-        private void SetRShoe(int player, String shoe)
+        private void SetRightShoe(int player, String shoe)
         {
             Shoe h = (Shoe)Enum.Parse(typeof(Shoe), shoe);
             int loc = GetPlayerDataStart(player) + (int) PlayerOffsets.Helmet_LeftShoe_RightShoe;
@@ -998,5 +1052,38 @@ namespace NFL2K5Tool
             int val = (GameSaveData[loc] & 0xc3 ) + ((int)s << 2);
             SetByte(loc, (byte)val);
         }
+
+        //CollegeIndex(p) = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
+        private string GetCollege(int player)
+        {
+            int loc = GetPlayerDataStart(player);
+            int collegePointerVal = (GameSaveData[loc + 3] << 24) + (GameSaveData[loc + 2] << 16) + (GameSaveData[loc + 1] << 8) + GameSaveData[loc];
+            int collegeIndex = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
+            return mColleges[collegeIndex];
+        }
+
+        private void SetCollege(int player, string college)
+        {
+            int loc = GetPlayerDataStart(player);
+            int collegeIndex = GetCollegeIndex(college);
+            int pointerVal = 0;
+            if (collegeIndex > -1)
+            {
+                // check this 
+                pointerVal = ((-2127 /*0xfffff7b1*/) - player * cPlayerDataLength) + collegeIndex * 8;
+                Console.WriteLine("player {0} college pointer {1}", player, pointerVal);
+                byte b1 = (byte)pointerVal; ;
+                byte b2 = (byte)(pointerVal >> 8);
+
+                SetByte(loc, b1);
+                SetByte(loc + 1, b2);
+            }
+            else
+            {
+                //Add error 
+            }
+        }
+        #endregion
+
     }
 }
