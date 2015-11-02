@@ -37,11 +37,13 @@
             this.statusBar1 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stringToHexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stringToHexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listApperanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listAttributesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -77,7 +79,6 @@
             this.mTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mTextBox.Location = new System.Drawing.Point(2, 27);
             this.mTextBox.Name = "mTextBox";
-            this.mTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.mTextBox.Size = new System.Drawing.Size(743, 318);
             this.mTextBox.TabIndex = 2;
             this.mTextBox.Text = "";
@@ -112,7 +113,7 @@
             this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown1.TabIndex = 4;
             this.numericUpDown1.Value = new decimal(new int[] {
-            2300,
+            2317,
             0,
             0,
             0});
@@ -151,31 +152,33 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stringToHexToolStripMenuItem,
             this.loadSaveToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
-            // stringToHexToolStripMenuItem
+            // loadSaveToolStripMenuItem
             // 
-            this.stringToHexToolStripMenuItem.Name = "stringToHexToolStripMenuItem";
-            this.stringToHexToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.stringToHexToolStripMenuItem.Text = "StringTo&Hex";
-            this.stringToHexToolStripMenuItem.Click += new System.EventHandler(this.stringToHexToolStripMenuItem_Click);
+            this.loadSaveToolStripMenuItem.Name = "loadSaveToolStripMenuItem";
+            this.loadSaveToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.loadSaveToolStripMenuItem.Text = "&Load Save";
+            this.loadSaveToolStripMenuItem.Click += new System.EventHandler(this.loadSaveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.findToolStripMenuItem});
+            this.findToolStripMenuItem,
+            this.stringToHexToolStripMenuItem,
+            this.listApperanceToolStripMenuItem,
+            this.listAttributesToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -183,16 +186,34 @@
             // findToolStripMenuItem
             // 
             this.findToolStripMenuItem.Name = "findToolStripMenuItem";
-            this.findToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
+            this.findToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.findToolStripMenuItem.Text = "F&ind";
             this.findToolStripMenuItem.Click += new System.EventHandler(this.findToolStripMenuItem_Click);
             // 
-            // loadSaveToolStripMenuItem
+            // stringToHexToolStripMenuItem
             // 
-            this.loadSaveToolStripMenuItem.Name = "loadSaveToolStripMenuItem";
-            this.loadSaveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.loadSaveToolStripMenuItem.Text = "&Load Save";
-            this.loadSaveToolStripMenuItem.Click += new System.EventHandler(this.loadSaveToolStripMenuItem_Click);
+            this.stringToHexToolStripMenuItem.Name = "stringToHexToolStripMenuItem";
+            this.stringToHexToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stringToHexToolStripMenuItem.Text = "&Debug Dialog";
+            this.stringToHexToolStripMenuItem.Click += new System.EventHandler(this.stringToHexToolStripMenuItem_Click);
+            // 
+            // listApperanceToolStripMenuItem
+            // 
+            this.listApperanceToolStripMenuItem.Checked = true;
+            this.listApperanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.listApperanceToolStripMenuItem.Name = "listApperanceToolStripMenuItem";
+            this.listApperanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.listApperanceToolStripMenuItem.Text = "List Apperance";
+            this.listApperanceToolStripMenuItem.Click += new System.EventHandler(this.listApperanceToolStripMenuItem_Click);
+            // 
+            // listAttributesToolStripMenuItem
+            // 
+            this.listAttributesToolStripMenuItem.Checked = true;
+            this.listAttributesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.listAttributesToolStripMenuItem.Name = "listAttributesToolStripMenuItem";
+            this.listAttributesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.listAttributesToolStripMenuItem.Text = "List Attributes";
+            this.listAttributesToolStripMenuItem.Click += new System.EventHandler(this.listAttributesToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -229,11 +250,13 @@
         private System.Windows.Forms.Label statusBar1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stringToHexToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadSaveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stringToHexToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listApperanceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listAttributesToolStripMenuItem;
     }
 }
 

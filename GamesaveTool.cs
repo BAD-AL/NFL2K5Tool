@@ -11,12 +11,15 @@ namespace NFL2K5Tool
     {
         private const int cPlayerStart = 0xB288;
         private const int cPlayerDataLength = 0x54;
+        private const int cMaxPlayers = 2317;
 
         // Duane starks is the first player in the original roster 
         const int cDuaneStarksFnamePointerLoc = 0xB298;
         const int cNumberOfColleges = 265;
 
         const int cCollegeStringsStart = 0x7A23C;
+
+        const int cNameSectionEnd = 0x8960f;
 
         private string[] mColleges;
 
@@ -45,27 +48,29 @@ namespace NFL2K5Tool
         /// <summary>
         /// The attributes key
         /// </summary>
-        public string Key
+        public string GetKey(bool attributes, bool apperance)
         {
-            get
+            StringBuilder builder = new StringBuilder(350);
+            StringBuilder dummy = new StringBuilder(200);
+            int prevLength = 0;
+            builder.Append("#fname,lname,Number,Pos,");
+            mOrder = new int[4 + mAttributeOrder.Length + mApperanceOrder.Length];
+            mOrder[0] = -1;
+            mOrder[1] = -1;
+            mOrder[2] = (int)PlayerOffsets.JerseyNumber;
+            mOrder[3] = (int)PlayerOffsets.Position;
+            int i = 4;
+            if (attributes)
             {
-                StringBuilder builder = new StringBuilder(350);
-                StringBuilder dummy = new StringBuilder(200);
-                StringBuilder stillNeedToDo = new StringBuilder(50);
-                int prevLength = 0;
-                builder.Append("#fname,lname,Number,Pos,");
-                mOrder = new int[4 + mAttributeOrder.Length + mApperanceOrder.Length];
-                mOrder[0] = -1;
-                mOrder[1] = -1;
-                mOrder[2] = (int)PlayerOffsets.JerseyNumber;
-                mOrder[3] = (int)PlayerOffsets.Position;
-                int i = 4;
                 foreach (PlayerOffsets attr in mAttributeOrder)
                 {
                     builder.Append(attr.ToString());
                     builder.Append(",");
                     mOrder[i++] = (int)attr;
                 }
+            }
+            if (apperance)
+            {
                 foreach (AppearanceAttributes app in mApperanceOrder)
                 {
                     prevLength = dummy.Length;
@@ -76,19 +81,9 @@ namespace NFL2K5Tool
                         builder.Append(app.ToString());
                         builder.Append(",");
                     }
-                    else
-                    {
-                        stillNeedToDo.Append(app.ToString());
-                        stillNeedToDo.Append(",");
-                    }
                 }
-                if (stillNeedToDo.Length > 0)
-                {
-                    builder.Append("\n#Still need to do:");
-                    builder.Append(stillNeedToDo.ToString());
-                }
-                return builder.ToString();
             }
+            return builder.ToString();
         }
 
         private char[] mComma = new char[] { ',' };
@@ -97,8 +92,6 @@ namespace NFL2K5Tool
         {
             int attr = -1;
             string[] attributes = line.Split(mComma);
-            if (mOrder == null)
-                Key;// will generate the key; TODO: have this set/reset by the input parser
             for (int i = 0; i < attributes.Length; i++)
             {
                 // figure out how to set names
@@ -417,14 +410,79 @@ namespace NFL2K5Tool
         }
 
         /// <summary>
-        /// Get's the player's name 
+        /// Set a player's first name.
+        /// TODO: consider updating a pointer instead of writing a string if the name already exists.
+        /// </summary>
+        public void SetPlayerFirstName(int player, string firstName)
+        {
+            SetPlayerName(player, firstName, false);
+        }
+
+        /// <summary>
+        /// Set a player's last name
+        /// </summary>
+        public void SetPlayerLastName(int player, string lastName)
+        {
+            SetPlayerName(player, lastName, true);
+        }
+
+        private void SetPlayerName(int player, string name, bool isLastName)
+        {
+            int ptrLoc1 = player * cPlayerDataLength + cDuaneStarksFnamePointerLoc;
+            if (isLastName)
+                ptrLoc1 += 4;
+            string prevName = GetName(ptrLoc1);
+
+            int diff = name.Length - prevName.Length;
+            int stringLoc = GetStringLocation(ptrLoc1);
+
+            if (diff > 0)
+                ShiftDataDown(GetStringLocation(ptrLoc1), diff);
+            else if (diff < 0)
+                ShiftDataUp(GetStringLocation(ptrLoc1), -1 * diff);
+
+            AdjustStringPointers(stringLoc + 2 * name.Length, diff);
+            
+            // lay down name
+            for (int i = 0; i < name.Length; i++)
+            {
+                SetByte(stringLoc, (byte)name[i]);
+                SetByte(stringLoc+1, 0);
+                stringLoc += 2;
+            }
+            SetByte(stringLoc,   0); // set null char
+            SetByte(stringLoc+1, 0);
+        }
+
+        //0x8960f is the end of the name section; although it's not obvious 
+        // that the stuff after that section is useful (it's all 2a 00 repeating)
+        private void ShiftDataDown(int startIndex, int amount)
+        {
+            for (int i = cNameSectionEnd - amount; i > startIndex; i--)
+            {
+                //SetByte(i, GameSaveData[i - amount]); // for debugging
+                GameSaveData[i] = GameSaveData[i - amount]; // for speed
+            }
+        }
+
+        private void ShiftDataUp(int startIndex, int amount)
+        {
+            for (int i = startIndex; i > cNameSectionEnd; i++)
+            {
+                //SetByte(i, GameSaveData[i + amount]); // for debugging
+                GameSaveData[i] = GameSaveData[i + amount]; // for speed
+            }
+        }
+
+        /// <summary>
+        /// Gets the player's name 
         /// </summary>
         /// <param name="player">an int from 0 to 2317</param>
         /// <returns></returns>
         public string GetPlayerName(int player, char sepChar)
         {
             string retVal = "!!!!!!!!INVALID!!!!!!!!!!!!";
-            if (player > -1 && player < 2318)
+            if (player > -1 && player <= cMaxPlayers)
             {
                 int ptrLoc = player * cPlayerDataLength + cDuaneStarksFnamePointerLoc;
                 retVal = GetName(ptrLoc) + sepChar + GetName(ptrLoc + 4);
@@ -441,14 +499,19 @@ namespace NFL2K5Tool
         public string GetName(int namePointerLoc)
         {
             string retVal = "!!!!!INVALID!!!!!!!!";
-            int pointer = 0;
-            pointer = GameSaveData[namePointerLoc+2] << 16;
-            pointer += GameSaveData[namePointerLoc+1] << 8;
-            pointer += GameSaveData[namePointerLoc ];
-            int dataLocation = namePointerLoc + pointer - 1;
-
+            int dataLocation = GetStringLocation(namePointerLoc);
             retVal = GetString(dataLocation);
             return retVal;
+        }
+
+        private int GetStringLocation(int namePointerLoc)
+        {
+            int pointer = 0;
+            pointer = GameSaveData[namePointerLoc + 2] << 16;
+            pointer += GameSaveData[namePointerLoc + 1] << 8;
+            pointer += GameSaveData[namePointerLoc];
+            int dataLocation = namePointerLoc + pointer - 1;
+            return dataLocation;
         }
 
         public string GetString(int loc)
@@ -466,6 +529,54 @@ namespace NFL2K5Tool
                 retVal = builder.ToString();
             return retVal;
         }
+
+        /// <summary>
+        /// If a pointer points to something before the changed area, leave it alone.
+        /// else adjust it.
+        /// </summary>
+        /// <param name="locationOfChange">The location where the string table changed</param>
+        /// <param name="difference">the amount to adjust the pointrs by.</param>
+        private void AdjustStringPointers(int locationOfChange, int difference)
+        {
+            int firstNamePtr = 0;
+            int lastNamePtr = 0;
+            int loc = 0;
+            for (int player = 0; player <= cMaxPlayers; player++)
+            {
+                firstNamePtr = player * cPlayerDataLength + cDuaneStarksFnamePointerLoc;
+                lastNamePtr = firstNamePtr + 4;
+                loc = GetStringLocation(firstNamePtr);
+                if( loc >= locationOfChange)
+                {
+                    AdjustPointer(firstNamePtr, difference);
+                }
+                loc = GetStringLocation(lastNamePtr);
+                if (loc >= locationOfChange)
+                {
+                    AdjustPointer(lastNamePtr, difference);
+                }
+            }
+        }
+
+        /// <summary>
+        /// calculate the pointer, add the difference, set it back
+        /// </summary>
+        private void AdjustPointer(int namePointerLoc, int change)
+        {
+            int pointer = GameSaveData[namePointerLoc + 2] << 16;
+            pointer += GameSaveData[namePointerLoc + 1] << 8;
+            pointer += GameSaveData[namePointerLoc];
+
+            pointer += change;
+            byte b1 = (byte)(pointer & 0xff);
+            byte b2 = (byte)((pointer >> 8) & 0xff);
+            byte b3 = (byte)((pointer >> 16) & 0xff);
+
+            SetByte(namePointerLoc, b1);
+            SetByte(namePointerLoc + 1, b2);
+            SetByte(namePointerLoc + 2, b3);
+        }
+
 
         private void PopulateColleges()
         {

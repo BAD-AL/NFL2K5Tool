@@ -66,6 +66,7 @@ namespace NFL2K5Tool
 
         protected virtual void ProcessLine(string line)
         {
+            Tool.GetKey(true, true);// TODO, plumb support for specifying 'Key'
             line = line.Trim();
             if (line.StartsWith("#") || line.Length < 1)
             {

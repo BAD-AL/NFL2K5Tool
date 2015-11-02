@@ -64,8 +64,8 @@
       <DependentUpon>StringInputDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="StringToHexForm.resx">
-      <DependentUpon>StringToHexForm.cs</DependentUpon>
+    <EmbeddedResource Include="DebugDialog.resx">
+      <DependentUpon>DebugDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -84,11 +84,11 @@
     <Compile Include="StringInputDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StringToHexForm.cs">
+    <Compile Include="DebugDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StringToHexForm.Designer.cs">
-      <DependentUpon>StringToHexForm.cs</DependentUpon>
+    <Compile Include="DebugDialog.Designer.cs">
+      <DependentUpon>DebugDialog.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

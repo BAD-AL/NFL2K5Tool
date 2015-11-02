@@ -48,12 +48,12 @@ namespace NFL2K5Tool
             mTextBox.Clear();
             StringBuilder builder = new StringBuilder(5000);
 
-            builder.Append(mTool.Key);
+            builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
             builder.Append("\n");
             int max = (int)numericUpDown1.Value;
             for (int i = 0; i < max; i++)
             {
-                builder.Append(mTool.GetPlayerData(i, true, true));
+                builder.Append(mTool.GetPlayerData(i, listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
                 builder.Append("\n");
             }
             mTextBox.AppendText(builder.ToString());
@@ -157,7 +157,7 @@ namespace NFL2K5Tool
                     mTextBox.SelectionLength = m.Length;
                     ret = true;
                     if (!wrapped)
-                        message = "Found";
+                        message = "Found Line:" + mTextBox.GetLineFromCharIndex(mTextBox.SelectionStart);
                     else
                         message = "Text found, search starting at beginning.";
                 }
@@ -258,8 +258,8 @@ namespace NFL2K5Tool
 
         private void stringToHexToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            StringToHexForm form = new StringToHexForm();
-            form.SaveFile = mTool.GameSaveData;
+            DebugDialog form = new DebugDialog();
+            form.Tool = mTool;
             form.Show();
         }
 
@@ -267,5 +267,16 @@ namespace NFL2K5Tool
         {
             LoadSaveFile();
         }
+
+        private void listApperanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listApperanceToolStripMenuItem.Checked = !listApperanceToolStripMenuItem.Checked;
+        }
+
+        private void listAttributesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listAttributesToolStripMenuItem.Checked = !listAttributesToolStripMenuItem.Checked;
+        }
+
     }
 }
