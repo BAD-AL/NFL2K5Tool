@@ -113,7 +113,7 @@
             this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown1.TabIndex = 4;
             this.numericUpDown1.Value = new decimal(new int[] {
-            2317,
+            1936,
             0,
             0,
             0});
@@ -161,14 +161,14 @@
             // loadSaveToolStripMenuItem
             // 
             this.loadSaveToolStripMenuItem.Name = "loadSaveToolStripMenuItem";
-            this.loadSaveToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.loadSaveToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.loadSaveToolStripMenuItem.Text = "&Load Save";
             this.loadSaveToolStripMenuItem.Click += new System.EventHandler(this.loadSaveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 

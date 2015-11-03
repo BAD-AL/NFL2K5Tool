@@ -11,7 +11,7 @@ namespace NFL2K5Tool
     {
         private const int cPlayerStart = 0xB288;
         private const int cPlayerDataLength = 0x54;
-        private const int cMaxPlayers = 2317;
+        private const int cMaxPlayers = 2317; // including free agents and draft class
 
         // Duane starks is the first player in the original roster 
         const int cDuaneStarksFnamePointerLoc = 0xB298;
@@ -19,7 +19,13 @@ namespace NFL2K5Tool
 
         const int cCollegeStringsStart = 0x7A23C;
 
-        const int cNameSectionEnd = 0x8960f;
+        const int cModifiableNameSectionEnd = 0x8906f;
+
+        // Do not modify strings in this section.
+        // There is however a blank section that could possibly be used for 
+        // names after it (0x8f2f0 - 0x91310)
+        const int cCollegePlayerNameSectionStart = 0x8bab0;
+        const int cCollegePlayerNameSectionEnd = 0x8f2ef;
 
         private string[] mColleges;
 
@@ -412,6 +418,8 @@ namespace NFL2K5Tool
         /// <summary>
         /// Set a player's first name.
         /// TODO: consider updating a pointer instead of writing a string if the name already exists.
+        ///       Do not change the text of a player in the Draft Class. Update his name pointer instead.
+        ///       
         /// </summary>
         public void SetPlayerFirstName(int player, string firstName)
         {
@@ -433,7 +441,7 @@ namespace NFL2K5Tool
                 ptrLoc1 += 4;
             string prevName = GetName(ptrLoc1);
 
-            int diff = name.Length - prevName.Length;
+            int diff = 2* (name.Length - prevName.Length);
             int stringLoc = GetStringLocation(ptrLoc1);
 
             if (diff > 0)
@@ -441,7 +449,7 @@ namespace NFL2K5Tool
             else if (diff < 0)
                 ShiftDataUp(GetStringLocation(ptrLoc1), -1 * diff);
 
-            AdjustStringPointers(stringLoc + 2 * name.Length, diff);
+            AdjustStringPointers(stringLoc + 2 * prevName.Length, diff);
             
             // lay down name
             for (int i = 0; i < name.Length; i++)
@@ -458,7 +466,7 @@ namespace NFL2K5Tool
         // that the stuff after that section is useful (it's all 2a 00 repeating)
         private void ShiftDataDown(int startIndex, int amount)
         {
-            for (int i = cNameSectionEnd - amount; i > startIndex; i--)
+            for (int i = cModifiableNameSectionEnd - amount; i > startIndex; i--)
             {
                 //SetByte(i, GameSaveData[i - amount]); // for debugging
                 GameSaveData[i] = GameSaveData[i - amount]; // for speed
@@ -467,7 +475,7 @@ namespace NFL2K5Tool
 
         private void ShiftDataUp(int startIndex, int amount)
         {
-            for (int i = startIndex; i > cNameSectionEnd; i++)
+            for (int i = startIndex; i < cModifiableNameSectionEnd; i++)
             {
                 //SetByte(i, GameSaveData[i + amount]); // for debugging
                 GameSaveData[i] = GameSaveData[i + amount]; // for speed
@@ -546,14 +554,17 @@ namespace NFL2K5Tool
                 firstNamePtr = player * cPlayerDataLength + cDuaneStarksFnamePointerLoc;
                 lastNamePtr = firstNamePtr + 4;
                 loc = GetStringLocation(firstNamePtr);
-                if( loc >= locationOfChange)
+                if (loc < cModifiableNameSectionEnd)
                 {
-                    AdjustPointer(firstNamePtr, difference);
-                }
-                loc = GetStringLocation(lastNamePtr);
-                if (loc >= locationOfChange)
-                {
-                    AdjustPointer(lastNamePtr, difference);
+                    if (loc >= locationOfChange)
+                    {
+                        AdjustPointer(firstNamePtr, difference);
+                    }
+                    loc = GetStringLocation(lastNamePtr);
+                    if (loc >= locationOfChange)
+                    {
+                        AdjustPointer(lastNamePtr, difference);
+                    }
                 }
             }
         }

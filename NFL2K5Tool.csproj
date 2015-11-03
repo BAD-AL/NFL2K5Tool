@@ -81,6 +81,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="StaticUtils.cs" />
     <Compile Include="StringInputDlg.cs">
       <SubType>Form</SubType>
     </Compile>

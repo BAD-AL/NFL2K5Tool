@@ -50,50 +50,12 @@ namespace NFL2K5Tool
 
         private void FindLocations()
         {
-            List<long> locs = FindStringInFile(textBox1.Text);
+            textBox3.Clear();
+            List<long> locs = StaticUtils.FindStringInFile(textBox1.Text, SaveFile, 0, SaveFile.Length);
             foreach (int loc in locs)
             {
                 textBox3.AppendText(String.Format("{0:x}\n", loc));
             }
-        }
-
-        private List<long> FindStringInFile(string str)
-        {
-            List<long> retVal = new List<long>();
-            textBox3.Clear();
-            if (SaveFile != null && SaveFile.Length > 80)
-            {
-                int i = 0;
-                byte[] hexNumber = new byte[str.Length * 2];
-                foreach (char c in str)
-                {
-                    hexNumber[i] = (byte)c;
-                    hexNumber[i + 1] = 0;
-                    i += 2;
-                }
-                long num = (long)(SaveFile.Length - hexNumber.Length);
-                for (long num3 = 0L; num3 < num; num3 += 1L)
-                {
-                    if (Find(hexNumber, num3, SaveFile))
-                    {
-                        retVal.Add(num3);
-                    }
-                }
-            }
-            return retVal;
-        }
-
-        private bool Find(byte[] hexNumber, long location, byte[]data)
-        {
-            int i;
-            for (i = 0; i < hexNumber.Length; i++)
-            {
-                if (hexNumber[i] != data[(int)(checked((IntPtr)(unchecked(location + (long)i))))])
-                {
-                    break;
-                }
-            }
-            return i == hexNumber.Length;
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
@@ -109,7 +71,7 @@ namespace NFL2K5Tool
         private void mFindPointers_Click(object sender, EventArgs e)
         {
             textBox3.Clear();
-            List<long> locs = FindStringInFile(textBox1.Text);
+            List<long> locs = StaticUtils.FindStringInFile(textBox1.Text, SaveFile, 0, SaveFile.Length);
             List<int> pointers;
 
             for (int i = 0; i < locs.Count; i++)
@@ -121,7 +83,6 @@ namespace NFL2K5Tool
                     textBox3.AppendText("\r\n");
                 }
             }
-            
         }
 
         private List<int> FindPointersForLocation(long location)
