@@ -1,0 +1,12 @@
+Made some changes to the base franchise file.
+Cardinals: 52 players
+Ravens: 51
+Bears: 49
+49ers: 50
+Bengals: 54
+Bills: 54
+Colts: 48
+Patroits: 47
+Eagles: 46
+Titans: 45
+Texans: 44

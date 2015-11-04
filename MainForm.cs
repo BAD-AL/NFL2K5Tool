@@ -48,6 +48,8 @@ namespace NFL2K5Tool
             mTextBox.Clear();
             StringBuilder builder = new StringBuilder(5000);
 
+            builder.Append(mTool.GetNumberOfPlayersOnAllTeams());
+
             builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
             builder.Append("\n");
             int max = (int)numericUpDown1.Value;

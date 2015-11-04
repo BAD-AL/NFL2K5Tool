@@ -135,13 +135,13 @@ namespace NFL2K5Tool
         private void mSetFirstNameButton_Click(object sender, EventArgs e)
         {
             if( mNameTextBox.Text.Length > 0)
-                Tool.SetPlayerFirstName((int)mPlayerUpDown.Value, mNameTextBox.Text);
+                Tool.SetPlayerFirstName((int)mPlayerUpDown.Value, mNameTextBox.Text, mUsePointerButton.Checked);
         }
 
         private void mSetLastNameButton_Click(object sender, EventArgs e)
         {
             if (mNameTextBox.Text.Length > 0)
-                Tool.SetPlayerLastName((int)mPlayerUpDown.Value, mNameTextBox.Text);
+                Tool.SetPlayerLastName((int)mPlayerUpDown.Value, mNameTextBox.Text, mUsePointerButton.Checked);
         }
 
     }

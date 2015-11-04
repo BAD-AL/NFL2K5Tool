@@ -19,6 +19,9 @@ namespace NFL2K5Tool
 
         const int cCollegeStringsStart = 0x7A23C;
 
+        //may be able to add strings after this section; (All 0's from 0x8f2f0 - 0x9131f)
+        const int cCollegeStringsEnd = 0x8f2c0;
+
         const int cModifiableNameSectionEnd = 0x8906f;
 
         // Do not modify strings in this section.
@@ -27,12 +30,54 @@ namespace NFL2K5Tool
         const int cCollegePlayerNameSectionStart = 0x8bab0;
         const int cCollegePlayerNameSectionEnd = 0x8f2ef;
 
+
+        const int cCardinalsNumPlayersAddress = 0x47b8;
+        const int cTeamDiff = 0x1f4; // 500 bytes
+
+		// The order is not correct; more debugging needed.
+        private string[] mTeams = {"Cardinals", "Falcons", "Ravens", "Bills", "Panthers", "Bears",
+                                   "Bengals", "Cowboys", "Broncos", "Lions", "Packers", "Colts",
+                                   "Jaguars", "Chiefs", "Dolphins", "Vikings", "Patroits", "Saints",
+                                   "Giants", "Jets", "Raiders", "Eagles", "Steelers", "Rams", "Chargers",
+                                   "49ers", "Seahawks", "Buccaneers", "Titans", "Redskins", "Browns",
+                                   "Texans", "FreeAgents", "DraftClass"};
+
         private string[] mColleges;
 
         public byte[] GameSaveData = null;
 
         public GamesaveTool()
         {
+        }
+
+        public string GetNumberOfPlayersOnAllTeams()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (string team in mTeams)
+            {
+                builder.Append(team);
+                builder.Append("Count = ");
+                builder.Append(GetNumPlayers(team));
+                builder.Append("\n");
+            }
+            return builder.ToString();
+        }
+
+        public int GetNumPlayers(string team)
+        {
+            int index = GetTeamIndex(team);
+            int location = cCardinalsNumPlayersAddress + index * cTeamDiff;
+            int retVal = GameSaveData[location];
+            return retVal;
+        }
+
+
+        private int GetTeamIndex(string team)
+        {
+            for (int i = 0; i < mTeams.Length; i++)
+                if (team == mTeams[i])
+                    return i;
+            return -1;
         }
 
         public void LoadSaveFile(string fileName)
@@ -421,45 +466,69 @@ namespace NFL2K5Tool
         ///       Do not change the text of a player in the Draft Class. Update his name pointer instead.
         ///       
         /// </summary>
-        public void SetPlayerFirstName(int player, string firstName)
+        public bool SetPlayerFirstName(int player, string firstName, bool useExistingName)
         {
-            SetPlayerName(player, firstName, false);
+            return SetPlayerNameText(player, firstName, false, useExistingName);
         }
 
         /// <summary>
         /// Set a player's last name
         /// </summary>
-        public void SetPlayerLastName(int player, string lastName)
+        public bool SetPlayerLastName(int player, string lastName, bool useExistingName)
         {
-            SetPlayerName(player, lastName, true);
+            return SetPlayerNameText(player, lastName, true, useExistingName);
         }
 
-        private void SetPlayerName(int player, string name, bool isLastName)
+        private bool SetPlayerNameText(int player, string name, bool isLastName, bool useExistingName)
         {
+            bool retVal = true;
             int ptrLoc1 = player * cPlayerDataLength + cDuaneStarksFnamePointerLoc;
             if (isLastName)
                 ptrLoc1 += 4;
-            string prevName = GetName(ptrLoc1);
-
-            int diff = 2* (name.Length - prevName.Length);
-            int stringLoc = GetStringLocation(ptrLoc1);
-
-            if (diff > 0)
-                ShiftDataDown(GetStringLocation(ptrLoc1), diff);
-            else if (diff < 0)
-                ShiftDataUp(GetStringLocation(ptrLoc1), -1 * diff);
-
-            AdjustStringPointers(stringLoc + 2 * prevName.Length, diff);
-            
-            // lay down name
-            for (int i = 0; i < name.Length; i++)
+            if (useExistingName)
             {
-                SetByte(stringLoc, (byte)name[i]);
-                SetByte(stringLoc+1, 0);
-                stringLoc += 2;
+                // we'll look through the college player names because we're not changing those.
+                List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, cCollegeStringsStart, cCollegeStringsEnd, true);
+                if (locations.Count < 1)
+                {
+                    retVal = false;
+                }
+                else
+                {
+                    int newPtrVal = (int)locations[0] - ptrLoc1 + 1;
+                    //lay it down little endian style
+                    SetByte(ptrLoc1,   (byte)(0xff & newPtrVal));
+                    SetByte(ptrLoc1+1, (byte)(0xff & (newPtrVal >> 8 )));
+                    SetByte(ptrLoc1+2, (byte)(0xff & (newPtrVal >> 16)));
+                }
             }
-            SetByte(stringLoc,   0); // set null char
-            SetByte(stringLoc+1, 0);
+            else 
+            {
+                string prevName = GetName(ptrLoc1);
+                if (prevName != name)
+                {
+                    int diff = 2 * (name.Length - prevName.Length);
+                    int stringLoc = GetStringLocation(ptrLoc1);
+
+                    if (diff > 0)
+                        ShiftDataDown(GetStringLocation(ptrLoc1), diff);
+                    else if (diff < 0)
+                        ShiftDataUp(GetStringLocation(ptrLoc1), -1 * diff);
+
+                    AdjustStringPointers(stringLoc + 2 * prevName.Length, diff);
+
+                    // lay down name
+                    for (int i = 0; i < name.Length; i++)
+                    {
+                        SetByte(stringLoc, (byte)name[i]);
+                        SetByte(stringLoc + 1, 0);
+                        stringLoc += 2;
+                    }
+                    SetByte(stringLoc, 0); // set null char
+                    SetByte(stringLoc + 1, 0);
+                }
+            }
+            return retVal;
         }
 
         //0x8960f is the end of the name section; although it's not obvious 

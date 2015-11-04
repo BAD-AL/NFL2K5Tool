@@ -38,10 +38,11 @@
             this.mNameTextBox = new System.Windows.Forms.TextBox();
             this.mPlayerUpDown = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.mPlayerNameTextBox = new System.Windows.Forms.TextBox();
             this.mSetLastNameButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.mSetFirstNameButton = new System.Windows.Forms.Button();
-            this.mPlayerNameTextBox = new System.Windows.Forms.TextBox();
+            this.mUsePointerButton = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -134,7 +135,7 @@
             this.mNameTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mNameTextBox.Location = new System.Drawing.Point(99, 19);
             this.mNameTextBox.Name = "mNameTextBox";
-            this.mNameTextBox.Size = new System.Drawing.Size(157, 20);
+            this.mNameTextBox.Size = new System.Drawing.Size(186, 20);
             this.mNameTextBox.TabIndex = 7;
             // 
             // mPlayerUpDown
@@ -162,6 +163,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.mUsePointerButton);
             this.groupBox1.Controls.Add(this.mPlayerNameTextBox);
             this.groupBox1.Controls.Add(this.mSetLastNameButton);
             this.groupBox1.Controls.Add(this.label1);
@@ -170,15 +172,26 @@
             this.groupBox1.Controls.Add(this.mNameTextBox);
             this.groupBox1.Location = new System.Drawing.Point(13, 221);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(274, 94);
+            this.groupBox1.Size = new System.Drawing.Size(303, 94);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Set Name debug";
             // 
+            // mPlayerNameTextBox
+            // 
+            this.mPlayerNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.mPlayerNameTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mPlayerNameTextBox.Location = new System.Drawing.Point(9, 45);
+            this.mPlayerNameTextBox.Name = "mPlayerNameTextBox";
+            this.mPlayerNameTextBox.ReadOnly = true;
+            this.mPlayerNameTextBox.Size = new System.Drawing.Size(161, 20);
+            this.mPlayerNameTextBox.TabIndex = 13;
+            // 
             // mSetLastNameButton
             // 
             this.mSetLastNameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.mSetLastNameButton.Location = new System.Drawing.Point(147, 65);
+            this.mSetLastNameButton.Location = new System.Drawing.Point(176, 65);
             this.mSetLastNameButton.Name = "mSetLastNameButton";
             this.mSetLastNameButton.Size = new System.Drawing.Size(109, 23);
             this.mSetLastNameButton.TabIndex = 12;
@@ -198,7 +211,7 @@
             // mSetFirstNameButton
             // 
             this.mSetFirstNameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.mSetFirstNameButton.Location = new System.Drawing.Point(32, 65);
+            this.mSetFirstNameButton.Location = new System.Drawing.Point(61, 65);
             this.mSetFirstNameButton.Name = "mSetFirstNameButton";
             this.mSetFirstNameButton.Size = new System.Drawing.Size(109, 23);
             this.mSetFirstNameButton.TabIndex = 10;
@@ -206,16 +219,15 @@
             this.mSetFirstNameButton.UseVisualStyleBackColor = true;
             this.mSetFirstNameButton.Click += new System.EventHandler(this.mSetFirstNameButton_Click);
             // 
-            // mPlayerNameTextBox
+            // mUsePointerButton
             // 
-            this.mPlayerNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.mPlayerNameTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mPlayerNameTextBox.Location = new System.Drawing.Point(9, 45);
-            this.mPlayerNameTextBox.Name = "mPlayerNameTextBox";
-            this.mPlayerNameTextBox.ReadOnly = true;
-            this.mPlayerNameTextBox.Size = new System.Drawing.Size(157, 20);
-            this.mPlayerNameTextBox.TabIndex = 13;
+            this.mUsePointerButton.AutoSize = true;
+            this.mUsePointerButton.Location = new System.Drawing.Point(189, 45);
+            this.mUsePointerButton.Name = "mUsePointerButton";
+            this.mUsePointerButton.Size = new System.Drawing.Size(80, 17);
+            this.mUsePointerButton.TabIndex = 14;
+            this.mUsePointerButton.Text = "Use pointer";
+            this.mUsePointerButton.UseVisualStyleBackColor = true;
             // 
             // DebugDialog
             // 
@@ -256,5 +268,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button mSetFirstNameButton;
         private System.Windows.Forms.TextBox mPlayerNameTextBox;
+        private System.Windows.Forms.CheckBox mUsePointerButton;
     }
 }
