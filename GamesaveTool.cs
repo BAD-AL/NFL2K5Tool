@@ -30,17 +30,25 @@ namespace NFL2K5Tool
         const int cCollegePlayerNameSectionStart = 0x8bab0;
         const int cCollegePlayerNameSectionEnd = 0x8f2ef;
 
-
-        const int cCardinalsNumPlayersAddress = 0x47b8;
+        const int cFreeAgentCountLocation = 0x358;
+        const int c49ersNumPlayersAddress = 0x45c4;
         const int cTeamDiff = 0x1f4; // 500 bytes
 
 		// The order is not correct; more debugging needed.
-        private string[] mTeams = {"Cardinals", "Falcons", "Ravens", "Bills", "Panthers", "Bears",
-                                   "Bengals", "Cowboys", "Broncos", "Lions", "Packers", "Colts",
-                                   "Jaguars", "Chiefs", "Dolphins", "Vikings", "Patroits", "Saints",
-                                   "Giants", "Jets", "Raiders", "Eagles", "Steelers", "Rams", "Chargers",
-                                   "49ers", "Seahawks", "Buccaneers", "Titans", "Redskins", "Browns",
-                                   "Texans", "FreeAgents", "DraftClass"};
+        private string[] mTeamsDataOrder =  {
+                 "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
+                 "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
+                 "Jets","Lions","Packers", "Panthers", "Patroits","Raiders","Rams","Ravens","Redskins",
+                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings", "FreeAgents", "DraftClass" 
+                 };
+            
+        private string[] mTeamsPlayerOrder = {
+                   "Cardinals", "Falcons", "Ravens", "Bills", "Panthers", "Bears", "Bengals", "Cowboys",
+                   "Broncos", "Lions", "Packers", "Colts", "Jaguars", "Chiefs", "Dolphins", "Vikings", 
+                   "Patroits", "Saints", "Giants", "Jets", "Raiders", "Eagles", "Steelers", "Rams",  "Chargers", 
+                   "49ers", "Seahawks", "Buccaneers", "Titans", "Redskins", "Browns", "Texans", 
+                   "FreeAgents", "DraftClass"
+                   };
 
         private string[] mColleges;
 
@@ -53,7 +61,7 @@ namespace NFL2K5Tool
         public string GetNumberOfPlayersOnAllTeams()
         {
             StringBuilder builder = new StringBuilder();
-            foreach (string team in mTeams)
+            foreach (string team in mTeamsDataOrder)
             {
                 builder.Append(team);
                 builder.Append("Count = ");
@@ -66,7 +74,7 @@ namespace NFL2K5Tool
         public int GetNumPlayers(string team)
         {
             int index = GetTeamIndex(team);
-            int location = cCardinalsNumPlayersAddress + index * cTeamDiff;
+            int location = c49ersNumPlayersAddress + index * cTeamDiff;
             int retVal = GameSaveData[location];
             return retVal;
         }
@@ -74,8 +82,8 @@ namespace NFL2K5Tool
 
         private int GetTeamIndex(string team)
         {
-            for (int i = 0; i < mTeams.Length; i++)
-                if (team == mTeams[i])
+            for (int i = 0; i < mTeamsDataOrder.Length; i++)
+                if (team == mTeamsDataOrder[i])
                     return i;
             return -1;
         }
