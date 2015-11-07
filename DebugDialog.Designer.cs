@@ -31,13 +31,14 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.textBox3 = new System.Windows.Forms.RichTextBox();
             this.mFindButton = new System.Windows.Forms.Button();
             this.mFindPointers = new System.Windows.Forms.Button();
             this.mPointsToLocButton = new System.Windows.Forms.Button();
             this.mNameTextBox = new System.Windows.Forms.TextBox();
             this.mPlayerUpDown = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.mTeamButton = new System.Windows.Forms.Button();
+            this.mLocationLabel = new System.Windows.Forms.Label();
             this.mUsePointerButton = new System.Windows.Forms.CheckBox();
             this.mPlayerNameTextBox = new System.Windows.Forms.TextBox();
             this.mSetLastNameButton = new System.Windows.Forms.Button();
@@ -47,10 +48,16 @@
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listTeamPlayerNumbersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
-            this.mLocationLabel = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.mListPlayersButton2 = new System.Windows.Forms.Button();
+            this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
+            this.mStatusLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
@@ -60,7 +67,7 @@
             this.textBox1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(13, 48);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(327, 20);
+            this.textBox1.Size = new System.Drawing.Size(365, 20);
             this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
@@ -73,7 +80,7 @@
             this.textBox2.Location = new System.Drawing.Point(12, 108);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(469, 20);
+            this.textBox2.Size = new System.Drawing.Size(507, 20);
             this.textBox2.TabIndex = 1;
             // 
             // checkBox1
@@ -88,23 +95,10 @@
             this.checkBox1.Text = "Unicode";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
-            // textBox3
-            // 
-            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.Location = new System.Drawing.Point(11, 158);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.textBox3.Size = new System.Drawing.Size(469, 127);
-            this.textBox3.TabIndex = 3;
-            this.textBox3.Text = "";
-            // 
             // mFindButton
             // 
             this.mFindButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.mFindButton.Location = new System.Drawing.Point(346, 26);
+            this.mFindButton.Location = new System.Drawing.Point(384, 26);
             this.mFindButton.Name = "mFindButton";
             this.mFindButton.Size = new System.Drawing.Size(124, 23);
             this.mFindButton.TabIndex = 4;
@@ -115,7 +109,7 @@
             // mFindPointers
             // 
             this.mFindPointers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.mFindPointers.Location = new System.Drawing.Point(346, 55);
+            this.mFindPointers.Location = new System.Drawing.Point(384, 55);
             this.mFindPointers.Name = "mFindPointers";
             this.mFindPointers.Size = new System.Drawing.Size(124, 23);
             this.mFindPointers.TabIndex = 5;
@@ -126,7 +120,7 @@
             // mPointsToLocButton
             // 
             this.mPointsToLocButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.mPointsToLocButton.Location = new System.Drawing.Point(346, 79);
+            this.mPointsToLocButton.Location = new System.Drawing.Point(384, 79);
             this.mPointsToLocButton.Name = "mPointsToLocButton";
             this.mPointsToLocButton.Size = new System.Drawing.Size(124, 23);
             this.mPointsToLocButton.TabIndex = 6;
@@ -141,7 +135,7 @@
             this.mNameTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mNameTextBox.Location = new System.Drawing.Point(99, 19);
             this.mNameTextBox.Name = "mNameTextBox";
-            this.mNameTextBox.Size = new System.Drawing.Size(186, 20);
+            this.mNameTextBox.Size = new System.Drawing.Size(210, 20);
             this.mNameTextBox.TabIndex = 7;
             // 
             // mPlayerUpDown
@@ -149,11 +143,6 @@
             this.mPlayerUpDown.Location = new System.Drawing.Point(43, 19);
             this.mPlayerUpDown.Maximum = new decimal(new int[] {
             1000000,
-            0,
-            0,
-            0});
-            this.mPlayerUpDown.Minimum = new decimal(new int[] {
-            1,
             0,
             0,
             0});
@@ -170,6 +159,7 @@
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Controls.Add(this.mTeamButton);
             this.groupBox1.Controls.Add(this.mLocationLabel);
             this.groupBox1.Controls.Add(this.mUsePointerButton);
             this.groupBox1.Controls.Add(this.mPlayerNameTextBox);
@@ -180,15 +170,37 @@
             this.groupBox1.Controls.Add(this.mNameTextBox);
             this.groupBox1.Location = new System.Drawing.Point(13, 289);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(303, 94);
+            this.groupBox1.Size = new System.Drawing.Size(327, 94);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Set Name debug";
             // 
+            // mTeamButton
+            // 
+            this.mTeamButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.mTeamButton.Location = new System.Drawing.Point(267, 64);
+            this.mTeamButton.Name = "mTeamButton";
+            this.mTeamButton.Size = new System.Drawing.Size(48, 23);
+            this.mTeamButton.TabIndex = 16;
+            this.mTeamButton.Text = "Team";
+            this.mTeamButton.UseVisualStyleBackColor = true;
+            this.mTeamButton.Click += new System.EventHandler(this.mTeamButton_Click);
+            // 
+            // mLocationLabel
+            // 
+            this.mLocationLabel.AutoSize = true;
+            this.mLocationLabel.Location = new System.Drawing.Point(6, 70);
+            this.mLocationLabel.Name = "mLocationLabel";
+            this.mLocationLabel.Size = new System.Drawing.Size(44, 13);
+            this.mLocationLabel.TabIndex = 15;
+            this.mLocationLabel.Text = "location";
+            this.mLocationLabel.Click += new System.EventHandler(this.mLocationLabel_Click);
+            // 
             // mUsePointerButton
             // 
+            this.mUsePointerButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.mUsePointerButton.AutoSize = true;
-            this.mUsePointerButton.Location = new System.Drawing.Point(189, 45);
+            this.mUsePointerButton.Location = new System.Drawing.Point(235, 45);
             this.mUsePointerButton.Name = "mUsePointerButton";
             this.mUsePointerButton.Size = new System.Drawing.Size(80, 17);
             this.mUsePointerButton.TabIndex = 14;
@@ -203,13 +215,13 @@
             this.mPlayerNameTextBox.Location = new System.Drawing.Point(9, 45);
             this.mPlayerNameTextBox.Name = "mPlayerNameTextBox";
             this.mPlayerNameTextBox.ReadOnly = true;
-            this.mPlayerNameTextBox.Size = new System.Drawing.Size(161, 20);
+            this.mPlayerNameTextBox.Size = new System.Drawing.Size(185, 20);
             this.mPlayerNameTextBox.TabIndex = 13;
             // 
             // mSetLastNameButton
             // 
             this.mSetLastNameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.mSetLastNameButton.Location = new System.Drawing.Point(194, 65);
+            this.mSetLastNameButton.Location = new System.Drawing.Point(170, 65);
             this.mSetLastNameButton.Name = "mSetLastNameButton";
             this.mSetLastNameButton.Size = new System.Drawing.Size(91, 23);
             this.mSetLastNameButton.TabIndex = 12;
@@ -229,7 +241,7 @@
             // mSetFirstNameButton
             // 
             this.mSetFirstNameButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.mSetFirstNameButton.Location = new System.Drawing.Point(97, 65);
+            this.mSetFirstNameButton.Location = new System.Drawing.Point(73, 65);
             this.mSetFirstNameButton.Name = "mSetFirstNameButton";
             this.mSetFirstNameButton.Size = new System.Drawing.Size(91, 23);
             this.mSetFirstNameButton.TabIndex = 10;
@@ -243,7 +255,7 @@
             this.findToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(494, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(532, 24);
             this.menuStrip1.TabIndex = 11;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -272,27 +284,89 @@
             this.mGetTeamButton.UseVisualStyleBackColor = true;
             this.mGetTeamButton.Click += new System.EventHandler(this.mGetTeamButton_Click);
             // 
-            // mLocationLabel
+            // groupBox2
             // 
-            this.mLocationLabel.AutoSize = true;
-            this.mLocationLabel.Location = new System.Drawing.Point(6, 70);
-            this.mLocationLabel.Name = "mLocationLabel";
-            this.mLocationLabel.Size = new System.Drawing.Size(44, 13);
-            this.mLocationLabel.TabIndex = 15;
-            this.mLocationLabel.Text = "location";
-            this.mLocationLabel.Click += new System.EventHandler(this.mLocationLabel_Click);
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.mStatusLabel);
+            this.groupBox2.Controls.Add(this.numericUpDown1);
+            this.groupBox2.Controls.Add(this.mListPlayersButton2);
+            this.groupBox2.Location = new System.Drawing.Point(346, 307);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(169, 65);
+            this.groupBox2.TabIndex = 13;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "List This many";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numericUpDown1.Location = new System.Drawing.Point(12, 17);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(55, 20);
+            this.numericUpDown1.TabIndex = 4;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            1936,
+            0,
+            0,
+            0});
+            // 
+            // mListPlayersButton2
+            // 
+            this.mListPlayersButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mListPlayersButton2.Location = new System.Drawing.Point(73, 14);
+            this.mListPlayersButton2.Name = "mListPlayersButton2";
+            this.mListPlayersButton2.Size = new System.Drawing.Size(88, 23);
+            this.mListPlayersButton2.TabIndex = 8;
+            this.mListPlayersButton2.Text = "Players";
+            this.mListPlayersButton2.UseVisualStyleBackColor = true;
+            this.mListPlayersButton2.Click += new System.EventHandler(this.mListPlayersButton2_Click);
+            // 
+            // mResultsTextBox
+            // 
+            this.mResultsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.mResultsTextBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mResultsTextBox.Location = new System.Drawing.Point(11, 158);
+            this.mResultsTextBox.Name = "mResultsTextBox";
+            this.mResultsTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.mResultsTextBox.SearchString = null;
+            this.mResultsTextBox.Size = new System.Drawing.Size(507, 127);
+            this.mResultsTextBox.StatusControl = null;
+            this.mResultsTextBox.TabIndex = 3;
+            this.mResultsTextBox.Text = "";
+            // 
+            // mStatusLabel
+            // 
+            this.mStatusLabel.AutoSize = true;
+            this.mStatusLabel.Location = new System.Drawing.Point(9, 46);
+            this.mStatusLabel.Name = "mStatusLabel";
+            this.mStatusLabel.Size = new System.Drawing.Size(46, 13);
+            this.mStatusLabel.TabIndex = 17;
+            this.mStatusLabel.Text = "Status...";
             // 
             // DebugDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(494, 388);
+            this.ClientSize = new System.Drawing.Size(532, 388);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.mGetTeamButton);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.mPointsToLocButton);
             this.Controls.Add(this.mFindPointers);
             this.Controls.Add(this.mFindButton);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.mResultsTextBox);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
@@ -305,6 +379,9 @@
             this.groupBox1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -315,7 +392,7 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.RichTextBox textBox3;
+        private SearchTextBox mResultsTextBox;
         private System.Windows.Forms.Button mFindButton;
         private System.Windows.Forms.Button mFindPointers;
         private System.Windows.Forms.Button mPointsToLocButton;
@@ -332,5 +409,10 @@
         private System.Windows.Forms.ToolStripMenuItem listTeamPlayerNumbersToolStripMenuItem;
         private System.Windows.Forms.Button mGetTeamButton;
         private System.Windows.Forms.Label mLocationLabel;
+        private System.Windows.Forms.Button mTeamButton;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Button mListPlayersButton2;
+        private System.Windows.Forms.Label mStatusLabel;
     }
 }

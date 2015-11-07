@@ -13,6 +13,7 @@ namespace NFL2K5Tool
         public DebugDialog()
         {
             InitializeComponent();
+            mResultsTextBox.StatusControl = mStatusLabel;
         }
 
         public GamesaveTool Tool { get; set; }
@@ -50,11 +51,11 @@ namespace NFL2K5Tool
 
         private void FindLocations()
         {
-            textBox3.Clear();
+            mResultsTextBox.Clear();
             List<long> locs = StaticUtils.FindStringInFile(textBox1.Text, SaveFile, 0, SaveFile.Length);
             foreach (int loc in locs)
             {
-                textBox3.AppendText(String.Format("{0:x}\n", loc));
+                mResultsTextBox.AppendText(String.Format("{0:x}\n", loc));
             }
         }
 
@@ -70,7 +71,7 @@ namespace NFL2K5Tool
         // need to find pointers for non-players
         private void mFindPointers_Click(object sender, EventArgs e)
         {
-            textBox3.Clear();
+            mResultsTextBox.Clear();
             List<long> locs = StaticUtils.FindStringInFile(textBox1.Text, SaveFile, 0, SaveFile.Length);
             List<int> pointers;
 
@@ -79,8 +80,8 @@ namespace NFL2K5Tool
                 pointers = FindPointersForLocation(locs[i]);
                 foreach (int dude in pointers)
                 {
-                    textBox3.AppendText(dude.ToString("X"));
-                    textBox3.AppendText("\r\n");
+                    mResultsTextBox.AppendText(dude.ToString("X"));
+                    mResultsTextBox.AppendText("\r\n");
                 }
             }
         }
@@ -109,7 +110,7 @@ namespace NFL2K5Tool
 
         private void mPointsToLocButton_Click(object sender, EventArgs e)
         {
-            textBox3.Clear();
+            mResultsTextBox.Clear();
             string val = textBox1.Text;
             ShowPointersForLoc(val);
         }
@@ -120,22 +121,22 @@ namespace NFL2K5Tool
                 val = val.Substring(2);
             try
             {
-                textBox3.Clear();
+                mResultsTextBox.Clear();
                 int loc = Int32.Parse(val, System.Globalization.NumberStyles.AllowHexSpecifier);
                 List<int> pointers = FindPointersForLocation(loc);
                 foreach (int dude in pointers)
                 {
-                    textBox3.AppendText(dude.ToString("X"));
-                    textBox3.AppendText("\r\n");
+                    mResultsTextBox.AppendText(dude.ToString("X"));
+                    mResultsTextBox.AppendText("\r\n");
                 }
                 if (pointers.Count == 0)
                 {
-                    textBox3.Text = "Pointr to: "+  val + " Not found";
+                    mResultsTextBox.Text = "Pointr to: "+  val + " Not found";
                 }
             }
             catch (Exception e)
             {
-                textBox3.Text = e.Message; 
+                mResultsTextBox.Text = e.Message; 
             }
         }
 
@@ -165,18 +166,37 @@ namespace NFL2K5Tool
 
         private void listNumberOfPlayersButton_Click(object sender, EventArgs e)
         {
-           textBox3.Text = Tool.GetNumberOfPlayersOnAllTeams();
+           mResultsTextBox.Text = Tool.GetNumberOfPlayersOnAllTeams();
         }
 
         private void mGetTeamButton_Click(object sender, EventArgs e)
         {
-            string team = textBox1.Text;
-            textBox3.Text = Tool.GetTeamPlayers(team, false, false);
+            mResultsTextBox.Text = Tool.GetTeamPlayers(textBox1.Text, false, false);
         }
 
         private void mLocationLabel_Click(object sender, EventArgs e)
         {
             ShowPointersForLoc(mLocationLabel.Text);
+        }
+
+        private void mTeamButton_Click(object sender, EventArgs e)
+        {
+            mResultsTextBox.Text = Tool.GetPlayerTeam((int)mPlayerUpDown.Value);
+        }
+
+        private void mListPlayersButton2_Click(object sender, EventArgs e)
+        {
+            mResultsTextBox.Clear();
+            StringBuilder builder = new StringBuilder(5000);
+            builder.Append(Tool.GetKey(false, false));
+            builder.Append("\n");
+            int max = (int)numericUpDown1.Value;
+            for (int i = 0; i < max; i++)
+            {
+                builder.Append(Tool.GetPlayerData(i, false, false));
+                builder.Append("\n");
+            }
+            mResultsTextBox.AppendText(builder.ToString());
         }
 
     }

@@ -30,7 +30,7 @@
         {
             this.mLoadSaveButton = new System.Windows.Forms.Button();
             this.mListPlayersButton = new System.Windows.Forms.Button();
-            this.mTextBox = new System.Windows.Forms.RichTextBox();
+            this.mTextBox = new SearchTextBox();
             this.mClearButton = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.statusBar1 = new System.Windows.Forms.Label();
@@ -41,13 +41,13 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stringToHexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listTeamsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listApperanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listAttributesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mListPlayersButton2 = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.listFreeAgentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listDraftClassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listTeamsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mListPlayersButton2 = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mApplyButton = new System.Windows.Forms.Button();
             this.mSaveButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -89,7 +89,6 @@
             this.mTextBox.Size = new System.Drawing.Size(674, 327);
             this.mTextBox.TabIndex = 2;
             this.mTextBox.Text = "";
-            this.mTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mTextBox_KeyDown);
             // 
             // mClearButton
             // 
@@ -197,6 +196,15 @@
             this.stringToHexToolStripMenuItem.Text = "&Debug Dialog";
             this.stringToHexToolStripMenuItem.Click += new System.EventHandler(this.stringToHexToolStripMenuItem_Click);
             // 
+            // listTeamsToolStripMenuItem
+            // 
+            this.listTeamsToolStripMenuItem.Checked = true;
+            this.listTeamsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.listTeamsToolStripMenuItem.Name = "listTeamsToolStripMenuItem";
+            this.listTeamsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.listTeamsToolStripMenuItem.Text = "List Teams";
+            this.listTeamsToolStripMenuItem.Click += new System.EventHandler(this.listTeamsToolStripMenuItem_Click);
+            // 
             // listApperanceToolStripMenuItem
             // 
             this.listApperanceToolStripMenuItem.Checked = true;
@@ -214,6 +222,20 @@
             this.listAttributesToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.listAttributesToolStripMenuItem.Text = "List Attributes";
             this.listAttributesToolStripMenuItem.Click += new System.EventHandler(this.listAttributesToolStripMenuItem_Click);
+            // 
+            // listFreeAgentsToolStripMenuItem
+            // 
+            this.listFreeAgentsToolStripMenuItem.Name = "listFreeAgentsToolStripMenuItem";
+            this.listFreeAgentsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.listFreeAgentsToolStripMenuItem.Text = "List Free Agents";
+            this.listFreeAgentsToolStripMenuItem.Click += new System.EventHandler(this.listFreeAgentsToolStripMenuItem_Click);
+            // 
+            // listDraftClassToolStripMenuItem
+            // 
+            this.listDraftClassToolStripMenuItem.Name = "listDraftClassToolStripMenuItem";
+            this.listDraftClassToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.listDraftClassToolStripMenuItem.Text = "List Draft Class";
+            this.listDraftClassToolStripMenuItem.Click += new System.EventHandler(this.listDraftClassToolStripMenuItem_Click);
             // 
             // mListPlayersButton2
             // 
@@ -238,29 +260,6 @@
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "List This many";
-            // 
-            // listFreeAgentsToolStripMenuItem
-            // 
-            this.listFreeAgentsToolStripMenuItem.Name = "listFreeAgentsToolStripMenuItem";
-            this.listFreeAgentsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.listFreeAgentsToolStripMenuItem.Text = "List Free Agents";
-            this.listFreeAgentsToolStripMenuItem.Click += new System.EventHandler(this.listFreeAgentsToolStripMenuItem_Click);
-            // 
-            // listDraftClassToolStripMenuItem
-            // 
-            this.listDraftClassToolStripMenuItem.Name = "listDraftClassToolStripMenuItem";
-            this.listDraftClassToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.listDraftClassToolStripMenuItem.Text = "List Draft Class";
-            this.listDraftClassToolStripMenuItem.Click += new System.EventHandler(this.listDraftClassToolStripMenuItem_Click);
-            // 
-            // listTeamsToolStripMenuItem
-            // 
-            this.listTeamsToolStripMenuItem.Checked = true;
-            this.listTeamsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.listTeamsToolStripMenuItem.Name = "listTeamsToolStripMenuItem";
-            this.listTeamsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.listTeamsToolStripMenuItem.Text = "List Teams";
-            this.listTeamsToolStripMenuItem.Click += new System.EventHandler(this.listTeamsToolStripMenuItem_Click);
             // 
             // mApplyButton
             // 
@@ -315,7 +314,7 @@
 
         private System.Windows.Forms.Button mLoadSaveButton;
         private System.Windows.Forms.Button mListPlayersButton;
-        private System.Windows.Forms.RichTextBox mTextBox;
+        private SearchTextBox mTextBox;
         private System.Windows.Forms.Button mClearButton;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label statusBar1;

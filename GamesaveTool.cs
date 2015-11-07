@@ -7,6 +7,9 @@ using System.Text.RegularExpressions;
 
 namespace NFL2K5Tool
 {
+    /// <summary>
+    /// The class that reads and modifies the xbox game save file.
+    /// </summary>
     public class GamesaveTool
     {
         private const int cPlayerStart = 0xB288;
@@ -38,36 +41,47 @@ namespace NFL2K5Tool
         const int c49ersNumPlayersAddress = 0x45c3; // 00 35
         const int cTeamDiff = 0x1f4; // 500 bytes
 
-		// The order is not correct; more debugging needed.
+		// The team data is ordered like this:
         private string[] mTeamsDataOrder =  {
                  "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
                  "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
                  "Jets","Lions","Packers", "Panthers", "Patroits","Raiders","Rams","Ravens","Redskins",
-                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings", "FreeAgents", "DraftClass" 
+                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings", 
+                 
+                 // these guys aren't really teams, investigate deleting these 2 from the array
+                 "FreeAgents", "DraftClass" 
                  };
-            
-        private string[] mTeamsPlayerOrder = {
-                   "Cardinals", "Falcons", "Ravens", "Bills", "Panthers", "Bears", "Bengals", "Cowboys",
-                   "Broncos", "Lions", "Packers", "Colts", "Jaguars", "Chiefs", "Dolphins", "Vikings", 
-                   "Patroits", "Saints", "Giants", "Jets", "Raiders", "Eagles", "Steelers", "Rams",  "Chargers", 
-                   "49ers", "Seahawks", "Buccaneers", "Titans", "Redskins", "Browns", "Texans", 
-                   "FreeAgents", "DraftClass"
-                   };
+        
+        //Players are listed in this order in the original 2004 season; No longer used
+        //private string[] mTeamsPlayerOrder = {
+        //           "Cardinals", "Falcons", "Ravens", "Bills", "Panthers", "Bears", "Bengals", "Cowboys",
+        //           "Broncos", "Lions", "Packers", "Colts", "Jaguars", "Chiefs", "Dolphins", "Vikings", 
+        //           "Patroits", "Saints", "Giants", "Jets", "Raiders", "Eagles", "Steelers", "Rams",  "Chargers", 
+        //           "49ers", "Seahawks", "Buccaneers", "Titans", "Redskins", "Browns", "Texans", 
+        //           "FreeAgents", "DraftClass"
+        //           };
 
         private string[] mColleges;
 
+        /// <summary>
+        /// The gamesave file/data
+        /// </summary>
         public byte[] GameSaveData = null;
 
-        public GamesaveTool()
-        {
-        }
-
-        public string GetLeaguePlayers(bool attributes, bool apperance, bool freeAgents, bool draftClass)
+        /// <summary>
+        /// Gets the players by team (does not get free agents or draft class)
+        /// </summary>
+        /// <param name="attributes">true to list out skills</param>
+        /// <param name="appearance">true to list out appearance</param>
+        /// <param name="freeAgents"></param>
+        /// <param name="draftClass"></param>
+        /// <returns></returns>
+        public string GetLeaguePlayers(bool attributes, bool appearance, bool freeAgents, bool draftClass)
         {
             StringBuilder builder = new StringBuilder(300 * 55 * 35);
             for (int i = 0; i < 32; i++)
             {
-                builder.Append(GetTeamPlayers(mTeamsDataOrder[i], attributes, apperance));
+                builder.Append(GetTeamPlayers(mTeamsDataOrder[i], attributes, appearance));
             }
             return builder.ToString();
         }
@@ -77,9 +91,9 @@ namespace NFL2K5Tool
         /// I could not find pointers for the players, so I'm assuming the draft class is always 380 players for now.
         /// </summary>
         /// <param name="attributes">include skill attributes</param>
-        /// <param name="apperance">include appearance attributes.</param>
+        /// <param name="appearance">include appearance attributes.</param>
         /// <returns>string with all the players for the given team.</returns>
-        public string GetDraftClass(bool attributes, bool apperance)
+        public string GetDraftClass(bool attributes, bool appearance)
         {
             int firstPlayer = 1937;
             int numPlayers = 380;
@@ -93,7 +107,7 @@ namespace NFL2K5Tool
             
             for (int i = firstPlayer; i < limit; i++)
             {
-                builder.Append(GetPlayerData(i, attributes, apperance));
+                builder.Append(GetPlayerData(i, attributes, appearance));
                 builder.Append("\n");
             }
             return builder.ToString();
@@ -104,17 +118,17 @@ namespace NFL2K5Tool
         /// </summary>
         /// <param name="team"></param>
         /// <param name="attributes">include skill attributes</param>
-        /// <param name="apperance">include appearance attributes.</param>
+        /// <param name="appearance">include appearance attributes.</param>
         /// <returns>string with all the players for the given team.</returns>
-        public string GetTeamPlayers(string team, bool attributes, bool apperance)
+        public string GetTeamPlayers(string team, bool attributes, bool appearance)
         {
             int teamIndex = GetTeamIndex(team);
             int teamPlayerPointersStart = teamIndex * cTeamDiff + c49ersPlayerPointersStart;
-            if (team.Equals("FreeAgents", StringComparison.InvariantCultureIgnoreCase))
+            if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
                 teamPlayerPointersStart = cFreeAgentsPlayerPointersStart;
-            else if (team.Equals("DraftClass", StringComparison.InvariantCultureIgnoreCase))
-                return GetDraftClass(attributes, apperance);
-
+            else if ("DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
+                return GetDraftClass(attributes, appearance);
+            /*
             int numPlayers = GetNumPlayers(team);
             int playerIndex = -1;
 
@@ -128,12 +142,53 @@ namespace NFL2K5Tool
             for (int i = 0; i < numPlayers; i++)
             {
                 playerIndex = GetPlayerIndexByPointer( teamPlayerPointersStart + (i * 4)); // 4== ptr length
-                builder.Append(GetPlayerData(playerIndex, attributes, apperance));
+                builder.Append(GetPlayerData(playerIndex, attributes, appearance));
+                builder.Append("\n");
+            }
+            return builder.ToString();
+            */
+            List<int> playerIndexes = GetPlayerIndexesForTeam(team);
+            StringBuilder builder = new StringBuilder(300 * playerIndexes.Count + 1);
+            builder.Append("\nTeam = ");
+            builder.Append(team);
+            builder.Append("    Players:");
+            builder.Append(playerIndexes.Count);
+            builder.Append("\n");
+
+            for (int i = 0; i < playerIndexes.Count; i++)
+            {
+                builder.Append(GetPlayerData(playerIndexes[i], attributes, appearance));
                 builder.Append("\n");
             }
             return builder.ToString();
         }
 
+        private List<int> GetPlayerIndexesForTeam(string team)
+        {
+            List<int> retVal = new List<int>(55);
+            int teamIndex = GetTeamIndex(team);
+            int teamPlayerPointersStart = teamIndex * cTeamDiff + c49ersPlayerPointersStart;
+            if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
+                teamPlayerPointersStart = cFreeAgentsPlayerPointersStart;
+            //else if ("DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
+            //    return GetDraftClass(attributes, appearance);
+
+            int numPlayers = GetNumPlayers(team);
+            int playerIndex = -1;
+
+            for (int i = 0; i < numPlayers; i++)
+            {
+                playerIndex = GetPlayerIndexByPointer(teamPlayerPointersStart + (i * 4)); // 4== ptr length
+                retVal.Add(playerIndex);
+            }
+            return retVal;
+        }
+
+        /// <summary>
+        /// reads the pointer to see where it points to, then does math returning the player's index.
+        /// </summary>
+        /// <param name="pointerLoc">The address of the player pointer</param>
+        /// <returns>The index of the player</returns>
         private int GetPlayerIndexByPointer(int pointerLoc)
         {
             int ptr = GameSaveData[pointerLoc + 3] << 24;
@@ -145,23 +200,6 @@ namespace NFL2K5Tool
             return retVal;
         }
 
-        /// <summary>
-        /// Returns the first player index for the given team.
-        /// </summary>
-        /// <param name="team"></param>
-        /// <returns></returns>
-        private int GetFirstPlayer(string team)
-        {
-            int current = 0;
-            for (int i = 0; i < mTeamsDataOrder.Length; i++)
-            {
-                if (team == mTeamsPlayerOrder[i])
-                    break;
-                current += GetNumPlayers(mTeamsPlayerOrder[i]);
-            }
-            return current;
-        }
-
         // debugging method
         public string GetNumberOfPlayersOnAllTeams()
         {
@@ -169,7 +207,7 @@ namespace NFL2K5Tool
             foreach (string team in mTeamsDataOrder)
             {
                 builder.Append(team);
-                builder.Append("Count = ");
+                builder.Append(" Count = ");
                 builder.Append(GetNumPlayers(team));
                 builder.Append("\n");
             }
@@ -199,6 +237,31 @@ namespace NFL2K5Tool
             return -1;
         }
 
+        /// <summary>
+        /// Returns the player's team
+        /// </summary>
+        public string GetPlayerTeam(int player)
+        {
+            int playerLocation = GetPlayerDataStart(player);
+            List<int> players;
+            //GetPointerDestination
+            for (int i = 0; i < mTeamsDataOrder.Length -1; i++) // hmm... this isn't going to work for draft class...
+            {
+                players = GetPlayerIndexesForTeam(mTeamsDataOrder[i]);
+                for (int j = 0; j < players.Count; j++)
+                {
+                    if (players[j] == player)
+                        return mTeamsDataOrder[i];
+                }
+            }
+            return "DraftClass";
+        }
+
+        /// <summary>
+        /// Loads the gamesave fle
+        /// TODO: error checking; filetype setup (roster/franchise)
+        /// </summary>
+        /// <param name="fileName">the filename to load</param>
         public void LoadSaveFile(string fileName)
         {
             GameSaveData = File.ReadAllBytes(fileName);
@@ -214,21 +277,23 @@ namespace NFL2K5Tool
         {
             GameSaveData[location] = b;
         }
-        private int[] mOrder;
+
+        private int[] mOrder; // order of attributes
+
         /// <summary>
         /// The attributes key
         /// </summary>
-        public string GetKey(bool attributes, bool apperance)
+        public string GetKey(bool attributes, bool appearance)
         {
             StringBuilder builder = new StringBuilder(350);
             StringBuilder dummy = new StringBuilder(200);
             int prevLength = 0;
             builder.Append("#Pos,fname,lname,Number,");
-            mOrder = new int[4 + mAttributeOrder.Length + mApperanceOrder.Length];
-            mOrder[0] = -1;
+            mOrder = new int[4 + mAttributeOrder.Length + mappearanceOrder.Length];
+            mOrder[0] = (int)PlayerOffsets.Position;;
             mOrder[1] = -1;
-            mOrder[2] = (int)PlayerOffsets.JerseyNumber;
-            mOrder[3] = (int)PlayerOffsets.Position;
+            mOrder[2] = -2;
+            mOrder[3] = (int)PlayerOffsets.JerseyNumber;
             int i = 4;
             if (attributes)
             {
@@ -239,12 +304,12 @@ namespace NFL2K5Tool
                     mOrder[i++] = (int)attr;
                 }
             }
-            if (apperance)
+            if (appearance)
             {
-                foreach (AppearanceAttributes app in mApperanceOrder)
+                foreach (AppearanceAttributes app in mappearanceOrder)
                 {
                     prevLength = dummy.Length;
-                    GetPlayerApperanceAttribute(0, app, dummy);
+                    GetPlayerappearanceAttribute(0, app, dummy);
                     mOrder[i++] = (int)app;
                     if (dummy.Length > prevLength)
                     {
@@ -258,6 +323,11 @@ namespace NFL2K5Tool
 
         private char[] mComma = new char[] { ',' };
 
+        /// <summary>
+        /// Sets a player's attributes
+        /// </summary>
+        /// <param name="player">The index of the player</param>
+        /// <param name="line">The data tp apply.</param>
         public void SetPlayerData(int player, string line)
         {
             int attr = -1;
@@ -266,17 +336,20 @@ namespace NFL2K5Tool
             {
                 // figure out how to set names
                 attr = mOrder[i];
-                if (attr == 0)
+                if (attr == -1)
                 {
-                    // set first name
+                    // Name setting perhaps should be done at another, smarter level?
+                    // How we gonna decide to use pointers or not?
+                    SetPlayerFirstName(player, attributes[i], false);
                 }
-                else if (attr == 1)
+                else if (attr == -2)
                 {
-                    // set last name
+                    // How we gonna decide to use pointers or not?
+                    SetPlayerLastName(player, attributes[i], false);
                 }
                 if (attr > 99)
                 {
-                    SetPlayerApperanceAttribute(player, (AppearanceAttributes)attr, attributes[i]);
+                    SetPlayerappearanceAttribute(player, (AppearanceAttributes)attr, attributes[i]);
                 }
                 else
                 {
@@ -286,20 +359,20 @@ namespace NFL2K5Tool
         }
 
         /// <summary>
-        /// Attribute order: 
+        /// Default Attribute order: 
         /// #fname,lname,position,number,Speed,Agility,Strength,Jumping,Coverage,PassRush,RunCoverage,PassBlocking,RunBlocking,Catch,RunRoute,
         /// BreakTackle,HoldOnToBall,PowerRunStyle,PassAccuracy,PassArmStrength,PassReadCoverage,Tackle,KickPower,KickAccuracy,Stamana,Durability,
         /// Leadership,Scramble,Composure,Consistency,Aggressiveness,
         /// 
-        /// Apperance order:
+        /// Default appearance order:
         /// College,DOB,Hand,Weight,Height,BodyType,Skin,Face,Dreads,Helmet,FaceMask,FaceShield,EyeBlack,MouthPiece,LeftGlove,RightGlove,
         /// LeftWrist,RightWrist,LeftElbow,RightElbow,Sleeves,LeftShoe,RightShoe,NeckRoll,Turtleneck
         /// </summary>
         /// <param name="player"></param>
         /// <param name="attributes"></param>
-        /// <param name="apperance"></param>
+        /// <param name="appearance"></param>
         /// <returns></returns>
-        public string GetPlayerData(int player, bool attributes, bool apperance)
+        public string GetPlayerData(int player, bool attributes, bool appearance)
         {
             StringBuilder builder = new StringBuilder(300);
 
@@ -312,26 +385,30 @@ namespace NFL2K5Tool
             
             if (attributes)
                 GetPlayerAttributes(player,builder);
-            if (apperance)
-                GetPlayerApperance(player, builder);
+            if (appearance)
+                GetPlayerappearance(player, builder);
 
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Get the location where the player's data starts.
+        /// </summary>
         public int GetPlayerDataStart(int player)
         {
             int ret = cPlayerStart + player * cPlayerDataLength;
             return ret;
         }
 
-        private void GetPlayerApperance(int player, StringBuilder builder)
+        private void GetPlayerappearance(int player, StringBuilder builder)
         {
-            foreach (AppearanceAttributes attr in this.mApperanceOrder)
+            foreach (AppearanceAttributes attr in this.mappearanceOrder)
             {
-                GetPlayerApperanceAttribute(player, attr, builder);
+                GetPlayerappearanceAttribute(player, attr, builder);
             }
         }
-        private void SetPlayerApperanceAttribute(int player, AppearanceAttributes attr, string strVal)
+
+        private void SetPlayerappearanceAttribute(int player, AppearanceAttributes attr, string strVal)
         {
             switch (attr)
             {
@@ -389,7 +466,7 @@ namespace NFL2K5Tool
             }
         }
 
-        private void GetPlayerApperanceAttribute(int player, AppearanceAttributes attr, StringBuilder builder)
+        private void GetPlayerappearanceAttribute(int player, AppearanceAttributes attr, StringBuilder builder)
         {
             switch (attr)
             {
@@ -454,7 +531,7 @@ namespace NFL2K5Tool
             }
         }
 
-        private AppearanceAttributes[] mApperanceOrder = new AppearanceAttributes[]{
+        private AppearanceAttributes[] mappearanceOrder = new AppearanceAttributes[]{
              AppearanceAttributes.College, AppearanceAttributes.DOB, AppearanceAttributes.Hand, 
              AppearanceAttributes.Weight, AppearanceAttributes.Height, AppearanceAttributes.BodyType, 
              AppearanceAttributes.Skin, AppearanceAttributes.Face, AppearanceAttributes.Dreads, 
@@ -506,6 +583,7 @@ namespace NFL2K5Tool
                     retVal = val.ToString();
                     break;
                 case PlayerOffsets.DOB:
+                    //TODO: get this working
                     // The year still isn't correct :( [month and Day are good though]; moving on...
                     int lsd_year = ((GameSaveData[loc + 2] & 0x0001) << 3) + (GameSaveData[loc + 1] >> 5);
                     int msd_year = (GameSaveData[loc + 2] & 0x0e)  ;
@@ -560,7 +638,7 @@ namespace NFL2K5Tool
                     SetByte(loc, (byte)v2);
                     break;
                 case PlayerOffsets.DOB:
-
+                    //TODO: get this working
                     break;
                 case PlayerOffsets.Weight:
                     val = Int32.Parse(stringVal);
@@ -583,9 +661,6 @@ namespace NFL2K5Tool
 
         /// <summary>
         /// Set a player's first name.
-        /// TODO: consider updating a pointer instead of writing a string if the name already exists.
-        ///       Do not change the text of a player in the Draft Class. Update his name pointer instead.
-        ///       
         /// </summary>
         public bool SetPlayerFirstName(int player, string firstName, bool useExistingName)
         {
@@ -595,11 +670,23 @@ namespace NFL2K5Tool
         /// <summary>
         /// Set a player's last name
         /// </summary>
+        /// <param name="player">the player index</param>
+        /// <param name="lastName"></param>
+        /// <param name="useExistingName">true to simply update the name pointer to a shared name</param>
+        /// <returns>true if successful</returns>
         public bool SetPlayerLastName(int player, string lastName, bool useExistingName)
         {
             return SetPlayerNameText(player, lastName, true, useExistingName);
         }
 
+        /// <summary>
+        /// Set's a player's first or last name.
+        /// </summary>
+        /// <param name="player">the player index</param>
+        /// <param name="name">the name to set</param>
+        /// <param name="isLastName">true if you want to set the player's last name, otherwise sets his first name</param>
+        /// <param name="useExistingName">true to use a shared name.</param>
+        /// <returns>true if successful</returns>
         private bool SetPlayerNameText(int player, string name, bool isLastName, bool useExistingName)
         {
             bool retVal = true;
@@ -629,12 +716,12 @@ namespace NFL2K5Tool
                 if (prevName != name)
                 {
                     int diff = 2 * (name.Length - prevName.Length);
-                    int stringLoc = GetStringLocation(ptrLoc1);
+                    int stringLoc = GetPointerDestination(ptrLoc1);
 
                     if (diff > 0)
-                        ShiftDataDown(GetStringLocation(ptrLoc1), diff);
+                        ShiftDataDown(GetPointerDestination(ptrLoc1), diff);
                     else if (diff < 0)
-                        ShiftDataUp(GetStringLocation(ptrLoc1), -1 * diff);
+                        ShiftDataUp(GetPointerDestination(ptrLoc1), -1 * diff);
 
                     AdjustStringPointers(stringLoc + 2 * prevName.Length, diff);
 
@@ -697,21 +784,28 @@ namespace NFL2K5Tool
         public string GetName(int namePointerLoc)
         {
             string retVal = "!!!!!INVALID!!!!!!!!";
-            int dataLocation = GetStringLocation(namePointerLoc);
+            int dataLocation = GetPointerDestination(namePointerLoc);
             retVal = GetString(dataLocation);
             return retVal;
         }
 
-        private int GetStringLocation(int namePointerLoc)
+        /// <summary>
+        /// Returns the address that the pointer at the given location points to.
+        /// </summary>
+        public int GetPointerDestination(int pointerLoc)
         {
             int pointer = 0;
-            pointer = GameSaveData[namePointerLoc + 2] << 16;
-            pointer += GameSaveData[namePointerLoc + 1] << 8;
-            pointer += GameSaveData[namePointerLoc];
-            int dataLocation = namePointerLoc + pointer - 1;
+            pointer = GameSaveData[pointerLoc + 3] << 24;
+            pointer += GameSaveData[pointerLoc + 2] << 16;
+            pointer += GameSaveData[pointerLoc + 1] << 8;
+            pointer += GameSaveData[pointerLoc];
+            int dataLocation = pointerLoc + pointer - 1;
             return dataLocation;
         }
 
+        /// <summary>
+        /// Gets the string at the specified location
+        /// </summary>
         public string GetString(int loc)
         {
             string retVal = "";
@@ -743,14 +837,14 @@ namespace NFL2K5Tool
             {
                 firstNamePtr = player * cPlayerDataLength + cDuaneStarksFnamePointerLoc;
                 lastNamePtr = firstNamePtr + 4;
-                loc = GetStringLocation(firstNamePtr);
+                loc = GetPointerDestination(firstNamePtr);
                 if (loc < cModifiableNameSectionEnd)
                 {
                     if (loc >= locationOfChange)
                     {
                         AdjustPointer(firstNamePtr, difference);
                     }
-                    loc = GetStringLocation(lastNamePtr);
+                    loc = GetPointerDestination(lastNamePtr);
                     if (loc >= locationOfChange)
                     {
                         AdjustPointer(lastNamePtr, difference);
@@ -760,7 +854,7 @@ namespace NFL2K5Tool
         }
 
         /// <summary>
-        /// calculate the pointer, add the difference, set it back
+        /// updates a pointer to the requested change
         /// </summary>
         private void AdjustPointer(int namePointerLoc, int change)
         {
@@ -841,7 +935,7 @@ namespace NFL2K5Tool
         /// <summary>
         /// set face for a dude
         /// </summary>
-        /// <param name="player">the player (0-2100+)</param>
+        /// <param name="player">the player (0-2317)</param>
         /// <param name="val">string representation of the face enum</param>
         private void SetFaceMask(int player, String val)
         {
@@ -1392,7 +1486,7 @@ namespace NFL2K5Tool
             }
             else
             {
-                //Add error 
+                //TODO: Add error ?
             }
         }
         #endregion
