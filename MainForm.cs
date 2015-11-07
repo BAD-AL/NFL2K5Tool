@@ -38,7 +38,7 @@ namespace NFL2K5Tool
                 string shortName = dlg.FileName.Substring(dlg.FileName.LastIndexOf(Path.DirectorySeparatorChar) + 1);
                 Text = "NFL2K5Tool - " + shortName;
                 statusBar1.Text = dlg.FileName + " loaded";
-                mListPlayersButton.Enabled = true;
+                mListPlayersButton2.Enabled = mListPlayersButton.Enabled = true;
             }
         }
 
@@ -48,19 +48,19 @@ namespace NFL2K5Tool
             mTextBox.Clear();
             StringBuilder builder = new StringBuilder(5000);
 
-            builder.Append(mTool.GetNumberOfPlayersOnAllTeams());
-
             builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
             builder.Append("\n");
-            int max = (int)numericUpDown1.Value;
-            for (int i = 0; i < max; i++)
-            {
-                builder.Append(mTool.GetPlayerData(i, listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
-                builder.Append("\n");
-            }
+            
+            if( listTeamsToolStripMenuItem.Checked)
+                builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, true, true));
+            
+            if (listFreeAgentsToolStripMenuItem.Checked)
+                builder.Append(mTool.GetTeamPlayers("FreeAgents", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+            
+            if( listDraftClassToolStripMenuItem.Checked)
+                builder.Append(mTool.GetTeamPlayers("DraftClass", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+            
             mTextBox.AppendText(builder.ToString());
-            //mTextBox.SelectionStart = builder.Length - 1;
-            //mTextBox.ScrollToCaret();
         }
 
         private void mClearButton_Click(object sender, EventArgs e)
@@ -146,7 +146,11 @@ namespace NFL2K5Tool
             {
                 Regex r;
                 r = new Regex(searchString, RegexOptions.IgnoreCase);
-                Match m = r.Match(mTextBox.Text, mTextBox.SelectionStart+1);
+                int startAt = mTextBox.SelectionStart+1;
+                if (startAt > mTextBox.Text.Length)
+                    startAt = 0;
+
+                Match m = r.Match(mTextBox.Text, startAt);
 
                 if (m.Length == 0)
                 { // continue at the top if not found
@@ -279,6 +283,57 @@ namespace NFL2K5Tool
         {
             listAttributesToolStripMenuItem.Checked = !listAttributesToolStripMenuItem.Checked;
         }
+
+        private void listFreeAgentsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listFreeAgentsToolStripMenuItem.Checked = !listFreeAgentsToolStripMenuItem.Checked;
+        }
+
+        private void listDraftClassToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listDraftClassToolStripMenuItem.Checked = !listDraftClassToolStripMenuItem.Checked;
+        }
+
+        private void listTeamsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listTeamsToolStripMenuItem.Checked = !listTeamsToolStripMenuItem.Checked;
+        }
+
+        private void mListPlayersButton2_Click(object sender, EventArgs e)
+        {
+            mTextBox.Clear();
+            StringBuilder builder = new StringBuilder(5000);
+            builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+            builder.Append("\n");
+            int max = (int)numericUpDown1.Value;
+            for (int i = 0; i < max; i++)
+            {
+                builder.Append(mTool.GetPlayerData(i, listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+                builder.Append("\n");
+            }
+            //builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, true, true));
+            mTextBox.AppendText(builder.ToString());
+        }
+
+        private void mApplyButton_Click(object sender, EventArgs e)
+        {
+            InputParser parser = new InputParser();
+            parser.Tool = this.mTool;
+            parser.ProcessText(mTextBox.Text);
+        }
+
+        private void mSaveButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.RestoreDirectory = true;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                if (File.Exists(dlg.FileName))
+                    File.Delete(dlg.FileName);
+                File.WriteAllBytes(dlg.FileName, mTool.GameSaveData);
+            }
+        }
+
 
     }
 }

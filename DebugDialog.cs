@@ -93,7 +93,8 @@ namespace NFL2K5Tool
             int limit = this.SaveFile.Length - 4;
             for (long i = 0; i < limit; i++)
             {
-                pointer = SaveFile[i + 2] << 16;
+                pointer =  SaveFile[i + 3] << 24;
+                pointer += SaveFile[i + 2] << 16;
                 pointer += SaveFile[i + 1] << 8;
                 pointer += SaveFile[i];
                 dataLocation = i + pointer - 1;
@@ -110,14 +111,31 @@ namespace NFL2K5Tool
         {
             textBox3.Clear();
             string val = textBox1.Text;
+            ShowPointersForLoc(val);
+        }
+
+        private void ShowPointersForLoc(string val)
+        {
             if (val.StartsWith("0x"))
                 val = val.Substring(2);
-            int loc = Int32.Parse(val, System.Globalization.NumberStyles.AllowHexSpecifier);
-            List<int> pointers = FindPointersForLocation(loc);
-            foreach (int dude in pointers)
+            try
             {
-                textBox3.AppendText(dude.ToString("X"));
-                textBox3.AppendText("\r\n");
+                textBox3.Clear();
+                int loc = Int32.Parse(val, System.Globalization.NumberStyles.AllowHexSpecifier);
+                List<int> pointers = FindPointersForLocation(loc);
+                foreach (int dude in pointers)
+                {
+                    textBox3.AppendText(dude.ToString("X"));
+                    textBox3.AppendText("\r\n");
+                }
+                if (pointers.Count == 0)
+                {
+                    textBox3.Text = "Pointr to: "+  val + " Not found";
+                }
+            }
+            catch (Exception e)
+            {
+                textBox3.Text = e.Message; 
             }
         }
 
@@ -125,6 +143,7 @@ namespace NFL2K5Tool
         {
             int player = (int) mPlayerUpDown.Value;
             mPlayerNameTextBox.Text = Tool.GetPlayerName(player, ' ');
+            mLocationLabel.Text = "0x" + Tool.GetPlayerDataStart(player).ToString("X");
         }
 
         private void mPlayerUpDown_ValueChanged(object sender, EventArgs e)
@@ -142,6 +161,22 @@ namespace NFL2K5Tool
         {
             if (mNameTextBox.Text.Length > 0)
                 Tool.SetPlayerLastName((int)mPlayerUpDown.Value, mNameTextBox.Text, mUsePointerButton.Checked);
+        }
+
+        private void listNumberOfPlayersButton_Click(object sender, EventArgs e)
+        {
+           textBox3.Text = Tool.GetNumberOfPlayersOnAllTeams();
+        }
+
+        private void mGetTeamButton_Click(object sender, EventArgs e)
+        {
+            string team = textBox1.Text;
+            textBox3.Text = Tool.GetTeamPlayers(team, false, false);
+        }
+
+        private void mLocationLabel_Click(object sender, EventArgs e)
+        {
+            ShowPointersForLoc(mLocationLabel.Text);
         }
 
     }
