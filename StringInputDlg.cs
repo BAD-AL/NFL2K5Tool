@@ -14,11 +14,11 @@ namespace NFL2K5Tool
 	/// </summary>
 	public class StringInputDlg : System.Windows.Forms.Form
 	{
-		private System.Windows.Forms.Button okButton;
+		private System.Windows.Forms.Button mOkButton;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox userInput;
+		private System.Windows.Forms.TextBox mUserInput;
 		private string result = "";
-		private System.Windows.Forms.Button cancelButton;
+		private System.Windows.Forms.Button mCancelButton;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -29,8 +29,8 @@ namespace NFL2K5Tool
 			InitializeComponent();
 			this.Text= title;
 			this.label1.Text = message;
-			this.userInput.Text= initialText;
-			this.userInput.SelectAll();
+			this.mUserInput.Text= initialText;
+			this.mUserInput.SelectAll();
 		}
 
 		public static string GetString(string title, string message)
@@ -219,39 +219,39 @@ namespace NFL2K5Tool
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.okButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.userInput = new System.Windows.Forms.TextBox();
+            this.mOkButton = new System.Windows.Forms.Button();
+            this.mCancelButton = new System.Windows.Forms.Button();
+            this.mUserInput = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // okButton
             // 
-            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(65, 64);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(60, 23);
-            this.okButton.TabIndex = 1;
-            this.okButton.Text = "OK";
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            this.mOkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.mOkButton.Location = new System.Drawing.Point(65, 64);
+            this.mOkButton.Name = "okButton";
+            this.mOkButton.Size = new System.Drawing.Size(60, 23);
+            this.mOkButton.TabIndex = 1;
+            this.mOkButton.Text = "OK";
+            this.mOkButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // cancelButton
             // 
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(141, 64);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(60, 23);
-            this.cancelButton.TabIndex = 2;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            this.mCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.mCancelButton.Location = new System.Drawing.Point(141, 64);
+            this.mCancelButton.Name = "cancelButton";
+            this.mCancelButton.Size = new System.Drawing.Size(60, 23);
+            this.mCancelButton.TabIndex = 2;
+            this.mCancelButton.Text = "Cancel";
+            this.mCancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // userInput
             // 
-            this.userInput.Location = new System.Drawing.Point(56, 40);
-            this.userInput.Name = "userInput";
-            this.userInput.Size = new System.Drawing.Size(200, 20);
-            this.userInput.TabIndex = 0;
-            this.userInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.userInput_KeyDown);
+            this.mUserInput.Location = new System.Drawing.Point(56, 40);
+            this.mUserInput.Name = "userInput";
+            this.mUserInput.Size = new System.Drawing.Size(200, 20);
+            this.mUserInput.TabIndex = 0;
+            this.mUserInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.userInput_KeyDown);
             // 
             // label1
             // 
@@ -266,9 +266,9 @@ namespace NFL2K5Tool
             this.ClientSize = new System.Drawing.Size(282, 104);
             this.ControlBox = false;
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.userInput);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.mUserInput);
+            this.Controls.Add(this.mCancelButton);
+            this.Controls.Add(this.mOkButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -293,7 +293,7 @@ namespace NFL2K5Tool
 
 		private void okButton_Click(object sender, System.EventArgs e) 
 		{
-			result = userInput.Text;
+			result = mUserInput.Text;
 			this.DialogResult = DialogResult.OK;
 		}
 

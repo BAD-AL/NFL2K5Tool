@@ -2,13 +2,25 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace NFL2K5Tool
 {
     public class InputParser
     {
+        List<string> mErrors = new List<string>();
+        private Regex mTeamRegex = new Regex("Team\\s*=\\s*([0-9a-zA-Z]+)");
+        private Regex mWeekRegex  = new Regex("Week ([1-9][0	-7]?)");
+        private Regex mGameRegex  = new Regex("([0-9a-z]+)\\s+at\\s+([0-9a-zA-Z]+)");
+        private ParsingStates mCurrentState = ParsingStates.PlayerModification;
+        private InputParserTeamTracker mTracker = new InputParserTeamTracker();
+
         public GamesaveTool Tool { get; set; }
 
+        /// <summary>
+        /// Process the text in the given file, applying it to the gamesave data.
+        /// </summary>
+        /// <param name="fileName"></param>
         public void ProcessFile(string fileName)
         {
             try
@@ -30,13 +42,10 @@ namespace NFL2K5Tool
             string[] lines = text.Split(chars);
             ProcessLines(lines);
         }
-        int player = 0;
-
-        private ParsingStates mCurrentState = ParsingStates.PlayerModification;
 
         public void ProcessLines(string[] lines)
         {
-            player = 0;
+            Tool.GetKey(true, true);// TODO, plumb support for specifying 'Key'
             int i = 0;
             try
             {
@@ -45,7 +54,7 @@ namespace NFL2K5Tool
                     ProcessLine(lines[i]);
                     //Console.WriteLine(i);
                 }
-                //ShowErrors();
+                StaticUtils.ShowErrors();
                 //ApplySchedule();
             }
             catch (Exception e)
@@ -64,31 +73,159 @@ namespace NFL2K5Tool
             }
         }
 
+        private Match mTeamMatch = Match.Empty;
+
         protected virtual void ProcessLine(string line)
         {
-            Tool.GetKey(true, true);// TODO, plumb support for specifying 'Key'
             line = line.Trim();
             if (line.StartsWith("#") || line.Length < 1)
             {
+            }
+            else if ( (mTeamMatch = mTeamRegex.Match(line)) != Match.Empty)
+            {
+                Console.WriteLine("'{0}' ", line);
+                mCurrentState = ParsingStates.PlayerModification;
+                string team = mTeamMatch.Groups[1].ToString();
+                bool ret = SetCurrentTeam(team);
+                if (!ret)
+                {
+                    StaticUtils.Errors.Add(string.Format("ERROR with line '{0}'.", line));
+                    StaticUtils.Errors.Add(string.Format("Team input must be in the form 'TEAM = team '"));
+                    return;
+                }
             }
             else 
             {
                 switch (mCurrentState)
                 {
                     case ParsingStates.PlayerModification:
-                        Tool.SetPlayerData(player, line);
-                        player++;
+                        InsertPlayer(line);
                         break;
                     case ParsingStates.Schedule:
                         break;
                 }
             }
         }
+
+        private void InsertPlayer(string line)
+        {
+            int playerIndex = GetPlayerIndex(line);
+            Tool.SetPlayerData(playerIndex, line);
+        }
+
+        private int GetPlayerIndex(string line)
+        {
+            int retVal = -1;
+            List<int> playerIndexes = Tool.GetPlayerIndexesForTeam(mTracker.Team);
+
+            if (mTracker.PlayerCount < playerIndexes.Count)
+            {
+                retVal = playerIndexes[mTracker.PlayerCount++];
+            }
+            else
+            {
+                StaticUtils.Errors.Add(String.Format("Error, team player limit reached. {0}; cannot add player: {1}",mTracker.Team, line));
+            }
+            return retVal;
+        }
+
+        private string GetAwayTeam(string line)
+        {
+            Match m = mGameRegex.Match(line);
+            string awayTeam = m.Groups[1].ToString();
+            return awayTeam;
+        }
+
+        private string GetHomeTeam(string line)
+        {
+            Match m = mGameRegex.Match(line);
+            string team = m.Groups[2].ToString();
+            return team;
+        }
+
+        private int GetWeek(string line)
+        {
+            Match m = mWeekRegex.Match(line);
+            string week_str = m.Groups[1].ToString();
+            int ret = -1;
+            try
+            {
+                ret = Int32.Parse(week_str);
+                ret--; // our week starts at 0
+            }
+            catch
+            {
+                StaticUtils.Errors.Add(string.Format("Week '{0}' is invalid.", week_str));
+            }
+            return ret;
+        }
+
+        private bool SetCurrentTeam(string team)
+        {
+            if (Tool.GetTeamIndex(team) < 0)
+            {//error condition
+                mErrors.Add(string.Format("Team '{0}' is Invalid.", team));
+                return false;
+            }
+            else
+            {
+                mTracker.Team = team;
+                mTracker.Reset();
+            }
+            return true;
+        }
+
     }
 
     public enum ParsingStates
     {
         PlayerModification,
         Schedule
+    }
+
+    /// <summary>
+    /// class used to help keep track of number of players being input.
+    /// </summary>
+    public class InputParserTeamTracker
+    {
+        public int CBs = 0;
+        public int DEs = 0;
+        public int DTs = 0;
+        public int FBs = 0;
+        public int Gs  = 0;
+        public int RBs = 0;
+        public int OLBs = 0;
+        public int ILBs = 0;
+        public int Ps = 0;
+        public int QBs = 0;
+        public int SSs = 0;
+        public int Ts = 0;
+        public int TEs = 0;
+        public int WRs = 0;
+        public int Cs = 0;
+
+        public int PlayerCount = 0;
+
+        public string Team = "";
+
+        public void Reset()
+        {
+             CBs = 0;
+             DEs = 0;
+             DTs = 0;
+             FBs = 0;
+             Gs = 0;
+             RBs = 0;
+             OLBs = 0;
+             ILBs = 0;
+             Ps = 0;
+             QBs = 0;
+             SSs = 0;
+             Ts = 0;
+             TEs = 0;
+             WRs = 0;
+             Cs = 0;
+             PlayerCount = 0;
+        }
     }
 }

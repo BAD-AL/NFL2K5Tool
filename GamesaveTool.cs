@@ -128,25 +128,7 @@ namespace NFL2K5Tool
                 teamPlayerPointersStart = cFreeAgentsPlayerPointersStart;
             else if ("DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
                 return GetDraftClass(attributes, appearance);
-            /*
-            int numPlayers = GetNumPlayers(team);
-            int playerIndex = -1;
 
-            StringBuilder builder = new StringBuilder(300 * numPlayers +1);
-            builder.Append("\nTeam = ");
-            builder.Append(team);
-            builder.Append("    Players:");
-            builder.Append(numPlayers);
-            builder.Append("\n");
-
-            for (int i = 0; i < numPlayers; i++)
-            {
-                playerIndex = GetPlayerIndexByPointer( teamPlayerPointersStart + (i * 4)); // 4== ptr length
-                builder.Append(GetPlayerData(playerIndex, attributes, appearance));
-                builder.Append("\n");
-            }
-            return builder.ToString();
-            */
             List<int> playerIndexes = GetPlayerIndexesForTeam(team);
             StringBuilder builder = new StringBuilder(300 * playerIndexes.Count + 1);
             builder.Append("\nTeam = ");
@@ -163,7 +145,10 @@ namespace NFL2K5Tool
             return builder.ToString();
         }
 
-        private List<int> GetPlayerIndexesForTeam(string team)
+        /// <summary>
+        /// returns a list of player indexes for the given team
+        /// </summary>
+        public List<int> GetPlayerIndexesForTeam(string team)
         {
             List<int> retVal = new List<int>(55);
             int teamIndex = GetTeamIndex(team);
@@ -229,10 +214,15 @@ namespace NFL2K5Tool
             return retVal;
         }
 
-        private int GetTeamIndex(string team)
+        /// <summary>
+        /// Gets the team index
+        /// </summary>
+        /// <param name="team"></param>
+        /// <returns></returns>
+        public int GetTeamIndex(string team)
         {
             for (int i = 0; i < mTeamsDataOrder.Length; i++)
-                if (team == mTeamsDataOrder[i])
+                if (mTeamsDataOrder[i].Equals(team, StringComparison.OrdinalIgnoreCase))
                     return i;
             return -1;
         }
@@ -257,6 +247,13 @@ namespace NFL2K5Tool
             return "DraftClass";
         }
 
+
+        public int GetPlayerPositionDepth(int player)
+        {
+            int playerLocation = GetPlayerDataStart(player);
+            return GameSaveData[ playerLocation + 41];
+        }
+            
         /// <summary>
         /// Loads the gamesave fle
         /// TODO: error checking; filetype setup (roster/franchise)
@@ -328,34 +325,49 @@ namespace NFL2K5Tool
         /// </summary>
         /// <param name="player">The index of the player</param>
         /// <param name="line">The data tp apply.</param>
-        public void SetPlayerData(int player, string line)
+        public bool SetPlayerData(int player, string line)
         {
-            int attr = -1;
-            string[] attributes = line.Split(mComma);
-            for (int i = 0; i < attributes.Length; i++)
+            bool retVal = false;
+            if (player > -1 && player < cMaxPlayers)
             {
-                // figure out how to set names
-                attr = mOrder[i];
-                if (attr == -1)
+                int attr = -1;
+                string[] attributes = line.Split(mComma);
+                for (int i = 0; i < attributes.Length; i++)
                 {
-                    // Name setting perhaps should be done at another, smarter level?
-                    // How we gonna decide to use pointers or not?
-                    SetPlayerFirstName(player, attributes[i], false);
+                    try
+                    {
+                        // figure out how to set names
+                        attr = mOrder[i];
+                        if (attr == -1)
+                        {
+                            // Name setting perhaps should be done at another, smarter level?
+                            // How we gonna decide to use pointers or not?
+                            SetPlayerFirstName(player, attributes[i], false);
+                        }
+                        else if (attr == -2)
+                        {
+                            // How we gonna decide to use pointers or not?
+                            SetPlayerLastName(player, attributes[i], false);
+                        }
+                        else if (attr > 99)
+                        {
+                            SetPlayerappearanceAttribute(player, (AppearanceAttributes)attr, attributes[i]);
+                        }
+                        else
+                        {
+                            SetAttribute(player, (PlayerOffsets)attr, attributes[i]);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        string desc = attr > 99 ? ((AppearanceAttributes)attr).ToString(): ((PlayerOffsets)attr).ToString();
+
+                        StaticUtils.Errors.Add("Error setting attribute '" + desc + "' to '" + attributes[i]);
+                    }
                 }
-                else if (attr == -2)
-                {
-                    // How we gonna decide to use pointers or not?
-                    SetPlayerLastName(player, attributes[i], false);
-                }
-                if (attr > 99)
-                {
-                    SetPlayerappearanceAttribute(player, (AppearanceAttributes)attr, attributes[i]);
-                }
-                else
-                {
-                    SetAttribute(player, (PlayerOffsets)attr, attributes[i]);
-                }
+                retVal = true;
             }
+            return retVal;
         }
 
         /// <summary>
@@ -651,6 +663,10 @@ namespace NFL2K5Tool
                     break;
                 case PlayerOffsets.College:
                     SetCollege(player, stringVal);
+                    break;
+                case PlayerOffsets.Position:
+                    Positions p = (Positions)Enum.Parse(typeof(Positions), stringVal);
+                    SetByte(loc, (byte)p);
                     break;
                 default:
                     val = Int32.Parse(stringVal);
@@ -1486,7 +1502,7 @@ namespace NFL2K5Tool
             }
             else
             {
-                //TODO: Add error ?
+                StaticUtils.Errors.Add("College '"+college+ "' appears to be invalid");
             }
         }
         #endregion

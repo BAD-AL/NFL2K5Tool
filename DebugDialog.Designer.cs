@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DebugDialog));
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -49,10 +50,11 @@
             this.listTeamPlayerNumbersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.mStatusLabel = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
-            this.mStatusLabel = new System.Windows.Forms.Label();
+            this.includeDepthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -262,7 +264,8 @@
             // findToolStripMenuItem
             // 
             this.findToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.listTeamPlayerNumbersToolStripMenuItem});
+            this.listTeamPlayerNumbersToolStripMenuItem,
+            this.includeDepthToolStripMenuItem});
             this.findToolStripMenuItem.Name = "findToolStripMenuItem";
             this.findToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
             this.findToolStripMenuItem.Text = "Find";
@@ -297,6 +300,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "List This many";
             // 
+            // mStatusLabel
+            // 
+            this.mStatusLabel.AutoSize = true;
+            this.mStatusLabel.Location = new System.Drawing.Point(9, 46);
+            this.mStatusLabel.Name = "mStatusLabel";
+            this.mStatusLabel.Size = new System.Drawing.Size(46, 13);
+            this.mStatusLabel.TabIndex = 17;
+            this.mStatusLabel.Text = "Status...";
+            // 
             // numericUpDown1
             // 
             this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -315,10 +327,11 @@
             this.numericUpDown1.Size = new System.Drawing.Size(55, 20);
             this.numericUpDown1.TabIndex = 4;
             this.numericUpDown1.Value = new decimal(new int[] {
-            1936,
+            2317,
             0,
             0,
             0});
+            this.numericUpDown1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.numericUpDown1_KeyDown);
             // 
             // mListPlayersButton2
             // 
@@ -346,14 +359,12 @@
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
             // 
-            // mStatusLabel
+            // includeDepthToolStripMenuItem
             // 
-            this.mStatusLabel.AutoSize = true;
-            this.mStatusLabel.Location = new System.Drawing.Point(9, 46);
-            this.mStatusLabel.Name = "mStatusLabel";
-            this.mStatusLabel.Size = new System.Drawing.Size(46, 13);
-            this.mStatusLabel.TabIndex = 17;
-            this.mStatusLabel.Text = "Status...";
+            this.includeDepthToolStripMenuItem.Name = "includeDepthToolStripMenuItem";
+            this.includeDepthToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.includeDepthToolStripMenuItem.Text = "Include depth";
+            this.includeDepthToolStripMenuItem.Click += new System.EventHandler(this.includeDepthToolStripMenuItem_Click);
             // 
             // DebugDialog
             // 
@@ -371,6 +382,7 @@
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "DebugDialog";
             this.Text = "Debug Dialog";
@@ -414,5 +426,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Button mListPlayersButton2;
         private System.Windows.Forms.Label mStatusLabel;
+        private System.Windows.Forms.ToolStripMenuItem includeDepthToolStripMenuItem;
     }
 }

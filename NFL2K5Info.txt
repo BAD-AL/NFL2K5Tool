@@ -17,3 +17,10 @@ Desired Features:
 7. Auto update Depth chart
 8. Search text in text area
 9. Set Coach data
+
+Player Data:
+0x54 bytes (84 bytes)
+bytes 0- 37 seem to be all appearance related.
+bytes 38-52 ??? (41 appears relavent to depth chart)
+bytes 53-81, seem to all be skill related
+ 

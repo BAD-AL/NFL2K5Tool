@@ -56,7 +56,7 @@ namespace NFL2K5Tool
         BreakTackle,
         PassAccuracy,
         PassReadCoverage,
-        Catch,//0x44
+        Catch,
         RunBlocking,
         PassBlocking,
         HoldOntoBall,

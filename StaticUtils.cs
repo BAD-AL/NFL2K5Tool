@@ -10,6 +10,31 @@ namespace NFL2K5Tool
     public static class StaticUtils
     {
         /// <summary>
+        /// a place to keep all the processing errors.
+        /// </summary>
+        public static List<string> Errors = new List<string>();
+
+        /// <summary>
+        /// Shows the errors 
+        /// </summary>
+        public static void ShowErrors()
+        {
+            if (Errors.Count > 0)
+            {
+                StringBuilder b = new StringBuilder();
+                foreach (string s in Errors)
+                {
+                    b.Append(s);
+                    b.Append("\n");
+                }
+                ErrorForm form = new ErrorForm();
+                form.ErrorText = b.ToString();
+                form.ShowDialog();
+                Errors = new List<string>();
+            }
+        }
+
+        /// <summary>
         /// Find string 'str' (unicode string) in the data byte array.
         /// </summary>
         /// <param name="str">The string to look for</param>

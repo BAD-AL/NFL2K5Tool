@@ -37,7 +37,7 @@ namespace NFL2K5Tool
                 string shortName = dlg.FileName.Substring(dlg.FileName.LastIndexOf(Path.DirectorySeparatorChar) + 1);
                 Text = "NFL2K5Tool - " + shortName;
                 statusBar1.Text = dlg.FileName + " loaded";
-                mListPlayersButton2.Enabled = mListPlayersButton.Enabled = true;
+                mListPlayersButton2.Enabled = mListPlayersButton.Enabled = debugDialogMenuItem.Enabled = true;
             }
         }
 

@@ -194,9 +194,25 @@ namespace NFL2K5Tool
             for (int i = 0; i < max; i++)
             {
                 builder.Append(Tool.GetPlayerData(i, false, false));
+                if (includeDepthToolStripMenuItem.Checked)
+                {
+                    builder.Append(" Depth:");
+                    builder.Append(Tool.GetPlayerPositionDepth(i).ToString("X2"));
+                }
                 builder.Append("\n");
             }
             mResultsTextBox.AppendText(builder.ToString());
+        }
+
+        private void numericUpDown1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                mListPlayersButton2_Click(sender, e);
+        }
+
+        private void includeDepthToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            includeDepthToolStripMenuItem.Checked = !includeDepthToolStripMenuItem.Checked;
         }
 
     }

@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mLoadSaveButton = new System.Windows.Forms.Button();
             this.mListPlayersButton = new System.Windows.Forms.Button();
-            this.mTextBox = new SearchTextBox();
             this.mClearButton = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.statusBar1 = new System.Windows.Forms.Label();
@@ -40,7 +40,7 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stringToHexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugDialogMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listTeamsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listApperanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listAttributesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,6 +50,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mApplyButton = new System.Windows.Forms.Button();
             this.mSaveButton = new System.Windows.Forms.Button();
+            this.mTextBox = new NFL2K5Tool.SearchTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -77,18 +78,6 @@
             this.mListPlayersButton.Text = "List Team &Players";
             this.mListPlayersButton.UseVisualStyleBackColor = true;
             this.mListPlayersButton.Click += new System.EventHandler(this.mListPlayersButton_Click);
-            // 
-            // mTextBox
-            // 
-            this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.mTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mTextBox.Location = new System.Drawing.Point(2, 27);
-            this.mTextBox.Name = "mTextBox";
-            this.mTextBox.Size = new System.Drawing.Size(674, 327);
-            this.mTextBox.TabIndex = 2;
-            this.mTextBox.Text = "";
             // 
             // mClearButton
             // 
@@ -172,7 +161,7 @@
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.findToolStripMenuItem,
-            this.stringToHexToolStripMenuItem,
+            this.debugDialogMenuItem,
             this.listTeamsToolStripMenuItem,
             this.listApperanceToolStripMenuItem,
             this.listAttributesToolStripMenuItem,
@@ -189,12 +178,13 @@
             this.findToolStripMenuItem.Text = "F&ind";
             this.findToolStripMenuItem.Click += new System.EventHandler(this.findToolStripMenuItem_Click);
             // 
-            // stringToHexToolStripMenuItem
+            // debugDialogMenuItem
             // 
-            this.stringToHexToolStripMenuItem.Name = "stringToHexToolStripMenuItem";
-            this.stringToHexToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.stringToHexToolStripMenuItem.Text = "&Debug Dialog";
-            this.stringToHexToolStripMenuItem.Click += new System.EventHandler(this.stringToHexToolStripMenuItem_Click);
+            this.debugDialogMenuItem.Enabled = false;
+            this.debugDialogMenuItem.Name = "debugDialogMenuItem";
+            this.debugDialogMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.debugDialogMenuItem.Text = "&Debug Dialog";
+            this.debugDialogMenuItem.Click += new System.EventHandler(this.stringToHexToolStripMenuItem_Click);
             // 
             // listTeamsToolStripMenuItem
             // 
@@ -260,6 +250,7 @@
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "List This many";
+            this.groupBox1.Visible = false;
             // 
             // mApplyButton
             // 
@@ -283,6 +274,21 @@
             this.mSaveButton.UseVisualStyleBackColor = true;
             this.mSaveButton.Click += new System.EventHandler(this.mSaveButton_Click);
             // 
+            // mTextBox
+            // 
+            this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.mTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mTextBox.Location = new System.Drawing.Point(2, 27);
+            this.mTextBox.Name = "mTextBox";
+            this.mTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.mTextBox.SearchString = null;
+            this.mTextBox.Size = new System.Drawing.Size(674, 327);
+            this.mTextBox.StatusControl = null;
+            this.mTextBox.TabIndex = 2;
+            this.mTextBox.Text = "";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -297,6 +303,7 @@
             this.Controls.Add(this.mListPlayersButton);
             this.Controls.Add(this.mLoadSaveButton);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(694, 200);
             this.Name = "MainForm";
@@ -324,7 +331,7 @@
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadSaveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stringToHexToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debugDialogMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listApperanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listAttributesToolStripMenuItem;
         private System.Windows.Forms.Button mListPlayersButton2;
