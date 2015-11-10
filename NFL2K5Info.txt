@@ -23,4 +23,5 @@ Player Data:
 bytes 0- 37 seem to be all appearance related.
 bytes 38-52 ??? (41 appears relavent to depth chart)
 bytes 53-81, seem to all be skill related
+
  

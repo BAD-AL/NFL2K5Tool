@@ -38,6 +38,7 @@ namespace NFL2K5Tool
 
         public void ProcessText(string text)
         {
+            mDelim = CharCount(text, ';') > CharCount(text, ',') ? mSemiColon : mComma;
             char[] chars = "\n\r".ToCharArray();
             string[] lines = text.Split(chars);
             ProcessLines(lines);
@@ -54,7 +55,6 @@ namespace NFL2K5Tool
                     ProcessLine(lines[i]);
                     //Console.WriteLine(i);
                 }
-                StaticUtils.ShowErrors();
                 //ApplySchedule();
             }
             catch (Exception e)
@@ -78,6 +78,9 @@ namespace NFL2K5Tool
         protected virtual void ProcessLine(string line)
         {
             line = line.Trim();
+            if (line.EndsWith(","))
+                line = line.Substring(0, line.Length - 1);
+
             if (line.StartsWith("#") || line.Length < 1)
             {
             }
@@ -110,7 +113,7 @@ namespace NFL2K5Tool
         private void InsertPlayer(string line)
         {
             int playerIndex = GetPlayerIndex(line);
-            Tool.SetPlayerData(playerIndex, line);
+            SetPlayerData(playerIndex, line);
         }
 
         private int GetPlayerIndex(string line)
@@ -125,6 +128,87 @@ namespace NFL2K5Tool
             else
             {
                 StaticUtils.Errors.Add(String.Format("Error, team player limit reached. {0}; cannot add player: {1}",mTracker.Team, line));
+            }
+            return retVal;
+        }
+
+
+        private char[] mComma = new char[] { ',' };
+        private char[] mSemiColon = new char[] { ';' };
+        // will be set when starting to parse.
+        private char[] mDelim;
+
+        private List<string> ParsePlayerLine(string line)
+        {
+            List<string> retVal = new List<string>(line.Split(mDelim));
+            for (int i = 0; i < retVal.Count; i++)
+            {
+                // Fixup the issue with commas inside quoted strings. 
+                // (This however only works for strings that have 1 comma inside)
+                if (retVal[i].EndsWith("\"") && i > 0 && retVal[i - 1].StartsWith("\""))
+                {
+                    retVal[i - 1] += ( mDelim[0] + retVal[i]);
+                    retVal.RemoveAt(i);
+                }
+            }
+            return retVal;
+        }
+
+        int CharCount(string input, char thingToCount)
+        {
+            int retVal = 0;
+            for (int i = 0; i < input.Length; i++)
+                if (input[i] == thingToCount)
+                    retVal++;
+
+            return retVal;
+        }
+
+        /// <summary>
+        /// Sets a player's attributes
+        /// </summary>
+        /// <param name="player">The index of the player</param>
+        /// <param name="line">The data tp apply.</param>
+        public bool SetPlayerData(int player, string line)
+        {
+            bool retVal = false;
+            if (player > -1 && player < Tool.MaxPlayers)
+            {
+                int attr = -1;
+                List<string> attributes = ParsePlayerLine(line);
+                for (int i = 0; i < attributes.Count; i++)
+                {
+                    try
+                    {
+                        attr = Tool.Order[i];
+                        if (attr == -1)
+                        {
+                            // Name setting perhaps should be done at another, smarter level?
+                            // How we gonna decide to use pointers or not?
+                            Tool.SetPlayerFirstName(player, attributes[i], false);
+                        }
+                        else if (attr == -2)
+                        {
+                            // How we gonna decide to use pointers or not?
+                            Tool.SetPlayerLastName(player, attributes[i], false);
+                        }
+                        else if (attr > 99)
+                        {
+                            Tool.SetPlayerappearanceAttribute(player, (AppearanceAttributes)attr, attributes[i]);
+                        }
+                        else
+                        {
+                            Tool.SetAttribute(player, (PlayerOffsets)attr, attributes[i]);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        string desc = attr > 99 ? ((AppearanceAttributes)attr).ToString() : ((PlayerOffsets)attr).ToString();
+
+                        StaticUtils.Errors.Add("Error setting attribute '" + desc + "' to '" + attributes[i]);
+                    }
+                }
+                retVal = true;
             }
             return retVal;
         }

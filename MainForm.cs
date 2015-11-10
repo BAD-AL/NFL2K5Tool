@@ -130,11 +130,18 @@ namespace NFL2K5Tool
             mTextBox.AppendText(builder.ToString());
         }
 
+        
         private void mApplyButton_Click(object sender, EventArgs e)
         {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            statusBar1.Text = "Applying data...";
             InputParser parser = new InputParser();
             parser.Tool = this.mTool;
             parser.ProcessText(mTextBox.Text);
+            sw.Stop();
+            statusBar1.Text = "Done Applying data." + (sw.ElapsedMilliseconds/1000.0) +"s";
+            StaticUtils.ShowErrors();
         }
 
         private void mSaveButton_Click(object sender, EventArgs e)

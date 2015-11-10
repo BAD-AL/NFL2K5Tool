@@ -278,6 +278,13 @@ namespace NFL2K5Tool
         private int[] mOrder; // order of attributes
 
         /// <summary>
+        /// the order of the Attributes
+        /// </summary>
+        public int[] Order { get { return mOrder; } }
+
+        public int MaxPlayers { get { return cMaxPlayers; } }
+
+        /// <summary>
         /// The attributes key
         /// </summary>
         public string GetKey(bool attributes, bool appearance)
@@ -286,7 +293,7 @@ namespace NFL2K5Tool
             StringBuilder dummy = new StringBuilder(200);
             int prevLength = 0;
             builder.Append("#Pos,fname,lname,Number,");
-            mOrder = new int[4 + mAttributeOrder.Length + mappearanceOrder.Length];
+            mOrder = new int[4 + mAttributeOrder.Length + mAppearanceOrder.Length];
             mOrder[0] = (int)PlayerOffsets.Position;;
             mOrder[1] = -1;
             mOrder[2] = -2;
@@ -303,7 +310,7 @@ namespace NFL2K5Tool
             }
             if (appearance)
             {
-                foreach (AppearanceAttributes app in mappearanceOrder)
+                foreach (AppearanceAttributes app in mAppearanceOrder)
                 {
                     prevLength = dummy.Length;
                     GetPlayerappearanceAttribute(0, app, dummy);
@@ -316,58 +323,6 @@ namespace NFL2K5Tool
                 }
             }
             return builder.ToString();
-        }
-
-        private char[] mComma = new char[] { ',' };
-
-        /// <summary>
-        /// Sets a player's attributes
-        /// </summary>
-        /// <param name="player">The index of the player</param>
-        /// <param name="line">The data tp apply.</param>
-        public bool SetPlayerData(int player, string line)
-        {
-            bool retVal = false;
-            if (player > -1 && player < cMaxPlayers)
-            {
-                int attr = -1;
-                string[] attributes = line.Split(mComma);
-                for (int i = 0; i < attributes.Length; i++)
-                {
-                    try
-                    {
-                        // figure out how to set names
-                        attr = mOrder[i];
-                        if (attr == -1)
-                        {
-                            // Name setting perhaps should be done at another, smarter level?
-                            // How we gonna decide to use pointers or not?
-                            SetPlayerFirstName(player, attributes[i], false);
-                        }
-                        else if (attr == -2)
-                        {
-                            // How we gonna decide to use pointers or not?
-                            SetPlayerLastName(player, attributes[i], false);
-                        }
-                        else if (attr > 99)
-                        {
-                            SetPlayerappearanceAttribute(player, (AppearanceAttributes)attr, attributes[i]);
-                        }
-                        else
-                        {
-                            SetAttribute(player, (PlayerOffsets)attr, attributes[i]);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        string desc = attr > 99 ? ((AppearanceAttributes)attr).ToString(): ((PlayerOffsets)attr).ToString();
-
-                        StaticUtils.Errors.Add("Error setting attribute '" + desc + "' to '" + attributes[i]);
-                    }
-                }
-                retVal = true;
-            }
-            return retVal;
         }
 
         /// <summary>
@@ -414,13 +369,13 @@ namespace NFL2K5Tool
 
         private void GetPlayerappearance(int player, StringBuilder builder)
         {
-            foreach (AppearanceAttributes attr in this.mappearanceOrder)
+            foreach (AppearanceAttributes attr in this.mAppearanceOrder)
             {
                 GetPlayerappearanceAttribute(player, attr, builder);
             }
         }
 
-        private void SetPlayerappearanceAttribute(int player, AppearanceAttributes attr, string strVal)
+        public void SetPlayerappearanceAttribute(int player, AppearanceAttributes attr, string strVal)
         {
             switch (attr)
             {
@@ -543,7 +498,7 @@ namespace NFL2K5Tool
             }
         }
 
-        private AppearanceAttributes[] mappearanceOrder = new AppearanceAttributes[]{
+        private AppearanceAttributes[] mAppearanceOrder = new AppearanceAttributes[]{
              AppearanceAttributes.College, AppearanceAttributes.DOB, AppearanceAttributes.Hand, 
              AppearanceAttributes.Weight, AppearanceAttributes.Height, AppearanceAttributes.BodyType, 
              AppearanceAttributes.Skin, AppearanceAttributes.Face, AppearanceAttributes.Dreads, 
@@ -627,7 +582,7 @@ namespace NFL2K5Tool
 
         private char[] slash = { '/' };
 
-        private void SetAttribute(int player, PlayerOffsets attr, string stringVal)
+        public void SetAttribute(int player, PlayerOffsets attr, string stringVal)
         {
             int loc = GetPlayerDataStart(player) + (int)attr;
             int val = 0;
@@ -761,8 +716,8 @@ namespace NFL2K5Tool
         {
             for (int i = cModifiableNameSectionEnd - amount; i > startIndex; i--)
             {
-                //SetByte(i, GameSaveData[i - amount]); // for debugging
-                GameSaveData[i] = GameSaveData[i - amount]; // for speed
+                SetByte(i, GameSaveData[i - amount]); // for debugging
+                //GameSaveData[i] = GameSaveData[i - amount]; // for speed
             }
         }
 
@@ -770,8 +725,8 @@ namespace NFL2K5Tool
         {
             for (int i = startIndex; i < cModifiableNameSectionEnd; i++)
             {
-                //SetByte(i, GameSaveData[i + amount]); // for debugging
-                GameSaveData[i] = GameSaveData[i + amount]; // for speed
+                SetByte(i, GameSaveData[i + amount]); // for debugging
+                //GameSaveData[i] = GameSaveData[i + amount]; // for speed
             }
         }
 
@@ -1099,7 +1054,7 @@ namespace NFL2K5Tool
         private void SetHand(int player, String val)
         {
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.Turtleneck_Body_EyeBlack_Hand_Dreads;
-            YesNo ret = (YesNo)Enum.Parse(typeof(YesNo), val);
+            Hand ret = (Hand)Enum.Parse(typeof(Hand), val);
             int dude = (int)ret;
             dude = dude << 1;
             int b = GameSaveData[loc];
@@ -1193,12 +1148,10 @@ namespace NFL2K5Tool
         private void GetSkin(int player, StringBuilder builder)
         {
             int loc1 = GetPlayerDataStart(player) + (int)PlayerOffsets.DOB; //skin is in the same bytes as DOB
-            int loc2 = GetPlayerDataStart(player) + 1 + (int)PlayerOffsets.DOB; //skin is in the same bytes as DOB
-            int b = GameSaveData[loc2] << 8;
-            b += GameSaveData[loc1]; // Skin is in bits 5-9 of this int
-            b &= 0xfff;
-            b = b >> 7;
-            Skin ret = (Skin)b;
+            int loc2 = GetPlayerDataStart(player) - 1 + (int)PlayerOffsets.DOB; //skin is in the same bytes as DOB
+            int sk = (GameSaveData[loc1] & 0xF) << 1;
+            sk += GameSaveData[loc2] >> 7;
+            Skin ret = (Skin)sk;
             builder.Append(ret.ToString());
             builder.Append(",");
         }
@@ -1213,17 +1166,13 @@ namespace NFL2K5Tool
         private void SetSkin(int player, String val)
         {
             int loc1 = GetPlayerDataStart(player) + (int)PlayerOffsets.DOB; //skin is in the same bytes as DOB
-            int loc2 = GetPlayerDataStart(player) + 1 + (int)PlayerOffsets.DOB; //skin is in the same bytes as DOB
-            Skin ret = (Skin)Enum.Parse(typeof(Skin), val);
-            int dude = (int)ret;
-            dude = dude << 7;
-            int b = GameSaveData[loc2] << 8;
-            b += GameSaveData[loc1];
-            b &= 0xf07f; // clear out bits 5-9
-            b += dude;
-            // now put hi byte in DOB+1; low byte in DOB
-            int b1 = b & 0xff;
-            int b2 = b >> 8;
+            int loc2 = GetPlayerDataStart(player) - 1 + (int)PlayerOffsets.DOB; 
+            Skin sk = (Skin)Enum.Parse(typeof(Skin), val);
+            int dude = (int)sk;
+            int b1 = GameSaveData[loc1] & 0xf0;
+            int b2 = GameSaveData[loc2] & 0x7f;
+            b1 += dude >> 1;
+            b2 += (dude & 1) << 7;
             SetByte(loc1, (byte)b1);
             SetByte(loc2, (byte)b2);
         }
@@ -1245,11 +1194,8 @@ namespace NFL2K5Tool
             Helmet h = (Helmet)Enum.Parse(typeof(Helmet), helmet);
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.Helmet_LeftShoe_RightShoe;
             // helmet is 2nd bit
-            int val = GameSaveData[loc];
-            if (h == Helmet.Standard)
-                val = val & 0xBF;
-            else
-                val = val | 0x40;
+            int val = GameSaveData[loc] & 0xBF;
+            val += (int)h << 7;
             SetByte(loc, (byte)val);
         }
 
@@ -1270,7 +1216,7 @@ namespace NFL2K5Tool
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.Helmet_LeftShoe_RightShoe;
             //LShoe is last 3 bits; 
             int val = GameSaveData[loc] & 0xf8;
-            val |= (int)val;
+            val += (int)h;
             SetByte(loc, (byte)val);
         }
 
@@ -1330,10 +1276,10 @@ namespace NFL2K5Tool
         {
             Glove g = (Glove)Enum.Parse(typeof(Glove), glove);
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.MouthPiece_LeftGlove_Sleeves_NeckRoll;
-            int val1 = GameSaveData[loc]; // 
-            int val2 = GameSaveData[loc+1]; // most sig 2 bits of glove go to least sig bits in this value
-            val1 = (val1 & 0x3f) + ( ((int)g & 3) << 6);
-            val2 = (val2 & 0xfc) + ((int)g >> 2);
+            int val1 = GameSaveData[loc] & 0x3f; 
+            int val2 = GameSaveData[loc+1] & 0x3c; // most sig 2 bits of glove go to least sig bits in this value
+            val1 += ((int)g & 3) << 6;
+            val2 += ((int)g >> 2);
             SetByte(loc, (byte)val1);
             SetByte(loc+1, (byte)val2);
         }
@@ -1478,15 +1424,23 @@ namespace NFL2K5Tool
         //CollegeIndex(p) = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
         private string GetCollege(int player)
         {
+            string retVal = "";
             int loc = GetPlayerDataStart(player);
             int collegePointerVal = (GameSaveData[loc + 3] << 24) + (GameSaveData[loc + 2] << 16) + (GameSaveData[loc + 1] << 8) + GameSaveData[loc];
             int collegeIndex = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
-            return mColleges[collegeIndex];
+            retVal= mColleges[collegeIndex];
+            if (retVal.IndexOf(',') > -1)
+            {
+                retVal = '"' + retVal + '"';
+            }
+            return retVal;
         }
 
         private void SetCollege(int player, string college)
         {
             int loc = GetPlayerDataStart(player);
+            if( college[0] == '"')
+                college = college.Replace("\"", "");
             int collegeIndex = GetCollegeIndex(college);
             int pointerVal = 0;
             if (collegeIndex > -1)
