@@ -29,28 +29,38 @@ namespace NFL2K5Tool
         /// </summary>
         public string SearchString { get; set; }
 
+        private void ContextMenuItem_Click(object source, System.EventArgs e)
+        {
+            if (source == mCutMenuItem)
+                this.Cut();
+            else if (source == mCopyMenuItem)
+                this.Copy();
+            else if (source == mPasteMenuItem)
+                this.Paste();
+            else if (source == mFindNextMenuItem)
+                FindNextMatch();
+            else if (source == mFindPrevMenuItem)
+                FindPrevMatch();
+            else if (source == mSelectAllMenuItem)
+                this.SelectAll();
+            else if (source == mFindMenuItem)
+                if (SetSearchString()) FindNextMatch();
+        }
+
         /// <summary>
         /// Overridden for searching on key strokes
         /// </summary>
-        /// <param name="e"></param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
             if (e.Control)
             {
                 if (e.KeyCode == Keys.F)
-                {
-                    if (SetSearchString())
-                        FindNextMatch();
-                }
+                    if (SetSearchString()) FindNextMatch();
                 else if (e.KeyCode == Keys.F3)
                     FindPrevMatch();
-                //else if (e.KeyCode == Keys.G)
-                //    EditPlayer();
                 else if (e.KeyCode == Keys.L)
-                {
                     CutLine();
-                }
                 else if (e.KeyCode == Keys.V)
                 {
                     this.Paste(DataFormats.GetFormat(DataFormats.Text));
