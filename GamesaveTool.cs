@@ -270,9 +270,9 @@ namespace NFL2K5Tool
         /// </summary>
         /// <param name="location"></param>
         /// <param name="b"></param>
-        protected void SetByte(int location, byte b)
+        protected void SetByte(int loc, byte b)
         {
-            GameSaveData[location] = b;
+            GameSaveData[loc] = b;
         }
 
         private int[] mOrder; // order of attributes
@@ -599,10 +599,12 @@ namespace NFL2K5Tool
                     break;
                 case PlayerOffsets.JerseyNumber:
                     val = Int32.Parse(stringVal);
-                    v1 = (val >> 5 & 3);
-				    v2 = (val  << 3 & 0xf8);
-                    SetByte(loc + 1, (byte)v1);
-                    SetByte(loc, (byte)v2);
+                    v1 = GameSaveData[loc] & 7;
+                    v2 = GameSaveData[loc + 1] & 0xfc;
+                    v2 += val >> 5;
+                    v1 += (val & 0x1f ) << 3;
+                    SetByte(loc, (byte)v1);
+                    SetByte(loc + 1, (byte)v2);
                     break;
                 case PlayerOffsets.DOB:
                     //TODO: get this working
@@ -876,7 +878,7 @@ namespace NFL2K5Tool
         // input like 6'3"
         private int GetInches(string stringVal)
         {
-            int feet = stringVal[0] - 30;
+            int feet = stringVal[0] - 0x30;
             stringVal = stringVal.Replace("\"", "");
             int inches = Int32.Parse(stringVal.Substring(2));
             inches += feet * 12;
@@ -915,7 +917,7 @@ namespace NFL2K5Tool
             int dude = (int)ret;
             dude = dude << 2;
             int b = GameSaveData[loc];
-            b &= 0x80;// clear all but first bit
+            b &= 0x83;// clear all but first & last 2 bits
             b += dude;
             SetByte(loc, (byte)b);
         }
@@ -943,7 +945,7 @@ namespace NFL2K5Tool
             int dude = (int)ret;
             int b = GameSaveData[loc];
             b &= 0x01; // clear all but last bit
-            b += dude;
+            b += dude <<1;
             SetByte(loc, (byte)b);
         }
 
@@ -971,7 +973,7 @@ namespace NFL2K5Tool
             int dude = (int)ret;
             dude = dude << 5;
             int b = GameSaveData[loc];
-            b &= 0x1F; // clear bits 6&7
+            b &= 0x9F; // clear bits 6&7
             b += dude;
             SetByte(loc, (byte)b);
         }
@@ -1000,7 +1002,7 @@ namespace NFL2K5Tool
             int dude = (int)ret;
             dude = dude << 3;
             int b = GameSaveData[loc];
-            b &= 0x67; // clear bits 4&5
+            b &= 0xe7; // clear bits 4&5
             b += dude;
             SetByte(loc, (byte)b);
         }
@@ -1029,7 +1031,7 @@ namespace NFL2K5Tool
             int dude = (int)ret;
             dude = dude << 2;
             int b = GameSaveData[loc];
-            b &= 0x7b; // clear bit 3
+            b &= 0xfb; // clear bit 3
             b += dude;
             SetByte(loc, (byte)b);
         }
@@ -1058,7 +1060,7 @@ namespace NFL2K5Tool
             int dude = (int)ret;
             dude = dude << 1;
             int b = GameSaveData[loc];
-            b &= 0x7d; // clear bit 2
+            b &= 0xfd; // clear bit 2
             b += dude;
             SetByte(loc, (byte)b);
         }
@@ -1085,7 +1087,7 @@ namespace NFL2K5Tool
             YesNo ret = (YesNo)Enum.Parse(typeof(YesNo), val);
             int dude = (int)ret;
             int b = GameSaveData[loc];
-            b &= 0x7e; // clear bit 1
+            b &= 0xfe; // clear bit 1
             b += dude;
             SetByte(loc, (byte)b);
         }
@@ -1122,21 +1124,15 @@ namespace NFL2K5Tool
             Visor ret = (Visor)Enum.Parse(typeof(Visor), val);
 
             int dude = (int)ret;
-            int b1 = GameSaveData[loc1];
-            int b2 = GameSaveData[loc2];
+            int b1 = GameSaveData[loc1] & 0x7f;
+            int b2 = GameSaveData[loc2] & 0xfe;
 
             switch (ret)
             {
-                case Visor.None:
-                    b1 &= 0x7f;
-                    b2 &= 0xfe;
-                    break;
                 case Visor.Clear:
                     b1 += 0x80;
-                    b2 &= 0xfe;
                     break;
                 case Visor.Dark:
-                    b1 &= 0x7f;
                     b2 += 1;
                     break;
             }
@@ -1195,7 +1191,7 @@ namespace NFL2K5Tool
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.Helmet_LeftShoe_RightShoe;
             // helmet is 2nd bit
             int val = GameSaveData[loc] & 0xBF;
-            val += (int)h << 7;
+            val += (int)h << 6;
             SetByte(loc, (byte)val);
         }
 
@@ -1224,7 +1220,7 @@ namespace NFL2K5Tool
         {
             Shoe retVal = Shoe.Shoe1;
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.Helmet_LeftShoe_RightShoe;
-            // RShoe is bits 3,4,5 
+            // RShoe is bits 4,5,6  
             int val = GameSaveData[loc] & 0x38;
             val = val >> 3;
             retVal = (Shoe)val;
@@ -1236,9 +1232,9 @@ namespace NFL2K5Tool
         {
             Shoe h = (Shoe)Enum.Parse(typeof(Shoe), shoe);
             int loc = GetPlayerDataStart(player) + (int) PlayerOffsets.Helmet_LeftShoe_RightShoe;
-            // RShoe is bits 3,4,5 
+            // RShoe is bits 4,5,6 
             int val = GameSaveData[loc] & 0xc7;
-            val |= (val << 3 ) ;
+            val += ((int)h << 3 ) ;
             SetByte(loc, (byte)val);
         }
 
@@ -1277,7 +1273,7 @@ namespace NFL2K5Tool
             Glove g = (Glove)Enum.Parse(typeof(Glove), glove);
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.MouthPiece_LeftGlove_Sleeves_NeckRoll;
             int val1 = GameSaveData[loc] & 0x3f; 
-            int val2 = GameSaveData[loc+1] & 0x3c; // most sig 2 bits of glove go to least sig bits in this value
+            int val2 = GameSaveData[loc+1] & 0xfc; // most sig 2 bits of glove go to least sig bits in this value
             val1 += ((int)g & 3) << 6;
             val2 += ((int)g >> 2);
             SetByte(loc, (byte)val1);
@@ -1355,11 +1351,14 @@ namespace NFL2K5Tool
         private void SetLeftWrist(int player, String w)
         {
             Wrist s = (Wrist)Enum.Parse(typeof(Wrist), w);
+            int val = (int)s;
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.RightGlove_LeftWrist;
-            int val = ((GameSaveData[loc + 1] << 8) + GameSaveData[loc]) & 0xfcf3;
-            val += ((int)s << 6);
-            SetByte(loc, (byte)val);
-            SetByte(loc + 1, (byte)(val >> 8));
+            int b1 = GameSaveData[loc] & 0x3f;
+            int b2 = GameSaveData[loc+1] & 0xfc;
+            b1 += (0x3 & val) << 6;
+            b2 += val >> 2;
+            SetByte(loc, (byte)b1);
+            SetByte(loc+1, (byte)b2);
         }
 
         private void GetRightWrist(int player, StringBuilder builder)
@@ -1397,7 +1396,7 @@ namespace NFL2K5Tool
             Elbow s = (Elbow)Enum.Parse(typeof(Elbow), w);
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.RightWrist_LeftElbow;
             int val1 = (GameSaveData[loc] & 0x3f) + (((int)s & 3 ) << 6) ;
-            int val2 = (GameSaveData[loc+1] & 0xfc) + ((int)s & 0xfc );
+            int val2 = (GameSaveData[loc+1] & 0xfc) + (((int)s & 0xfc )>>2);
 
             SetByte(loc, (byte)val1);
             SetByte(loc + 1, (byte)val2);

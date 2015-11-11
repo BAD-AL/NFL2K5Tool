@@ -48,7 +48,6 @@
             this.listDraftClassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.mApplyButton = new System.Windows.Forms.Button();
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -252,21 +251,10 @@
             this.groupBox1.Text = "List This many";
             this.groupBox1.Visible = false;
             // 
-            // mApplyButton
-            // 
-            this.mApplyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.mApplyButton.Location = new System.Drawing.Point(303, 359);
-            this.mApplyButton.Name = "mApplyButton";
-            this.mApplyButton.Size = new System.Drawing.Size(111, 23);
-            this.mApplyButton.TabIndex = 10;
-            this.mApplyButton.Text = "Apply To Save";
-            this.mApplyButton.UseVisualStyleBackColor = true;
-            this.mApplyButton.Click += new System.EventHandler(this.mApplyButton_Click);
-            // 
             // mSaveButton
             // 
-            this.mSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.mSaveButton.Location = new System.Drawing.Point(420, 359);
+            this.mSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mSaveButton.Location = new System.Drawing.Point(300, 360);
             this.mSaveButton.Name = "mSaveButton";
             this.mSaveButton.Size = new System.Drawing.Size(75, 23);
             this.mSaveButton.TabIndex = 11;
@@ -295,7 +283,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(678, 411);
             this.Controls.Add(this.mSaveButton);
-            this.Controls.Add(this.mApplyButton);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.statusBar1);
             this.Controls.Add(this.mClearButton);
@@ -339,7 +326,6 @@
         private System.Windows.Forms.ToolStripMenuItem listFreeAgentsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listDraftClassToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listTeamsToolStripMenuItem;
-        private System.Windows.Forms.Button mApplyButton;
         private System.Windows.Forms.Button mSaveButton;
     }
 }

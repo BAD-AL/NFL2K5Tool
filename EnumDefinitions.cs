@@ -25,7 +25,7 @@ namespace NFL2K5Tool
         College=0,
         PBP = 4,
         Photo= 6,
-        Helmet_LeftShoe_RightShoe = 0x0c, // LShoe is last 3 bits; helmet is 7th bit; RShoe is bits 3,4,5 
+        Helmet_LeftShoe_RightShoe = 0x0c, // LShoe is last 3 bits; helmet is 7th bit; RShoe is bits 4,5,6 
         JerseyNumber = 0x20, // & 0x21
 
         Turtleneck_Body_EyeBlack_Hand_Dreads = 0x18, // Shared: Skin(8), Turtleneck(bits6&7), Body(4&5), EyeBlack(3), Hand(2),  Dreads(1) (most sig  --> least sig )

@@ -133,6 +133,11 @@ namespace NFL2K5Tool
         
         private void mApplyButton_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void mSaveButton_Click(object sender, EventArgs e)
+        {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
             statusBar1.Text = "Applying data...";
@@ -140,12 +145,9 @@ namespace NFL2K5Tool
             parser.Tool = this.mTool;
             parser.ProcessText(mTextBox.Text);
             sw.Stop();
-            statusBar1.Text = "Done Applying data." + (sw.ElapsedMilliseconds/1000.0) +"s";
+            statusBar1.Text = "Done Applying data." + (sw.ElapsedMilliseconds / 1000.0) + "s";
             StaticUtils.ShowErrors();
-        }
 
-        private void mSaveButton_Click(object sender, EventArgs e)
-        {
             SaveFileDialog dlg = new SaveFileDialog();
             dlg.RestoreDirectory = true;
             if (dlg.ShowDialog() == DialogResult.OK)
