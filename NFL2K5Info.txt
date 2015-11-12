@@ -32,6 +32,6 @@ Can read all 2317 players from save file and write them back with no file differ
 Next pieces:
 	1. Auto-Update depth chart
 	2. Figure out DOB
-	3. Make work on Roster files too.
+	3. Add support for PBP, Photo, & DOB.
 	4. Command line interface.
 	

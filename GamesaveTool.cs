@@ -12,34 +12,70 @@ namespace NFL2K5Tool
     /// </summary>
     public class GamesaveTool
     {
-        private const int cPlayerStart = 0xB288;
-        private const int cPlayerDataLength = 0x54;
-        private const int cMaxPlayers = 2317; // including free agents and draft class
-
         // Duane starks is the first player in the original roster 
-        const int cDuaneStarksFnamePointerLoc = 0xB298;
-        const int cNumberOfColleges = 265;
-
-        const int cCollegeStringsStart = 0x7A23C;
-
+        private int cPlayerStart = 0xB288; // 0xAFA8 for roster
+        private int cDuaneStarksFnamePointerLoc = 0xB298; // 0xAFB8
+        private int cCollegeStringsStart = 0x7A23C;
+        private int cCollegeStringsEnd = 0x8f2c0;
         //may be able to add strings after this section; (All 0's from 0x8f2f0 - 0x9131f)
-        const int cCollegeStringsEnd = 0x8f2c0;
-
-        const int cModifiableNameSectionEnd = 0x8906f;
-
-        const string NFL2K5Folder = "53450030";
+        private  int cModifiableNameSectionEnd = 0x8906f;
 
         // Do not modify strings in this section.
         // There is however a blank section that could possibly be used for 
         // names after it (0x8f2f0 - 0x91310)
-        const int cCollegePlayerNameSectionStart = 0x8bab0;
-        const int cCollegePlayerNameSectionEnd = 0x8f2ef;
+        private int cCollegePlayerNameSectionStart = 0x8bab0;
+        private int cCollegePlayerNameSectionEnd = 0x8f2ef;
 
-        const int cFreeAgentCountLocation = 0x357; // default : 00 c5
-        const int c49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
-        const int cFreeAgentsPlayerPointersStart = 0x3f644;
-        const int c49ersNumPlayersAddress = 0x45c3; // 00 35
-        const int cTeamDiff = 0x1f4; // 500 bytes
+        private int cFreeAgentCountLocation = 0x357; // default : 00 c5
+        private int c49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
+        private int cFreeAgentsPlayerPointersStart = 0x3f644;
+        private int c49ersNumPlayersAddress = 0x45c3; // 00 35
+
+
+        private const int cPlayerDataLength = 0x54;
+        private const int cMaxPlayers = 2317; // including free agents and draft class
+        private const int cNumberOfColleges = 266;
+        private const int cTeamDiff = 0x1f4; // 500 bytes
+        
+        const string NFL2K5Folder = "53450030";
+
+        private SaveType SaveType = SaveType.Franchise;
+
+        private void InitializeForFranchise()
+        {
+            SaveType = SaveType.Franchise;
+            // Duane starks is the first player in the original roster 
+            cPlayerStart = 0xB288; // 0xAFA8 for roster
+            cDuaneStarksFnamePointerLoc = 0xB298; // 0xAFB8
+            cCollegeStringsStart = 0x7A23C;
+            cCollegeStringsEnd = 0x8f2c0;
+            cModifiableNameSectionEnd = 0x8906f;
+            cCollegePlayerNameSectionStart = 0x8bab0;
+            cCollegePlayerNameSectionEnd = 0x8f2ef;
+            cFreeAgentCountLocation = 0x357; // default : 00 c5
+            c49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
+            cFreeAgentsPlayerPointersStart = 0x3f644;
+            c49ersNumPlayersAddress = 0x45c3; // 00 35
+        }
+
+        private void InitializeForRoster()
+        {
+            SaveType = SaveType.Roster;
+            // Duane starks is the first player in the original roster 
+            cPlayerStart = 0xAFA8; 
+            cDuaneStarksFnamePointerLoc = 0xAFB8; 
+            cCollegeStringsStart = 0x79f5c;
+            cCollegeStringsEnd = 0x7b96F;
+            cModifiableNameSectionEnd = 0x88d8f;
+            cCollegePlayerNameSectionStart = 0x8b7d0;
+            cCollegePlayerNameSectionEnd = 0x8f00f;
+
+            cFreeAgentCountLocation = 0x77; // default : 00 c5 // guess???
+
+            c49ersPlayerPointersStart = 0x41c8; // playerLoc = ptrLoc + ptrVal -1;
+            cFreeAgentsPlayerPointersStart = 0x3f364;
+            c49ersNumPlayersAddress = 0x42e3; // 00 35
+        }
 
 		// The team data is ordered like this:
         private string[] mTeamsDataOrder =  {
@@ -73,10 +109,8 @@ namespace NFL2K5Tool
         /// </summary>
         /// <param name="attributes">true to list out skills</param>
         /// <param name="appearance">true to list out appearance</param>
-        /// <param name="freeAgents"></param>
-        /// <param name="draftClass"></param>
         /// <returns></returns>
-        public string GetLeaguePlayers(bool attributes, bool appearance, bool freeAgents, bool draftClass)
+        public string GetLeaguePlayers(bool attributes, bool appearance)
         {
             StringBuilder builder = new StringBuilder(300 * 55 * 35);
             for (int i = 0; i < 32; i++)
@@ -98,6 +132,9 @@ namespace NFL2K5Tool
             int firstPlayer = 1937;
             int numPlayers = 380;
             int limit  = firstPlayer +  numPlayers;
+            if( SaveType == SaveType.Roster)
+                limit = firstPlayer + 7;
+
             StringBuilder builder = new StringBuilder(300 * numPlayers + 1);
             builder.Append("\nTeam = ");
             builder.Append("DraftClass");
@@ -256,12 +293,18 @@ namespace NFL2K5Tool
             
         /// <summary>
         /// Loads the gamesave fle
-        /// TODO: error checking; filetype setup (roster/franchise)
+        /// TODO: error checking; 
         /// </summary>
         /// <param name="fileName">the filename to load</param>
         public void LoadSaveFile(string fileName)
         {
             GameSaveData = File.ReadAllBytes(fileName);
+            if (GameSaveData[0] == (byte)'R' && GameSaveData[1] == (byte)'O' && 
+                GameSaveData[2] == (byte)'S' && GameSaveData[3] == (byte)'T')
+                InitializeForRoster();
+            else
+                InitializeForFranchise();
+            
             PopulateColleges();
         }
 
@@ -313,7 +356,7 @@ namespace NFL2K5Tool
                 foreach (AppearanceAttributes app in mAppearanceOrder)
                 {
                     prevLength = dummy.Length;
-                    GetPlayerappearanceAttribute(0, app, dummy);
+                    GetPlayerAppearanceAttribute(0, app, dummy);
                     mOrder[i++] = (int)app;
                     if (dummy.Length > prevLength)
                     {
@@ -371,7 +414,7 @@ namespace NFL2K5Tool
         {
             foreach (AppearanceAttributes attr in this.mAppearanceOrder)
             {
-                GetPlayerappearanceAttribute(player, attr, builder);
+                GetPlayerAppearanceAttribute(player, attr, builder);
             }
         }
 
@@ -430,10 +473,12 @@ namespace NFL2K5Tool
                     SetRightElbow(player, strVal); break;
                 case AppearanceAttributes.College:
                     SetCollege(player, strVal); break;
+                case AppearanceAttributes.YearsPro:
+                    SetAttribute(player, PlayerOffsets.YearsPro, strVal); break;
             }
         }
 
-        private void GetPlayerappearanceAttribute(int player, AppearanceAttributes attr, StringBuilder builder)
+        private void GetPlayerAppearanceAttribute(int player, AppearanceAttributes attr, StringBuilder builder)
         {
             switch (attr)
             {
@@ -495,11 +540,15 @@ namespace NFL2K5Tool
                     builder.Append(GetCollege(player));
                     builder.Append(",");
                     break;
+                case AppearanceAttributes.YearsPro:
+                    builder.Append(GetAttribute(player, PlayerOffsets.YearsPro));
+                    builder.Append(",");
+                    break;
             }
         }
 
         private AppearanceAttributes[] mAppearanceOrder = new AppearanceAttributes[]{
-             AppearanceAttributes.College, AppearanceAttributes.DOB, AppearanceAttributes.Hand, 
+             AppearanceAttributes.College, AppearanceAttributes.DOB, AppearanceAttributes.YearsPro, AppearanceAttributes.Hand, 
              AppearanceAttributes.Weight, AppearanceAttributes.Height, AppearanceAttributes.BodyType, 
              AppearanceAttributes.Skin, AppearanceAttributes.Face, AppearanceAttributes.Dreads, 
              AppearanceAttributes.Helmet, AppearanceAttributes.FaceMask, AppearanceAttributes.Visor, 
@@ -1460,5 +1509,11 @@ namespace NFL2K5Tool
         }
         #endregion
 
+    }
+
+    public enum SaveType
+    {
+        Roster,
+        Franchise
     }
 }

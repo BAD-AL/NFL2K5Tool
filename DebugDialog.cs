@@ -199,6 +199,15 @@ namespace NFL2K5Tool
                     builder.Append(" Depth:");
                     builder.Append(Tool.GetPlayerPositionDepth(i).ToString("X2"));
                 }
+                if (mNumBytes.Value > 0)
+                {
+                    int dataStart = Tool.GetPlayerDataStart(i);
+                    builder.Append(" ");
+                    for (int j = 0; j < mNumBytes.Value; j++)
+                    {
+                        builder.Append(Tool.GameSaveData[dataStart + j].ToString("X2"));
+                    }
+                }
                 builder.Append("\n");
             }
             mResultsTextBox.AppendText(builder.ToString());

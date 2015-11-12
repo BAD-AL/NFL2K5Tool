@@ -51,7 +51,7 @@ namespace NFL2K5Tool
             builder.Append("\n");
             
             if( listTeamsToolStripMenuItem.Checked)
-                builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, true, true));
+                builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
             
             if (listFreeAgentsToolStripMenuItem.Checked)
                 builder.Append(mTool.GetTeamPlayers("FreeAgents", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
