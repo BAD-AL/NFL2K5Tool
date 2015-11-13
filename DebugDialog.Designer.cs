@@ -49,22 +49,25 @@
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listTeamPlayerNumbersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.includeDepthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.mNumBytes = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.mOffsetUpDown = new System.Windows.Forms.NumericUpDown();
             this.mStatusLabel = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
-            this.mOffsetUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.mNumBytes = new System.Windows.Forms.NumericUpDown();
+            this.includePhotePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mOffsetUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mNumBytes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mOffsetUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
@@ -259,7 +262,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.findToolStripMenuItem});
+            this.findToolStripMenuItem,
+            this.editToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(532, 24);
@@ -289,6 +293,22 @@
             this.includeDepthToolStripMenuItem.Text = "Include depth";
             this.includeDepthToolStripMenuItem.Click += new System.EventHandler(this.includeDepthToolStripMenuItem_Click);
             // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.autoUpdateDepthChartToolStripMenuItem,
+            this.includePhotePBPToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "&Edit";
+            // 
+            // autoUpdateDepthChartToolStripMenuItem
+            // 
+            this.autoUpdateDepthChartToolStripMenuItem.Name = "autoUpdateDepthChartToolStripMenuItem";
+            this.autoUpdateDepthChartToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.autoUpdateDepthChartToolStripMenuItem.Text = "Auto Update Depth Chart";
+            this.autoUpdateDepthChartToolStripMenuItem.Click += new System.EventHandler(this.autoUpdateDepthChartToolStripMenuItem_Click);
+            // 
             // mGetTeamButton
             // 
             this.mGetTeamButton.Location = new System.Drawing.Point(13, 74);
@@ -314,6 +334,47 @@
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "List This many";
+            // 
+            // mNumBytes
+            // 
+            this.mNumBytes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mNumBytes.Location = new System.Drawing.Point(83, 42);
+            this.mNumBytes.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.mNumBytes.Name = "mNumBytes";
+            this.mNumBytes.Size = new System.Drawing.Size(36, 20);
+            this.mNumBytes.TabIndex = 20;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 44);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(76, 13);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "+ (byes, offset)";
+            // 
+            // mOffsetUpDown
+            // 
+            this.mOffsetUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mOffsetUpDown.Location = new System.Drawing.Point(125, 42);
+            this.mOffsetUpDown.Maximum = new decimal(new int[] {
+            84,
+            0,
+            0,
+            0});
+            this.mOffsetUpDown.Name = "mOffsetUpDown";
+            this.mOffsetUpDown.Size = new System.Drawing.Size(36, 20);
+            this.mOffsetUpDown.TabIndex = 18;
+            this.mOffsetUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // mStatusLabel
             // 
@@ -375,46 +436,12 @@
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
             // 
-            // mOffsetUpDown
+            // includePhotePBPToolStripMenuItem
             // 
-            this.mOffsetUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mOffsetUpDown.Location = new System.Drawing.Point(125, 42);
-            this.mOffsetUpDown.Maximum = new decimal(new int[] {
-            84,
-            0,
-            0,
-            0});
-            this.mOffsetUpDown.Name = "mOffsetUpDown";
-            this.mOffsetUpDown.Size = new System.Drawing.Size(36, 20);
-            this.mOffsetUpDown.TabIndex = 18;
-            this.mOffsetUpDown.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 44);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(76, 13);
-            this.label2.TabIndex = 19;
-            this.label2.Text = "+ (byes, offset)";
-            // 
-            // mNumBytes
-            // 
-            this.mNumBytes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mNumBytes.Location = new System.Drawing.Point(83, 42);
-            this.mNumBytes.Maximum = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.mNumBytes.Name = "mNumBytes";
-            this.mNumBytes.Size = new System.Drawing.Size(36, 20);
-            this.mNumBytes.TabIndex = 20;
+            this.includePhotePBPToolStripMenuItem.Name = "includePhotePBPToolStripMenuItem";
+            this.includePhotePBPToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.includePhotePBPToolStripMenuItem.Text = "Include Phote & PBP";
+            this.includePhotePBPToolStripMenuItem.Click += new System.EventHandler(this.includePhotePBPToolStripMenuItem_Click);
             // 
             // DebugDialog
             // 
@@ -443,9 +470,9 @@
             this.menuStrip1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mOffsetUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mNumBytes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mOffsetUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -482,5 +509,8 @@
         private System.Windows.Forms.NumericUpDown mOffsetUpDown;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown mNumBytes;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoUpdateDepthChartToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem includePhotePBPToolStripMenuItem;
     }
 }

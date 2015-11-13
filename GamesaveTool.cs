@@ -13,27 +13,27 @@ namespace NFL2K5Tool
     public class GamesaveTool
     {
         // Duane starks is the first player in the original roster 
-        private int cPlayerStart = 0xB288; // 0xAFA8 for roster
-        private int cDuaneStarksFnamePointerLoc = 0xB298; // 0xAFB8
-        private int cCollegeStringsStart = 0x7A23C;
-        private int cCollegeStringsEnd = 0x8f2c0;
+        private int mPlayerStart = 0xB288; // 0xAFA8 for roster
+        private int mDuaneStarksFnamePointerLoc = 0xB298; // 0xAFB8
+        private int mCollegeStringsStart = 0x7A23C;
+        private int mCollegeStringsEnd = 0x8f2c0;
         //may be able to add strings after this section; (All 0's from 0x8f2f0 - 0x9131f)
-        private  int cModifiableNameSectionEnd = 0x8906f;
+        private  int mModifiableNameSectionEnd = 0x8906f;
 
         // Do not modify strings in this section.
         // There is however a blank section that could possibly be used for 
         // names after it (0x8f2f0 - 0x91310)
-        private int cCollegePlayerNameSectionStart = 0x8bab0;
-        private int cCollegePlayerNameSectionEnd = 0x8f2ef;
+        private int mCollegePlayerNameSectionStart = 0x8bab0;
+        private int mCollegePlayerNameSectionEnd = 0x8f2ef;
 
-        private int cFreeAgentCountLocation = 0x357; // default : 00 c5
-        private int c49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
-        private int cFreeAgentsPlayerPointersStart = 0x3f644;
-        private int c49ersNumPlayersAddress = 0x45c3; // 00 35
-
+        private int mFreeAgentCountLocation = 0x357; // default : 00 c5
+        private int m49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
+        private int mFreeAgentsPlayerPointersStart = 0x3f644;
+        private int m49ersNumPlayersAddress = 0x45c3; // 00 35
+        private int mMaxPlayers = 2317; //1944 including free agents and draft class
 
         private const int cPlayerDataLength = 0x54;
-        private const int cMaxPlayers = 2317; // including free agents and draft class
+        
         private const int cNumberOfColleges = 266;
         private const int cTeamDiff = 0x1f4; // 500 bytes
         
@@ -45,36 +45,38 @@ namespace NFL2K5Tool
         {
             SaveType = SaveType.Franchise;
             // Duane starks is the first player in the original roster 
-            cPlayerStart = 0xB288; // 0xAFA8 for roster
-            cDuaneStarksFnamePointerLoc = 0xB298; // 0xAFB8
-            cCollegeStringsStart = 0x7A23C;
-            cCollegeStringsEnd = 0x8f2c0;
-            cModifiableNameSectionEnd = 0x8906f;
-            cCollegePlayerNameSectionStart = 0x8bab0;
-            cCollegePlayerNameSectionEnd = 0x8f2ef;
-            cFreeAgentCountLocation = 0x357; // default : 00 c5
-            c49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
-            cFreeAgentsPlayerPointersStart = 0x3f644;
-            c49ersNumPlayersAddress = 0x45c3; // 00 35
+            mPlayerStart = 0xB288; // 0xAFA8 for roster
+            mDuaneStarksFnamePointerLoc = 0xB298; // 0xAFB8
+            mCollegeStringsStart = 0x7A23C;
+            mCollegeStringsEnd = 0x8f2c0;
+            mModifiableNameSectionEnd = 0x8906f;
+            mCollegePlayerNameSectionStart = 0x8bab0;
+            mCollegePlayerNameSectionEnd = 0x8f2ef;
+            mFreeAgentCountLocation = 0x357; // default : 00 c5
+            m49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
+            mFreeAgentsPlayerPointersStart = 0x3f644;
+            m49ersNumPlayersAddress = 0x45c3; // 00 35
+            mMaxPlayers = 2317; 
         }
 
         private void InitializeForRoster()
         {
             SaveType = SaveType.Roster;
             // Duane starks is the first player in the original roster 
-            cPlayerStart = 0xAFA8; 
-            cDuaneStarksFnamePointerLoc = 0xAFB8; 
-            cCollegeStringsStart = 0x79f5c;
-            cCollegeStringsEnd = 0x7b96F;
-            cModifiableNameSectionEnd = 0x88d8f;
-            cCollegePlayerNameSectionStart = 0x8b7d0;
-            cCollegePlayerNameSectionEnd = 0x8f00f;
+            mPlayerStart = 0xAFA8; 
+            mDuaneStarksFnamePointerLoc = 0xAFB8; 
+            mCollegeStringsStart = 0x79f5c;
+            mCollegeStringsEnd = 0x7b96F;
+            mModifiableNameSectionEnd = 0x88d8f;
+            mCollegePlayerNameSectionStart = 0x8b7d0;
+            mCollegePlayerNameSectionEnd = 0x8f00f;
 
-            cFreeAgentCountLocation = 0x77; // default : 00 c5 // guess???
+            mFreeAgentCountLocation = 0x77; // default : 00 c5 // guess???
 
-            c49ersPlayerPointersStart = 0x41c8; // playerLoc = ptrLoc + ptrVal -1;
-            cFreeAgentsPlayerPointersStart = 0x3f364;
-            c49ersNumPlayersAddress = 0x42e3; // 00 35
+            m49ersPlayerPointersStart = 0x41c8; // playerLoc = ptrLoc + ptrVal -1;
+            mFreeAgentsPlayerPointersStart = 0x3f364;
+            m49ersNumPlayersAddress = 0x42e3; // 00 35
+            mMaxPlayers = 1943;
         }
 
 		// The team data is ordered like this:
@@ -160,9 +162,9 @@ namespace NFL2K5Tool
         public string GetTeamPlayers(string team, bool attributes, bool appearance)
         {
             int teamIndex = GetTeamIndex(team);
-            int teamPlayerPointersStart = teamIndex * cTeamDiff + c49ersPlayerPointersStart;
+            int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
             if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
-                teamPlayerPointersStart = cFreeAgentsPlayerPointersStart;
+                teamPlayerPointersStart = mFreeAgentsPlayerPointersStart;
             else if ("DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
                 return GetDraftClass(attributes, appearance);
 
@@ -189,9 +191,9 @@ namespace NFL2K5Tool
         {
             List<int> retVal = new List<int>(55);
             int teamIndex = GetTeamIndex(team);
-            int teamPlayerPointersStart = teamIndex * cTeamDiff + c49ersPlayerPointersStart;
+            int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
             if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
-                teamPlayerPointersStart = cFreeAgentsPlayerPointersStart;
+                teamPlayerPointersStart = mFreeAgentsPlayerPointersStart;
             //else if ("DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
             //    return GetDraftClass(attributes, appearance);
 
@@ -218,7 +220,7 @@ namespace NFL2K5Tool
             ptr += GameSaveData[pointerLoc + 1] << 8;
             ptr += GameSaveData[pointerLoc];
             int playerLoc = ptr + pointerLoc - 1;
-            int retVal = (playerLoc - cPlayerStart) / cPlayerDataLength;
+            int retVal = (playerLoc - mPlayerStart) / cPlayerDataLength;
             return retVal;
         }
 
@@ -242,9 +244,9 @@ namespace NFL2K5Tool
         public int GetNumPlayers(string team)
         {
             int index = GetTeamIndex(team);
-            int location = c49ersNumPlayersAddress + index * cTeamDiff;
+            int location = m49ersNumPlayersAddress + index * cTeamDiff;
             if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
-                location = cFreeAgentCountLocation;
+                location = mFreeAgentCountLocation;
 
             int retVal = GameSaveData[location] << 8;
             retVal += GameSaveData[location + 1];
@@ -284,13 +286,156 @@ namespace NFL2K5Tool
             return "DraftClass";
         }
 
+        /// <summary>
+        /// Automatically updat the Play by play names
+        /// consider doing this in the Form, not directly applying to the save file.
+        /// </summary>
+        public void AutoUpdatePBP()
+        {
+            string key, firstName, lastName, number, val;
+            for (int player = 0; player < MaxPlayers; player++)
+            {
+                firstName = GetPlayerFirstName(player);
+                lastName = GetPlayerLastName(player);
+                number = GetAttribute(player, PlayerOffsets.JerseyNumber);
+                if (number.Length < 2)
+                    number = "#0" + number;
+                else
+                    number = "#" + number;
+
+                key = lastName + ", " + firstName;
+                if (DataMap.PBPMap.ContainsKey(key))
+                    val = DataMap.PBPMap[key];
+                else if (DataMap.PBPMap.ContainsKey(lastName))
+                    val = DataMap.PBPMap[lastName];
+                else if (DataMap.PBPMap.ContainsKey(number))
+                    val = DataMap.PBPMap[number];
+                SetAttribute(player, PlayerOffsets.PBP, val);
+            }
+        }
+
+        /// <summary>
+        /// Automatically update the Play by play names.
+        /// consider doing this in the Form, not directly applying to the save file.
+        /// </summary>
+        public void AutoUpdatePhoto(bool showReport)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            string key, firstName, lastName, number, val;
+            for (int player = 0; player < MaxPlayers; player++)
+            {
+                firstName = GetPlayerFirstName(player);
+                lastName = GetPlayerLastName(player);
+                number = GetAttribute(player, PlayerOffsets.JerseyNumber);
+                if (number.Length < 2)
+                    number = "#0" + number;
+                else
+                    number = "#" + number;
+
+                key = lastName + ", " + firstName;
+                if (DataMap.PhotoMap.ContainsKey(key))
+                {
+                    val = DataMap.PhotoMap[key];
+                    builder.Append("Photo for:");
+                    builder.Append(firstName);
+                    builder.Append(" ");
+                    builder.Append(lastName);
+                    builder.Append(":");
+                    builder.Append(val);
+                    builder.Append("\r\n");
+                }
+                else if (DataMap.PhotoMap.ContainsKey(number))
+                    val = DataMap.PhotoMap[number];
+                SetAttribute(player, PlayerOffsets.PBP, val);
+            }
+            return builder.ToString();
+        }
 
         public int GetPlayerPositionDepth(int player)
         {
             int playerLocation = GetPlayerDataStart(player);
-            return GameSaveData[ playerLocation + 41];
+            return GameSaveData[playerLocation + (int)PlayerOffsets.Depth];
         }
-            
+
+        public void SetPlayerPositionDepth(int player, byte depth)
+        {
+            int playerLocation = GetPlayerDataStart(player);
+            SetByte(playerLocation + (int)PlayerOffsets.Depth, depth);
+        }
+
+        /// <summary>
+        /// Automatically updates the depth charts for all teams.
+        /// </summary>
+        public void AutoUpdateDepthChart()
+        {
+            for (int i = 0; i < 32; i++)
+            {
+                AutoUpdateDepthChartForTeam(mTeamsDataOrder[i]);
+            }
+        }
+
+        // Maybe make this one configurable?
+        byte[] mMultiDepthArray = new byte[] { 0x60, 0x10, 0x84, 0x34, 0xA8, 0xCC, 0x58, 0xFC };
+        byte[] mSinglePosDepthArray = new byte[] { 0x0, 0x4, 0x8, 0x0C, 0xF }; //not so sure on the last one here
+
+        /// <summary>
+        /// Will go through a team and auto assign depth to all the players.
+        /// Example:
+        /// The first  CB encountered on a roster will be starting on the Right side.
+        /// The second CB encountered on a roster will be starting on the Left side.
+        /// The third  CB encountered on a roster will be backing up those 2 guys.
+        /// The fourth CB encountered on a roster will be backing up those 3 guys.
+        /// ...
+        /// For positions like QB (where only 1 of that position type plays at a time) 
+        /// It just assigns depth in order it encounters the players.
+        /// </summary>
+        /// <param name="team">The team to update the depth chart for.</param>
+        public void AutoUpdateDepthChartForTeam(string team)
+        {
+            // QB = 0, K, P, WR, CB, FS, SS, RB, FB, TE, OLB, ILB, C, G, T, DT, DE
+            byte[] positions = new byte[] {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+            int teamIndex = GetTeamIndex(team);
+            int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
+            if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase) || "DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
+                return;
+            string name = "";
+            int depth = 0;
+            Positions pos;
+            List<int> playerIndexes = GetPlayerIndexesForTeam(team);
+            for (int i = 0; i < playerIndexes.Count; i++)
+            {
+                pos = GetPlayerPositionEnum(playerIndexes[i]);
+                name = GetPlayerName(playerIndexes[i], ',');
+                switch (pos)
+                {
+                    case Positions.QB:
+                    case Positions.TE:
+                    case Positions.C:
+                    case Positions.FB:
+                    case Positions.FS:
+                    case Positions.K:
+                    case Positions.P:
+                    case Positions.RB:
+                    case Positions.SS:
+                        depth = positions[(int)pos];
+                        if (depth > mSinglePosDepthArray.Length - 1)
+                            SetPlayerPositionDepth(playerIndexes[i], mSinglePosDepthArray[mSinglePosDepthArray.Length - 1]);
+                        else
+                            SetPlayerPositionDepth(playerIndexes[i], mSinglePosDepthArray[depth]);
+                        break;
+                    default:
+                        depth = positions[(int)pos];
+                        if (depth > mMultiDepthArray.Length - 1)
+                            SetPlayerPositionDepth(playerIndexes[i], mMultiDepthArray[mMultiDepthArray.Length - 1]);
+                        else
+                            SetPlayerPositionDepth(playerIndexes[i], mMultiDepthArray[depth]);
+                        break;
+                }
+                positions[(int)pos]++;
+            }
+        }
+
         /// <summary>
         /// Loads the gamesave fle
         /// TODO: error checking; 
@@ -325,7 +470,7 @@ namespace NFL2K5Tool
         /// </summary>
         public int[] Order { get { return mOrder; } }
 
-        public int MaxPlayers { get { return cMaxPlayers; } }
+        public int MaxPlayers { get { return mMaxPlayers; } }
 
         /// <summary>
         /// The attributes key
@@ -406,7 +551,7 @@ namespace NFL2K5Tool
         /// </summary>
         public int GetPlayerDataStart(int player)
         {
-            int ret = cPlayerStart + player * cPlayerDataLength;
+            int ret = mPlayerStart + player * cPlayerDataLength;
             return ret;
         }
 
@@ -418,7 +563,7 @@ namespace NFL2K5Tool
             }
         }
 
-        public void SetPlayerappearanceAttribute(int player, AppearanceAttributes attr, string strVal)
+        public void SetPlayerAppearanceAttribute(int player, AppearanceAttributes attr, string strVal)
         {
             switch (attr)
             {
@@ -475,6 +620,10 @@ namespace NFL2K5Tool
                     SetCollege(player, strVal); break;
                 case AppearanceAttributes.YearsPro:
                     SetAttribute(player, PlayerOffsets.YearsPro, strVal); break;
+                case AppearanceAttributes.Photo:
+                    SetAttribute(player, PlayerOffsets.Photo, strVal); break;
+                case AppearanceAttributes.PBP:
+                    SetAttribute(player, PlayerOffsets.PBP, strVal); break;
             }
         }
 
@@ -544,11 +693,20 @@ namespace NFL2K5Tool
                     builder.Append(GetAttribute(player, PlayerOffsets.YearsPro));
                     builder.Append(",");
                     break;
+                case AppearanceAttributes.Photo:
+                    builder.Append(GetAttribute(player, PlayerOffsets.Photo));
+                    builder.Append(",");
+                    break;
+                case AppearanceAttributes.PBP:
+                    builder.Append(GetAttribute(player, PlayerOffsets.PBP));
+                    builder.Append(",");
+                    break;
             }
         }
 
         private AppearanceAttributes[] mAppearanceOrder = new AppearanceAttributes[]{
-             AppearanceAttributes.College, AppearanceAttributes.DOB, AppearanceAttributes.YearsPro, AppearanceAttributes.Hand, 
+             AppearanceAttributes.College, AppearanceAttributes.DOB,  AppearanceAttributes.PBP, 
+             AppearanceAttributes.Photo, AppearanceAttributes.YearsPro, AppearanceAttributes.Hand, 
              AppearanceAttributes.Weight, AppearanceAttributes.Height, AppearanceAttributes.BodyType, 
              AppearanceAttributes.Skin, AppearanceAttributes.Face, AppearanceAttributes.Dreads, 
              AppearanceAttributes.Helmet, AppearanceAttributes.FaceMask, AppearanceAttributes.Visor, 
@@ -578,7 +736,7 @@ namespace NFL2K5Tool
             }
         }
 
-        private string GetAttribute(int player, PlayerOffsets attr)
+        public string GetAttribute(int player, PlayerOffsets attr)
         {
             string retVal = "";
             int loc = GetPlayerDataStart(player) + (int)attr;
@@ -621,6 +779,12 @@ namespace NFL2K5Tool
                     break;
                 case PlayerOffsets.College:
                     retVal = GetCollege(player);
+                    break;
+                case PlayerOffsets.PBP:
+                case PlayerOffsets.Photo:
+                    val = GameSaveData[loc+1] << 8;
+                    val += GameSaveData[loc];
+                    retVal = "" + val;
                     break;
                 default:
                     retVal += val;
@@ -674,6 +838,14 @@ namespace NFL2K5Tool
                     Positions p = (Positions)Enum.Parse(typeof(Positions), stringVal);
                     SetByte(loc, (byte)p);
                     break;
+                case PlayerOffsets.PBP:
+                case PlayerOffsets.Photo:
+                    val = Int32.Parse(stringVal);
+                    v1 = val & 0xff;
+                    v2 = val >> 8;
+                    SetByte(loc,     (byte)v1);
+                    SetByte(loc + 1, (byte)v2);
+                    break;
                 default:
                     val = Int32.Parse(stringVal);
                     SetByte(loc, (byte)val);
@@ -712,13 +884,13 @@ namespace NFL2K5Tool
         private bool SetPlayerNameText(int player, string name, bool isLastName, bool useExistingName)
         {
             bool retVal = true;
-            int ptrLoc1 = player * cPlayerDataLength + cDuaneStarksFnamePointerLoc;
+            int ptrLoc1 = player * cPlayerDataLength + mDuaneStarksFnamePointerLoc;
             if (isLastName)
                 ptrLoc1 += 4;
             if (useExistingName)
             {
                 // we'll look through the college player names because we're not changing those.
-                List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, cCollegeStringsStart, cCollegeStringsEnd, true);
+                List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, mCollegeStringsStart, mCollegeStringsEnd, true);
                 if (locations.Count < 1)
                 {
                     retVal = false;
@@ -765,7 +937,7 @@ namespace NFL2K5Tool
         // that the stuff after that section is useful (it's all 2a 00 repeating)
         private void ShiftDataDown(int startIndex, int amount)
         {
-            for (int i = cModifiableNameSectionEnd - amount; i > startIndex; i--)
+            for (int i = mModifiableNameSectionEnd - amount; i > startIndex; i--)
             {
                 SetByte(i, GameSaveData[i - amount]); // for debugging
                 //GameSaveData[i] = GameSaveData[i - amount]; // for speed
@@ -774,7 +946,7 @@ namespace NFL2K5Tool
 
         private void ShiftDataUp(int startIndex, int amount)
         {
-            for (int i = startIndex; i < cModifiableNameSectionEnd; i++)
+            for (int i = startIndex; i < mModifiableNameSectionEnd; i++)
             {
                 SetByte(i, GameSaveData[i + amount]); // for debugging
                 //GameSaveData[i] = GameSaveData[i + amount]; // for speed
@@ -785,14 +957,43 @@ namespace NFL2K5Tool
         /// Gets the player's name 
         /// </summary>
         /// <param name="player">an int from 0 to 2317</param>
-        /// <returns></returns>
         public string GetPlayerName(int player, char sepChar)
         {
             string retVal = "!!!!!!!!INVALID!!!!!!!!!!!!";
-            if (player > -1 && player <= cMaxPlayers)
+            if (player > -1 && player <= mMaxPlayers)
             {
-                int ptrLoc = player * cPlayerDataLength + cDuaneStarksFnamePointerLoc;
+                int ptrLoc = player * cPlayerDataLength + mDuaneStarksFnamePointerLoc;
                 retVal = GetName(ptrLoc) + sepChar + GetName(ptrLoc + 4);
+            }
+            return retVal;
+        }
+
+        /// <summary>
+        /// Gets the player's first name 
+        /// </summary>
+        /// <param name="player">an int from 0 to 2317</param>
+        public string GetPlayerFirstName(int player)
+        {
+            string retVal = "!!!!!!!!INVALID!!!!!!!!!!!!";
+            if (player > -1 && player <= mMaxPlayers)
+            {
+                int ptrLoc = player * cPlayerDataLength + mDuaneStarksFnamePointerLoc;
+                retVal = GetName(ptrLoc);
+            }
+            return retVal;
+        }
+
+        /// <summary>
+        /// Gets the player's last name 
+        /// </summary>
+        /// <param name="player">an int from 0 to 2317</param>
+        public string GetPlayerLastName(int player)
+        {
+            string retVal = "!!!!!!!!INVALID!!!!!!!!!!!!";
+            if (player > -1 && player <= mMaxPlayers)
+            {
+                int ptrLoc = player * cPlayerDataLength + mDuaneStarksFnamePointerLoc;
+                retVal = GetName(ptrLoc + 4);
             }
             return retVal;
         }
@@ -855,12 +1056,12 @@ namespace NFL2K5Tool
             int firstNamePtr = 0;
             int lastNamePtr = 0;
             int loc = 0;
-            for (int player = 0; player <= cMaxPlayers; player++)
+            for (int player = 0; player <= mMaxPlayers; player++)
             {
-                firstNamePtr = player * cPlayerDataLength + cDuaneStarksFnamePointerLoc;
+                firstNamePtr = player * cPlayerDataLength + mDuaneStarksFnamePointerLoc;
                 lastNamePtr = firstNamePtr + 4;
                 loc = GetPointerDestination(firstNamePtr);
-                if (loc < cModifiableNameSectionEnd)
+                if (loc < mModifiableNameSectionEnd)
                 {
                     if (loc >= locationOfChange)
                     {
@@ -898,7 +1099,7 @@ namespace NFL2K5Tool
         private void PopulateColleges()
         {
             mColleges = new string[cNumberOfColleges];
-            int loc = cCollegeStringsStart;
+            int loc = mCollegeStringsStart;
             //end == 0x7bc50
             for (int i = 0; i < mColleges.Length; i++)
             {
@@ -941,6 +1142,14 @@ namespace NFL2K5Tool
             loc += (int)PlayerOffsets.Position;
             Positions p = (Positions)GameSaveData[loc];
             return p.ToString();
+        }
+
+        private Positions GetPlayerPositionEnum(int player)
+        {
+            int loc = GetPlayerDataStart(player);
+            loc += (int)PlayerOffsets.Position;
+            Positions p = (Positions)GameSaveData[loc];
+            return p;
         }
 
         //Face is stored in all but last bit 

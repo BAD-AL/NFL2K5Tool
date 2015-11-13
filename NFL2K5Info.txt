@@ -24,14 +24,12 @@ bytes 0- 37 seem to be all appearance related.
 bytes 38-52 ??? (41 appears relavent to depth chart)
 bytes 53-81, seem to all be skill related
 
-
-Project Status:
-Can read and write player data successfully! (Everything but DOB).
-Can read all 2317 players from save file and write them back with no file differences!
-
-Next pieces:
-	1. Auto-Update depth chart
-	2. Figure out DOB
-	3. Add support for PBP, Photo, & DOB.
-	4. Command line interface.
-	
+Depth chart multi pos
+1. 60
+2. 10
+3. 84
+4. 34
+5. A8
+6. CC
+7. 58
+8. FC

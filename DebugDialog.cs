@@ -190,6 +190,7 @@ namespace NFL2K5Tool
             StringBuilder builder = new StringBuilder(5000);
             builder.Append(Tool.GetKey(false, false));
             builder.Append("\n");
+            string photo, pbp;
             int max = (int)numericUpDown1.Value;
             for (int i = 0; i < max; i++)
             {
@@ -199,9 +200,27 @@ namespace NFL2K5Tool
                     builder.Append(" Depth:");
                     builder.Append(Tool.GetPlayerPositionDepth(i).ToString("X2"));
                 }
+                if (includePhotePBPToolStripMenuItem.Checked)
+                {
+                    photo = Tool.GetAttribute(i, PlayerOffsets.Photo);
+                    pbp = Tool.GetAttribute(i, PlayerOffsets.PBP);
+                    builder.Append(photo);
+                    builder.Append(",");
+                    builder.Append(pbp);
+                    builder.Append(",");
+                    builder.Append(DataMap.GetPlayerNameForPhoto(photo));
+                    builder.Append(",");
+                    builder.Append(DataMap.GetPlayerNameForPBP(photo));
+                    builder.Append(",");
+                    
+                    if (Tool.GetAttribute(i, PlayerOffsets.Photo) != Tool.GetAttribute(i, PlayerOffsets.PBP))
+                    {
+                        builder.Append("****,");
+                    }
+                }
                 if (mNumBytes.Value > 0)
                 {
-                    int dataStart = Tool.GetPlayerDataStart(i);
+                    int dataStart = Tool.GetPlayerDataStart(i) + (int)mOffsetUpDown.Value;
                     builder.Append(" ");
                     for (int j = 0; j < mNumBytes.Value; j++)
                     {
@@ -222,6 +241,16 @@ namespace NFL2K5Tool
         private void includeDepthToolStripMenuItem_Click(object sender, EventArgs e)
         {
             includeDepthToolStripMenuItem.Checked = !includeDepthToolStripMenuItem.Checked;
+        }
+
+        private void autoUpdateDepthChartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Tool.AutoUpdateDepthChartForTeam("Packers");
+        }
+
+        private void includePhotePBPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            includePhotePBPToolStripMenuItem.Checked = !includePhotePBPToolStripMenuItem.Checked;
         }
 
     }

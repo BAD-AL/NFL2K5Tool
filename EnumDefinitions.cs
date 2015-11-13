@@ -40,6 +40,7 @@ namespace NFL2K5Tool
         Height = 0x2B, // (Inches)
 
         YearsPro = 0x25,
+        Depth = 0x29,
         Position = 0x35,
         Speed,
         Agility,
@@ -73,7 +74,7 @@ namespace NFL2K5Tool
     public enum AppearanceAttributes
     {
         College = 100, // starting here so that we have no collisions with the PlayerOffsets enum
-        DOB, YearsPro, Hand, Weight, Height, BodyType, Skin, Face, Dreads, Helmet, FaceMask, Visor, 
+        DOB, YearsPro, PBP, Photo, Hand, Weight, Height, BodyType, Skin, Face, Dreads, Helmet, FaceMask, Visor, 
         EyeBlack,  MouthPiece, LeftGlove, RightGlove, LeftWrist, RightWrist, LeftElbow, 
         RightElbow, Sleeves, LeftShoe, RightShoe, NeckRoll, Turtleneck
     }

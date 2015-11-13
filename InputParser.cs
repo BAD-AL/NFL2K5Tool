@@ -194,7 +194,7 @@ namespace NFL2K5Tool
                         }
                         else if (attr > 99)
                         {
-                            Tool.SetPlayerappearanceAttribute(player, (AppearanceAttributes)attr, attributes[i]);
+                            Tool.SetPlayerAppearanceAttribute(player, (AppearanceAttributes)attr, attributes[i]);
                         }
                         else
                         {

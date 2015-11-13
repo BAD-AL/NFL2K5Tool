@@ -138,15 +138,7 @@ namespace NFL2K5Tool
 
         private void mSaveButton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
-            statusBar1.Text = "Applying data...";
-            InputParser parser = new InputParser();
-            parser.Tool = this.mTool;
-            parser.ProcessText(mTextBox.Text);
-            sw.Stop();
-            statusBar1.Text = "Done Applying data." + (sw.ElapsedMilliseconds / 1000.0) + "s";
-            StaticUtils.ShowErrors();
+            ApplyTextToSave();
 
             SaveFileDialog dlg = new SaveFileDialog();
             dlg.RestoreDirectory = true;
@@ -156,6 +148,39 @@ namespace NFL2K5Tool
                     File.Delete(dlg.FileName);
                 File.WriteAllBytes(dlg.FileName, mTool.GameSaveData);
             }
+        }
+
+        private void ApplyTextToSave()
+        {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            statusBar1.Text = "Applying data...";
+            InputParser parser = new InputParser();
+            parser.Tool = this.mTool;
+            parser.ProcessText(mTextBox.Text);
+            sw.Stop();
+            statusBar1.Text = "Done Applying data." + (sw.ElapsedMilliseconds / 1000.0) + "s";
+            StaticUtils.ShowErrors();
+        }
+
+        private void autoUpdateDepthChartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTool.AutoUpdateDepthChart();
+        }
+
+        private void applyDataWithoutSavingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ApplyTextToSave();
+        }
+
+        private void autoUpdatePhotoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTool.AutoUpdatePhoto();
+        }
+
+        private void autoUpdatePBPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTool.AutoUpdatePBP();
         }
 
 

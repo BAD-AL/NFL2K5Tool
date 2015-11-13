@@ -46,10 +46,15 @@
             this.listAttributesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listFreeAgentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listDraftClassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.applyDataWithoutSavingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUpdatePhotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUpdatePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -137,6 +142,8 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadSaveToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.applyDataWithoutSavingToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -145,14 +152,14 @@
             // loadSaveToolStripMenuItem
             // 
             this.loadSaveToolStripMenuItem.Name = "loadSaveToolStripMenuItem";
-            this.loadSaveToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.loadSaveToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.loadSaveToolStripMenuItem.Text = "&Load Save";
             this.loadSaveToolStripMenuItem.Click += new System.EventHandler(this.loadSaveToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -165,7 +172,10 @@
             this.listApperanceToolStripMenuItem,
             this.listAttributesToolStripMenuItem,
             this.listFreeAgentsToolStripMenuItem,
-            this.listDraftClassToolStripMenuItem});
+            this.listDraftClassToolStripMenuItem,
+            this.autoUpdateDepthChartToolStripMenuItem,
+            this.autoUpdatePhotoToolStripMenuItem,
+            this.autoUpdatePBPToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -173,7 +183,7 @@
             // findToolStripMenuItem
             // 
             this.findToolStripMenuItem.Name = "findToolStripMenuItem";
-            this.findToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.findToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.findToolStripMenuItem.Text = "F&ind";
             this.findToolStripMenuItem.Click += new System.EventHandler(this.findToolStripMenuItem_Click);
             // 
@@ -181,7 +191,7 @@
             // 
             this.debugDialogMenuItem.Enabled = false;
             this.debugDialogMenuItem.Name = "debugDialogMenuItem";
-            this.debugDialogMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.debugDialogMenuItem.Size = new System.Drawing.Size(208, 22);
             this.debugDialogMenuItem.Text = "&Debug Dialog";
             this.debugDialogMenuItem.Click += new System.EventHandler(this.stringToHexToolStripMenuItem_Click);
             // 
@@ -190,7 +200,7 @@
             this.listTeamsToolStripMenuItem.Checked = true;
             this.listTeamsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.listTeamsToolStripMenuItem.Name = "listTeamsToolStripMenuItem";
-            this.listTeamsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.listTeamsToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.listTeamsToolStripMenuItem.Text = "List Teams";
             this.listTeamsToolStripMenuItem.Click += new System.EventHandler(this.listTeamsToolStripMenuItem_Click);
             // 
@@ -199,7 +209,7 @@
             this.listApperanceToolStripMenuItem.Checked = true;
             this.listApperanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.listApperanceToolStripMenuItem.Name = "listApperanceToolStripMenuItem";
-            this.listApperanceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.listApperanceToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.listApperanceToolStripMenuItem.Text = "List Apperance";
             this.listApperanceToolStripMenuItem.Click += new System.EventHandler(this.listApperanceToolStripMenuItem_Click);
             // 
@@ -208,23 +218,30 @@
             this.listAttributesToolStripMenuItem.Checked = true;
             this.listAttributesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.listAttributesToolStripMenuItem.Name = "listAttributesToolStripMenuItem";
-            this.listAttributesToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.listAttributesToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.listAttributesToolStripMenuItem.Text = "List Attributes";
             this.listAttributesToolStripMenuItem.Click += new System.EventHandler(this.listAttributesToolStripMenuItem_Click);
             // 
             // listFreeAgentsToolStripMenuItem
             // 
             this.listFreeAgentsToolStripMenuItem.Name = "listFreeAgentsToolStripMenuItem";
-            this.listFreeAgentsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.listFreeAgentsToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.listFreeAgentsToolStripMenuItem.Text = "List Free Agents";
             this.listFreeAgentsToolStripMenuItem.Click += new System.EventHandler(this.listFreeAgentsToolStripMenuItem_Click);
             // 
             // listDraftClassToolStripMenuItem
             // 
             this.listDraftClassToolStripMenuItem.Name = "listDraftClassToolStripMenuItem";
-            this.listDraftClassToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.listDraftClassToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.listDraftClassToolStripMenuItem.Text = "List Draft Class";
             this.listDraftClassToolStripMenuItem.Click += new System.EventHandler(this.listDraftClassToolStripMenuItem_Click);
+            // 
+            // autoUpdateDepthChartToolStripMenuItem
+            // 
+            this.autoUpdateDepthChartToolStripMenuItem.Name = "autoUpdateDepthChartToolStripMenuItem";
+            this.autoUpdateDepthChartToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.autoUpdateDepthChartToolStripMenuItem.Text = "Auto Update &Depth Chart";
+            this.autoUpdateDepthChartToolStripMenuItem.Click += new System.EventHandler(this.autoUpdateDepthChartToolStripMenuItem_Click);
             // 
             // mListPlayersButton2
             // 
@@ -277,6 +294,34 @@
             this.mTextBox.TabIndex = 2;
             this.mTextBox.Text = "";
             // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.mSaveButton_Click);
+            // 
+            // applyDataWithoutSavingToolStripMenuItem
+            // 
+            this.applyDataWithoutSavingToolStripMenuItem.Name = "applyDataWithoutSavingToolStripMenuItem";
+            this.applyDataWithoutSavingToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.applyDataWithoutSavingToolStripMenuItem.Text = "Apply data without saving";
+            this.applyDataWithoutSavingToolStripMenuItem.Click += new System.EventHandler(this.applyDataWithoutSavingToolStripMenuItem_Click);
+            // 
+            // autoUpdatePhotoToolStripMenuItem
+            // 
+            this.autoUpdatePhotoToolStripMenuItem.Name = "autoUpdatePhotoToolStripMenuItem";
+            this.autoUpdatePhotoToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.autoUpdatePhotoToolStripMenuItem.Text = "Auto update Photo";
+            this.autoUpdatePhotoToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePhotoToolStripMenuItem_Click);
+            // 
+            // autoUpdatePBPToolStripMenuItem
+            // 
+            this.autoUpdatePBPToolStripMenuItem.Name = "autoUpdatePBPToolStripMenuItem";
+            this.autoUpdatePBPToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.autoUpdatePBPToolStripMenuItem.Text = "Auto update PBP";
+            this.autoUpdatePBPToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePBPToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -327,6 +372,11 @@
         private System.Windows.Forms.ToolStripMenuItem listDraftClassToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listTeamsToolStripMenuItem;
         private System.Windows.Forms.Button mSaveButton;
+        private System.Windows.Forms.ToolStripMenuItem autoUpdateDepthChartToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem applyDataWithoutSavingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoUpdatePhotoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoUpdatePBPToolStripMenuItem;
     }
 }
 
