@@ -51,6 +51,8 @@
             this.includeDepthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.includePhotePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extractPHOHO2K2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.mNumBytes = new System.Windows.Forms.NumericUpDown();
@@ -60,7 +62,7 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
-            this.includePhotePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extractPhoto2K4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -297,7 +299,9 @@
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.autoUpdateDepthChartToolStripMenuItem,
-            this.includePhotePBPToolStripMenuItem});
+            this.includePhotePBPToolStripMenuItem,
+            this.extractPHOHO2K2ToolStripMenuItem,
+            this.extractPhoto2K4ToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -308,6 +312,20 @@
             this.autoUpdateDepthChartToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.autoUpdateDepthChartToolStripMenuItem.Text = "Auto Update Depth Chart";
             this.autoUpdateDepthChartToolStripMenuItem.Click += new System.EventHandler(this.autoUpdateDepthChartToolStripMenuItem_Click);
+            // 
+            // includePhotePBPToolStripMenuItem
+            // 
+            this.includePhotePBPToolStripMenuItem.Name = "includePhotePBPToolStripMenuItem";
+            this.includePhotePBPToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.includePhotePBPToolStripMenuItem.Text = "Include Phote & PBP";
+            this.includePhotePBPToolStripMenuItem.Click += new System.EventHandler(this.includePhotePBPToolStripMenuItem_Click);
+            // 
+            // extractPHOHO2K2ToolStripMenuItem
+            // 
+            this.extractPHOHO2K2ToolStripMenuItem.Name = "extractPHOHO2K2ToolStripMenuItem";
+            this.extractPHOHO2K2ToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.extractPHOHO2K2ToolStripMenuItem.Text = "Extract PHOHO 2K2";
+            this.extractPHOHO2K2ToolStripMenuItem.Click += new System.EventHandler(this.extractPHOHO2K2ToolStripMenuItem_Click);
             // 
             // mGetTeamButton
             // 
@@ -436,12 +454,12 @@
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
             // 
-            // includePhotePBPToolStripMenuItem
+            // extractPhoto2K4ToolStripMenuItem
             // 
-            this.includePhotePBPToolStripMenuItem.Name = "includePhotePBPToolStripMenuItem";
-            this.includePhotePBPToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.includePhotePBPToolStripMenuItem.Text = "Include Phote & PBP";
-            this.includePhotePBPToolStripMenuItem.Click += new System.EventHandler(this.includePhotePBPToolStripMenuItem_Click);
+            this.extractPhoto2K4ToolStripMenuItem.Name = "extractPhoto2K4ToolStripMenuItem";
+            this.extractPhoto2K4ToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.extractPhoto2K4ToolStripMenuItem.Text = "Extract Photo 2K4";
+            this.extractPhoto2K4ToolStripMenuItem.Click += new System.EventHandler(this.extractPhoto2K4ToolStripMenuItem_Click);
             // 
             // DebugDialog
             // 
@@ -512,5 +530,7 @@
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoUpdateDepthChartToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem includePhotePBPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem extractPHOHO2K2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem extractPhoto2K4ToolStripMenuItem;
     }
 }

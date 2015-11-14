@@ -144,9 +144,7 @@ namespace NFL2K5Tool
             dlg.RestoreDirectory = true;
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                if (File.Exists(dlg.FileName))
-                    File.Delete(dlg.FileName);
-                File.WriteAllBytes(dlg.FileName, mTool.GameSaveData);
+                mTool.SaveFile(dlg.FileName);
             }
         }
 
@@ -160,7 +158,7 @@ namespace NFL2K5Tool
             parser.ProcessText(mTextBox.Text);
             sw.Stop();
             statusBar1.Text = "Done Applying data." + (sw.ElapsedMilliseconds / 1000.0) + "s";
-            StaticUtils.ShowErrors();
+            StaticUtils.ShowErrors(false);
         }
 
         private void autoUpdateDepthChartToolStripMenuItem_Click(object sender, EventArgs e)

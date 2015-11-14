@@ -21,6 +21,7 @@ namespace NFL2K5Tool
         /// Process the text in the given file, applying it to the gamesave data.
         /// </summary>
         /// <param name="fileName"></param>
+        /// <returns> empty string on success, a non empty string on failure.</returns>
         public void ProcessFile(string fileName)
         {
             try
@@ -32,7 +33,31 @@ namespace NFL2K5Tool
             }
             catch (Exception e)
             {
-                StringInputDlg.ShowError(e.Message);
+                StaticUtils.Errors.Add(String.Format("Error processing file '{0}'. {1}", fileName, e.Message));
+            }
+        }
+
+        public void ReadFromStdin()
+        {
+            string line = "";
+            int lineNumber = 0;
+            Console.WriteLine("Reading from standard in...");
+            try
+            {
+                while ((line = Console.ReadLine()) != null)
+                {
+                    lineNumber++;
+                    ProcessLine(line);
+                    //Console.WriteLine("Line "+lineNumber);
+                }
+                //ApplySchedule();
+            }
+            catch (Exception e)
+            {
+                StaticUtils.Errors.Add(
+                string.Format(
+                 "Error Processing line {0}:'{1}'.\n{2}\n{3}",
+                    lineNumber, line, e.Message, e.StackTrace));
             }
         }
 

@@ -41,6 +41,8 @@ namespace NFL2K5Tool
 
         private SaveType SaveType = SaveType.Franchise;
 
+        private string mZipFile = "";
+
         private void InitializeForFranchise()
         {
             SaveType = SaveType.Franchise;
@@ -308,7 +310,7 @@ namespace NFL2K5Tool
                     val = DataMap.PBPMap[key];
                 else if (DataMap.PBPMap.ContainsKey(lastName))
                     val = DataMap.PBPMap[lastName];
-                else if (DataMap.PBPMap.ContainsKey(number))
+                else //if (DataMap.PBPMap.ContainsKey(number))
                     val = DataMap.PBPMap[number];
                 SetAttribute(player, PlayerOffsets.PBP, val);
             }
@@ -318,7 +320,7 @@ namespace NFL2K5Tool
         /// Automatically update the Play by play names.
         /// consider doing this in the Form, not directly applying to the save file.
         /// </summary>
-        public void AutoUpdatePhoto(bool showReport)
+        public string AutoUpdatePhoto()
         {
             StringBuilder builder = new StringBuilder();
 
@@ -345,7 +347,7 @@ namespace NFL2K5Tool
                     builder.Append(val);
                     builder.Append("\r\n");
                 }
-                else if (DataMap.PhotoMap.ContainsKey(number))
+                else //if (DataMap.PhotoMap.ContainsKey(number))
                     val = DataMap.PhotoMap[number];
                 SetAttribute(player, PlayerOffsets.PBP, val);
             }
@@ -441,16 +443,56 @@ namespace NFL2K5Tool
         /// TODO: error checking; 
         /// </summary>
         /// <param name="fileName">the filename to load</param>
-        public void LoadSaveFile(string fileName)
+        public bool LoadSaveFile(string fileName)
         {
-            GameSaveData = File.ReadAllBytes(fileName);
-            if (GameSaveData[0] == (byte)'R' && GameSaveData[1] == (byte)'O' && 
-                GameSaveData[2] == (byte)'S' && GameSaveData[3] == (byte)'T')
-                InitializeForRoster();
+            bool retVal = false;
+            if (File.Exists(fileName))
+            {
+                if (fileName.EndsWith(".dat", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    mZipFile = "";
+                    GameSaveData = File.ReadAllBytes(fileName);
+                }
+                else if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    GameSaveData = StaticUtils.ExtractFileFromZip(fileName, null, "SAVEGAME.DAT");
+                    mZipFile = fileName;
+                }
+
+                if (GameSaveData[0] == (byte)'R' && GameSaveData[1] == (byte)'O' &&
+                    GameSaveData[2] == (byte)'S' && GameSaveData[3] == (byte)'T')
+                    InitializeForRoster();
+                else
+                    InitializeForFranchise();
+
+                PopulateColleges();
+                retVal = true;
+            }
+            return retVal;
+        }
+
+        public void SaveFile(string fileName)
+        {
+            if (fileName.EndsWith(".dat", StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (File.Exists(fileName))
+                    File.Delete(fileName);
+                File.WriteAllBytes(fileName, GameSaveData);
+                Console.WriteLine("Data successfully written to file: {0}.", fileName);
+            }
+            else if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) && mZipFile.Length > 4)
+            {
+                if( mZipFile != fileName)
+                    File.Copy(mZipFile, fileName, true);
+                string tmpFile = Path.GetTempFileName();
+                File.WriteAllBytes(tmpFile, GameSaveData);
+                StaticUtils.ReplaceFileInArchive(fileName, null, "SAVEGAME.DAT", tmpFile);
+                File.Delete(tmpFile);
+            }
             else
-                InitializeForFranchise();
-            
-            PopulateColleges();
+            {
+                StaticUtils.Errors.Add("Error! Need to specify a .zip or .DAT file name. If specifying a zip file, the original file loaded must have come from a zip.");
+            }
         }
 
         /// <summary>

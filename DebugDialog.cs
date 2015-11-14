@@ -253,5 +253,81 @@ namespace NFL2K5Tool
             includePhotePBPToolStripMenuItem.Checked = !includePhotePBPToolStripMenuItem.Checked;
         }
 
+        int FirstPlayerFNamePtr = 0xe290;
+        int photoDistance = 0x32;
+        int playerSize = 0xD0;
+
+        // getting data from NFL2k2 gamesave
+        private string GetNFL2K2PhotoData()
+        {
+            FirstPlayerFNamePtr = 0xe290;
+            photoDistance = 0x32;
+            playerSize = 0xD0;
+
+            return GetNameData();
+        }
+
+        // getting data from NFL2k4 gamesave
+        private string GetNFL2K4PhotoData()
+        {
+            FirstPlayerFNamePtr = 0x1132c;
+            photoDistance = -6;
+            playerSize = 0x50;
+
+            return GetNameData();
+        }
+
+        private string GetNameData()
+        {
+            StringBuilder builder = new StringBuilder(5000);
+            int ptrLoc = 0;
+            int photoLoc = 0;
+            try
+            {
+                for (int i = 0; i < numericUpDown1.Value; i++)
+                {
+                    ptrLoc = FirstPlayerFNamePtr + (i * playerSize);
+                    photoLoc = ptrLoc + photoDistance;
+                    builder.Append(Tool.GetString(Tool.GetPointerDestination(ptrLoc + 4))); // lname
+                    builder.Append(", ");
+                    builder.Append(Tool.GetString(Tool.GetPointerDestination(ptrLoc))); // fname
+                    builder.Append("=");
+                    builder.Append(Get2BytePointer(photoLoc));
+                    //if (Get2BytePointer(photoLoc) != Get2BytePointer(photoLoc + 2))
+                    //    builder.Append("*** " + Get2BytePointer(photoLoc+2));
+                    //builder.Append("," + ptrLoc.ToString("X"));
+                    builder.Append("\n");
+                }
+            }
+            catch { }
+            return builder.ToString();
+        }
+
+        private string Get2BytePointer(int photoLoc)
+        {
+            string retVal = "";
+            int val = Tool.GameSaveData[photoLoc + 1] << 8;
+            val += Tool.GameSaveData[photoLoc];
+            if (val < 10)
+                retVal = "000" + val;
+            else if (val < 100)
+                retVal = "00" + val;
+            else if (val < 1000)
+                retVal = "0" + val;
+            else
+                retVal = val.ToString();
+            return retVal;
+        }
+
+        private void extractPHOHO2K2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mResultsTextBox.Text = GetNFL2K2PhotoData();
+        }
+
+        private void extractPhoto2K4ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mResultsTextBox.Text = GetNFL2K4PhotoData();
+        }
+
     }
 }
