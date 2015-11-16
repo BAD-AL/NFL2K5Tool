@@ -53,6 +53,7 @@
             this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.includePhotePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractPHOHO2K2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extractPhoto2K4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.mNumBytes = new System.Windows.Forms.NumericUpDown();
@@ -61,8 +62,13 @@
             this.mStatusLabel = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.mSetByteButton = new System.Windows.Forms.Button();
+            this.mSetByteLocUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
-            this.extractPhoto2K4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -70,6 +76,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.mNumBytes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mOffsetUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mSetByteLocUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
@@ -180,7 +188,7 @@
             this.groupBox1.Controls.Add(this.mSetFirstNameButton);
             this.groupBox1.Controls.Add(this.mPlayerUpDown);
             this.groupBox1.Controls.Add(this.mNameTextBox);
-            this.groupBox1.Location = new System.Drawing.Point(13, 323);
+            this.groupBox1.Location = new System.Drawing.Point(13, 359);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(327, 94);
             this.groupBox1.TabIndex = 9;
@@ -327,6 +335,13 @@
             this.extractPHOHO2K2ToolStripMenuItem.Text = "Extract PHOHO 2K2";
             this.extractPHOHO2K2ToolStripMenuItem.Click += new System.EventHandler(this.extractPHOHO2K2ToolStripMenuItem_Click);
             // 
+            // extractPhoto2K4ToolStripMenuItem
+            // 
+            this.extractPhoto2K4ToolStripMenuItem.Name = "extractPhoto2K4ToolStripMenuItem";
+            this.extractPhoto2K4ToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.extractPhoto2K4ToolStripMenuItem.Text = "Extract Photo 2K4";
+            this.extractPhoto2K4ToolStripMenuItem.Click += new System.EventHandler(this.extractPhoto2K4ToolStripMenuItem_Click);
+            // 
             // mGetTeamButton
             // 
             this.mGetTeamButton.Location = new System.Drawing.Point(13, 74);
@@ -346,7 +361,7 @@
             this.groupBox2.Controls.Add(this.mStatusLabel);
             this.groupBox2.Controls.Add(this.numericUpDown1);
             this.groupBox2.Controls.Add(this.mListPlayersButton2);
-            this.groupBox2.Location = new System.Drawing.Point(346, 323);
+            this.groupBox2.Location = new System.Drawing.Point(346, 359);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(169, 83);
             this.groupBox2.TabIndex = 13;
@@ -439,6 +454,84 @@
             this.mListPlayersButton2.UseVisualStyleBackColor = true;
             this.mListPlayersButton2.Click += new System.EventHandler(this.mListPlayersButton2_Click);
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Controls.Add(this.mSetByteLocUpDown);
+            this.groupBox3.Controls.Add(this.mSetByteButton);
+            this.groupBox3.Controls.Add(this.label4);
+            this.groupBox3.Controls.Add(this.mSetByteValTextBox);
+            this.groupBox3.Location = new System.Drawing.Point(160, 316);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(355, 37);
+            this.groupBox3.TabIndex = 14;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Set Bytes";
+            // 
+            // mSetByteValTextBox
+            // 
+            this.mSetByteValTextBox.Location = new System.Drawing.Point(178, 12);
+            this.mSetByteValTextBox.MaxLength = 80;
+            this.mSetByteValTextBox.Name = "mSetByteValTextBox";
+            this.mSetByteValTextBox.Size = new System.Drawing.Size(100, 20);
+            this.mSetByteValTextBox.TabIndex = 1;
+            this.mSetByteValTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mSetByteValTextBox_KeyDown);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(124, 15);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(48, 13);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Val (hex)";
+            // 
+            // mSetByteButton
+            // 
+            this.mSetByteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mSetByteButton.Location = new System.Drawing.Point(283, 11);
+            this.mSetByteButton.Name = "mSetByteButton";
+            this.mSetByteButton.Size = new System.Drawing.Size(61, 23);
+            this.mSetByteButton.TabIndex = 21;
+            this.mSetByteButton.Text = "Set";
+            this.mSetByteButton.UseVisualStyleBackColor = true;
+            this.mSetByteButton.Click += new System.EventHandler(this.mSetByteButton_Click);
+            // 
+            // mSetByteLocUpDown
+            // 
+            this.mSetByteLocUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mSetByteLocUpDown.Hexadecimal = true;
+            this.mSetByteLocUpDown.Location = new System.Drawing.Point(36, 14);
+            this.mSetByteLocUpDown.Maximum = new decimal(new int[] {
+            820032,
+            0,
+            0,
+            0});
+            this.mSetByteLocUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.mSetByteLocUpDown.Name = "mSetByteLocUpDown";
+            this.mSetByteLocUpDown.Size = new System.Drawing.Size(83, 20);
+            this.mSetByteLocUpDown.TabIndex = 21;
+            this.mSetByteLocUpDown.Value = new decimal(new int[] {
+            45731,
+            0,
+            0,
+            0});
+            this.mSetByteLocUpDown.ValueChanged += new System.EventHandler(this.mSetByteLocUpDown_ValueChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(5, 16);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(25, 13);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "Loc";
+            // 
             // mResultsTextBox
             // 
             this.mResultsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -449,23 +542,17 @@
             this.mResultsTextBox.Name = "mResultsTextBox";
             this.mResultsTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.mResultsTextBox.SearchString = null;
-            this.mResultsTextBox.Size = new System.Drawing.Size(507, 143);
+            this.mResultsTextBox.Size = new System.Drawing.Size(507, 152);
             this.mResultsTextBox.StatusControl = null;
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
-            // 
-            // extractPhoto2K4ToolStripMenuItem
-            // 
-            this.extractPhoto2K4ToolStripMenuItem.Name = "extractPhoto2K4ToolStripMenuItem";
-            this.extractPhoto2K4ToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.extractPhoto2K4ToolStripMenuItem.Text = "Extract Photo 2K4";
-            this.extractPhoto2K4ToolStripMenuItem.Click += new System.EventHandler(this.extractPhoto2K4ToolStripMenuItem_Click);
             // 
             // DebugDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(532, 422);
+            this.ClientSize = new System.Drawing.Size(532, 458);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.mGetTeamButton);
             this.Controls.Add(this.groupBox1);
@@ -491,6 +578,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.mNumBytes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mOffsetUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mSetByteLocUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -532,5 +622,11 @@
         private System.Windows.Forms.ToolStripMenuItem includePhotePBPToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem extractPHOHO2K2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem extractPhoto2K4ToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TextBox mSetByteValTextBox;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown mSetByteLocUpDown;
+        private System.Windows.Forms.Button mSetByteButton;
     }
 }

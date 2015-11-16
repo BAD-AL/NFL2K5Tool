@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -523,8 +522,13 @@ namespace NFL2K5Tool
             StringBuilder dummy = new StringBuilder(200);
             int prevLength = 0;
             builder.Append("#Pos,fname,lname,Number,");
-            mOrder = new int[4 + mAttributeOrder.Length + mAppearanceOrder.Length];
-            mOrder[0] = (int)PlayerOffsets.Position;;
+            int size = 4;
+            if (attributes)
+                size += mAttributeOrder.Length;
+            if (appearance)
+                size += mAppearanceOrder.Length;
+            mOrder = new int[size];
+            mOrder[0] = (int)PlayerOffsets.Position;
             mOrder[1] = -1;
             mOrder[2] = -2;
             mOrder[3] = (int)PlayerOffsets.JerseyNumber;
@@ -628,8 +632,7 @@ namespace NFL2K5Tool
                 case AppearanceAttributes.Skin:
                     SetSkin(player, strVal); break;
                 case AppearanceAttributes.DOB:
-                    
-                    break;
+                    SetAttribute(player, PlayerOffsets.DOB, strVal); break;
                 case AppearanceAttributes.Helmet:
                     SetHelmet(player, strVal); break;
                 case AppearanceAttributes.RightShoe:
@@ -799,16 +802,15 @@ namespace NFL2K5Tool
                     retVal = val.ToString();
                     break;
                 case PlayerOffsets.DOB:
-                    //TODO: get this working
-                    // The year still isn't correct :( [month and Day are good though]; moving on...
-                    int lsd_year = ((GameSaveData[loc + 2] & 0x0001) << 3) + (GameSaveData[loc + 1] >> 5);
-                    int msd_year = (GameSaveData[loc + 2] & 0x0e)  ;
+                    int year = (GameSaveData[loc + 2] & 0x0f) << 3;
+                    year += GameSaveData[loc + 1] >> 5;
                     int day = GameSaveData[loc+1] & 0x1f;
                     int month = (int)(GameSaveData[loc]  >> 4);
-                    //if (month != 0 && day != 0 && year != 0)
-                        retVal = string.Concat(new object[] { month, "/", day, "/", msd_year, lsd_year });
-                    //else
-                    //    retVal = "1/1/1954";
+                    if (year > 54)
+                        year += 1900;
+                    else
+                        year += 2000;
+                    retVal = string.Concat(new object[] { month, "/", day, "/", year });
                     break;
                 case PlayerOffsets.Weight:
                     val += 150;
@@ -836,12 +838,13 @@ namespace NFL2K5Tool
         }
 
         private char[] slash = { '/' };
+        Regex mDobRegex = new Regex("([0-9]{1,2})/([0-9]{1,2})/([0-9]{4})");
 
         public void SetAttribute(int player, PlayerOffsets attr, string stringVal)
         {
             int loc = GetPlayerDataStart(player) + (int)attr;
             int val = 0;
-            int v1, v2;
+            int v1, v2, v3;
             switch (attr)
             {
                 case PlayerOffsets.PowerRunStyle:
@@ -862,7 +865,34 @@ namespace NFL2K5Tool
                     SetByte(loc + 1, (byte)v2);
                     break;
                 case PlayerOffsets.DOB:
-                    //TODO: get this working
+                    Match m = mDobRegex.Match(stringVal);
+                    if (m != Match.Empty)
+                    {
+                        int month = Int32.Parse(m.Groups[1].Value);
+                        int day   = Int32.Parse(m.Groups[2].Value);
+                        int year  = Int32.Parse(m.Groups[3].Value);
+                        
+                        if (year < 1954)
+                            year = 1954;
+                        else if (year > 2050)
+                            year = 2050;
+
+                        if (year > 2000)
+                            year -= 2000;
+                        else if (year > 1900)
+                            year -= 1900;
+
+                        v1 = (GameSaveData[loc] & 0x0f) + (month << 4);
+                        v2 = day;
+                        v2 += ((year & 7) << 5);
+                        v3 = GameSaveData[loc + 2] & 0xf0;
+                        v3 += (year >> 3);
+                        SetByte(loc,   (byte)v1);
+                        SetByte(loc+1, (byte)v2);
+                        SetByte(loc+2, (byte)v3);
+                    }
+                    else
+                        throw new FormatException(String.Format("Error! DOB incorrectly formatted '{0}'", stringVal));
                     break;
                 case PlayerOffsets.Weight:
                     val = Int32.Parse(stringVal);

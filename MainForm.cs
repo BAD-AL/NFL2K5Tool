@@ -31,6 +31,7 @@ namespace NFL2K5Tool
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.InitialDirectory = Directory.GetCurrentDirectory();
             dlg.RestoreDirectory = true;
+            dlg.Filter = "XBOX Save files (*.DAT, *.zip)|*.DAT;*.zip";
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 mTool.LoadSaveFile(dlg.FileName);
@@ -138,12 +139,11 @@ namespace NFL2K5Tool
 
         private void mSaveButton_Click(object sender, EventArgs e)
         {
-            ApplyTextToSave();
-
             SaveFileDialog dlg = new SaveFileDialog();
             dlg.RestoreDirectory = true;
             if (dlg.ShowDialog() == DialogResult.OK)
             {
+                ApplyTextToSave();
                 mTool.SaveFile(dlg.FileName);
             }
         }

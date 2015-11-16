@@ -29,7 +29,7 @@ namespace NFL2K5Tool
         JerseyNumber = 0x20, // & 0x21
 
         Turtleneck_Body_EyeBlack_Hand_Dreads = 0x18, // Shared: Skin(8), Turtleneck(bits6&7), Body(4&5), EyeBlack(3), Hand(2),  Dreads(1) (most sig  --> least sig )
-        DOB = 0x19,
+        DOB = 0x19, // Skin is shared in the second nibble at this location.
         MouthPiece_LeftGlove_Sleeves_NeckRoll= 0x1c,
         RightGlove_LeftWrist = 0x1d,
         RightWrist_LeftElbow = 0x1e,
@@ -73,7 +73,7 @@ namespace NFL2K5Tool
 
     public enum AppearanceAttributes
     {
-        College = 100, // starting here so that we have no collisions with the PlayerOffsets enum
+        College = 200, // starting here so that we have no collisions with the PlayerOffsets enum
         DOB, YearsPro, PBP, Photo, Hand, Weight, Height, BodyType, Skin, Face, Dreads, Helmet, FaceMask, Visor, 
         EyeBlack,  MouthPiece, LeftGlove, RightGlove, LeftWrist, RightWrist, LeftElbow, 
         RightElbow, Sleeves, LeftShoe, RightShoe, NeckRoll, Turtleneck

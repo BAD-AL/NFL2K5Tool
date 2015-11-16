@@ -329,5 +329,42 @@ namespace NFL2K5Tool
             mResultsTextBox.Text = GetNFL2K4PhotoData();
         }
 
+        private void mSetByteLocUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            mSetByteValTextBox.Text = Tool.GameSaveData[(int)mSetByteLocUpDown.Value].ToString("X2");
+        }
+
+        private void SetBytes()
+        {
+            byte b1 = 0;
+
+            try
+            {
+                for (int i = 0; i < mSetByteValTextBox.Text.Length; i += 2)
+                {
+                    b1 = (byte)UInt16.Parse(mSetByteValTextBox.Text.Substring(i, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
+                    Tool.GameSaveData[(int)mSetByteLocUpDown.Value + i] = b1;
+                }
+            }
+            catch
+            {
+                mStatusLabel.Text = "Set Byte error.";
+            }
+
+        }
+
+        private void mSetByteButton_Click(object sender, EventArgs e)
+        {
+            SetBytes();
+        }
+
+        private void mSetByteValTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SetBytes();
+            }
+        }
+
     }
 }

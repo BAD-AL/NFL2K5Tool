@@ -71,7 +71,7 @@ namespace NFL2K5Tool
 
         public void ProcessLines(string[] lines)
         {
-            Tool.GetKey(true, true);// TODO, plumb support for specifying 'Key'
+            Tool.GetKey(true, true); // TODO, plumb support for specifying 'Key'; Figure out what to take in
             int i = 0;
             try
             {
@@ -217,7 +217,7 @@ namespace NFL2K5Tool
                             // How we gonna decide to use pointers or not?
                             Tool.SetPlayerLastName(player, attributes[i], false);
                         }
-                        else if (attr > 99)
+                        else if (attr >= (int)AppearanceAttributes.College)
                         {
                             Tool.SetPlayerAppearanceAttribute(player, (AppearanceAttributes)attr, attributes[i]);
                         }

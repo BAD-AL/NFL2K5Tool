@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
+
+//https://github.com/icsharpcode/SharpZipLib
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
-using System.IO;
 
 namespace NFL2K5Tool
 {
@@ -118,6 +120,7 @@ namespace NFL2K5Tool
             return i == target.Length;
         }
 
+        #region Zip file handling
         /// <summary>
         /// 
         /// </summary>
@@ -281,7 +284,6 @@ namespace NFL2K5Tool
                 CompressFolder(folder, zipStream, folderOffset);
             }
         }
-
-
+        #endregion
     }
 }
