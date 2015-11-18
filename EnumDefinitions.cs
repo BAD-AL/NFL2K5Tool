@@ -26,21 +26,21 @@ namespace NFL2K5Tool
         PBP = 4,
         Photo= 6,
         Helmet_LeftShoe_RightShoe = 0x0c, // LShoe is last 3 bits; helmet is 7th bit; RShoe is bits 4,5,6 
-        JerseyNumber = 0x20, // & 0x21
-
         Turtleneck_Body_EyeBlack_Hand_Dreads = 0x18, // Shared: Skin(8), Turtleneck(bits6&7), Body(4&5), EyeBlack(3), Hand(2),  Dreads(1) (most sig  --> least sig )
         DOB = 0x19, // Skin is shared in the second nibble at this location.
         MouthPiece_LeftGlove_Sleeves_NeckRoll= 0x1c,
         RightGlove_LeftWrist = 0x1d,
         RightWrist_LeftElbow = 0x1e,
         RightElbow = 0x1f,
+        JerseyNumber = 0x20, // & 0x21
         FaceMask = 0x21, // part if Wacko Visor is in this byte too (FaceMask = val & 0x1F >> 1)
         Face = 0x22, // part of Wacko Visor is in this byte too (Face = Val >>1 )
+        YearsPro = 0x25,
+        Depth = 0x29,
         Weight = 0x2A, // 150 + value
         Height = 0x2B, // (Inches)
 
-        YearsPro = 0x25,
-        Depth = 0x29,
+
         Position = 0x35,
         Speed,
         Agility,
@@ -51,7 +51,7 @@ namespace NFL2K5Tool
         Strength,
         Jumping,
         Coverage,
-        RunRoute,
+        RunRoute,//0x40
         Tackle,
         BreakTackle,
         PassAccuracy,
@@ -66,7 +66,7 @@ namespace NFL2K5Tool
         Leadership = 0x4C,
         PowerRunStyle,
         Composure,
-        Scramble,
+        Scramble,//4f
         Consistency,
         Aggressiveness
     }

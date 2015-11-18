@@ -267,6 +267,16 @@ namespace NFL2K5Tool
             return GetNameData();
         }
 
+        // getting data from NFL2k2 gamesave
+        private string GetNFL2K3PhotoData()
+        {
+            FirstPlayerFNamePtr = 0xFB28;
+            photoDistance = -10;
+            playerSize = 0x54;
+
+            return GetNameData();
+        }
+
         // getting data from NFL2k4 gamesave
         private string GetNFL2K4PhotoData()
         {
@@ -294,7 +304,7 @@ namespace NFL2K5Tool
                     builder.Append("=");
                     builder.Append(Get2BytePointer(photoLoc));
                     //if (Get2BytePointer(photoLoc) != Get2BytePointer(photoLoc + 2))
-                    //    builder.Append("*** " + Get2BytePointer(photoLoc+2));
+                    //    builder.Append("*** " + Get2BytePointer(photoLoc + 2));
                     //builder.Append("," + ptrLoc.ToString("X"));
                     builder.Append("\n");
                 }
@@ -322,6 +332,11 @@ namespace NFL2K5Tool
         private void extractPHOHO2K2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             mResultsTextBox.Text = GetNFL2K2PhotoData();
+        }
+
+        private void extractPhoto2K3ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mResultsTextBox.Text = GetNFL2K3PhotoData();
         }
 
         private void extractPhoto2K4ToolStripMenuItem_Click(object sender, EventArgs e)

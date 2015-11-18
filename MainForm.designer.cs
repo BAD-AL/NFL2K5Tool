@@ -37,6 +37,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.applyDataWithoutSavingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,14 +49,14 @@
             this.listFreeAgentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listDraftClassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUpdatePhotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUpdatePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.applyDataWithoutSavingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoUpdatePhotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoUpdatePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mLoadTextFileButton = new System.Windows.Forms.Button();
+            this.loadTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -75,7 +77,7 @@
             // 
             this.mListPlayersButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.mListPlayersButton.Enabled = false;
-            this.mListPlayersButton.Location = new System.Drawing.Point(94, 360);
+            this.mListPlayersButton.Location = new System.Drawing.Point(191, 360);
             this.mListPlayersButton.Name = "mListPlayersButton";
             this.mListPlayersButton.Size = new System.Drawing.Size(119, 23);
             this.mListPlayersButton.TabIndex = 1;
@@ -86,7 +88,7 @@
             // mClearButton
             // 
             this.mClearButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mClearButton.Location = new System.Drawing.Point(219, 360);
+            this.mClearButton.Location = new System.Drawing.Point(316, 360);
             this.mClearButton.Name = "mClearButton";
             this.mClearButton.Size = new System.Drawing.Size(75, 23);
             this.mClearButton.TabIndex = 3;
@@ -142,8 +144,9 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadSaveToolStripMenuItem,
-            this.saveToolStripMenuItem,
+            this.loadTextFileToolStripMenuItem,
             this.applyDataWithoutSavingToolStripMenuItem,
+            this.saveToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -155,6 +158,20 @@
             this.loadSaveToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.loadSaveToolStripMenuItem.Text = "&Load Save";
             this.loadSaveToolStripMenuItem.Click += new System.EventHandler(this.loadSaveToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.mSaveButton_Click);
+            // 
+            // applyDataWithoutSavingToolStripMenuItem
+            // 
+            this.applyDataWithoutSavingToolStripMenuItem.Name = "applyDataWithoutSavingToolStripMenuItem";
+            this.applyDataWithoutSavingToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.applyDataWithoutSavingToolStripMenuItem.Text = "Apply data without saving";
+            this.applyDataWithoutSavingToolStripMenuItem.Click += new System.EventHandler(this.applyDataWithoutSavingToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -243,6 +260,20 @@
             this.autoUpdateDepthChartToolStripMenuItem.Text = "Auto Update &Depth Chart";
             this.autoUpdateDepthChartToolStripMenuItem.Click += new System.EventHandler(this.autoUpdateDepthChartToolStripMenuItem_Click);
             // 
+            // autoUpdatePhotoToolStripMenuItem
+            // 
+            this.autoUpdatePhotoToolStripMenuItem.Name = "autoUpdatePhotoToolStripMenuItem";
+            this.autoUpdatePhotoToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.autoUpdatePhotoToolStripMenuItem.Text = "Auto update Photo";
+            this.autoUpdatePhotoToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePhotoToolStripMenuItem_Click);
+            // 
+            // autoUpdatePBPToolStripMenuItem
+            // 
+            this.autoUpdatePBPToolStripMenuItem.Name = "autoUpdatePBPToolStripMenuItem";
+            this.autoUpdatePBPToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.autoUpdatePBPToolStripMenuItem.Text = "Auto update PBP";
+            this.autoUpdatePBPToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePBPToolStripMenuItem_Click);
+            // 
             // mListPlayersButton2
             // 
             this.mListPlayersButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -271,7 +302,7 @@
             // mSaveButton
             // 
             this.mSaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mSaveButton.Location = new System.Drawing.Point(300, 360);
+            this.mSaveButton.Location = new System.Drawing.Point(397, 360);
             this.mSaveButton.Name = "mSaveButton";
             this.mSaveButton.Size = new System.Drawing.Size(75, 23);
             this.mSaveButton.TabIndex = 11;
@@ -294,39 +325,30 @@
             this.mTextBox.TabIndex = 2;
             this.mTextBox.Text = "";
             // 
-            // saveToolStripMenuItem
+            // mLoadTextFileButton
             // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.saveToolStripMenuItem.Text = "&Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.mSaveButton_Click);
+            this.mLoadTextFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mLoadTextFileButton.Location = new System.Drawing.Point(94, 360);
+            this.mLoadTextFileButton.Name = "mLoadTextFileButton";
+            this.mLoadTextFileButton.Size = new System.Drawing.Size(91, 23);
+            this.mLoadTextFileButton.TabIndex = 12;
+            this.mLoadTextFileButton.Text = "Load Text File";
+            this.mLoadTextFileButton.UseVisualStyleBackColor = true;
+            this.mLoadTextFileButton.Click += new System.EventHandler(this.mLoadTextFileButton_Click);
             // 
-            // applyDataWithoutSavingToolStripMenuItem
+            // loadTextFileToolStripMenuItem
             // 
-            this.applyDataWithoutSavingToolStripMenuItem.Name = "applyDataWithoutSavingToolStripMenuItem";
-            this.applyDataWithoutSavingToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.applyDataWithoutSavingToolStripMenuItem.Text = "Apply data without saving";
-            this.applyDataWithoutSavingToolStripMenuItem.Click += new System.EventHandler(this.applyDataWithoutSavingToolStripMenuItem_Click);
-            // 
-            // autoUpdatePhotoToolStripMenuItem
-            // 
-            this.autoUpdatePhotoToolStripMenuItem.Name = "autoUpdatePhotoToolStripMenuItem";
-            this.autoUpdatePhotoToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.autoUpdatePhotoToolStripMenuItem.Text = "Auto update Photo";
-            this.autoUpdatePhotoToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePhotoToolStripMenuItem_Click);
-            // 
-            // autoUpdatePBPToolStripMenuItem
-            // 
-            this.autoUpdatePBPToolStripMenuItem.Name = "autoUpdatePBPToolStripMenuItem";
-            this.autoUpdatePBPToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.autoUpdatePBPToolStripMenuItem.Text = "Auto update PBP";
-            this.autoUpdatePBPToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePBPToolStripMenuItem_Click);
+            this.loadTextFileToolStripMenuItem.Name = "loadTextFileToolStripMenuItem";
+            this.loadTextFileToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.loadTextFileToolStripMenuItem.Text = "LoadTextFile";
+            this.loadTextFileToolStripMenuItem.Click += new System.EventHandler(this.loadTextFileAction);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(678, 411);
+            this.Controls.Add(this.mLoadTextFileButton);
             this.Controls.Add(this.mSaveButton);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.statusBar1);
@@ -377,6 +399,8 @@
         private System.Windows.Forms.ToolStripMenuItem applyDataWithoutSavingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoUpdatePhotoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoUpdatePBPToolStripMenuItem;
+        private System.Windows.Forms.Button mLoadTextFileButton;
+        private System.Windows.Forms.ToolStripMenuItem loadTextFileToolStripMenuItem;
     }
 }
 

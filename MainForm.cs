@@ -181,6 +181,36 @@ namespace NFL2K5Tool
             mTool.AutoUpdatePBP();
         }
 
+        private void mLoadTextFileButton_Click(object sender, EventArgs e)
+        {
+            LoadTextFile();
+        }
+
+        private void loadTextFileAction(object sender, EventArgs e)
+        {
+            LoadTextFile();
+        }
+
+        private void LoadTextFile()
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.RestoreDirectory = true;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    mTextBox.Text = File.ReadAllText(dlg.FileName);
+                }
+                catch (Exception )
+                {
+                    MessageBox.Show(this, "Error Loadig file"+dlg.FileName, 
+                        "Error!",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            dlg.Dispose();
+        }
+
+
 
     }
 }

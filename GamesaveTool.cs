@@ -1200,6 +1200,8 @@ namespace NFL2K5Tool
         // input like 6'3"
         private int GetInches(string stringVal)
         {
+            if (stringVal[0] == '"' && stringVal[stringVal.Length - 1] == '"')
+                stringVal = stringVal.Substring(1, stringVal.Length - 3);
             int feet = stringVal[0] - 0x30;
             stringVal = stringVal.Replace("\"", "");
             int inches = Int32.Parse(stringVal.Substring(2));

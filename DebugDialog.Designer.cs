@@ -53,6 +53,7 @@
             this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.includePhotePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractPHOHO2K2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extractPhoto2K3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractPhoto2K4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -63,11 +64,11 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.mSetByteButton = new System.Windows.Forms.Button();
-            this.mSetByteLocUpDown = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
+            this.mSetByteLocUpDown = new System.Windows.Forms.NumericUpDown();
+            this.mSetByteButton = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -309,6 +310,7 @@
             this.autoUpdateDepthChartToolStripMenuItem,
             this.includePhotePBPToolStripMenuItem,
             this.extractPHOHO2K2ToolStripMenuItem,
+            this.extractPhoto2K3ToolStripMenuItem,
             this.extractPhoto2K4ToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
@@ -334,6 +336,13 @@
             this.extractPHOHO2K2ToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.extractPHOHO2K2ToolStripMenuItem.Text = "Extract PHOHO 2K2";
             this.extractPHOHO2K2ToolStripMenuItem.Click += new System.EventHandler(this.extractPHOHO2K2ToolStripMenuItem_Click);
+            // 
+            // extractPhoto2K3ToolStripMenuItem
+            // 
+            this.extractPhoto2K3ToolStripMenuItem.Name = "extractPhoto2K3ToolStripMenuItem";
+            this.extractPhoto2K3ToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.extractPhoto2K3ToolStripMenuItem.Text = "Extract Photo 2K3";
+            this.extractPhoto2K3ToolStripMenuItem.Click += new System.EventHandler(this.extractPhoto2K3ToolStripMenuItem_Click);
             // 
             // extractPhoto2K4ToolStripMenuItem
             // 
@@ -469,34 +478,14 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Set Bytes";
             // 
-            // mSetByteValTextBox
+            // label3
             // 
-            this.mSetByteValTextBox.Location = new System.Drawing.Point(178, 12);
-            this.mSetByteValTextBox.MaxLength = 80;
-            this.mSetByteValTextBox.Name = "mSetByteValTextBox";
-            this.mSetByteValTextBox.Size = new System.Drawing.Size(100, 20);
-            this.mSetByteValTextBox.TabIndex = 1;
-            this.mSetByteValTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mSetByteValTextBox_KeyDown);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(124, 15);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(48, 13);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Val (hex)";
-            // 
-            // mSetByteButton
-            // 
-            this.mSetByteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mSetByteButton.Location = new System.Drawing.Point(283, 11);
-            this.mSetByteButton.Name = "mSetByteButton";
-            this.mSetByteButton.Size = new System.Drawing.Size(61, 23);
-            this.mSetByteButton.TabIndex = 21;
-            this.mSetByteButton.Text = "Set";
-            this.mSetByteButton.UseVisualStyleBackColor = true;
-            this.mSetByteButton.Click += new System.EventHandler(this.mSetByteButton_Click);
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(5, 16);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(25, 13);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "Loc";
             // 
             // mSetByteLocUpDown
             // 
@@ -523,14 +512,34 @@
             0});
             this.mSetByteLocUpDown.ValueChanged += new System.EventHandler(this.mSetByteLocUpDown_ValueChanged);
             // 
-            // label3
+            // mSetByteButton
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 16);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(25, 13);
-            this.label3.TabIndex = 22;
-            this.label3.Text = "Loc";
+            this.mSetByteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mSetByteButton.Location = new System.Drawing.Point(283, 11);
+            this.mSetByteButton.Name = "mSetByteButton";
+            this.mSetByteButton.Size = new System.Drawing.Size(61, 23);
+            this.mSetByteButton.TabIndex = 21;
+            this.mSetByteButton.Text = "Set";
+            this.mSetByteButton.UseVisualStyleBackColor = true;
+            this.mSetByteButton.Click += new System.EventHandler(this.mSetByteButton_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(124, 15);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(48, 13);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Val (hex)";
+            // 
+            // mSetByteValTextBox
+            // 
+            this.mSetByteValTextBox.Location = new System.Drawing.Point(178, 12);
+            this.mSetByteValTextBox.MaxLength = 80;
+            this.mSetByteValTextBox.Name = "mSetByteValTextBox";
+            this.mSetByteValTextBox.Size = new System.Drawing.Size(100, 20);
+            this.mSetByteValTextBox.TabIndex = 1;
+            this.mSetByteValTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mSetByteValTextBox_KeyDown);
             // 
             // mResultsTextBox
             // 
@@ -628,5 +637,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown mSetByteLocUpDown;
         private System.Windows.Forms.Button mSetByteButton;
+        private System.Windows.Forms.ToolStripMenuItem extractPhoto2K3ToolStripMenuItem;
     }
 }
