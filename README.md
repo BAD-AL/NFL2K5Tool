@@ -11,6 +11,7 @@ Simply copy and paste text into the program.
 ###Project Status:
 Can read and write player data successfully! 
 Can read all 2317 players from save file and write them back with no file differences!
+Working on Signing...
 
 ###Implemented features:
 1. Auto update depth chart. 

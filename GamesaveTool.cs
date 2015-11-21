@@ -477,6 +477,7 @@ namespace NFL2K5Tool
                 if (File.Exists(fileName))
                     File.Delete(fileName);
                 File.WriteAllBytes(fileName, GameSaveData);
+                StaticUtils.SignNfl2K5Save(fileName);
                 Console.WriteLine("Data successfully written to file: {0}.", fileName);
             }
             else if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) && mZipFile.Length > 4)
@@ -485,6 +486,7 @@ namespace NFL2K5Tool
                     File.Copy(mZipFile, fileName, true);
                 string tmpFile = Path.GetTempFileName();
                 File.WriteAllBytes(tmpFile, GameSaveData);
+                StaticUtils.SignNfl2K5Save(tmpFile);
                 StaticUtils.ReplaceFileInArchive(fileName, null, "SAVEGAME.DAT", tmpFile);
                 File.Delete(tmpFile);
             }

@@ -6,6 +6,7 @@ using System.IO;
 //https://github.com/icsharpcode/SharpZipLib
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using System.Security.Cryptography;
 
 namespace NFL2K5Tool
 {
@@ -180,7 +181,7 @@ namespace NFL2K5Tool
             }
         }
         
-        public static string UnzipToTempFolder(string archiveFilenameIn, string password)
+        private static string UnzipToTempFolder(string archiveFilenameIn, string password)
         {
             string dirName = Path.GetTempPath() + "NFL2K5ToolTmpZipUnpack";
 
@@ -282,6 +283,52 @@ namespace NFL2K5Tool
             foreach (string folder in folders)
             {
                 CompressFolder(folder, zipStream, folderOffset);
+            }
+        }
+        #endregion
+
+        #region save signing
+        // http://www.gothi.co.uk/2010/06/xbox-save-resigning-a-technical-overview/
+
+        //"722E7565FB841B09E938DA756393FF80"
+        private static byte[] mNFL2K5Key = new byte[] { 
+            0x72, 0x2E, 0x75, 0x65, 0xFB, 0x84, 0x1B, 0x09, 
+            0xE9, 0x38, 0xDA, 0x75, 0x63, 0x93, 0xFF, 0x80
+        };
+
+        /// <summary>
+        /// Signs the NFL2K5 xbox file.
+        /// </summary>
+        /// <param name="sourceFile">The file to sign</param>
+        public static void SignNfl2K5Save(string fileToSign)
+        {
+            SignFile(mNFL2K5Key, fileToSign);
+        }
+        
+        private static void SignFile(byte[] key, string fileToSign)
+        {
+            try
+            {
+                using (HMACSHA1 hMACSHA = new HMACSHA1(key))
+                {
+                    using (FileStream fileStream = new FileStream(fileToSign, FileMode.Open))
+                    {
+                        byte[] buffer = new BinaryReader(fileStream)
+                        {
+                            BaseStream =
+                            {
+                                Position = 24L
+                            }
+                        }.ReadBytes(Convert.ToInt32(fileStream.Length - 24L));
+                        byte[] array = hMACSHA.ComputeHash(buffer);
+                        fileStream.Position = 4L;
+                        fileStream.Write(array, 0, array.Length);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Errors.Add("Error signing file! " + fileToSign);
             }
         }
         #endregion

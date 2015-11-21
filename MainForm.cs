@@ -145,6 +145,7 @@ namespace NFL2K5Tool
             {
                 ApplyTextToSave();
                 mTool.SaveFile(dlg.FileName);
+                StaticUtils.ShowErrors(false);
             }
         }
 
