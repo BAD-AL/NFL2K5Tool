@@ -304,4 +304,17 @@ namespace NFL2K5Tool
         HighBlack,
         HighTeam
     }
+
+
+    public enum Game
+    {
+        HomeTeam,
+        AwayTeam,
+        Month,
+        Day,
+        YearTwoDigit,
+        HourOfDay,
+        MinuteOfHour,
+        NullByte
+    }
 }

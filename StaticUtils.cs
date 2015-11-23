@@ -50,6 +50,15 @@ namespace NFL2K5Tool
         }
 
         /// <summary>
+        /// Add an error to the session
+        /// </summary>
+        /// <param name="error"></param>
+        public static void AddError(string error)
+        {
+            Errors.Add(error);
+        }
+
+        /// <summary>
         /// Find string 'str' (unicode string) in the data byte array.
         /// </summary>
         /// <param name="str">The string to look for</param>
@@ -61,6 +70,7 @@ namespace NFL2K5Tool
         {
             return FindStringInFile(str, data, start, end, false);
         }
+
 
         /// <summary>
         /// Find string 'str' (unicode string) in the data byte array.
@@ -74,6 +84,33 @@ namespace NFL2K5Tool
         public static List<long> FindStringInFile(string str, byte[] data, int start, int end, bool nullByte)
         {
             List<long> retVal = new List<long>();
+            int length = str.Length * 2;
+            if (nullByte)
+                length += 2;
+
+            byte[] target = new byte[length];
+            int i = 0;
+            Array.Clear(target, 0, target.Length); // fill with 0's
+            foreach (char c in str)
+            {
+                target[i] = (byte)c;
+                target[i + 1] = 0;
+                i += 2;
+            }
+            return FindByesInFile(target, data, start, end);
+        }
+
+        /// <summary>
+        /// Find an array of bytes in the data byte array.
+        /// </summary>
+        /// <param name="str">The bytes to look for</param>
+        /// <param name="data">The data to search through.</param>
+        /// <param name="start">where to start in 'data'</param>
+        /// <param name="end">Where to end in 'data'</param>
+        /// <returns>a list of addresses</returns>
+        public static List<long> FindByesInFile(byte[] target, byte[] data, int start, int end)
+        {
+            List<long> retVal = new List<long>();
 
             if (data != null && data.Length > 80)
             {
@@ -82,20 +119,6 @@ namespace NFL2K5Tool
                 if (end > data.Length)
                     end = data.Length - 1;
 
-                int i = 0;
-                int length  = str.Length * 2;
-                if (nullByte)
-                    length += 2;
-
-                byte[] target = new byte[length];
-                
-                Array.Clear(target, 0, target.Length); // fill with 0's
-                foreach (char c in str)
-                {
-                    target[i] = (byte)c;
-                    target[i + 1] = 0;
-                    i += 2;
-                }
                 long num = (long)(end - target.Length);
                 for (long num3 = start; num3 < num; num3 += 1L)
                 {
@@ -326,7 +349,7 @@ namespace NFL2K5Tool
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 Errors.Add("Error signing file! " + fileToSign);
             }

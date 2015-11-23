@@ -30,15 +30,16 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mLoadSaveButton = new System.Windows.Forms.Button();
-            this.mListPlayersButton = new System.Windows.Forms.Button();
+            this.mListContentsButton = new System.Windows.Forms.Button();
             this.mClearButton = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.statusBar1 = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.applyDataWithoutSavingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,6 +47,7 @@
             this.listTeamsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listApperanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listAttributesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listFreeAgentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listDraftClassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,9 +56,11 @@
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mSaveButton = new System.Windows.Forms.Button();
-            this.mTextBox = new NFL2K5Tool.SearchTextBox();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
-            this.loadTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.teamPlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mTextBox = new NFL2K5Tool.SearchTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -73,17 +77,17 @@
             this.mLoadSaveButton.UseVisualStyleBackColor = true;
             this.mLoadSaveButton.Click += new System.EventHandler(this.mLoadSaveButton_Click);
             // 
-            // mListPlayersButton
+            // mListContentsButton
             // 
-            this.mListPlayersButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mListPlayersButton.Enabled = false;
-            this.mListPlayersButton.Location = new System.Drawing.Point(191, 360);
-            this.mListPlayersButton.Name = "mListPlayersButton";
-            this.mListPlayersButton.Size = new System.Drawing.Size(119, 23);
-            this.mListPlayersButton.TabIndex = 1;
-            this.mListPlayersButton.Text = "List Team &Players";
-            this.mListPlayersButton.UseVisualStyleBackColor = true;
-            this.mListPlayersButton.Click += new System.EventHandler(this.mListPlayersButton_Click);
+            this.mListContentsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mListContentsButton.Enabled = false;
+            this.mListContentsButton.Location = new System.Drawing.Point(191, 360);
+            this.mListContentsButton.Name = "mListContentsButton";
+            this.mListContentsButton.Size = new System.Drawing.Size(119, 23);
+            this.mListContentsButton.TabIndex = 1;
+            this.mListContentsButton.Text = "List &Contents";
+            this.mListContentsButton.UseVisualStyleBackColor = true;
+            this.mListContentsButton.Click += new System.EventHandler(this.mListContentsButton_Click);
             // 
             // mClearButton
             // 
@@ -133,7 +137,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.editToolStripMenuItem});
+            this.editToolStripMenuItem,
+            this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(678, 24);
@@ -159,12 +164,12 @@
             this.loadSaveToolStripMenuItem.Text = "&Load Save";
             this.loadSaveToolStripMenuItem.Click += new System.EventHandler(this.loadSaveToolStripMenuItem_Click);
             // 
-            // saveToolStripMenuItem
+            // loadTextFileToolStripMenuItem
             // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.saveToolStripMenuItem.Text = "&Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.mSaveButton_Click);
+            this.loadTextFileToolStripMenuItem.Name = "loadTextFileToolStripMenuItem";
+            this.loadTextFileToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.loadTextFileToolStripMenuItem.Text = "LoadTextFile";
+            this.loadTextFileToolStripMenuItem.Click += new System.EventHandler(this.loadTextFileAction);
             // 
             // applyDataWithoutSavingToolStripMenuItem
             // 
@@ -172,6 +177,13 @@
             this.applyDataWithoutSavingToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.applyDataWithoutSavingToolStripMenuItem.Text = "Apply data without saving";
             this.applyDataWithoutSavingToolStripMenuItem.Click += new System.EventHandler(this.applyDataWithoutSavingToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.mSaveButton_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -188,6 +200,7 @@
             this.listTeamsToolStripMenuItem,
             this.listApperanceToolStripMenuItem,
             this.listAttributesToolStripMenuItem,
+            this.listScheduleToolStripMenuItem,
             this.listFreeAgentsToolStripMenuItem,
             this.listDraftClassToolStripMenuItem,
             this.autoUpdateDepthChartToolStripMenuItem,
@@ -238,6 +251,13 @@
             this.listAttributesToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.listAttributesToolStripMenuItem.Text = "List Attributes";
             this.listAttributesToolStripMenuItem.Click += new System.EventHandler(this.listAttributesToolStripMenuItem_Click);
+            // 
+            // listScheduleToolStripMenuItem
+            // 
+            this.listScheduleToolStripMenuItem.Name = "listScheduleToolStripMenuItem";
+            this.listScheduleToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.listScheduleToolStripMenuItem.Text = "List Schedule";
+            this.listScheduleToolStripMenuItem.Click += new System.EventHandler(this.listScheduleToolStripMenuItem_Click);
             // 
             // listFreeAgentsToolStripMenuItem
             // 
@@ -310,6 +330,40 @@
             this.mSaveButton.UseVisualStyleBackColor = true;
             this.mSaveButton.Click += new System.EventHandler(this.mSaveButton_Click);
             // 
+            // mLoadTextFileButton
+            // 
+            this.mLoadTextFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mLoadTextFileButton.Location = new System.Drawing.Point(94, 360);
+            this.mLoadTextFileButton.Name = "mLoadTextFileButton";
+            this.mLoadTextFileButton.Size = new System.Drawing.Size(91, 23);
+            this.mLoadTextFileButton.TabIndex = 12;
+            this.mLoadTextFileButton.Text = "Load Text File";
+            this.mLoadTextFileButton.UseVisualStyleBackColor = true;
+            this.mLoadTextFileButton.Click += new System.EventHandler(this.mLoadTextFileButton_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scheduleToolStripMenuItem,
+            this.teamPlayersToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // scheduleToolStripMenuItem
+            // 
+            this.scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
+            this.scheduleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scheduleToolStripMenuItem.Text = "&Schedule";
+            this.scheduleToolStripMenuItem.Click += new System.EventHandler(this.scheduleToolStripMenuItem_Click);
+            // 
+            // teamPlayersToolStripMenuItem
+            // 
+            this.teamPlayersToolStripMenuItem.Name = "teamPlayersToolStripMenuItem";
+            this.teamPlayersToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.teamPlayersToolStripMenuItem.Text = "&Team Players";
+            this.teamPlayersToolStripMenuItem.Click += new System.EventHandler(this.teamPlayersToolStripMenuItem_Click);
+            // 
             // mTextBox
             // 
             this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -325,24 +379,6 @@
             this.mTextBox.TabIndex = 2;
             this.mTextBox.Text = "";
             // 
-            // mLoadTextFileButton
-            // 
-            this.mLoadTextFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mLoadTextFileButton.Location = new System.Drawing.Point(94, 360);
-            this.mLoadTextFileButton.Name = "mLoadTextFileButton";
-            this.mLoadTextFileButton.Size = new System.Drawing.Size(91, 23);
-            this.mLoadTextFileButton.TabIndex = 12;
-            this.mLoadTextFileButton.Text = "Load Text File";
-            this.mLoadTextFileButton.UseVisualStyleBackColor = true;
-            this.mLoadTextFileButton.Click += new System.EventHandler(this.mLoadTextFileButton_Click);
-            // 
-            // loadTextFileToolStripMenuItem
-            // 
-            this.loadTextFileToolStripMenuItem.Name = "loadTextFileToolStripMenuItem";
-            this.loadTextFileToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.loadTextFileToolStripMenuItem.Text = "LoadTextFile";
-            this.loadTextFileToolStripMenuItem.Click += new System.EventHandler(this.loadTextFileAction);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -354,7 +390,7 @@
             this.Controls.Add(this.statusBar1);
             this.Controls.Add(this.mClearButton);
             this.Controls.Add(this.mTextBox);
-            this.Controls.Add(this.mListPlayersButton);
+            this.Controls.Add(this.mListContentsButton);
             this.Controls.Add(this.mLoadSaveButton);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -374,7 +410,7 @@
         #endregion
 
         private System.Windows.Forms.Button mLoadSaveButton;
-        private System.Windows.Forms.Button mListPlayersButton;
+        private System.Windows.Forms.Button mListContentsButton;
         private SearchTextBox mTextBox;
         private System.Windows.Forms.Button mClearButton;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
@@ -401,6 +437,10 @@
         private System.Windows.Forms.ToolStripMenuItem autoUpdatePBPToolStripMenuItem;
         private System.Windows.Forms.Button mLoadTextFileButton;
         private System.Windows.Forms.ToolStripMenuItem loadTextFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listScheduleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scheduleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem teamPlayersToolStripMenuItem;
     }
 }
 

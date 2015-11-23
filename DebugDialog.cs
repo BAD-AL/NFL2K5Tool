@@ -381,5 +381,40 @@ namespace NFL2K5Tool
             }
         }
 
+        private void mFindBytesButton_Click(object sender, EventArgs e)
+        {
+            FindBytesInFile();
+        }
+
+        private void FindBytesInFile()
+        {
+            string val = textBox1.Text;
+            try
+            {
+                string part = "";
+                if (val.StartsWith("0x"))
+                    val = val.Substring(2);
+                byte[] bytesToSearch = new byte[val.Length / 2];
+                int j = 0;
+                for (int i = 0; i < val.Length; i+=2)
+                {
+                    part = val.Substring(i, 2);
+                    bytesToSearch[j++] = Byte.Parse(part, System.Globalization.NumberStyles.AllowHexSpecifier);
+                }
+                mResultsTextBox.Clear();
+                List<long> locs = StaticUtils.FindByesInFile(bytesToSearch, Tool.GameSaveData, 0, Tool.GameSaveData.Length);
+                foreach (int loc in locs)
+                {
+                    mResultsTextBox.AppendText(String.Format("{0:x}\n", loc));
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Could not search for: " + textBox1.Text +
+                    ". Ensure you are searching with valid characters [0-9A-F], even number of characters",
+                    "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }

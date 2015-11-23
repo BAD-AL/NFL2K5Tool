@@ -70,6 +70,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
+            this.mFindBytesButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -556,11 +557,23 @@
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
             // 
+            // mFindBytesButton
+            // 
+            this.mFindBytesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.mFindBytesButton.Location = new System.Drawing.Point(254, 74);
+            this.mFindBytesButton.Name = "mFindBytesButton";
+            this.mFindBytesButton.Size = new System.Drawing.Size(124, 23);
+            this.mFindBytesButton.TabIndex = 15;
+            this.mFindBytesButton.Text = "Find bytes in savefile";
+            this.mFindBytesButton.UseVisualStyleBackColor = true;
+            this.mFindBytesButton.Click += new System.EventHandler(this.mFindBytesButton_Click);
+            // 
             // DebugDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(532, 458);
+            this.Controls.Add(this.mFindBytesButton);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.mGetTeamButton);
@@ -638,5 +651,6 @@
         private System.Windows.Forms.NumericUpDown mSetByteLocUpDown;
         private System.Windows.Forms.Button mSetByteButton;
         private System.Windows.Forms.ToolStripMenuItem extractPhoto2K3ToolStripMenuItem;
+        private System.Windows.Forms.Button mFindBytesButton;
     }
 }

@@ -138,7 +138,7 @@ namespace NFL2K5Tool
                 #endregion
 
                 #region printing stuff out
-                //TODO: add support for showing schedule, playbooks
+                //TODO: add support for showing playbooks
                 if (tool != null)
                 {
                     StringBuilder builder = new StringBuilder(5000);

@@ -19,6 +19,7 @@ namespace NFL2K5Tool
         {
             InitializeComponent();
             //Text = Directory.GetCurrentDirectory();
+            EnableControls(false);
         }
 
         private void mLoadSaveButton_Click(object sender, EventArgs e)
@@ -38,12 +39,31 @@ namespace NFL2K5Tool
                 string shortName = dlg.FileName.Substring(dlg.FileName.LastIndexOf(Path.DirectorySeparatorChar) + 1);
                 Text = "NFL2K5Tool - " + shortName;
                 statusBar1.Text = dlg.FileName + " loaded";
-                mListPlayersButton2.Enabled = mListPlayersButton.Enabled = debugDialogMenuItem.Enabled = true;
+                EnableControls(true);
             }
         }
 
+        /// <summary>
+        /// Controls enabling/disabling of controls (to make sure we have data to access before we try to access it)
+        /// </summary>
+        private void EnableControls(bool enable)
+        {
+            scheduleToolStripMenuItem.Enabled=
+            autoUpdateDepthChartToolStripMenuItem.Enabled =
+            autoUpdatePBPToolStripMenuItem.Enabled =
+            autoUpdatePhotoToolStripMenuItem.Enabled =
+            teamPlayersToolStripMenuItem.Enabled=
+            mListPlayersButton2.Enabled = 
+            mListContentsButton.Enabled = 
+            applyDataWithoutSavingToolStripMenuItem.Enabled =
+            saveToolStripMenuItem.Enabled =
+            mSaveButton.Enabled =
+            debugDialogMenuItem.Enabled = enable;
+        }
 
-        private void mListPlayersButton_Click(object sender, EventArgs e)
+
+
+        private void mListContentsButton_Click(object sender, EventArgs e)
         {
             mTextBox.Clear();
             StringBuilder builder = new StringBuilder(5000);
@@ -59,8 +79,38 @@ namespace NFL2K5Tool
             
             if( listDraftClassToolStripMenuItem.Checked)
                 builder.Append(mTool.GetTeamPlayers("DraftClass", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
-            
+
+            if (listScheduleToolStripMenuItem.Checked)
+            {
+                SchedulerHelper helper = new SchedulerHelper(mTool);
+                builder.Append("\n\n#Schedule\n");
+                builder.Append(helper.GetSchedule());
+            }
+
             mTextBox.AppendText(builder.ToString());
+        }
+
+        private void scheduleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SchedulerHelper helper = new SchedulerHelper(mTool);
+            mTextBox.AppendText("\n\n#Schedule\n");
+            mTextBox.AppendText(helper.GetSchedule());
+        }
+
+        private void teamPlayersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+            builder.Append("\n");
+            if (listTeamsToolStripMenuItem.Checked)
+                builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+
+            if (listFreeAgentsToolStripMenuItem.Checked)
+                builder.Append(mTool.GetTeamPlayers("FreeAgents", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+
+            if (listDraftClassToolStripMenuItem.Checked)
+                builder.Append(mTool.GetTeamPlayers("DraftClass", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+            mTextBox.Text = builder.ToString();
         }
 
         private void mClearButton_Click(object sender, EventArgs e)
@@ -82,7 +132,7 @@ namespace NFL2K5Tool
         {
             DebugDialog form = new DebugDialog();
             form.Tool = mTool;
-            form.Show();
+            form.Show(this);
         }
 
         private void loadSaveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -115,6 +165,11 @@ namespace NFL2K5Tool
             listTeamsToolStripMenuItem.Checked = !listTeamsToolStripMenuItem.Checked;
         }
 
+        private void listScheduleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listScheduleToolStripMenuItem.Checked = !listScheduleToolStripMenuItem.Checked;
+        }
+
         private void mListPlayersButton2_Click(object sender, EventArgs e)
         {
             mTextBox.Clear();
@@ -130,7 +185,6 @@ namespace NFL2K5Tool
             //builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, true, true));
             mTextBox.AppendText(builder.ToString());
         }
-
         
         private void mApplyButton_Click(object sender, EventArgs e)
         {
@@ -210,8 +264,6 @@ namespace NFL2K5Tool
             }
             dlg.Dispose();
         }
-
-
 
     }
 }

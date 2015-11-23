@@ -10,10 +10,12 @@ namespace NFL2K5Tool
     {
         List<string> mErrors = new List<string>();
         private Regex mTeamRegex = new Regex("Team\\s*=\\s*([0-9a-zA-Z]+)");
-        private Regex mWeekRegex  = new Regex("Week ([1-9][0	-7]?)");
+        private Regex mWeekRegex  = new Regex("(?i)Week(?-i) ([1-9][0-7]?)");
         private Regex mGameRegex  = new Regex("([0-9a-z]+)\\s+at\\s+([0-9a-zA-Z]+)");
+        private Regex mYearRegex = new Regex("YEAR\\s*=\\s*([0-9]+)");
         private ParsingStates mCurrentState = ParsingStates.PlayerModification;
         private InputParserTeamTracker mTracker = new InputParserTeamTracker();
+        private List<string> mScheduleList;
 
         public GamesaveTool Tool { get; set; }
 
@@ -33,7 +35,7 @@ namespace NFL2K5Tool
             }
             catch (Exception e)
             {
-                StaticUtils.Errors.Add(String.Format("Error processing file '{0}'. {1}", fileName, e.Message));
+                StaticUtils.AddError(String.Format("Error processing file '{0}'. {1}", fileName, e.Message));
             }
         }
 
@@ -48,13 +50,12 @@ namespace NFL2K5Tool
                 {
                     lineNumber++;
                     ProcessLine(line);
-                    //Console.WriteLine("Line "+lineNumber);
                 }
-                //ApplySchedule();
+                ApplySchedule();
             }
             catch (Exception e)
             {
-                StaticUtils.Errors.Add(
+                StaticUtils.AddError(
                 string.Format(
                  "Error Processing line {0}:'{1}'.\n{2}\n{3}",
                     lineNumber, line, e.Message, e.StackTrace));
@@ -78,9 +79,8 @@ namespace NFL2K5Tool
                 for (i = 0; i < lines.Length; i++)
                 {
                     ProcessLine(lines[i]);
-                    //Console.WriteLine(i);
                 }
-                //ApplySchedule();
+                ApplySchedule();
             }
             catch (Exception e)
             {
@@ -91,8 +91,6 @@ namespace NFL2K5Tool
                 sb.Append(e.Message);
                 sb.Append("\n");
                 sb.Append(e.StackTrace);
-                //						"Error Processing line {0}:\t'{1}'.\n{2}\n{3}",
-                //						i,lines[i], e.Message,e.StackTrace);
                 sb.Append("\n\nOperation aborted at this point. Data not applied.");
                 StringInputDlg.ShowError(sb.ToString());
             }
@@ -109,20 +107,35 @@ namespace NFL2K5Tool
             if (line.StartsWith("#") || line.Length < 1)
             {
             }
-            else if ( (mTeamMatch = mTeamRegex.Match(line)) != Match.Empty)
+            else if (line.StartsWith("SET"))
             {
-                Console.WriteLine("'{0}' ", line);
+                ApplySet(line);
+            }
+            else if ((mTeamMatch = mTeamRegex.Match(line)) != Match.Empty)
+            {
+                //Console.WriteLine("'{0}' ", line);
                 mCurrentState = ParsingStates.PlayerModification;
                 string team = mTeamMatch.Groups[1].ToString();
                 bool ret = SetCurrentTeam(team);
                 if (!ret)
                 {
-                    StaticUtils.Errors.Add(string.Format("ERROR with line '{0}'.", line));
-                    StaticUtils.Errors.Add(string.Format("Team input must be in the form 'TEAM = team '"));
+                    StaticUtils.AddError(string.Format("ERROR with line '{0}'.", line));
+                    StaticUtils.AddError(string.Format("Team input must be in the form 'TEAM = team '"));
                     return;
                 }
             }
-            else 
+            else if (mWeekRegex.Match(line) != Match.Empty)  //line.StartsWith("WEEK"))
+            {
+                mCurrentState = ParsingStates.Schedule;
+                if (mScheduleList == null)
+                    mScheduleList = new List<string>(300);
+                mScheduleList.Add(line);
+            }
+            else if (mYearRegex.Match(line) != Match.Empty)//line.StartsWith("YEAR"))
+            {
+                SetYear(line);
+            }
+            else
             {
                 switch (mCurrentState)
                 {
@@ -130,6 +143,7 @@ namespace NFL2K5Tool
                         InsertPlayer(line);
                         break;
                     case ParsingStates.Schedule:
+                        mScheduleList.Add(line);
                         break;
                 }
             }
@@ -152,7 +166,7 @@ namespace NFL2K5Tool
             }
             else
             {
-                StaticUtils.Errors.Add(String.Format("Error, team player limit reached. {0}; cannot add player: {1}",mTracker.Team, line));
+                StaticUtils.AddError(String.Format("Error, team player limit reached. {0}; cannot add player: {1}",mTracker.Team, line));
             }
             return retVal;
         }
@@ -230,43 +244,12 @@ namespace NFL2K5Tool
                     {
                         string desc = attr > 99 ? ((AppearanceAttributes)attr).ToString() : ((PlayerOffsets)attr).ToString();
 
-                        StaticUtils.Errors.Add("Error setting attribute '" + desc + "' to '" + attributes[i]);
+                        StaticUtils.AddError("Error setting attribute '" + desc + "' to '" + attributes[i]);
                     }
                 }
                 retVal = true;
             }
             return retVal;
-        }
-
-        private string GetAwayTeam(string line)
-        {
-            Match m = mGameRegex.Match(line);
-            string awayTeam = m.Groups[1].ToString();
-            return awayTeam;
-        }
-
-        private string GetHomeTeam(string line)
-        {
-            Match m = mGameRegex.Match(line);
-            string team = m.Groups[2].ToString();
-            return team;
-        }
-
-        private int GetWeek(string line)
-        {
-            Match m = mWeekRegex.Match(line);
-            string week_str = m.Groups[1].ToString();
-            int ret = -1;
-            try
-            {
-                ret = Int32.Parse(week_str);
-                ret--; // our week starts at 0
-            }
-            catch
-            {
-                StaticUtils.Errors.Add(string.Format("Week '{0}' is invalid.", week_str));
-            }
-            return ret;
         }
 
         private bool SetCurrentTeam(string team)
@@ -284,6 +267,121 @@ namespace NFL2K5Tool
             return true;
         }
 
+        private void SetYear(string line)
+        {
+            Match m = mYearRegex.Match(line);
+            string year = m.Groups[1].ToString();
+            if (year.Length < 1)
+            {
+                StaticUtils.AddError(string.Format("'{0}' is not valid.", line));
+            }
+            else
+            {
+                Tool.SetYear(year);
+                //Console.WriteLine("Year set to '{0}'", year);
+            }
+        }
+
+        private void ApplySchedule()
+        {
+            if (mScheduleList != null && mScheduleList.Count > 0)
+            {
+                Tool.ApplySchedule(mScheduleList);
+                mScheduleList = null;
+            }
+        }
+
+
+        #region SetBytes logic
+
+        private Regex simpleSetRegex;
+
+        private void ApplySet(string line)
+        {
+            if (simpleSetRegex == null)
+                simpleSetRegex = new Regex("SET\\s*\\(\\s*(0x[0-9a-fA-F]+)\\s*,\\s*(0x[0-9a-fA-F]+)\\s*\\)");
+
+            if (simpleSetRegex.Match(line) != Match.Empty)
+            {
+                ApplySimpleSet(line);
+            }
+            else if (line.IndexOf("PromptUser", StringComparison.OrdinalIgnoreCase) > -1)
+            {
+                string simpleSetLine = StringInputDlg.PromptForSetUserInput(line);
+                if (!string.IsNullOrEmpty(simpleSetLine))
+                {
+                    ApplySet(simpleSetLine);
+                }
+            }
+            else
+            {
+                StaticUtils.AddError(string.Format("ERROR with line \"{0}\"", line));
+            }
+        }
+
+        protected void ApplySimpleSet(string line)
+        {
+            if (simpleSetRegex == null)
+                simpleSetRegex = new Regex("SET\\s*\\(\\s*(0x[0-9a-fA-F]+)\\s*,\\s*(0x[0-9a-fA-F]+)\\s*\\)");
+
+            Match m = simpleSetRegex.Match(line);
+            if (m == Match.Empty)
+            {
+                StaticUtils.AddError(string.Format("SET function not used properly. incorrect syntax>'{0}'", line));
+                return;
+            }
+            string loc = m.Groups[1].ToString().ToLower();
+            string val = m.Groups[2].ToString().ToLower();
+            loc = loc.Substring(2);
+            val = val.Substring(2);
+            if (val.Length % 2 != 0)
+                val = "0" + val;
+
+            try
+            {
+                int location = Int32.Parse(loc, System.Globalization.NumberStyles.AllowHexSpecifier);
+                byte[] bytes = GetHexBytes(val);
+                if (location + bytes.Length > Tool.GameSaveData.Length)
+                {
+                    StaticUtils.AddError(string.Format("ApplySet:> Error with line {0}. Data falls off the end of rom.\n", line));
+                }
+                else if (location < 0)
+                {
+                    StaticUtils.AddError(string.Format("ApplySet:> Error with line {0}. location is negative.\n", line));
+                }
+                else
+                {
+                    for (int i = 0; i < bytes.Length; i++)
+                    {
+                        Tool.SetByte(location + i, bytes[i]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                StaticUtils.AddError(string.Format("ApplySet:> Error with line {0}.\n{1}", line, e.Message));
+            }
+        }
+
+        protected byte[] GetHexBytes(string input)
+        {
+            if (input == null)
+                return null;
+
+            byte[] ret = new byte[input.Length / 2];
+            string b = "";
+            int tmp = 0;
+            int j = 0;
+
+            for (int i = 0; i < input.Length; i += 2)
+            {
+                b = input.Substring(i, 2);
+                tmp = Int32.Parse(b, System.Globalization.NumberStyles.AllowHexSpecifier);
+                ret[j++] = (byte)tmp;
+            }
+            return ret;
+        }
+        #endregion
     }
 
     public enum ParsingStates

@@ -36,7 +36,7 @@
             // 
             this.mOkButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mOkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.mOkButton.Location = new System.Drawing.Point(270, 238);
+            this.mOkButton.Location = new System.Drawing.Point(474, 238);
             this.mOkButton.Name = "mOkButton";
             this.mOkButton.Size = new System.Drawing.Size(75, 23);
             this.mOkButton.TabIndex = 0;
@@ -52,7 +52,7 @@
             this.mErrorTextBox.Location = new System.Drawing.Point(1, 2);
             this.mErrorTextBox.Name = "mErrorTextBox";
             this.mErrorTextBox.ReadOnly = true;
-            this.mErrorTextBox.Size = new System.Drawing.Size(344, 230);
+            this.mErrorTextBox.Size = new System.Drawing.Size(548, 230);
             this.mErrorTextBox.TabIndex = 1;
             this.mErrorTextBox.Text = "";
             // 
@@ -60,7 +60,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(346, 264);
+            this.ClientSize = new System.Drawing.Size(550, 264);
             this.Controls.Add(this.mErrorTextBox);
             this.Controls.Add(this.mOkButton);
             this.Name = "ErrorForm";

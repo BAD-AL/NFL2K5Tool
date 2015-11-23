@@ -57,7 +57,9 @@ namespace NFL2K5Tool
             m49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
             mFreeAgentsPlayerPointersStart = 0x3f644;
             m49ersNumPlayersAddress = 0x45c3; // 00 35
-            mMaxPlayers = 2317; 
+            mMaxPlayers = 2317;
+
+            Year = 2000 + GameSaveData[SchedulerHelper.FranchiseGameOneYearLocation];
         }
 
         private void InitializeForRoster()
@@ -78,6 +80,8 @@ namespace NFL2K5Tool
             mFreeAgentsPlayerPointersStart = 0x3f364;
             m49ersNumPlayersAddress = 0x42e3; // 00 35
             mMaxPlayers = 1943;
+
+            Year = 0; //?? does a year apply to a roster at all???
         }
 
 		// The team data is ordered like this:
@@ -106,6 +110,11 @@ namespace NFL2K5Tool
         /// The gamesave file/data
         /// </summary>
         public byte[] GameSaveData = null;
+
+        /// <summary>
+        /// the year 
+        /// </summary>
+        public int Year { get; private set; }
 
         /// <summary>
         /// Gets the players by team (does not get free agents or draft class)
@@ -492,8 +501,35 @@ namespace NFL2K5Tool
             }
             else
             {
-                StaticUtils.Errors.Add("Error! Need to specify a .zip or .DAT file name. If specifying a zip file, the original file loaded must have come from a zip.");
+                StaticUtils.AddError("Error! Need to specify a .zip or .DAT file name. If specifying a zip file, the original file loaded must have come from a zip.");
             }
+        }
+
+        /// <summary>
+        /// Sets the year in the gamesave. TODO: implement this.
+        /// </summary>
+        /// <param name="year"></param>
+        public void SetYear(string year)
+        {
+            try
+            {
+                this.Year = Int32.Parse(year);
+            }
+            catch
+            {
+                StaticUtils.AddError("Error Setting year to:"+ year);
+            }
+        }
+
+        /// <summary>
+        /// uses the Schedule helper class to apply the schedule.
+        /// </summary>
+        /// <param name="scheduleList"></param>
+        public void ApplySchedule(List<string> scheduleList)
+        {
+            SchedulerHelper helper = new SchedulerHelper(this);
+            helper.FranchiseScheduleMode = true;
+            helper.ApplySchedule(scheduleList);
         }
 
         /// <summary>
@@ -501,7 +537,7 @@ namespace NFL2K5Tool
         /// </summary>
         /// <param name="location"></param>
         /// <param name="b"></param>
-        protected void SetByte(int loc, byte b)
+        public void SetByte(int loc, byte b)
         {
             GameSaveData[loc] = b;
         }
@@ -1778,9 +1814,7 @@ namespace NFL2K5Tool
             int pointerVal = 0;
             if (collegeIndex > -1)
             {
-                // check this 
                 pointerVal = ((-2127 /*0xfffff7b1*/) - player * cPlayerDataLength) + collegeIndex * 8;
-                Console.WriteLine("player {0} college pointer {1}", player, pointerVal);
                 byte b1 = (byte)pointerVal; ;
                 byte b2 = (byte)(pointerVal >> 8);
 
@@ -1789,7 +1823,7 @@ namespace NFL2K5Tool
             }
             else
             {
-                StaticUtils.Errors.Add("College '"+college+ "' appears to be invalid");
+                StaticUtils.AddError("College '"+college+ "' appears to be invalid");
             }
         }
         #endregion

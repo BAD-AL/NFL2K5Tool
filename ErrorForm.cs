@@ -13,6 +13,7 @@ namespace NFL2K5Tool
         public ErrorForm()
         {
             InitializeComponent();
+            this.Icon = SystemIcons.Error;
         }
 
         /// <summary>
