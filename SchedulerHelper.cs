@@ -364,7 +364,10 @@ namespace NFL2K5Tool
             DateTime time = new DateTime(
                     2000 + Tool.GameSaveData[location + (int)Game.YearTwoDigit],
                     Tool.GameSaveData[location + (int)Game.Month],
-                    Tool.GameSaveData[location + (int)Game.Day]);
+                    Tool.GameSaveData[location + (int)Game.Day],
+                    Tool.GameSaveData[location + (int)Game.HourOfDay],
+                    Tool.GameSaveData[location + (int)Game.MinuteOfHour],
+                    0);
             
 
             DayOfWeek d = time.DayOfWeek;

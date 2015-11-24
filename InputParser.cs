@@ -17,7 +17,13 @@ namespace NFL2K5Tool
         private InputParserTeamTracker mTracker = new InputParserTeamTracker();
         private List<string> mScheduleList;
 
-        public GamesaveTool Tool { get; set; }
+        public InputParser(GamesaveTool tool)
+        {
+            this.Tool = tool;
+        }
+
+
+        private GamesaveTool Tool { get; set; }
 
         /// <summary>
         /// Process the text in the given file, applying it to the gamesave data.
@@ -64,7 +70,7 @@ namespace NFL2K5Tool
 
         public void ProcessText(string text)
         {
-            mDelim = CharCount(text, ';') > CharCount(text, ',') ? mSemiColon : mComma;
+            sDelim = CharCount(text, ';') > CharCount(text, ',') ? sSemiColon : sComma;
             char[] chars = "\n\r".ToCharArray();
             string[] lines = text.Split(chars);
             ProcessLines(lines);
@@ -172,28 +178,37 @@ namespace NFL2K5Tool
         }
 
 
-        private char[] mComma = new char[] { ',' };
-        private char[] mSemiColon = new char[] { ';' };
+        private static char[] sComma = new char[] { ',' };
+        private static char[] sSemiColon = new char[] { ';' };
         // will be set when starting to parse.
-        private char[] mDelim;
+        private static char[] sDelim;
 
-        private List<string> ParsePlayerLine(string line)
+        /// <summary>
+        /// Parses a line of text into a list of strings.
+        /// </summary>
+        /// <param name="line">a comma deliminated string of attributes.</param>
+        /// <returns>a list of strings</returns>
+        public static List<string> ParsePlayerLine(string line)
         {
-            List<string> retVal = new List<string>(line.Split(mDelim));
+            if (sDelim == null)
+            {
+                sDelim = CharCount(line, ';') > CharCount(line, ',') ? sSemiColon : sComma;
+            }
+            List<string> retVal = new List<string>(line.Split(sDelim));
             for (int i = 0; i < retVal.Count; i++)
             {
                 // Fixup the issue with commas inside quoted strings. 
                 // (This however only works for strings that have 1 comma inside)
                 if (retVal[i].EndsWith("\"") && i > 0 && retVal[i - 1].StartsWith("\""))
                 {
-                    retVal[i - 1] += ( mDelim[0] + retVal[i]);
+                    retVal[i - 1] += ( sDelim[0] + retVal[i]);
                     retVal.RemoveAt(i);
                 }
             }
             return retVal;
         }
 
-        int CharCount(string input, char thingToCount)
+        static int CharCount(string input, char thingToCount)
         {
             int retVal = 0;
             for (int i = 0; i < input.Length; i++)

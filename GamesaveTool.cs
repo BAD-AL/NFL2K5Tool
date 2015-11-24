@@ -486,7 +486,7 @@ namespace NFL2K5Tool
                 if (File.Exists(fileName))
                     File.Delete(fileName);
                 File.WriteAllBytes(fileName, GameSaveData);
-                StaticUtils.SignNfl2K5Save(fileName);
+                // Can't sign just a .DAT file.
                 Console.WriteLine("Data successfully written to file: {0}.", fileName);
             }
             else if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) && mZipFile.Length > 4)
@@ -495,8 +495,12 @@ namespace NFL2K5Tool
                     File.Copy(mZipFile, fileName, true);
                 string tmpFile = Path.GetTempFileName();
                 File.WriteAllBytes(tmpFile, GameSaveData);
-                StaticUtils.SignNfl2K5Save(tmpFile);
                 StaticUtils.ReplaceFileInArchive(fileName, null, "SAVEGAME.DAT", tmpFile);
+                File.Delete(tmpFile);
+                
+                tmpFile = Path.GetTempFileName();
+                StaticUtils.SignNfl2K5Save(tmpFile, GameSaveData);
+                StaticUtils.ReplaceFileInArchive(fileName, null, "EXTRA", tmpFile);
                 File.Delete(tmpFile);
             }
             else
@@ -524,12 +528,22 @@ namespace NFL2K5Tool
         /// <summary>
         /// uses the Schedule helper class to apply the schedule.
         /// </summary>
-        /// <param name="scheduleList"></param>
+        /// <param name="scheduleList">list of games to apply.</param>
         public void ApplySchedule(List<string> scheduleList)
         {
             SchedulerHelper helper = new SchedulerHelper(this);
             helper.FranchiseScheduleMode = true;
             helper.ApplySchedule(scheduleList);
+        }
+
+        /// <summary>
+        /// Gets the schedule
+        /// </summary>
+        public string GetSchedule()
+        {
+            SchedulerHelper helper = new SchedulerHelper(this);
+            helper.FranchiseScheduleMode = true;
+            return helper.GetSchedule();
         }
 
         /// <summary>

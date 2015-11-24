@@ -12,7 +12,8 @@ Simply copy and paste text into the program.
 Can read and write player data successfully! 
 Can read all 2317 players from save file and write them back with no file differences!
 Can Schedule games; Specifying a year will auto update the dates in the Game (to 'close' dates, not the exact dates the games are actually played)
-Working on Signing...
+Can load gamesave files onto your XBOX.
+Looks like I have a Bug in reading rosters.
 
 ###Implemented features:
 1. Auto update depth chart. 
@@ -23,8 +24,10 @@ Working on Signing...
 6. Zip file management (Currently not signing). 
 7. Scheduler.
 8. 'SET' Command support; SET(0x10, 0x2233) --> Sets the location 0x10 to '22' and location 0x11 to '33' in the gamesave file.
+9. Gamesaves are signed and loaded.
 
 ###Next features:
+    0. Player validator (flag players that have attributes that don't seem right.)
 	1. Player edit GUI 	
 	2. Editing coaches. 
 	3. Editing playbooks. 
@@ -33,6 +36,7 @@ Working on Signing...
 	6. Warn probable error conditions (Like when a RB weighs 300+ lbs, or has XL body type). 
 	7. Auto update Player equipment (from stock file database)
 	8. Help Manual
+	9. Allow formula definition for how good a player is.
 	
 ###Also need
 	1. To add tests.

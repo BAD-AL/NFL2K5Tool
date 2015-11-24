@@ -50,8 +50,10 @@ namespace NFL2K5Tool
                 string saveFileName, outputFileName, dataToApplyTextFile;
                 saveFileName = outputFileName = dataToApplyTextFile = null;
 
-                bool showAppearance, showAbilities, showPlaybooks, showSchedule, readFromStdIn, autoUpdateDepthChart, autoUpdatePbp, autoUpdatePhoto;
-                showAppearance = showAbilities = showPlaybooks = showSchedule = readFromStdIn = autoUpdateDepthChart = autoUpdatePbp = autoUpdatePhoto= false;
+                bool showAppearance, showAbilities, showPlaybooks, showSchedule, readFromStdIn,
+                    autoUpdateDepthChart, autoUpdatePbp, autoUpdatePhoto, showFreeAgents, showDraftClass;
+                showAppearance = showAbilities = showPlaybooks = showSchedule = readFromStdIn = 
+                    autoUpdateDepthChart = autoUpdatePbp = autoUpdatePhoto= showFreeAgents = showDraftClass = false;
 
                 #region Argument processing
                 string arg = "";
@@ -68,12 +70,20 @@ namespace NFL2K5Tool
                         case "-audc":   autoUpdateDepthChart = true; break;
                         case "-aupbp":  autoUpdatePbp = true; break;
                         case "-auph":   autoUpdatePhoto = true; break;
+                        case "-fa"  :   showFreeAgents = true; break;
+                        case "-dc":     showDraftClass = true; break;
                         case "-help":   // common help message arguments
                         case "--help":
                         case "/help":
                         case "/?":
                             PrintUsage();
                             return;
+                        default:
+                            if ( arg.StartsWith("-") )
+                            {
+                                Console.Error.WriteLine("Invalid argument: " + arg);
+                            }
+                            break;
                     }
                     if (args[i].StartsWith("-out:"))
                         outputFileName = args[i].Substring(5);
@@ -113,8 +123,7 @@ namespace NFL2K5Tool
                         PrintUsage();
                         return;
                     }
-                    InputParser parser = new InputParser();
-                    parser.Tool = tool;
+                    InputParser parser = new InputParser(tool);
                     if (readFromStdIn)
                         parser.ReadFromStdin();
                     else
@@ -142,10 +151,17 @@ namespace NFL2K5Tool
                 if (tool != null)
                 {
                     StringBuilder builder = new StringBuilder(5000);
-                    builder.Append(tool.GetKey(showAbilities, showAppearance));
-                    builder.Append(tool.GetLeaguePlayers(showAbilities, showAppearance));
-                    builder.Append(tool.GetTeamPlayers("FreeAgents", showAbilities, showAppearance));
-                    builder.Append(tool.GetTeamPlayers("DraftClass", showAbilities, showAppearance));
+                    if (showAbilities || showAppearance)
+                    {
+                        builder.Append(tool.GetKey(showAbilities, showAppearance));
+                        builder.Append(tool.GetLeaguePlayers(showAbilities, showAppearance));
+                        if (showFreeAgents)
+                            builder.Append(tool.GetTeamPlayers("FreeAgents", showAbilities, showAppearance));
+                        if (showDraftClass)
+                            builder.Append(tool.GetTeamPlayers("DraftClass", showAbilities, showAppearance));
+                    }
+                    if (showSchedule)
+                        builder.Append(tool.GetSchedule());
                     Console.Write(builder.ToString());
                 }
                 else
@@ -184,6 +200,8 @@ The following are the available options.
 -aupbp  Auto update the play by play info for each player.
 -auph   Auto update the photo for each player.
 -sch    Print schedule.
+-fa     Print Free Agents
+-dc     Print draft class
 -stdin  Read data from standard in.
 -pb		Show Playbooks
 -out:filename	Save modified Save file  to <filename>.

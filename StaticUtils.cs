@@ -321,32 +321,23 @@ namespace NFL2K5Tool
 
         /// <summary>
         /// Signs the NFL2K5 xbox file.
+        /// The actual SAVEGAME.DAT file is not signed. The file "EXTRA" inside the dave is.
+        /// The "EXTRA" file is signed hashed with the SAVEGAME.DAT data and the 2K5 key.
         /// </summary>
         /// <param name="sourceFile">The file to sign</param>
-        public static void SignNfl2K5Save(string fileToSign)
+        public static void SignNfl2K5Save(string fileToSign, byte[] dataToHash)
         {
-            SignFile(mNFL2K5Key, fileToSign);
+            SignFile(mNFL2K5Key, fileToSign, dataToHash);
         }
         
-        private static void SignFile(byte[] key, string fileToSign)
+        private static void SignFile(byte[] key, string fileToSign, byte[] dataToHash)
         {
             try
             {
                 using (HMACSHA1 hMACSHA = new HMACSHA1(key))
                 {
-                    using (FileStream fileStream = new FileStream(fileToSign, FileMode.Open))
-                    {
-                        byte[] buffer = new BinaryReader(fileStream)
-                        {
-                            BaseStream =
-                            {
-                                Position = 24L
-                            }
-                        }.ReadBytes(Convert.ToInt32(fileStream.Length - 24L));
-                        byte[] array = hMACSHA.ComputeHash(buffer);
-                        fileStream.Position = 4L;
-                        fileStream.Write(array, 0, array.Length);
-                    }
+                    byte[] array = hMACSHA.ComputeHash(dataToHash);
+                    File.WriteAllBytes(fileToSign, array);
                 }
             }
             catch (Exception )
