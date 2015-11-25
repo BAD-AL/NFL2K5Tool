@@ -13,7 +13,9 @@ Can read and write player data successfully!
 Can read all 2317 players from save file and write them back with no file differences!
 Can Schedule games; Specifying a year will auto update the dates in the Game (to 'close' dates, not the exact dates the games are actually played)
 Can load gamesave files onto your XBOX.
-Looks like I have a Bug in reading rosters.
+Looks like I have a Bug in reading rosters and Franchise files; 
+  Not all save game files are saved with the base information in the same place.
+  I'll need to find a way to dynamically find those locations.
 
 ###Implemented features:
 1. Auto update depth chart. 

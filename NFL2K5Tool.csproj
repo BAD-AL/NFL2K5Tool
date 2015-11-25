@@ -122,6 +122,7 @@
   <ItemGroup>
     <Content Include="logo.ico" />
     <Content Include="NFL2K5Info.txt" />
+    <Content Include="BaseTeamData.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

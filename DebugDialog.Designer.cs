@@ -71,6 +71,7 @@
             this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
             this.mFindBytesButton = new System.Windows.Forms.Button();
+            this.extractTeamSectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -312,7 +313,8 @@
             this.includePhotePBPToolStripMenuItem,
             this.extractPHOHO2K2ToolStripMenuItem,
             this.extractPhoto2K3ToolStripMenuItem,
-            this.extractPhoto2K4ToolStripMenuItem});
+            this.extractPhoto2K4ToolStripMenuItem,
+            this.extractTeamSectionsToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -568,6 +570,13 @@
             this.mFindBytesButton.UseVisualStyleBackColor = true;
             this.mFindBytesButton.Click += new System.EventHandler(this.mFindBytesButton_Click);
             // 
+            // extractTeamSectionsToolStripMenuItem
+            // 
+            this.extractTeamSectionsToolStripMenuItem.Name = "extractTeamSectionsToolStripMenuItem";
+            this.extractTeamSectionsToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.extractTeamSectionsToolStripMenuItem.Text = "Extract Team Sections";
+            this.extractTeamSectionsToolStripMenuItem.Click += new System.EventHandler(this.extractTeamSectionsToolStripMenuItem_Click);
+            // 
             // DebugDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -652,5 +661,6 @@
         private System.Windows.Forms.Button mSetByteButton;
         private System.Windows.Forms.ToolStripMenuItem extractPhoto2K3ToolStripMenuItem;
         private System.Windows.Forms.Button mFindBytesButton;
+        private System.Windows.Forms.ToolStripMenuItem extractTeamSectionsToolStripMenuItem;
     }
 }

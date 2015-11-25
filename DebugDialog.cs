@@ -416,5 +416,29 @@ namespace NFL2K5Tool
             }
         }
 
+        private void extractTeamSectionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            byte[] teamBytes;
+            string[] teams = {
+                 "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
+                 "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
+                 "Jets","Lions","Packers", "Panthers", "Patroits","Raiders","Rams","Ravens","Redskins",
+                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings"};
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < teams.Length; i++)
+            {
+                builder.Append(teams[i]);
+                builder.Append(",");
+                teamBytes = Tool.GetTeamBytes(teams[i]);
+                for (int j = 0; j < teamBytes.Length; j++)
+                {
+                    builder.Append(teamBytes[j].ToString("X2"));
+                    builder.Append(",");
+                }
+                builder.Append("\n");
+            }
+            mResultsTextBox.Text = builder.ToString();
+        }
+
     }
 }

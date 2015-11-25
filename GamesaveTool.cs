@@ -13,7 +13,6 @@ namespace NFL2K5Tool
     {
         // Duane starks is the first player in the original roster 
         private int mPlayerStart = 0xB288; // 0xAFA8 for roster
-        private int mDuaneStarksFnamePointerLoc = 0xB298; // 0xAFB8
         private int mCollegeStringsStart = 0x7A23C;
         private int mCollegeStringsEnd = 0x8f2c0;
         //may be able to add strings after this section; (All 0's from 0x8f2f0 - 0x9131f)
@@ -45,9 +44,7 @@ namespace NFL2K5Tool
         private void InitializeForFranchise()
         {
             SaveType = SaveType.Franchise;
-            // Duane starks is the first player in the original roster 
             mPlayerStart = 0xB288; // 0xAFA8 for roster
-            mDuaneStarksFnamePointerLoc = 0xB298; // 0xAFB8
             mCollegeStringsStart = 0x7A23C;
             mCollegeStringsEnd = 0x8f2c0;
             mModifiableNameSectionEnd = 0x8906f;
@@ -65,23 +62,27 @@ namespace NFL2K5Tool
         private void InitializeForRoster()
         {
             SaveType = SaveType.Roster;
-            // Duane starks is the first player in the original roster 
             mPlayerStart = 0xAFA8; 
-            mDuaneStarksFnamePointerLoc = 0xAFB8; 
             mCollegeStringsStart = 0x79f5c;
             mCollegeStringsEnd = 0x7b96F;
             mModifiableNameSectionEnd = 0x88d8f;
             mCollegePlayerNameSectionStart = 0x8b7d0;
             mCollegePlayerNameSectionEnd = 0x8f00f;
-
             mFreeAgentCountLocation = 0x77; // default : 00 c5 // guess???
-
             m49ersPlayerPointersStart = 0x41c8; // playerLoc = ptrLoc + ptrVal -1;
             mFreeAgentsPlayerPointersStart = 0x3f364;
             m49ersNumPlayersAddress = 0x42e3; // 00 35
             mMaxPlayers = 1943;
 
             Year = 0; //?? does a year apply to a roster at all???
+        }
+
+        private int FirstPlayerFnamePointerLoc
+        {
+            get 
+            {
+                return mPlayerStart + 0x10;
+            }
         }
 
 		// The team data is ordered like this:
@@ -160,6 +161,17 @@ namespace NFL2K5Tool
                 builder.Append("\n");
             }
             return builder.ToString();
+        }
+
+        public byte[] GetTeamBytes(string team)
+        {
+            int teamIndex = GetTeamIndex(team);
+            int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
+            int end = teamPlayerPointersStart + cTeamDiff;
+
+            byte[] retVal = new byte[end - teamPlayerPointersStart];
+            Array.Copy(GameSaveData, teamPlayerPointersStart, retVal, 0, retVal.Length);
+            return retVal;
         }
 
         /// <summary>
@@ -1008,7 +1020,7 @@ namespace NFL2K5Tool
         private bool SetPlayerNameText(int player, string name, bool isLastName, bool useExistingName)
         {
             bool retVal = true;
-            int ptrLoc1 = player * cPlayerDataLength + mDuaneStarksFnamePointerLoc;
+            int ptrLoc1 = player * cPlayerDataLength + FirstPlayerFnamePointerLoc;
             if (isLastName)
                 ptrLoc1 += 4;
             if (useExistingName)
@@ -1086,7 +1098,7 @@ namespace NFL2K5Tool
             string retVal = "!!!!!!!!INVALID!!!!!!!!!!!!";
             if (player > -1 && player <= mMaxPlayers)
             {
-                int ptrLoc = player * cPlayerDataLength + mDuaneStarksFnamePointerLoc;
+                int ptrLoc = player * cPlayerDataLength + FirstPlayerFnamePointerLoc;
                 retVal = GetName(ptrLoc) + sepChar + GetName(ptrLoc + 4);
             }
             return retVal;
@@ -1101,7 +1113,7 @@ namespace NFL2K5Tool
             string retVal = "!!!!!!!!INVALID!!!!!!!!!!!!";
             if (player > -1 && player <= mMaxPlayers)
             {
-                int ptrLoc = player * cPlayerDataLength + mDuaneStarksFnamePointerLoc;
+                int ptrLoc = player * cPlayerDataLength + FirstPlayerFnamePointerLoc;
                 retVal = GetName(ptrLoc);
             }
             return retVal;
@@ -1116,7 +1128,7 @@ namespace NFL2K5Tool
             string retVal = "!!!!!!!!INVALID!!!!!!!!!!!!";
             if (player > -1 && player <= mMaxPlayers)
             {
-                int ptrLoc = player * cPlayerDataLength + mDuaneStarksFnamePointerLoc;
+                int ptrLoc = player * cPlayerDataLength + FirstPlayerFnamePointerLoc;
                 retVal = GetName(ptrLoc + 4);
             }
             return retVal;
@@ -1182,7 +1194,7 @@ namespace NFL2K5Tool
             int loc = 0;
             for (int player = 0; player <= mMaxPlayers; player++)
             {
-                firstNamePtr = player * cPlayerDataLength + mDuaneStarksFnamePointerLoc;
+                firstNamePtr = player * cPlayerDataLength + FirstPlayerFnamePointerLoc;
                 lastNamePtr = firstNamePtr + 4;
                 loc = GetPointerDestination(firstNamePtr);
                 if (loc < mModifiableNameSectionEnd)
@@ -1807,14 +1819,17 @@ namespace NFL2K5Tool
         //CollegeIndex(p) = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
         private string GetCollege(int player)
         {
-            string retVal = "";
+            string retVal = "CollegeError";
             int loc = GetPlayerDataStart(player);
             int collegePointerVal = (GameSaveData[loc + 3] << 24) + (GameSaveData[loc + 2] << 16) + (GameSaveData[loc + 1] << 8) + GameSaveData[loc];
             int collegeIndex = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
-            retVal= mColleges[collegeIndex];
-            if (retVal.IndexOf(',') > -1)
+            if (collegeIndex < mColleges.Length)
             {
-                retVal = '"' + retVal + '"';
+                retVal = mColleges[collegeIndex];
+                if (retVal.IndexOf(',') > -1)
+                {
+                    retVal = '"' + retVal + '"';
+                }
             }
             return retVal;
         }

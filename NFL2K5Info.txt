@@ -5,7 +5,11 @@ Starts at B288 with Duane Starks (original Base Franchise save).
 Name pointer formula looks like: 
 stringLocation = pointerAddress + pointerFalue -1;
 
-Looks like 2317 total players in the save file.
+Signature is actually stored in file called "EXTRA". 
+It is hashed with the SAVEGAME.DAT file and the 2k5 key.
+changing the Save file name in "SaveMeta.xbx" causes roster to look corrupted when trying to load.
+
+Looks like 2317 total players in the base franchise save file.
 
 Desired Features:
 1. Read all player and deam data from gamesave to Text *
@@ -33,3 +37,27 @@ Depth chart multi pos
 6. CC
 7. 58
 8. FC
+
+
+Team Data (Team data is not isolated to this chunk though):
+bytes 0~260: Player pointers (not actually sure about the last several slots).
+
+
+277: Stadium
+
+289- 
+
+340: Team PBP
+
+
+----Depth chart----
+402: Default Jersey
+403: ?
+404: Punter depth
+405: KR1 depth
+406: KR2 Depth
+407: K depth
+408: Long Snapper
+409: Punt Returner
+
+410-500: All 0's {looks like unused space}
