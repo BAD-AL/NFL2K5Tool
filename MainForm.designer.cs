@@ -53,14 +53,17 @@
             this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdatePhotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdatePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.teamPlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.validateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortPlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.scheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.teamPlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
+            this.editSortFormulasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -294,6 +297,46 @@
             this.autoUpdatePBPToolStripMenuItem.Text = "Auto update PBP";
             this.autoUpdatePBPToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePBPToolStripMenuItem_Click);
             // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scheduleToolStripMenuItem,
+            this.teamPlayersToolStripMenuItem,
+            this.validateToolStripMenuItem,
+            this.sortPlayersToolStripMenuItem,
+            this.editSortFormulasToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // scheduleToolStripMenuItem
+            // 
+            this.scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
+            this.scheduleToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.scheduleToolStripMenuItem.Text = "&Schedule";
+            this.scheduleToolStripMenuItem.Click += new System.EventHandler(this.scheduleToolStripMenuItem_Click);
+            // 
+            // teamPlayersToolStripMenuItem
+            // 
+            this.teamPlayersToolStripMenuItem.Name = "teamPlayersToolStripMenuItem";
+            this.teamPlayersToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.teamPlayersToolStripMenuItem.Text = "&Team Players";
+            this.teamPlayersToolStripMenuItem.Click += new System.EventHandler(this.teamPlayersToolStripMenuItem_Click);
+            // 
+            // validateToolStripMenuItem
+            // 
+            this.validateToolStripMenuItem.Name = "validateToolStripMenuItem";
+            this.validateToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.validateToolStripMenuItem.Text = "&Validate Players";
+            this.validateToolStripMenuItem.Click += new System.EventHandler(this.validateToolStripMenuItem_Click);
+            // 
+            // sortPlayersToolStripMenuItem
+            // 
+            this.sortPlayersToolStripMenuItem.Name = "sortPlayersToolStripMenuItem";
+            this.sortPlayersToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.sortPlayersToolStripMenuItem.Text = "&Sort Players";
+            this.sortPlayersToolStripMenuItem.Click += new System.EventHandler(this.sortPlayersToolStripMenuItem_Click);
+            // 
             // mListPlayersButton2
             // 
             this.mListPlayersButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -341,29 +384,6 @@
             this.mLoadTextFileButton.UseVisualStyleBackColor = true;
             this.mLoadTextFileButton.Click += new System.EventHandler(this.mLoadTextFileButton_Click);
             // 
-            // viewToolStripMenuItem
-            // 
-            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.scheduleToolStripMenuItem,
-            this.teamPlayersToolStripMenuItem});
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "&View";
-            // 
-            // scheduleToolStripMenuItem
-            // 
-            this.scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
-            this.scheduleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.scheduleToolStripMenuItem.Text = "&Schedule";
-            this.scheduleToolStripMenuItem.Click += new System.EventHandler(this.scheduleToolStripMenuItem_Click);
-            // 
-            // teamPlayersToolStripMenuItem
-            // 
-            this.teamPlayersToolStripMenuItem.Name = "teamPlayersToolStripMenuItem";
-            this.teamPlayersToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.teamPlayersToolStripMenuItem.Text = "&Team Players";
-            this.teamPlayersToolStripMenuItem.Click += new System.EventHandler(this.teamPlayersToolStripMenuItem_Click);
-            // 
             // mTextBox
             // 
             this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -378,6 +398,13 @@
             this.mTextBox.StatusControl = null;
             this.mTextBox.TabIndex = 2;
             this.mTextBox.Text = "";
+            // 
+            // editSortFormulasToolStripMenuItem
+            // 
+            this.editSortFormulasToolStripMenuItem.Name = "editSortFormulasToolStripMenuItem";
+            this.editSortFormulasToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.editSortFormulasToolStripMenuItem.Text = "&Edit sort formulas";
+            this.editSortFormulasToolStripMenuItem.Click += new System.EventHandler(this.editSortFormulasToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -441,6 +468,9 @@
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scheduleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem teamPlayersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem validateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sortPlayersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editSortFormulasToolStripMenuItem;
     }
 }
 

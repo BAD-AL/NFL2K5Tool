@@ -37,8 +37,9 @@ namespace NFL2K5Tool
                 }
                 if (!showToConsole)
                 {
-                    ErrorForm form = new ErrorForm();
-                    form.ErrorText = b.ToString();
+                    MessageForm form = new MessageForm(System.Drawing.SystemIcons.Error);
+                    form.Text = "Error!";
+                    form.MessageText = b.ToString();
                     form.ShowDialog();
                 }
                 else

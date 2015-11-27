@@ -440,5 +440,12 @@ namespace NFL2K5Tool
             mResultsTextBox.Text = builder.ToString();
         }
 
+        private void mathTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DataTable tab = new DataTable();
+            Object result= tab.Compute(mResultsTextBox.Text, "");
+            mResultsTextBox.Text = result.ToString();
+        }
+
     }
 }

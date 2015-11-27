@@ -27,18 +27,19 @@ Looks like I have a Bug in reading rosters and Franchise files;
 7. Scheduler.
 8. 'SET' Command support; SET(0x10, 0x2233) --> Sets the location 0x10 to '22' and location 0x11 to '33' in the gamesave file.
 9. Gamesaves are signed and loaded.
+10. Warns possible error conditions for weight and body type (Like when a RB weighs 300+ lbs, or has XL body type). 
+11. User defined Player sort formulas
+
 
 ###Next features:
-    0. Player validator (flag players that have attributes that don't seem right.)
+    0. Player validator (flag players that have attributes that don't seem right.); allow user defined formulas?
 	1. Player edit GUI 	
 	2. Editing coaches. 
 	3. Editing playbooks. 
 	4. Add support for more Photos and names. 
 	5. Smart input parser (Where it tries to replace players at the same position instead of overwriting some random player), name management
-	6. Warn probable error conditions (Like when a RB weighs 300+ lbs, or has XL body type). 
-	7. Auto update Player equipment (from stock file database)
-	8. Help Manual
-	9. Allow formula definition for how good a player is.
+	6. Auto update Player equipment (from stock file database)
+	7. Help Manual
 	
 ###Also need
 	1. To add tests.

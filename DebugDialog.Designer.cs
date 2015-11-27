@@ -55,6 +55,7 @@
             this.extractPHOHO2K2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractPhoto2K3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractPhoto2K4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extractTeamSectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.mNumBytes = new System.Windows.Forms.NumericUpDown();
@@ -69,9 +70,9 @@
             this.mSetByteButton = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
-            this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
             this.mFindBytesButton = new System.Windows.Forms.Button();
-            this.extractTeamSectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
+            this.mathTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -287,7 +288,8 @@
             // 
             this.findToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.listTeamPlayerNumbersToolStripMenuItem,
-            this.includeDepthToolStripMenuItem});
+            this.includeDepthToolStripMenuItem,
+            this.mathTestToolStripMenuItem});
             this.findToolStripMenuItem.Name = "findToolStripMenuItem";
             this.findToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
             this.findToolStripMenuItem.Text = "Find";
@@ -353,6 +355,13 @@
             this.extractPhoto2K4ToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.extractPhoto2K4ToolStripMenuItem.Text = "Extract Photo 2K4";
             this.extractPhoto2K4ToolStripMenuItem.Click += new System.EventHandler(this.extractPhoto2K4ToolStripMenuItem_Click);
+            // 
+            // extractTeamSectionsToolStripMenuItem
+            // 
+            this.extractTeamSectionsToolStripMenuItem.Name = "extractTeamSectionsToolStripMenuItem";
+            this.extractTeamSectionsToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.extractTeamSectionsToolStripMenuItem.Text = "Extract Team Sections";
+            this.extractTeamSectionsToolStripMenuItem.Click += new System.EventHandler(this.extractTeamSectionsToolStripMenuItem_Click);
             // 
             // mGetTeamButton
             // 
@@ -544,6 +553,17 @@
             this.mSetByteValTextBox.TabIndex = 1;
             this.mSetByteValTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mSetByteValTextBox_KeyDown);
             // 
+            // mFindBytesButton
+            // 
+            this.mFindBytesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.mFindBytesButton.Location = new System.Drawing.Point(254, 74);
+            this.mFindBytesButton.Name = "mFindBytesButton";
+            this.mFindBytesButton.Size = new System.Drawing.Size(124, 23);
+            this.mFindBytesButton.TabIndex = 15;
+            this.mFindBytesButton.Text = "Find bytes in savefile";
+            this.mFindBytesButton.UseVisualStyleBackColor = true;
+            this.mFindBytesButton.Click += new System.EventHandler(this.mFindBytesButton_Click);
+            // 
             // mResultsTextBox
             // 
             this.mResultsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -559,23 +579,12 @@
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
             // 
-            // mFindBytesButton
+            // mathTestToolStripMenuItem
             // 
-            this.mFindBytesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.mFindBytesButton.Location = new System.Drawing.Point(254, 74);
-            this.mFindBytesButton.Name = "mFindBytesButton";
-            this.mFindBytesButton.Size = new System.Drawing.Size(124, 23);
-            this.mFindBytesButton.TabIndex = 15;
-            this.mFindBytesButton.Text = "Find bytes in savefile";
-            this.mFindBytesButton.UseVisualStyleBackColor = true;
-            this.mFindBytesButton.Click += new System.EventHandler(this.mFindBytesButton_Click);
-            // 
-            // extractTeamSectionsToolStripMenuItem
-            // 
-            this.extractTeamSectionsToolStripMenuItem.Name = "extractTeamSectionsToolStripMenuItem";
-            this.extractTeamSectionsToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.extractTeamSectionsToolStripMenuItem.Text = "Extract Team Sections";
-            this.extractTeamSectionsToolStripMenuItem.Click += new System.EventHandler(this.extractTeamSectionsToolStripMenuItem_Click);
+            this.mathTestToolStripMenuItem.Name = "mathTestToolStripMenuItem";
+            this.mathTestToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.mathTestToolStripMenuItem.Text = "Math test";
+            this.mathTestToolStripMenuItem.Click += new System.EventHandler(this.mathTestToolStripMenuItem_Click);
             // 
             // DebugDialog
             // 
@@ -662,5 +671,6 @@
         private System.Windows.Forms.ToolStripMenuItem extractPhoto2K3ToolStripMenuItem;
         private System.Windows.Forms.Button mFindBytesButton;
         private System.Windows.Forms.ToolStripMenuItem extractTeamSectionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mathTestToolStripMenuItem;
     }
 }

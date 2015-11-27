@@ -14,12 +14,14 @@ namespace NFL2K5Tool
     public partial class MainForm : Form
     {
         private GamesaveTool mTool = new GamesaveTool();
+        private const string mSortStringFileName = "PlayerData\\SortFormulas.txt";
 
         public MainForm()
         {
             InitializeComponent();
             //Text = Directory.GetCurrentDirectory();
             EnableControls(false);
+            mTextBox.StatusControl = statusBar1;
         }
 
         private void mLoadSaveButton_Click(object sender, EventArgs e)
@@ -245,6 +247,21 @@ namespace NFL2K5Tool
             LoadTextFile();
         }
 
+        private void validateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ValidatePlayers();
+        }
+
+        private void sortPlayersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SortPlayers();
+        }
+
+        private void editSortFormulasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditSortFormulas();
+        }
+
         private void LoadTextFile()
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -262,6 +279,101 @@ namespace NFL2K5Tool
                 }
             }
             dlg.Dispose();
+        }
+
+        private void ValidatePlayers()
+        {
+            PlayerValidator v = new PlayerValidator(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+            v.ValidatePlayers(mTextBox.Text);
+            List<String> warnings = v.GetWarnings();
+            if (warnings.Count > 0)
+            {
+                StringBuilder builder = new StringBuilder();
+                foreach (string w in warnings)
+                {
+                    builder.Append(w);
+                    builder.Append("\n");
+                }
+                MessageForm ef = new MessageForm(SystemIcons.Warning);
+                ef.MessageText = builder.ToString();
+                ef.Text = "Warning, verify player attributes";
+                ef.ShowDialog(this);
+            }
+            else
+            {
+                MessageBox.Show("No Issues Found", "Player Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void SortPlayers()
+        {
+            string allInput = mTextBox.Text.Replace("\r\n", "\n");
+            PlayerValidator pv = new PlayerValidator(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+
+            if (File.Exists(mSortStringFileName))
+                pv.FormulasString = File.ReadAllText(mSortStringFileName);
+
+            string teamPattern = "Team";
+
+            try
+            {
+                int index = 0;
+                int nn = -1;
+                string current = "";
+                string modified = "";
+                string result = allInput;
+                do
+                {
+                    index = allInput.IndexOf(teamPattern, index);
+                    if (index > -1)
+                    {
+                        nn = allInput.IndexOf("\n\n", index);
+                        if (nn < 0)
+                            nn = allInput.Length;
+                        current = allInput.Substring(index, nn - index);
+                        modified = pv.SortTeam(current);
+                        result = result.Replace(current, modified);
+                        index = nn;
+                    }
+                } while (index > -1);
+
+                mTextBox.Text = result;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this,
+                    String.Concat("Error sorting players. \nCheck formulas file for errors.\n", ex.Message, "\n", ex.InnerException.Message),
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void EditSortFormulas()
+        {
+            if (File.Exists(mSortStringFileName))
+            {
+                MessageForm ef = new MessageForm(SystemIcons.Question);
+                ef.Text = "Edit the sort formulas";
+                ef.MessageText = ef.MessageText = File.ReadAllText(mSortStringFileName);
+                ef.MessageEditable = true;
+                ef.AuxButtonText = "&Restore Default";
+                DialogResult result = ef.ShowDialog(this);
+                if (result == DialogResult.OK)
+                {
+                    string res = ef.MessageText;
+                    File.WriteAllText(mSortStringFileName, res);
+                }
+                else if (result == DialogResult.Abort)
+                {
+                    // restore the default sort data
+                    string res = PlayerValidator.sFormulasString;
+                    File.WriteAllText(mSortStringFileName, res);
+                }
+                ef.Dispose();
+            }
+            else
+            {
+                MessageBox.Show(this, "File: " + mSortStringFileName + " does not exist.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
     }
