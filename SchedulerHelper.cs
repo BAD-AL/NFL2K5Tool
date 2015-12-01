@@ -72,7 +72,7 @@ namespace NFL2K5Tool
 			"free_agents", //20
 		};
         // schedule begins a the 2nd Thursday of September.
-        public const int FranchiseGameOneYearLocation = 0x917ef; // first game year.
+        public static int FranchiseGameOneYearLocation = 0x917ef; // first game year.
 
         public GamesaveTool Tool {get; set;}
 

@@ -58,12 +58,12 @@
             this.teamPlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.validateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortPlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editSortFormulasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
-            this.editSortFormulasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -337,6 +337,13 @@
             this.sortPlayersToolStripMenuItem.Text = "&Sort Players";
             this.sortPlayersToolStripMenuItem.Click += new System.EventHandler(this.sortPlayersToolStripMenuItem_Click);
             // 
+            // editSortFormulasToolStripMenuItem
+            // 
+            this.editSortFormulasToolStripMenuItem.Name = "editSortFormulasToolStripMenuItem";
+            this.editSortFormulasToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.editSortFormulasToolStripMenuItem.Text = "&Edit sort formulas";
+            this.editSortFormulasToolStripMenuItem.Click += new System.EventHandler(this.editSortFormulasToolStripMenuItem_Click);
+            // 
             // mListPlayersButton2
             // 
             this.mListPlayersButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -392,19 +399,12 @@
             this.mTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mTextBox.Location = new System.Drawing.Point(2, 27);
             this.mTextBox.Name = "mTextBox";
-            this.mTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.mTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
             this.mTextBox.SearchString = null;
             this.mTextBox.Size = new System.Drawing.Size(674, 327);
             this.mTextBox.StatusControl = null;
             this.mTextBox.TabIndex = 2;
             this.mTextBox.Text = "";
-            // 
-            // editSortFormulasToolStripMenuItem
-            // 
-            this.editSortFormulasToolStripMenuItem.Name = "editSortFormulasToolStripMenuItem";
-            this.editSortFormulasToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.editSortFormulasToolStripMenuItem.Text = "&Edit sort formulas";
-            this.editSortFormulasToolStripMenuItem.Click += new System.EventHandler(this.editSortFormulasToolStripMenuItem_Click);
             // 
             // MainForm
             // 

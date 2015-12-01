@@ -101,6 +101,46 @@ namespace NFL2K5Tool
             return FindByesInFile(target, data, start, end);
         }
 
+        public static List<long> FindPointersToString( string searchString, byte[] saveFile, int start, int end)
+        {
+            List<long> locs = StaticUtils.FindStringInFile(searchString, saveFile, 0, saveFile.Length);
+            List<int> pointers;
+            List<long> retVal = new List<long>();
+
+            for (int i = 0; i < locs.Count; i++)
+            {
+                pointers = FindPointersForLocation(locs[i], saveFile);
+                foreach (int dude in pointers)
+                {
+                    if( dude > start && dude < end)
+                        retVal.Add(dude);
+                }
+            }
+            return retVal;
+        }
+
+        public static List<int> FindPointersForLocation(long location, byte[] saveFile)
+        {
+            List<int> pointerLocations = new List<int>();
+            int pointer = 0;
+            long dataLocation = 0;
+            int limit = saveFile.Length - 4;
+            for (long i = 0; i < limit; i++)
+            {
+                pointer = saveFile[i + 3] << 24;
+                pointer += saveFile[i + 2] << 16;
+                pointer += saveFile[i + 1] << 8;
+                pointer += saveFile[i];
+                dataLocation = i + pointer - 1;
+
+                if (dataLocation == location)
+                {
+                    pointerLocations.Add((int)i);
+                }
+            }
+            return pointerLocations;
+        }
+
         /// <summary>
         /// Find an array of bytes in the data byte array.
         /// </summary>

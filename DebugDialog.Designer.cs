@@ -49,6 +49,7 @@
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listTeamPlayerNumbersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.includeDepthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mathTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.includePhotePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,7 +73,6 @@
             this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
             this.mFindBytesButton = new System.Windows.Forms.Button();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
-            this.mathTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -148,7 +148,7 @@
             this.mPointsToLocButton.Name = "mPointsToLocButton";
             this.mPointsToLocButton.Size = new System.Drawing.Size(124, 23);
             this.mPointsToLocButton.TabIndex = 6;
-            this.mPointsToLocButton.Text = "Points To Loc";
+            this.mPointsToLocButton.Text = "Pointers To Loc";
             this.mPointsToLocButton.UseVisualStyleBackColor = true;
             this.mPointsToLocButton.Click += new System.EventHandler(this.mPointsToLocButton_Click);
             // 
@@ -307,6 +307,13 @@
             this.includeDepthToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
             this.includeDepthToolStripMenuItem.Text = "Include depth";
             this.includeDepthToolStripMenuItem.Click += new System.EventHandler(this.includeDepthToolStripMenuItem_Click);
+            // 
+            // mathTestToolStripMenuItem
+            // 
+            this.mathTestToolStripMenuItem.Name = "mathTestToolStripMenuItem";
+            this.mathTestToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.mathTestToolStripMenuItem.Text = "Math test";
+            this.mathTestToolStripMenuItem.Click += new System.EventHandler(this.mathTestToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -578,13 +585,6 @@
             this.mResultsTextBox.StatusControl = null;
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
-            // 
-            // mathTestToolStripMenuItem
-            // 
-            this.mathTestToolStripMenuItem.Name = "mathTestToolStripMenuItem";
-            this.mathTestToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.mathTestToolStripMenuItem.Text = "Math test";
-            this.mathTestToolStripMenuItem.Click += new System.EventHandler(this.mathTestToolStripMenuItem_Click);
             // 
             // DebugDialog
             // 

@@ -13,8 +13,6 @@ namespace NFL2K5Tool
     {
         // Duane starks is the first player in the original roster 
         private int mPlayerStart = 0xB288; // 0xAFA8 for roster
-        private int mCollegeStringsStart = 0x7A23C;
-        private int mCollegeStringsEnd = 0x8f2c0;
         //may be able to add strings after this section; (All 0's from 0x8f2f0 - 0x9131f)
         private  int mModifiableNameSectionEnd = 0x8906f;
 
@@ -24,15 +22,15 @@ namespace NFL2K5Tool
         private int mCollegePlayerNameSectionStart = 0x8bab0;
         private int mCollegePlayerNameSectionEnd = 0x8f2ef;
 
-        private int mFreeAgentCountLocation = 0x357; // default : 00 c5
         private int m49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
-        private int mFreeAgentsPlayerPointersStart = 0x3f644;
-        private int m49ersNumPlayersAddress = 0x45c3; // 00 35
-        private int mMaxPlayers = 2317; //1944 including free agents and draft class
+        private int m49ersNumPlayersAddress = 0x45c4; //  35
+        //const int cTeamNameOffset = 0x104;// interesting, but not used 
+        private int mFreeAgentCountLocation = 0x358; // default :  c5
+        private int mFreeAgentPlayersPointer = 0x35c; // points to the start of the free agent pointers
+
+        private int mMaxPlayers = 2317; //1944(roster) including free agents and draft class
 
         private const int cPlayerDataLength = 0x54;
-        
-        private const int cNumberOfColleges = 266;
         private const int cTeamDiff = 0x1f4; // 500 bytes
         
         const string NFL2K5Folder = "53450030";
@@ -45,36 +43,118 @@ namespace NFL2K5Tool
         {
             SaveType = SaveType.Franchise;
             mPlayerStart = 0xB288; // 0xAFA8 for roster
-            mCollegeStringsStart = 0x7A23C;
-            mCollegeStringsEnd = 0x8f2c0;
             mModifiableNameSectionEnd = 0x8906f;
             mCollegePlayerNameSectionStart = 0x8bab0;
             mCollegePlayerNameSectionEnd = 0x8f2ef;
-            mFreeAgentCountLocation = 0x357; // default : 00 c5
+            mFreeAgentPlayersPointer = 0x35c;
+            mFreeAgentCountLocation = 0x358; // default :  c5 00
             m49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
-            mFreeAgentsPlayerPointersStart = 0x3f644;
-            m49ersNumPlayersAddress = 0x45c3; // 00 35
+            m49ersNumPlayersAddress = 0x45c4; // 35 
             mMaxPlayers = 2317;
-
+            SchedulerHelper.FranchiseGameOneYearLocation = 0x917ef;
             Year = 2000 + GameSaveData[SchedulerHelper.FranchiseGameOneYearLocation];
+            AutoPlayerStartLocation();
         }
 
         private void InitializeForRoster()
         {
             SaveType = SaveType.Roster;
             mPlayerStart = 0xAFA8; 
-            mCollegeStringsStart = 0x79f5c;
-            mCollegeStringsEnd = 0x7b96F;
             mModifiableNameSectionEnd = 0x88d8f;
             mCollegePlayerNameSectionStart = 0x8b7d0;
             mCollegePlayerNameSectionEnd = 0x8f00f;
-            mFreeAgentCountLocation = 0x77; // default : 00 c5 // guess???
+            mFreeAgentPlayersPointer = 0x7c;
+            mFreeAgentCountLocation = 0x78; // default : 00 c5 // guess???
             m49ersPlayerPointersStart = 0x41c8; // playerLoc = ptrLoc + ptrVal -1;
-            mFreeAgentsPlayerPointersStart = 0x3f364;
-            m49ersNumPlayersAddress = 0x42e3; // 00 35
+            m49ersNumPlayersAddress = 0x42e4; // 35
             mMaxPlayers = 1943;
 
             Year = 0; //?? does a year apply to a roster at all???
+            AutoPlayerStartLocation();
+        }
+
+        /// <summary>
+        /// In the tool I rely heavily on being able to get a player by his player index;
+        /// so I need to know where the players start. this function goes through all teams and 
+        /// finds all the players that are pointed to and sets the first player data location (mPlayerStart)
+        /// </summary>
+        private void AutoPlayerStartLocation()
+        {
+            //mPlayerStart = 0xaff0; // not always true, needs adjustment
+            int firstPlayerLoc = GameSaveData.Length;
+
+            string team = "";
+            for (int t = 0; t < 33; t++)
+            {
+                team = mTeamsDataOrder[t];
+                int teamIndex = GetTeamIndex(team);
+                int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
+                if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
+                    teamPlayerPointersStart = GetPointerDestination(mFreeAgentPlayersPointer);
+
+                int numPlayers = GetNumPlayers(team);
+                int pointerLoc = -1;
+
+                for (int i = 0; i < numPlayers; i++)
+                {
+                    pointerLoc = teamPlayerPointersStart + (i * 4); // 4== ptr length
+                    int ptr = GameSaveData[pointerLoc + 3] << 24;
+                    ptr += GameSaveData[pointerLoc + 2] << 16;
+                    ptr += GameSaveData[pointerLoc + 1] << 8;
+                    ptr += GameSaveData[pointerLoc];
+                    int playerLoc = ptr + pointerLoc - 1;
+                    if (playerLoc < firstPlayerLoc && ValidPlayer(playerLoc))
+                        firstPlayerLoc = playerLoc;
+                }
+            }
+            if (firstPlayerLoc != mPlayerStart)
+                mPlayerStart = firstPlayerLoc;
+        }
+
+
+        Regex mInValidPlayerTest = new Regex(",[0-9]{2,3},");
+        // I don't think this is necessary, but I'm keeping it for now.
+        private bool ValidPlayer(int playerLoc)
+        {
+            bool retVal = false;
+            int prevFirstPlayer = mPlayerStart;
+            mPlayerStart = playerLoc;
+            try
+            {
+                StringBuilder builder = new StringBuilder();
+                GetPlayerAppearanceAttribute(0, AppearanceAttributes.College, builder);
+                builder.Remove(builder.Length - 1, 1);// remove comma
+                builder.Replace("\"",""); // remove quotes
+                string college = builder.ToString();
+
+                AppearanceAttributes[] attrs = { 
+                 AppearanceAttributes.Hand, AppearanceAttributes.BodyType, AppearanceAttributes.Skin, AppearanceAttributes.Face, 
+                 AppearanceAttributes.Dreads, AppearanceAttributes.Helmet, AppearanceAttributes.FaceMask, AppearanceAttributes.Visor, 
+                 AppearanceAttributes.EyeBlack, AppearanceAttributes.MouthPiece, AppearanceAttributes.LeftGlove, AppearanceAttributes.RightGlove, 
+                 AppearanceAttributes.LeftWrist, AppearanceAttributes.RightWrist, AppearanceAttributes.LeftElbow, AppearanceAttributes.RightElbow, 
+                 AppearanceAttributes.Sleeves, AppearanceAttributes.LeftShoe, AppearanceAttributes.RightShoe, AppearanceAttributes.NeckRoll, 
+                 AppearanceAttributes.Turtleneck
+                                           };
+
+                if (Colleges.ContainsKey(college))
+                {
+                    foreach (AppearanceAttributes attr in attrs)
+                    {
+                        GetPlayerAppearanceAttribute(0, attr, builder);
+                    }
+                    string test = builder.ToString();
+                    if (mInValidPlayerTest.Match(test) == Match.Empty)
+                        retVal = true;
+                }
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                mPlayerStart = prevFirstPlayer;
+            }
+            return retVal;
         }
 
         private int FirstPlayerFnamePointerLoc
@@ -104,8 +184,6 @@ namespace NFL2K5Tool
         //           "49ers", "Seahawks", "Buccaneers", "Titans", "Redskins", "Browns", "Texans", 
         //           "FreeAgents", "DraftClass"
         //           };
-
-        private string[] mColleges;
 
         /// <summary>
         /// The gamesave file/data
@@ -186,7 +264,7 @@ namespace NFL2K5Tool
             int teamIndex = GetTeamIndex(team);
             int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
             if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
-                teamPlayerPointersStart = mFreeAgentsPlayerPointersStart;
+                teamPlayerPointersStart = GetPointerDestination(mFreeAgentPlayersPointer);
             else if ("DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
                 return GetDraftClass(attributes, appearance);
 
@@ -215,7 +293,7 @@ namespace NFL2K5Tool
             int teamIndex = GetTeamIndex(team);
             int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
             if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
-                teamPlayerPointersStart = mFreeAgentsPlayerPointersStart;
+                teamPlayerPointersStart = GetPointerDestination( mFreeAgentPlayersPointer);
             //else if ("DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
             //    return GetDraftClass(attributes, appearance);
 
@@ -243,6 +321,8 @@ namespace NFL2K5Tool
             ptr += GameSaveData[pointerLoc];
             int playerLoc = ptr + pointerLoc - 1;
             int retVal = (playerLoc - mPlayerStart) / cPlayerDataLength;
+            if (retVal > mMaxPlayers)
+                throw new Exception("Error! Invalid player index:" + retVal);
             return retVal;
         }
 
@@ -265,13 +345,16 @@ namespace NFL2K5Tool
         /// </summary>
         public int GetNumPlayers(string team)
         {
+            int retVal = 0;
             int index = GetTeamIndex(team);
-            int location = m49ersNumPlayersAddress + index * cTeamDiff;
-            if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
-                location = mFreeAgentCountLocation;
 
-            int retVal = GameSaveData[location] << 8;
-            retVal += GameSaveData[location + 1];
+            int loc = m49ersNumPlayersAddress + index * cTeamDiff;
+            if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
+            {
+                loc = mFreeAgentCountLocation;
+                retVal = GameSaveData[loc + 1] << 8;
+            }
+            retVal += GameSaveData[loc];
             return retVal;
         }
 
@@ -485,7 +568,6 @@ namespace NFL2K5Tool
                 else
                     InitializeForFranchise();
 
-                PopulateColleges();
                 retVal = true;
             }
             return retVal;
@@ -661,7 +743,9 @@ namespace NFL2K5Tool
         /// </summary>
         public int GetPlayerDataStart(int player)
         {
-            int ret = mPlayerStart + player * cPlayerDataLength;
+            int ret = -1;
+            if (player <= mMaxPlayers)
+                ret = mPlayerStart + player * cPlayerDataLength;
             return ret;
         }
 
@@ -1026,7 +1110,7 @@ namespace NFL2K5Tool
             if (useExistingName)
             {
                 // we'll look through the college player names because we're not changing those.
-                List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, mCollegeStringsStart, mCollegeStringsEnd, true);
+                List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, mCollegePlayerNameSectionStart, mCollegePlayerNameSectionEnd, true);
                 if (locations.Count < 1)
                 {
                     retVal = false;
@@ -1231,33 +1315,6 @@ namespace NFL2K5Tool
             SetByte(namePointerLoc + 2, b3);
         }
 
-
-        private void PopulateColleges()
-        {
-            mColleges = new string[cNumberOfColleges];
-            int loc = mCollegeStringsStart;
-            //end == 0x7bc50
-            for (int i = 0; i < mColleges.Length; i++)
-            {
-                mColleges[i] = GetString(loc);
-                loc = loc + (mColleges[i].Length + 1) * 2;
-            }
-        }
-
-        // could improve this by also ignoring spaces???
-        private int GetCollegeIndex(string college)
-        {
-            int retVal = -1;
-            for (int i = 0; i < mColleges.Length; i++)
-            {
-                if (college.Equals(mColleges[i], StringComparison.InvariantCultureIgnoreCase))
-                {
-                    retVal = i;
-                    break;
-                }
-            }
-            return retVal;
-        }
 
         #region Get/Set attributes
 
@@ -1816,43 +1873,74 @@ namespace NFL2K5Tool
             SetByte(loc, (byte)val);
         }
 
-        //CollegeIndex(p) = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
-        private string GetCollege(int player)
+        private Dictionary<string, int> Colleges
         {
-            string retVal = "CollegeError";
-            int loc = GetPlayerDataStart(player);
-            int collegePointerVal = (GameSaveData[loc + 3] << 24) + (GameSaveData[loc + 2] << 16) + (GameSaveData[loc + 1] << 8) + GameSaveData[loc];
-            int collegeIndex = (((collegePointerVal - (-2127 /*0xfffff7b1*/)) + player * cPlayerDataLength)) / 8;
-            if (collegeIndex < mColleges.Length)
+            get
             {
-                retVal = mColleges[collegeIndex];
-                if (retVal.IndexOf(',') > -1)
-                {
-                    retVal = '"' + retVal + '"';
-                }
+                if (mColleges.Count == 0)
+                    PopulateColleges();
+                return mColleges;
             }
+        }
+
+        private Dictionary<string, int> mColleges = new Dictionary<string, int>(3500);
+
+        private void PopulateColleges()
+        {
+            int loc = GetPlayerDataStart(0);
+            int ptrDest = GetPointerDestination(loc); // get pointer to college structure
+            int i = ptrDest;
+            while (GameSaveData[i] != 0)
+                i -= 8; // back up to beginning of colleges (college structure is 8 bytes)
+            i += 8;
+            string collegeName = "";
+            while (true)
+            {
+                collegeName = GetName(i);
+                mColleges.Add(collegeName, i);
+                i += 8;
+                if (collegeName.IndexOf("Barnum & Bailey") == 0)
+                    break;
+            }
+        }
+
+        public string GetCollege(int player)
+        {
+            int loc = GetPlayerDataStart(player);
+            int pointerDest = GetPointerDestination(loc);
+            string retVal = GetName( pointerDest);
+            if (retVal.IndexOf(',') > -1)
+                retVal = String.Concat("\"", retVal, "\"");
             return retVal;
         }
 
         private void SetCollege(int player, string college)
         {
+            //int dataLocation = pointerLoc + pointer - 1;
+            int ptrVal = 0;
             int loc = GetPlayerDataStart(player);
             if( college[0] == '"')
                 college = college.Replace("\"", "");
-            int collegeIndex = GetCollegeIndex(college);
-            int pointerVal = 0;
-            if (collegeIndex > -1)
-            {
-                pointerVal = ((-2127 /*0xfffff7b1*/) - player * cPlayerDataLength) + collegeIndex * 8;
-                byte b1 = (byte)pointerVal; ;
-                byte b2 = (byte)(pointerVal >> 8);
 
-                SetByte(loc, b1);
-                SetByte(loc + 1, b2);
-            }
-            else
+            if (Colleges.ContainsKey(college))
             {
-                StaticUtils.AddError("College '"+college+ "' appears to be invalid");
+                ptrVal = mColleges[college] - loc + 1;
+            }
+            else 
+            {
+                // works, but is very slow; I've seen some saves with more colleges than others
+                // should not hit this case very often; but we only populate until we hit Barnum & Bailey.
+                // not sure if there is a 'count' for colleges.
+                List<long> ptrs = StaticUtils.FindPointersToString(college, GameSaveData, 0, GameSaveData.Length);
+                if( ptrs.Count > 0)
+                    ptrVal = (int)ptrs[0] - loc + 1;
+            }
+            if (ptrVal > 0)
+            {
+                SetByte(loc, (byte)(0xff & ptrVal));
+                SetByte(loc + 1, (byte)(ptrVal >> 8));
+                SetByte(loc + 2, (byte)(ptrVal >> 16));
+                SetByte(loc + 3, (byte)(ptrVal >> 24));
             }
         }
         #endregion
