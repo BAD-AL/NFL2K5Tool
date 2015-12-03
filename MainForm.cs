@@ -22,6 +22,9 @@ namespace NFL2K5Tool
             //Text = Directory.GetCurrentDirectory();
             EnableControls(false);
             mTextBox.StatusControl = statusBar1;
+
+            nameColorToolStripMenuItem.BackColor = Color.White;
+            nameColorToolStripMenuItem.ForeColor = Color.Blue;
         }
 
         private void mLoadSaveButton_Click(object sender, EventArgs e)
@@ -43,7 +46,9 @@ namespace NFL2K5Tool
                 statusBar1.Text = dlg.FileName + " loaded";
                 EnableControls(true);
             }
+            StaticUtils.ShowErrors(false);
         }
+
 
         /// <summary>
         /// Controls enabling/disabling of controls (to make sure we have data to access before we try to access it)
@@ -62,8 +67,6 @@ namespace NFL2K5Tool
             mSaveButton.Enabled =
             debugDialogMenuItem.Enabled = enable;
         }
-
-
 
         private void mListContentsButton_Click(object sender, EventArgs e)
         {
@@ -89,7 +92,25 @@ namespace NFL2K5Tool
                 builder.Append(helper.GetSchedule());
             }
 
-            mTextBox.AppendText(builder.ToString());
+            SetText(builder.ToString());
+        }
+
+        Regex mColorizeRegex = new Regex("^[A-Z]+,[A-Za-z ']+,[A-Z,a-z ']+,", RegexOptions.Multiline);
+        
+        /// <summary>
+        /// Sets the text box text and colorizes the player names
+        /// </summary>
+        /// <param name="text"></param>
+        private void SetText( string text)
+        {
+            mTextBox.Text = text;
+            MatchCollection mc = mColorizeRegex.Matches(mTextBox.Text);
+            foreach (Match m in mc)
+            {
+                mTextBox.SelectionStart = m.Index;
+                mTextBox.SelectionLength = m.Length - 1;
+                mTextBox.SelectionColor = nameColorToolStripMenuItem.ForeColor;
+            }
         }
 
         private void scheduleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -112,7 +133,7 @@ namespace NFL2K5Tool
 
             if (listDraftClassToolStripMenuItem.Checked)
                 builder.Append(mTool.GetTeamPlayers("DraftClass", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
-            mTextBox.Text = builder.ToString();
+            SetText(builder.ToString());
         }
 
         private void mClearButton_Click(object sender, EventArgs e)
@@ -229,12 +250,12 @@ namespace NFL2K5Tool
 
         private void autoUpdatePhotoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mTool.AutoUpdatePhoto();
+            AutoUpdatePhoto();
         }
 
         private void autoUpdatePBPToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mTool.AutoUpdatePBP();
+            AutoUpdatePBP();
         }
 
         private void mLoadTextFileButton_Click(object sender, EventArgs e)
@@ -270,7 +291,7 @@ namespace NFL2K5Tool
             {
                 try
                 {
-                    mTextBox.Text = File.ReadAllText(dlg.FileName);
+                    SetText(File.ReadAllText(dlg.FileName));
                 }
                 catch (Exception )
                 {
@@ -279,6 +300,20 @@ namespace NFL2K5Tool
                 }
             }
             dlg.Dispose();
+        }
+
+        private void AutoUpdatePhoto()
+        {
+            PlayerUpdater v = new PlayerUpdater(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+            SetText(v.UpdatePlayers(mTextBox.Text, false, true));
+            statusBar1.Text = "Player Photos updated";
+        }
+
+        private void AutoUpdatePBP()
+        {
+            PlayerUpdater v = new PlayerUpdater(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+            SetText(v.UpdatePlayers(mTextBox.Text, true, false));
+            statusBar1.Text = "Player PBPs updated";
         }
 
         private void ValidatePlayers()
@@ -308,10 +343,10 @@ namespace NFL2K5Tool
         private void SortPlayers()
         {
             string allInput = mTextBox.Text.Replace("\r\n", "\n");
-            PlayerValidator pv = new PlayerValidator(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+            PlayerSorter ps = new PlayerSorter(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
 
             if (File.Exists(mSortStringFileName))
-                pv.FormulasString = File.ReadAllText(mSortStringFileName);
+                ps.FormulasString = File.ReadAllText(mSortStringFileName);
 
             string teamPattern = "Team";
 
@@ -331,13 +366,13 @@ namespace NFL2K5Tool
                         if (nn < 0)
                             nn = allInput.Length;
                         current = allInput.Substring(index, nn - index);
-                        modified = pv.SortTeam(current);
+                        modified = ps.SortTeam(current);
                         result = result.Replace(current, modified);
                         index = nn;
                     }
                 } while (index > -1);
 
-                mTextBox.Text = result;
+                SetText(result);
             }
             catch (Exception ex)
             {
@@ -365,7 +400,7 @@ namespace NFL2K5Tool
                 else if (result == DialogResult.Abort)
                 {
                     // restore the default sort data
-                    string res = PlayerValidator.sFormulasString;
+                    string res = PlayerSorter.sFormulasString;
                     File.WriteAllText(mSortStringFileName, res);
                 }
                 ef.Dispose();
@@ -374,6 +409,28 @@ namespace NFL2K5Tool
             {
                 MessageBox.Show(this, "File: " + mSortStringFileName + " does not exist.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void decreaseFontSizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Font f = new Font(mTextBox.Font.FontFamily,mTextBox.Font.Size -1);
+            mTextBox.Font = f;
+        }
+
+        private void increaseFontSizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Font f = new Font(mTextBox.Font.FontFamily, mTextBox.Font.Size + 1);
+            mTextBox.Font = f;
+        }
+
+        private void nameColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog dlg = new ColorDialog();
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                nameColorToolStripMenuItem.ForeColor = dlg.Color;
+            }
+
         }
 
     }

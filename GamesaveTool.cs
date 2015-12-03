@@ -300,10 +300,17 @@ namespace NFL2K5Tool
             int numPlayers = GetNumPlayers(team);
             int playerIndex = -1;
 
-            for (int i = 0; i < numPlayers; i++)
+            try
             {
-                playerIndex = GetPlayerIndexByPointer(teamPlayerPointersStart + (i * 4)); // 4== ptr length
-                retVal.Add(playerIndex);
+                for (int i = 0; i < numPlayers; i++)
+                {
+                    playerIndex = GetPlayerIndexByPointer(teamPlayerPointersStart + (i * 4)); // 4== ptr length
+                    retVal.Add(playerIndex);
+                }
+            }
+            catch (Exception e)
+            {
+                StaticUtils.AddError(String.Concat("Error getting players for:",team," Invalid pointer found. player index=",playerIndex));
             }
             return retVal;
         }
@@ -1133,9 +1140,9 @@ namespace NFL2K5Tool
                     int stringLoc = GetPointerDestination(ptrLoc1);
 
                     if (diff > 0)
-                        ShiftDataDown(GetPointerDestination(ptrLoc1), diff);
+                        ShiftDataDown(stringLoc, diff);
                     else if (diff < 0)
-                        ShiftDataUp(GetPointerDestination(ptrLoc1), -1 * diff);
+                        ShiftDataUp(stringLoc, -1 * diff);
 
                     AdjustStringPointers(stringLoc + 2 * prevName.Length, diff);
 

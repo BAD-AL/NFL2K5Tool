@@ -41,7 +41,7 @@
             this.applyDataWithoutSavingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugDialogMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listTeamsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,20 +50,24 @@
             this.listScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listFreeAgentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listDraftClassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoUpdatePhotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.autoUpdatePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.teamPlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.validateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortPlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editSortFormulasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUpdatePhotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUpdatePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
+            this.uIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.increaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.decreaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
+            this.nameColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -140,8 +144,9 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.viewToolStripMenuItem,
             this.editToolStripMenuItem,
-            this.viewToolStripMenuItem});
+            this.uIToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(678, 24);
@@ -195,9 +200,9 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // editToolStripMenuItem
+            // viewToolStripMenuItem
             // 
-            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.findToolStripMenuItem,
             this.debugDialogMenuItem,
             this.listTeamsToolStripMenuItem,
@@ -205,18 +210,15 @@
             this.listAttributesToolStripMenuItem,
             this.listScheduleToolStripMenuItem,
             this.listFreeAgentsToolStripMenuItem,
-            this.listDraftClassToolStripMenuItem,
-            this.autoUpdateDepthChartToolStripMenuItem,
-            this.autoUpdatePhotoToolStripMenuItem,
-            this.autoUpdatePBPToolStripMenuItem});
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "&Edit";
+            this.listDraftClassToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "&View";
             // 
             // findToolStripMenuItem
             // 
             this.findToolStripMenuItem.Name = "findToolStripMenuItem";
-            this.findToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.findToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.findToolStripMenuItem.Text = "F&ind";
             this.findToolStripMenuItem.Click += new System.EventHandler(this.findToolStripMenuItem_Click);
             // 
@@ -224,7 +226,7 @@
             // 
             this.debugDialogMenuItem.Enabled = false;
             this.debugDialogMenuItem.Name = "debugDialogMenuItem";
-            this.debugDialogMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.debugDialogMenuItem.Size = new System.Drawing.Size(157, 22);
             this.debugDialogMenuItem.Text = "&Debug Dialog";
             this.debugDialogMenuItem.Click += new System.EventHandler(this.stringToHexToolStripMenuItem_Click);
             // 
@@ -233,7 +235,7 @@
             this.listTeamsToolStripMenuItem.Checked = true;
             this.listTeamsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.listTeamsToolStripMenuItem.Name = "listTeamsToolStripMenuItem";
-            this.listTeamsToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.listTeamsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.listTeamsToolStripMenuItem.Text = "List Teams";
             this.listTeamsToolStripMenuItem.Click += new System.EventHandler(this.listTeamsToolStripMenuItem_Click);
             // 
@@ -242,7 +244,7 @@
             this.listApperanceToolStripMenuItem.Checked = true;
             this.listApperanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.listApperanceToolStripMenuItem.Name = "listApperanceToolStripMenuItem";
-            this.listApperanceToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.listApperanceToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.listApperanceToolStripMenuItem.Text = "List Apperance";
             this.listApperanceToolStripMenuItem.Click += new System.EventHandler(this.listApperanceToolStripMenuItem_Click);
             // 
@@ -251,30 +253,80 @@
             this.listAttributesToolStripMenuItem.Checked = true;
             this.listAttributesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.listAttributesToolStripMenuItem.Name = "listAttributesToolStripMenuItem";
-            this.listAttributesToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.listAttributesToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.listAttributesToolStripMenuItem.Text = "List Attributes";
             this.listAttributesToolStripMenuItem.Click += new System.EventHandler(this.listAttributesToolStripMenuItem_Click);
             // 
             // listScheduleToolStripMenuItem
             // 
             this.listScheduleToolStripMenuItem.Name = "listScheduleToolStripMenuItem";
-            this.listScheduleToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.listScheduleToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.listScheduleToolStripMenuItem.Text = "List Schedule";
             this.listScheduleToolStripMenuItem.Click += new System.EventHandler(this.listScheduleToolStripMenuItem_Click);
             // 
             // listFreeAgentsToolStripMenuItem
             // 
             this.listFreeAgentsToolStripMenuItem.Name = "listFreeAgentsToolStripMenuItem";
-            this.listFreeAgentsToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.listFreeAgentsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.listFreeAgentsToolStripMenuItem.Text = "List Free Agents";
             this.listFreeAgentsToolStripMenuItem.Click += new System.EventHandler(this.listFreeAgentsToolStripMenuItem_Click);
             // 
             // listDraftClassToolStripMenuItem
             // 
             this.listDraftClassToolStripMenuItem.Name = "listDraftClassToolStripMenuItem";
-            this.listDraftClassToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.listDraftClassToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.listDraftClassToolStripMenuItem.Text = "List Draft Class";
             this.listDraftClassToolStripMenuItem.Click += new System.EventHandler(this.listDraftClassToolStripMenuItem_Click);
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scheduleToolStripMenuItem,
+            this.teamPlayersToolStripMenuItem,
+            this.validateToolStripMenuItem,
+            this.sortPlayersToolStripMenuItem,
+            this.editSortFormulasToolStripMenuItem,
+            this.autoUpdateDepthChartToolStripMenuItem,
+            this.autoUpdatePhotoToolStripMenuItem,
+            this.autoUpdatePBPToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "&Edit";
+            // 
+            // scheduleToolStripMenuItem
+            // 
+            this.scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
+            this.scheduleToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.scheduleToolStripMenuItem.Text = "Show &Schedule Now";
+            this.scheduleToolStripMenuItem.Click += new System.EventHandler(this.scheduleToolStripMenuItem_Click);
+            // 
+            // teamPlayersToolStripMenuItem
+            // 
+            this.teamPlayersToolStripMenuItem.Name = "teamPlayersToolStripMenuItem";
+            this.teamPlayersToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.teamPlayersToolStripMenuItem.Text = "Show &Team Players Now";
+            this.teamPlayersToolStripMenuItem.Click += new System.EventHandler(this.teamPlayersToolStripMenuItem_Click);
+            // 
+            // validateToolStripMenuItem
+            // 
+            this.validateToolStripMenuItem.Name = "validateToolStripMenuItem";
+            this.validateToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.validateToolStripMenuItem.Text = "&Validate Players";
+            this.validateToolStripMenuItem.Click += new System.EventHandler(this.validateToolStripMenuItem_Click);
+            // 
+            // sortPlayersToolStripMenuItem
+            // 
+            this.sortPlayersToolStripMenuItem.Name = "sortPlayersToolStripMenuItem";
+            this.sortPlayersToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.sortPlayersToolStripMenuItem.Text = "&Sort Players";
+            this.sortPlayersToolStripMenuItem.Click += new System.EventHandler(this.sortPlayersToolStripMenuItem_Click);
+            // 
+            // editSortFormulasToolStripMenuItem
+            // 
+            this.editSortFormulasToolStripMenuItem.Name = "editSortFormulasToolStripMenuItem";
+            this.editSortFormulasToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.editSortFormulasToolStripMenuItem.Text = "&Edit sort formulas";
+            this.editSortFormulasToolStripMenuItem.Click += new System.EventHandler(this.editSortFormulasToolStripMenuItem_Click);
             // 
             // autoUpdateDepthChartToolStripMenuItem
             // 
@@ -296,53 +348,6 @@
             this.autoUpdatePBPToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.autoUpdatePBPToolStripMenuItem.Text = "Auto update PBP";
             this.autoUpdatePBPToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePBPToolStripMenuItem_Click);
-            // 
-            // viewToolStripMenuItem
-            // 
-            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.scheduleToolStripMenuItem,
-            this.teamPlayersToolStripMenuItem,
-            this.validateToolStripMenuItem,
-            this.sortPlayersToolStripMenuItem,
-            this.editSortFormulasToolStripMenuItem});
-            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "&View";
-            // 
-            // scheduleToolStripMenuItem
-            // 
-            this.scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
-            this.scheduleToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.scheduleToolStripMenuItem.Text = "&Schedule";
-            this.scheduleToolStripMenuItem.Click += new System.EventHandler(this.scheduleToolStripMenuItem_Click);
-            // 
-            // teamPlayersToolStripMenuItem
-            // 
-            this.teamPlayersToolStripMenuItem.Name = "teamPlayersToolStripMenuItem";
-            this.teamPlayersToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.teamPlayersToolStripMenuItem.Text = "&Team Players";
-            this.teamPlayersToolStripMenuItem.Click += new System.EventHandler(this.teamPlayersToolStripMenuItem_Click);
-            // 
-            // validateToolStripMenuItem
-            // 
-            this.validateToolStripMenuItem.Name = "validateToolStripMenuItem";
-            this.validateToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.validateToolStripMenuItem.Text = "&Validate Players";
-            this.validateToolStripMenuItem.Click += new System.EventHandler(this.validateToolStripMenuItem_Click);
-            // 
-            // sortPlayersToolStripMenuItem
-            // 
-            this.sortPlayersToolStripMenuItem.Name = "sortPlayersToolStripMenuItem";
-            this.sortPlayersToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.sortPlayersToolStripMenuItem.Text = "&Sort Players";
-            this.sortPlayersToolStripMenuItem.Click += new System.EventHandler(this.sortPlayersToolStripMenuItem_Click);
-            // 
-            // editSortFormulasToolStripMenuItem
-            // 
-            this.editSortFormulasToolStripMenuItem.Name = "editSortFormulasToolStripMenuItem";
-            this.editSortFormulasToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.editSortFormulasToolStripMenuItem.Text = "&Edit sort formulas";
-            this.editSortFormulasToolStripMenuItem.Click += new System.EventHandler(this.editSortFormulasToolStripMenuItem_Click);
             // 
             // mListPlayersButton2
             // 
@@ -391,6 +396,30 @@
             this.mLoadTextFileButton.UseVisualStyleBackColor = true;
             this.mLoadTextFileButton.Click += new System.EventHandler(this.mLoadTextFileButton_Click);
             // 
+            // uIToolStripMenuItem
+            // 
+            this.uIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.increaseFontSizeToolStripMenuItem,
+            this.decreaseFontSizeToolStripMenuItem,
+            this.nameColorToolStripMenuItem});
+            this.uIToolStripMenuItem.Name = "uIToolStripMenuItem";
+            this.uIToolStripMenuItem.Size = new System.Drawing.Size(30, 20);
+            this.uIToolStripMenuItem.Text = "UI";
+            // 
+            // increaseFontSizeToolStripMenuItem
+            // 
+            this.increaseFontSizeToolStripMenuItem.Name = "increaseFontSizeToolStripMenuItem";
+            this.increaseFontSizeToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.increaseFontSizeToolStripMenuItem.Text = "&Increase Font size";
+            this.increaseFontSizeToolStripMenuItem.Click += new System.EventHandler(this.increaseFontSizeToolStripMenuItem_Click);
+            // 
+            // decreaseFontSizeToolStripMenuItem
+            // 
+            this.decreaseFontSizeToolStripMenuItem.Name = "decreaseFontSizeToolStripMenuItem";
+            this.decreaseFontSizeToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.decreaseFontSizeToolStripMenuItem.Text = "&Decrease Font Size";
+            this.decreaseFontSizeToolStripMenuItem.Click += new System.EventHandler(this.decreaseFontSizeToolStripMenuItem_Click);
+            // 
             // mTextBox
             // 
             this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -405,6 +434,13 @@
             this.mTextBox.StatusControl = null;
             this.mTextBox.TabIndex = 2;
             this.mTextBox.Text = "";
+            // 
+            // nameColorToolStripMenuItem
+            // 
+            this.nameColorToolStripMenuItem.Name = "nameColorToolStripMenuItem";
+            this.nameColorToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.nameColorToolStripMenuItem.Text = "&Name Color";
+            this.nameColorToolStripMenuItem.Click += new System.EventHandler(this.nameColorToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -445,7 +481,7 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadSaveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debugDialogMenuItem;
@@ -465,12 +501,16 @@
         private System.Windows.Forms.Button mLoadTextFileButton;
         private System.Windows.Forms.ToolStripMenuItem loadTextFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listScheduleToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scheduleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem teamPlayersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem validateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sortPlayersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editSortFormulasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uIToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem increaseFontSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem decreaseFontSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nameColorToolStripMenuItem;
     }
 }
 

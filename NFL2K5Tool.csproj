@@ -62,6 +62,9 @@
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlayerParser.cs" />
+    <Compile Include="PlayerSorter.cs" />
+    <Compile Include="PlayerUpdater.cs" />
     <Compile Include="PlayerValidator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
