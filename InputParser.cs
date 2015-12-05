@@ -17,6 +17,11 @@ namespace NFL2K5Tool
         private InputParserTeamTracker mTracker = new InputParserTeamTracker();
         private List<string> mScheduleList;
 
+        /// <summary>
+        /// true to use existing names; false to replace the names.
+        /// </summary>
+        public bool UseExistingNames { get; set; }
+
         public InputParser(GamesaveTool tool)
         {
             this.Tool = tool;
@@ -158,7 +163,7 @@ namespace NFL2K5Tool
         private void InsertPlayer(string line)
         {
             int playerIndex = GetPlayerIndex(line);
-            SetPlayerData(playerIndex, line);
+            SetPlayerData(playerIndex, line, this.UseExistingNames);
         }
 
         private int GetPlayerIndex(string line)
@@ -223,7 +228,7 @@ namespace NFL2K5Tool
         /// </summary>
         /// <param name="player">The index of the player</param>
         /// <param name="line">The data tp apply.</param>
-        public bool SetPlayerData(int player, string line)
+        public bool SetPlayerData(int player, string line, bool useExistingName)
         {
             bool retVal = false;
             if (player > -1 && player < Tool.MaxPlayers)
@@ -239,12 +244,12 @@ namespace NFL2K5Tool
                         {
                             // Name setting perhaps should be done at another, smarter level?
                             // How we gonna decide to use pointers or not?
-                            Tool.SetPlayerFirstName(player, attributes[i], false);
+                            Tool.SetPlayerFirstName(player, attributes[i], useExistingName);
                         }
                         else if (attr == -2)
                         {
                             // How we gonna decide to use pointers or not?
-                            Tool.SetPlayerLastName(player, attributes[i], false);
+                            Tool.SetPlayerLastName(player, attributes[i], useExistingName);
                         }
                         else if (attr >= (int)AppearanceAttributes.College)
                         {

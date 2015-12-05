@@ -13,7 +13,7 @@ namespace NFL2K5Tool
 {
     public partial class MainForm : Form
     {
-        private GamesaveTool mTool = new GamesaveTool();
+        private GamesaveTool mTool;// = new GamesaveTool();
         private const string mSortStringFileName = "PlayerData\\SortFormulas.txt";
 
         public MainForm()
@@ -40,6 +40,7 @@ namespace NFL2K5Tool
             dlg.Filter = "XBOX Save files (*.DAT, *.zip)|*.DAT;*.zip";
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                mTool = new GamesaveTool();
                 mTool.LoadSaveFile(dlg.FileName);
                 string shortName = dlg.FileName.Substring(dlg.FileName.LastIndexOf(Path.DirectorySeparatorChar) + 1);
                 Text = "NFL2K5Tool - " + shortName;
@@ -232,6 +233,8 @@ namespace NFL2K5Tool
             sw.Start();
             statusBar1.Text = "Applying data...";
             InputParser parser = new InputParser(this.mTool);
+            parser.UseExistingNames = reuseNamesToConserveNameSpaceToolStripMenuItem.Checked;
+
             parser.ProcessText(mTextBox.Text);
             sw.Stop();
             statusBar1.Text = "Done Applying data." + (sw.ElapsedMilliseconds / 1000.0) + "s";
@@ -394,13 +397,15 @@ namespace NFL2K5Tool
                 DialogResult result = ef.ShowDialog(this);
                 if (result == DialogResult.OK)
                 {
-                    string res = ef.MessageText;
+                    string res = ef.MessageText.Replace("\r\n","\n");
+                    res = res.Replace("\n", Environment.NewLine); // make the text file nice for text editors
                     File.WriteAllText(mSortStringFileName, res);
                 }
                 else if (result == DialogResult.Abort)
                 {
                     // restore the default sort data
-                    string res = PlayerSorter.sFormulasString;
+                    string res = PlayerSorter.sFormulasString.Replace("\r\n", "\n");
+                    res = res.Replace("\n", Environment.NewLine); // make the text file nice for text editors
                     File.WriteAllText(mSortStringFileName, res);
                 }
                 ef.Dispose();
@@ -431,6 +436,11 @@ namespace NFL2K5Tool
                 nameColorToolStripMenuItem.ForeColor = dlg.Color;
             }
 
+        }
+
+        private void reuseNamesToConserveNameSpaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            reuseNamesToConserveNameSpaceToolStripMenuItem.Checked = !reuseNamesToConserveNameSpaceToolStripMenuItem.Checked;
         }
 
     }

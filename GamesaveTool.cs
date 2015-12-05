@@ -157,13 +157,7 @@ namespace NFL2K5Tool
             return retVal;
         }
 
-        private int FirstPlayerFnamePointerLoc
-        {
-            get 
-            {
-                return mPlayerStart + 0x10;
-            }
-        }
+        private int FirstPlayerFnamePointerLoc { get  { return mPlayerStart + 0x10; } }
 
 		// The team data is ordered like this:
         private string[] mTeamsDataOrder =  {
@@ -427,7 +421,7 @@ namespace NFL2K5Tool
         }
 
         /// <summary>
-        /// Automatically update the Play by play names.
+        /// Automatically update the Player photos.
         /// consider doing this in the Form, not directly applying to the save file.
         /// </summary>
         public string AutoUpdatePhoto()
@@ -459,7 +453,7 @@ namespace NFL2K5Tool
                 }
                 else //if (DataMap.PhotoMap.ContainsKey(number))
                     val = DataMap.PhotoMap[number];
-                SetAttribute(player, PlayerOffsets.PBP, val);
+                SetAttribute(player, PlayerOffsets.Photo, val);
             }
             return builder.ToString();
         }
@@ -568,7 +562,7 @@ namespace NFL2K5Tool
                     GameSaveData = StaticUtils.ExtractFileFromZip(fileName, null, "SAVEGAME.DAT");
                     mZipFile = fileName;
                 }
-
+                mColleges.Clear();
                 if (GameSaveData[0] == (byte)'R' && GameSaveData[1] == (byte)'O' &&
                     GameSaveData[2] == (byte)'S' && GameSaveData[3] == (byte)'T')
                     InitializeForRoster();
@@ -984,6 +978,12 @@ namespace NFL2K5Tool
                     val = GameSaveData[loc+1] << 8;
                     val += GameSaveData[loc];
                     retVal = "" + val;
+                    switch (retVal.Length)
+                    {
+                        case 3: retVal = "0"   + retVal; break;
+                        case 2: retVal = "00"  + retVal; break;
+                        case 1: retVal = "000" + retVal; break;
+                    }
                     break;
                 default:
                     retVal += val;
@@ -1280,26 +1280,21 @@ namespace NFL2K5Tool
         /// <param name="difference">the amount to adjust the pointrs by.</param>
         private void AdjustStringPointers(int locationOfChange, int difference)
         {
-            int firstNamePtr = 0;
-            int lastNamePtr = 0;
+            int firstNamePtrLoc = 0;
+            int lastNamePtrLoc = 0;
             int loc = 0;
             for (int player = 0; player <= mMaxPlayers; player++)
             {
-                firstNamePtr = player * cPlayerDataLength + FirstPlayerFnamePointerLoc;
-                lastNamePtr = firstNamePtr + 4;
-                loc = GetPointerDestination(firstNamePtr);
-                if (loc < mModifiableNameSectionEnd)
-                {
-                    if (loc >= locationOfChange)
-                    {
-                        AdjustPointer(firstNamePtr, difference);
-                    }
-                    loc = GetPointerDestination(lastNamePtr);
-                    if (loc >= locationOfChange)
-                    {
-                        AdjustPointer(lastNamePtr, difference);
-                    }
-                }
+                firstNamePtrLoc = player * cPlayerDataLength + FirstPlayerFnamePointerLoc;
+                lastNamePtrLoc = firstNamePtrLoc + 4;
+
+                loc = GetPointerDestination(firstNamePtrLoc);
+                if (loc < mModifiableNameSectionEnd && loc >= locationOfChange)
+                    AdjustPointer(firstNamePtrLoc, difference);
+
+                loc = GetPointerDestination(lastNamePtrLoc);
+                if (loc < mModifiableNameSectionEnd && loc >= locationOfChange)
+                    AdjustPointer(lastNamePtrLoc, difference);
             }
         }
 
@@ -1942,7 +1937,7 @@ namespace NFL2K5Tool
                 if( ptrs.Count > 0)
                     ptrVal = (int)ptrs[0] - loc + 1;
             }
-            if (ptrVal > 0)
+            if (ptrVal != 0)
             {
                 SetByte(loc, (byte)(0xff & ptrVal));
                 SetByte(loc + 1, (byte)(ptrVal >> 8));

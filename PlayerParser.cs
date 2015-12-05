@@ -85,15 +85,18 @@ namespace NFL2K5Tool
             StringBuilder builder = new StringBuilder(300);
             foreach (string attr in playerParts)
             {
-                if (attr.IndexOf(',') > -1)
+                if (attr.Length > 0)
                 {
-                    builder.Append("\"");
-                    builder.Append(attr);
-                    builder.Append("\"");
+                    if (attr.IndexOf(',') > -1 && attr[0] != '"')
+                    {
+                        builder.Append("\"");
+                        builder.Append(attr);
+                        builder.Append("\"");
+                    }
+                    else
+                        builder.Append(attr);
+                    builder.Append(",");
                 }
-                else
-                    builder.Append(attr);
-                builder.Append(",");
             }
             return builder.ToString();
         }

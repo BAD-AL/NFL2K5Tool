@@ -4,20 +4,20 @@
 #Tackle,KickPower,KickAccuracy,Stamina,Durability,Leadership,Scramble,Composure,Consistency,Aggressiveness
 # 
 # Position sort Formulas:
-QB: (PassAccuracy + PassArmStrength + Leadership) /3
-RB: (3 * Speed + ( HoldOntoBall + BreakTackle))/ 5
+QB: (PassAccuracy + PassArmStrength + Leadership + Consistency) /4
+RB: (3 * Speed + ( HoldOntoBall + BreakTackle) + 2*Consistency)/ 7
 FB: (Catch + 3*RunBlocking ) /4
-WR: (3*Speed + 2*Catch + RunRoute)/5
-TE: (2*Speed + 2*Catch + RunRoute + PassBlocking + RunBlocking)/7
-C: (PassBlocking+RunBlocking)/2
-G: (PassBlocking+RunBlocking)/2
-T: (PassBlocking+RunBlocking)/2
-DE: (3*Speed + PassRush + Strength+ Tackle) /6
-DT: (RunCoverage + 2*Strength + PassRush) / 4
-ILB: (PassRush + RunCoverage + 2*Speed ) /5
-OLB: (3 * Speed + 2 * Tackle + PassRush + RunCoverage + Coverage )/8
-CB: (3*Speed + 3 * Coverage + Tackle )/7
-FS: (2* Coverage + Tackle + Speed) / 4
-SS: (2* Coverage + 2*Tackle + Speed) / 5
+WR: (3*Speed + 2*Catch + RunRoute + 2*Consistency)/7
+TE: (2*Speed + 2*Catch + RunRoute + PassBlocking + RunBlocking+ Consistency)/8
+C: (PassBlocking+RunBlocking+ Consistency)/3
+G: (PassBlocking+RunBlocking+ Consistency)/3
+T: (PassBlocking+RunBlocking+ Consistency)/3
+DE: (3*Speed + PassRush + Strength+ Tackle+ Consistency) /7
+DT: (RunCoverage + 2*Strength + PassRush+ Consistency) / 5
+ILB: (PassRush + RunCoverage + 2*Speed + Consistency) /6
+OLB: (3 * Speed + 2 * Tackle + PassRush + RunCoverage + Coverage + Consistency)/9
+CB: (3*Speed + 3 * Coverage + Tackle + Consistency)/8
+FS: (2* Coverage + Tackle + Speed + Consistency) / 5
+SS: (2* Coverage + 2*Tackle + Speed + Consistency) / 6
 K: (KickPower + 2*KickAccuracy)/3
 P: ( 2 * KickPower + KickAccuracy)/3

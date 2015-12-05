@@ -13,6 +13,13 @@ Can read and write player data successfully!
 Can read all 2317 players from save file and write them back with no file differences!
 Can Schedule games; Specifying a year will auto update the dates in the Game (to 'close' dates, not the exact dates the games are actually played)
 Can load gamesave files onto your XBOX.
+Need to work on solution for setting mass data when some names are mapped to multiple players.
+Currently works well in the following use cases:
+1. Extracting text data from gamesaves.
+2. Applying data to Base gamesave files.
+
+Currently Buggy at:
+Automatic photo/PBP update
 
 ###Implemented features:
 1. Auto update depth chart. 
@@ -26,10 +33,9 @@ Can load gamesave files onto your XBOX.
 9. Gamesaves are signed and loaded.
 10. Warns possible error conditions for weight and body type (Like when a RB weighs 300+ lbs, or has XL body type). 
 11. User defined Player sort formulas
+12. Player validator (flag players that have attributes that don't seem right.); allow user defined formulas?
 
-
-###Next features:
-    0. Player validator (flag players that have attributes that don't seem right.); allow user defined formulas?
+###Next features:  
 	1. Player edit GUI 	
 	2. Editing coaches. 
 	3. Editing playbooks. 
