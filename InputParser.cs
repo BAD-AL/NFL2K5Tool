@@ -27,8 +27,66 @@ namespace NFL2K5Tool
             this.Tool = tool;
         }
 
-
         private GamesaveTool Tool { get; set; }
+
+        /// <summary>
+        /// Gets teh team corresponding to the text position
+        /// </summary>
+        public static string GetTeam(int textPosition, string data)
+        {
+            string team = "49ers";
+            Regex r = new Regex("TEAM\\s*=\\s*([a-zA-Z49]+)", RegexOptions.IgnoreCase);
+            MatchCollection mc = r.Matches(data);
+            Match theMatch = null;
+
+            foreach (Match m in mc)
+            {
+                if (m.Index > textPosition)
+                    break;
+                theMatch = m;
+            }
+
+            if (theMatch != null)
+            {
+                team = theMatch.Groups[1].Value;
+            }
+            return team;
+        }
+
+        /// <summary>
+        /// returns the line that linePosition falls on in data
+        /// </summary>
+        public static string GetLine(int textPosition, string data)
+        {
+            string ret = null;
+            if (textPosition < data.Length)
+            {
+                int i = 0;
+                int lineStart = 0;
+                int posLen = 0;
+                for (i = textPosition; i > 0; i--)
+                {
+                    if (data[i] == '\n')
+                    {
+                        lineStart = i + 1;
+                        break;
+                    }
+                }
+                i = lineStart;
+                if (i < data.Length)
+                {
+                    char current = data[i];
+                    while (i < data.Length - 1 && current != '\n')
+                    {
+                        posLen++;
+                        i++;
+                        current = data[i];
+                    }
+                    ret = data.Substring(lineStart, posLen);
+                }
+            }
+            return ret;
+        }
 
         /// <summary>
         /// Process the text in the given file, applying it to the gamesave data.
@@ -207,6 +265,10 @@ namespace NFL2K5Tool
                 if (retVal[i].EndsWith("\"") && i > 0 && retVal[i - 1].StartsWith("\""))
                 {
                     retVal[i - 1] += ( sDelim[0] + retVal[i]);
+                    retVal.RemoveAt(i);
+                }
+                else if (retVal[i].Length == 0) // remove empty strings
+                {
                     retVal.RemoveAt(i);
                 }
             }

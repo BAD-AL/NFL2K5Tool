@@ -48,6 +48,12 @@
   <ItemGroup>
     <Compile Include="DataMap.cs" />
     <Compile Include="EnumDefinitions.cs" />
+    <Compile Include="IntAttrControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="IntAttrControl.Designer.cs">
+      <DependentUpon>IntAttrControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MessageForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,18 +68,32 @@
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlayerEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PlayerEditForm.Designer.cs">
+      <DependentUpon>PlayerEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PlayerParser.cs" />
     <Compile Include="PlayerSorter.cs" />
     <Compile Include="PlayerUpdater.cs" />
     <Compile Include="PlayerValidator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="IntAttrControl.resx">
+      <DependentUpon>IntAttrControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="MessageForm.resx">
       <DependentUpon>MessageForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlayerEditForm.resx">
+      <DependentUpon>PlayerEditForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -87,6 +107,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DebugDialog.resx">
       <DependentUpon>DebugDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StringSelectionControl.resx">
+      <DependentUpon>StringSelectionControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -120,6 +144,12 @@
     </Compile>
     <Compile Include="DebugDialog.Designer.cs">
       <DependentUpon>DebugDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StringSelectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="StringSelectionControl.Designer.cs">
+      <DependentUpon>StringSelectionControl.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

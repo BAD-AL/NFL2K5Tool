@@ -19,7 +19,7 @@ Currently works well in the following use cases:
 2. Applying data to Base gamesave files.
 
 Currently Buggy at:
-Automatic photo/PBP update
+Automatic photo/PBP update. Need to update the name and photo files.
 
 ###Implemented features:
 1. Auto update depth chart. 
@@ -36,13 +36,14 @@ Automatic photo/PBP update
 12. Player validator (flag players that have attributes that don't seem right.); allow user defined formulas?
 
 ###Next features:  
-	1. Player edit GUI 	
+	1. Player edit GUI -- in progress
 	2. Editing coaches. 
 	3. Editing playbooks. 
 	4. Add support for more Photos and names. 
 	5. Smart input parser (Where it tries to replace players at the same position instead of overwriting some random player), name management
 	6. Auto update Player equipment (from stock file database)
 	7. Help Manual
+	8. Updating the Kick and punt returners.
 	
 ###Also need
 	1. To add tests.

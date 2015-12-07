@@ -94,6 +94,16 @@ namespace NFL2K5Tool
         }
 
         private static Dictionary<string, string> sReversePhotoMap;
+
+        public static Dictionary<string, string> ReversePhotoMap
+        {
+            get 
+            {
+                if (sReversePhotoMap == null)
+                    sReversePhotoMap = ReadIntoMap(cPhotoMapPath, true);
+                return sReversePhotoMap; 
+            }
+        }
         /// <summary>
         /// Returns the player's name the number maps to.
         /// </summary>
@@ -106,14 +116,24 @@ namespace NFL2K5Tool
                 case 2: number = "00" + number; break;
                 case 3: number = "0" + number; break;
             }
-            if (sReversePhotoMap == null)
-                sReversePhotoMap = ReadIntoMap(cPhotoMapPath, true);
+
             if (sReversePhotoMap.ContainsKey(number))
                 return sReversePhotoMap[number];
             return "UNKNOWN!";
         }
 
         private static Dictionary<string, string> sReversePBPMap;
+
+        public static Dictionary<string, string> ReversePBPMap
+        {
+            get 
+            {
+                if (sReversePBPMap == null)
+                    sReversePBPMap = ReadIntoMap(cPBPMapPath, true);
+                return sReversePBPMap; 
+            }
+        }
+
         /// <summary>
         /// Returns the player's PBP the number maps to.
         /// </summary>
@@ -126,8 +146,6 @@ namespace NFL2K5Tool
                 case 2: number = "00" + number; break;
                 case 3: number = "0" + number; break;
             }
-            if (sReversePBPMap == null)
-                sReversePBPMap = ReadIntoMap(cPBPMapPath, true);
             if (sReversePBPMap.ContainsKey(number))
                 return sReversePBPMap[number];
             return "UNKNOWN!";

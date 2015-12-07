@@ -302,7 +302,7 @@ namespace NFL2K5Tool
                     retVal.Add(playerIndex);
                 }
             }
-            catch (Exception e)
+            catch (Exception )
             {
                 StaticUtils.AddError(String.Concat("Error getting players for:",team," Invalid pointer found. player index=",playerIndex));
             }
@@ -1873,6 +1873,16 @@ namespace NFL2K5Tool
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.RightElbow;
             int val = (GameSaveData[loc] & 0xc3 ) + ((int)s << 2);
             SetByte(loc, (byte)val);
+        }
+
+        /// <summary>
+        /// Get the colleges in the File.
+        /// </summary>
+        public string[] GetColleges()
+        {
+            string[] retVal = new string[Colleges.Keys.Count];
+            Colleges.Keys.CopyTo(retVal, 0);
+            return retVal;
         }
 
         private Dictionary<string, int> Colleges

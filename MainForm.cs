@@ -443,5 +443,41 @@ namespace NFL2K5Tool
             reuseNamesToConserveNameSpaceToolStripMenuItem.Checked = !reuseNamesToConserveNameSpaceToolStripMenuItem.Checked;
         }
 
+        private static DateTime m_LastTime;
+
+        private void TextBox_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            DateTime now = DateTime.Now;
+            if (m_LastTime.Day == now.Day &&
+                m_LastTime.Hour == now.Hour &&
+                m_LastTime.Second == now.Second)
+            {
+                //try {
+                    DoubleClicked();
+                //} catch (Exception ex) { StaticUtils.AddError("Encountered error on double click" + ex.Message); }
+            }
+            m_LastTime = now;
+        }
+
+        private void DoubleClicked()
+        {
+             EditPlayer();
+        }
+
+        private void EditPlayer()
+        {
+            PlayerEditForm form = new PlayerEditForm();
+            form.Colleges = mTool.GetColleges();
+            form.PBPs = DataMap.ReversePBPMap;
+            form.Photos = DataMap.ReversePhotoMap;
+            form.Data = mTextBox.Text;
+            form.SelectionStart = mTextBox.SelectionStart;
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                mTextBox.Text = form.Data;
+                mTextBox.SelectionStart = form.SelectionStart;
+                mTextBox.ScrollToCaret();
+            }
+        }
     }
 }

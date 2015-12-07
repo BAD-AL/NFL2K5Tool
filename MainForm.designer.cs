@@ -59,6 +59,7 @@
             this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdatePhotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdatePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reuseNamesToConserveNameSpaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.increaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.decreaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +69,6 @@
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
-            this.reuseNamesToConserveNameSpaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -351,6 +351,13 @@
             this.autoUpdatePBPToolStripMenuItem.Text = "Auto update PBP";
             this.autoUpdatePBPToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePBPToolStripMenuItem_Click);
             // 
+            // reuseNamesToConserveNameSpaceToolStripMenuItem
+            // 
+            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Name = "reuseNamesToConserveNameSpaceToolStripMenuItem";
+            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Text = "Reuse names to conserve name space";
+            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Click += new System.EventHandler(this.reuseNamesToConserveNameSpaceToolStripMenuItem_Click);
+            // 
             // uIToolStripMenuItem
             // 
             this.uIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -443,13 +450,7 @@
             this.mTextBox.StatusControl = null;
             this.mTextBox.TabIndex = 2;
             this.mTextBox.Text = "";
-            // 
-            // reuseNamesToConserveNameSpaceToolStripMenuItem
-            // 
-            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Name = "reuseNamesToConserveNameSpaceToolStripMenuItem";
-            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
-            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Text = "Reuse names to conserve name space";
-            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Click += new System.EventHandler(this.reuseNamesToConserveNameSpaceToolStripMenuItem_Click);
+            this.mTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TextBox_MouseDown);
             // 
             // MainForm
             // 
