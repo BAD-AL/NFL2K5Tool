@@ -89,6 +89,29 @@ namespace NFL2K5Tool
         }
 
         /// <summary>
+        /// returns the n'th line after the textPosition in 'data'. returns null if end of input reached before number of lines is reached.
+        /// </summary>
+        public static string GetLineAfter(int textPosition, int linesAfter, string data)
+        {
+            int ne = 0;
+            int i;
+            for (i = textPosition; i < data.Length; i++)
+            {
+                if (data[i] == '\n')
+                    ne++;
+                if (ne == linesAfter)
+                {
+                    i++;
+                    break;
+                }
+            }
+            if (i < data.Length)
+                return GetLine(i, data);
+            
+            return null;
+        }
+
+        /// <summary>
         /// Process the text in the given file, applying it to the gamesave data.
         /// </summary>
         /// <param name="fileName"></param>

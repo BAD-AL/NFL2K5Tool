@@ -448,9 +448,8 @@ namespace NFL2K5Tool
         private void TextBox_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             DateTime now = DateTime.Now;
-            if (m_LastTime.Day == now.Day &&
-                m_LastTime.Hour == now.Hour &&
-                m_LastTime.Second == now.Second)
+            TimeSpan span = new TimeSpan(now.Ticks - m_LastTime.Ticks);
+            if ( span.TotalMilliseconds < 1000) // less than a second
             {
                 //try {
                     DoubleClicked();

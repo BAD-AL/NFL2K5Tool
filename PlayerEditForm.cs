@@ -12,6 +12,7 @@ namespace NFL2K5Tool
     public partial class PlayerEditForm : Form
     {
         private string[] mKeyParts;
+        private bool mInitializing = true;
 
         /// <summary>
         /// Constructor.
@@ -57,7 +58,7 @@ namespace NFL2K5Tool
         }
         private string mKeyString = "";
         private const string mSkillsString = "Speed,Agility,Strength,Jumping,Coverage,PassRush,RunCoverage,PassBlocking,RunBlocking,Catch,RunRoute,BreakTackle,HoldOntoBall,PowerRunStyle,PassAccuracy,PassArmStrength,PassReadCoverage,Tackle,KickPower,KickAccuracy,Stamina,Durability,Leadership,Scramble,Composure,Consistency,Aggressiveness,";
-        private const string mAppearanceString = "College,DOB,PBP,Photo,YearsPro,Hand,Weight,Height,BodyType,Skin,Face,Dreads,Helmet,FaceMask,Visor,EyeBlack,MouthPiece,LeftGlove,RightGlove,LeftWrist,RightWrist,LeftElbow,RightElbow,Sleeves,LeftShoe,RightShoe,NeckRoll,Turtleneck,";
+        private const string mAppearanceString = "Number,College,DOB,PBP,Photo,YearsPro,Hand,Weight,Height,BodyType,Skin,Face,Dreads,Helmet,FaceMask,Visor,EyeBlack,MouthPiece,LeftGlove,RightGlove,LeftWrist,RightWrist,LeftElbow,RightElbow,Sleeves,LeftShoe,RightShoe,NeckRoll,Turtleneck,";
         
         /// <summary>
         /// Returns true when a new key is set, false if it's the same key
@@ -118,10 +119,18 @@ namespace NFL2K5Tool
         private void ClearControls(Control parentControl)
         {
             Control c = null;
+            IntAttrControl iac = null;
+            StringSelectionControl ssc = null;
             for (int i = parentControl.Controls.Count - 1; i > -1; i--)
             {
                 c = parentControl.Controls[i];
                 parentControl.Controls.Remove(c);
+                ssc = c as StringSelectionControl;
+                iac = c as IntAttrControl;
+                if( ssc != null)
+                    ssc.ValueChanged -= new EventHandler(ValueChanged);
+                else if( iac != null)
+                    iac.ValueChanged -= new EventHandler(ValueChanged);
                 c.Dispose();
             }
         }
@@ -142,32 +151,30 @@ namespace NFL2K5Tool
         private void AddAppearance(string appearance)
         {
             Control c = null;
-            IntAttrControl intAttrCtrl;
+            IntAttrControl intAttrCtrl = null;
+            StringSelectionControl ctrl = null;
             if( "Weight,DOB,YearsPro,".IndexOf(appearance+",") > -1)
             {
                 switch( appearance)
                 {
+                    case "Number":
                     case "YearsPro":
                         intAttrCtrl = new IntAttrControl();
                         intAttrCtrl.Name = intAttrCtrl.Text = appearance;
-                        c = intAttrCtrl;
                         break;
                     case "Weight":
                         intAttrCtrl = new IntAttrControl();
                         intAttrCtrl.Name = intAttrCtrl.Text = appearance;
                         intAttrCtrl.Min = 150;
                         intAttrCtrl.Max = intAttrCtrl.Min + 255;
-                        c = intAttrCtrl;
                         break;
                     case "DOB":
                         break;
                 }
             }
             else {
-                StringSelectionControl ctrl = new StringSelectionControl();
-                c = ctrl;
+                ctrl = new StringSelectionControl();
                 ctrl.Name = ctrl.Text = appearance;
-                c = ctrl;
                 switch (appearance)
                 {
                     case "Hand": ctrl.RepresentedValue = typeof(Hand); break;
@@ -217,6 +224,17 @@ namespace NFL2K5Tool
                         break;
                 }
             }
+            if (intAttrCtrl != null)
+            {
+                intAttrCtrl.ValueChanged += new EventHandler(ValueChanged);
+                c = intAttrCtrl;
+            }
+            else if (ctrl != null)
+            {
+                ctrl.ValueChanged += new EventHandler(ValueChanged);
+                c = ctrl;
+            }
+
             if (c != null)
             {
                 int row = mAppearanceTab.Controls.Count / 5;
@@ -237,7 +255,14 @@ namespace NFL2K5Tool
             {
                 int index = m_TeamsComboBox.Items.IndexOf(value);
                 if (index > -1)
+                {
                     m_TeamsComboBox.SelectedIndex = index;
+                    string[] players = GetTeamPlayers(value);
+                    if (players != null)
+                        mPlayerIndexUpDown.Maximum = players.Length;
+                    else
+                       mPlayerIndexUpDown.Maximum = 0;
+                }
             }
         }
 
@@ -269,7 +294,17 @@ namespace NFL2K5Tool
             {
                 m_TeamsComboBox.SelectedIndex = index;
             }
-            SetPlayerData(playerLine);
+            string[] players = GetTeamPlayers(team);
+            for (int i = 0; i < players.Length; i++)
+            {
+                if (players[i].StartsWith(playerLine))
+                {
+                    mPlayerIndexUpDown.Value = i;
+                    break;
+                }
+            }
+            SetCurrentPlayer();
+            mInitializing = false;
         }
 
         private void SetupTeams()
@@ -312,7 +347,7 @@ namespace NFL2K5Tool
             int currentTeamIndex = -1;
             string nextTeam = null;
 
-            Regex findTeamRegex = new Regex("TEAM\\s*=\\s*" + team);
+            Regex findTeamRegex = new Regex("TEAM\\s*=\\s*" + team, RegexOptions.IgnoreCase);
 
             Match m = findTeamRegex.Match(Data);
             if (!m.Success)
@@ -332,7 +367,6 @@ namespace NFL2K5Tool
             }
             if (nextTeamIndex < 0)
                 nextTeamIndex = Data.Length;
-
 
             int playerIndex = Data.IndexOf(oldPlayer, currentTeamIndex);
             if (playerIndex > -1)
@@ -379,9 +413,7 @@ namespace NFL2K5Tool
             List<string> playerParts = InputParser.ParsePlayerLine(playerLine);
             
             for (int i = 0; i < playerParts.Count; i++)
-            {
                 SetControlValue(mKeyParts[i], playerParts[i]);
-            }
         }
 
         private void SetControlValue(string controlName, string val)
@@ -452,7 +484,8 @@ namespace NFL2K5Tool
         {
             string retVal = "";
             if ((retVal = GetControlValue(mSkillsTab, controlName)) == null )
-                retVal = GetControlValue(mAppearanceTab, controlName);
+                if((retVal = GetControlValue(mAppearanceTab, controlName)) == null)
+                    retVal = GetControlValue(this, controlName);
             return retVal;
         }
 
@@ -465,20 +498,23 @@ namespace NFL2K5Tool
             {
                 if (c.Name == controlName)
                 {
+                    TextBox tb = c as TextBox;
                     IntAttrControl iac = c as IntAttrControl;
                     StringSelectionControl ssc = c as StringSelectionControl;
                     if (iac != null)
                         return iac.Value.ToString();
                     else if (ssc != null)
                     {
-                        if (controlName == "PBP" )
+                        if (controlName == "PBP" && PBPs.ContainsKey(ssc.Value))
                             return PBPs[ssc.Value];
-                        else if( controlName == "Photo")
+                        else if (controlName == "Photo" && Photos.ContainsKey(ssc.Value))
                             return Photos[ssc.Value];
                         else if (controlName == "College" && ssc.Value.IndexOf(',') > -1)
                             return string.Concat("\"", ssc.Value, "\"");
                         return ssc.Value;
                     }
+                    else if (tb != null)
+                        return tb.Text;
                 }
             }
             return null;
@@ -487,22 +523,42 @@ namespace NFL2K5Tool
         /// <summary>
         /// Gets a player 'line' from Data from 'team' playing 'position'.
         /// </summary>
-        /// <param name="team"></param>
-        /// <param name="position"></param>
-        /// <returns>the line </returns>
+        /// <param name="team">The team</param>
+        /// <param name="playerIndex">the player index on the team</param>
+        /// <returns>the player line </returns>
         private string GetPlayerString(string team, int playerIndex)
         {
-            string pattern = "TEAM\\s*=\\s*" + team;
-            Regex findTeamRegex = new Regex(pattern, RegexOptions.IgnoreCase);
+            string[] players = GetTeamPlayers(team);
+            if (players != null && playerIndex < players.Length)
+                return players[playerIndex];
+
+            return null;
+        }
+
+        private string[] GetTeamPlayers(string team)
+        {
+            Regex findTeamRegex = new Regex("TEAM\\s*=\\s*" + team, RegexOptions.IgnoreCase);
+            Regex nextTeam = new Regex("TEAM\\s*=\\s*", RegexOptions.IgnoreCase);
+            Regex player = new Regex("(K,.+)|(QB,.+)|(P,.+)|(WR,.+)|(CB,.+)|(FS,.+)|(SS,.+)|(RB,.+)|(FB,.+)|(TE,.+)|(OLB,.+)|(ILB,.+)|(C,.+)|(G,.+)|(T,.+)|(DT,.+)|(DE,.+)");
             Match m = findTeamRegex.Match(Data);
+            Match m2;
+            string chunk = "";
             if (m != Match.Empty)
             {
-                int teamIndex = m.Index;
-                if (teamIndex == -1)
-                    return null;
-                int lineEnd = Data.IndexOf("\n", playerIndex + 1);
-                string playerLine = Data.Substring(playerIndex, lineEnd - playerIndex);
-                return playerLine;
+                m2 = nextTeam.Match(Data, m.Index + m.Length);
+                int end = Data.Length;
+                if (m2 != Match.Empty)
+                    end = m2.Index;
+
+                chunk = Data.Substring(m.Index, end - m.Index);
+                MatchCollection mc = player.Matches(chunk);
+                if (mc.Count > 0)
+                {
+                    string[] retVal = new string[mc.Count];
+                    for (int i = 0; i < retVal.Length; i++)
+                        retVal[i] = mc[i].Value;
+                    return retVal;
+                }
             }
             return null;
         }
@@ -510,18 +566,65 @@ namespace NFL2K5Tool
         /// <summary>
         /// Returns the text representation of what the GUI is presenting.
         /// </summary>
-        /// <returns></returns>
         public string GetPlayerString_UI()
         {
             StringBuilder sb = new StringBuilder(60);
-            sb.Append("position");
-            sb.Append(", ");
-            sb.Append(fname.Text);
-            sb.Append(",");
-            sb.Append(lname.Text);
-            sb.Append(",");
-            //TODO: more stuff filled out here
+            string a = "";
+            for (int i = 0; i < mKeyParts.Length; i++)
+            {
+                a = GetControlValue(mKeyParts[i]);
+                if (!String.IsNullOrEmpty(a))
+                {
+                    sb.Append(a);
+                    sb.Append(",");
+                }
+            }
             return sb.ToString();
+        }
+
+        private void mNextButton_Click(object sender, EventArgs e)
+        {
+            string[] players = GetTeamPlayers(m_TeamsComboBox.SelectedItem.ToString());
+            if (mPlayerIndexUpDown.Value < players.Length)
+                mPlayerIndexUpDown.Value++;
+            else if (m_TeamsComboBox.SelectedIndex < m_TeamsComboBox.Items.Count)
+                m_TeamsComboBox.SelectedIndex++;
+            else
+                m_TeamsComboBox.SelectedIndex = 0;
+        }
+
+        private void m_TeamsComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!mInitializing)
+            {
+                string[] players = GetTeamPlayers(m_TeamsComboBox.SelectedItem.ToString());
+                if (players != null)
+                {
+                    mPlayerIndexUpDown.Value = 0;
+                    mPlayerIndexUpDown.Maximum = players.Length;
+                }
+            }
+        }
+
+        private void mPlayerIndexUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if (!mInitializing)
+            {
+                SetCurrentPlayer();
+            }
+        }
+
+        private void mOkButton_Click(object sender, EventArgs e)
+        {
+            ReplacePlayer();
+        }
+
+        private void ValueChanged(object sender, System.EventArgs e)
+        {
+            if (!mInitializing)
+            {
+                ReplacePlayer();
+            }
         }
     }
 }

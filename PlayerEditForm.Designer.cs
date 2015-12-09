@@ -124,6 +124,7 @@
             this.mOkButton.TabIndex = 8;
             this.mOkButton.Text = "&OK";
             this.mOkButton.UseVisualStyleBackColor = true;
+            this.mOkButton.Click += new System.EventHandler(this.mOkButton_Click);
             // 
             // m_TeamsComboBox
             // 
@@ -132,6 +133,7 @@
             this.m_TeamsComboBox.Name = "m_TeamsComboBox";
             this.m_TeamsComboBox.Size = new System.Drawing.Size(121, 21);
             this.m_TeamsComboBox.TabIndex = 3;
+            this.m_TeamsComboBox.SelectedIndexChanged += new System.EventHandler(this.m_TeamsComboBox_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -160,6 +162,7 @@
             this.mNextButton.TabIndex = 7;
             this.mNextButton.Text = "&NextPlayer";
             this.mNextButton.UseVisualStyleBackColor = true;
+            this.mNextButton.Click += new System.EventHandler(this.mNextButton_Click);
             // 
             // mPreviousButton
             // 
@@ -182,6 +185,7 @@
             this.mPlayerIndexUpDown.Name = "mPlayerIndexUpDown";
             this.mPlayerIndexUpDown.Size = new System.Drawing.Size(62, 20);
             this.mPlayerIndexUpDown.TabIndex = 4;
+            this.mPlayerIndexUpDown.ValueChanged += new System.EventHandler(this.mPlayerIndexUpDown_ValueChanged);
             // 
             // Pos
             // 

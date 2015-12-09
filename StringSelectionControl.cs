@@ -74,5 +74,13 @@ namespace NFL2K5Tool
             mComboBox.Items.Clear();
             mComboBox.Items.AddRange(values);
         }
+
+        public event EventHandler ValueChanged;
+
+        private void mComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ValueChanged != null)
+                ValueChanged(this, e);
+        }
     }
 }
