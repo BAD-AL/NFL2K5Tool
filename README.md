@@ -50,3 +50,7 @@ Scrolls after closing player edit form.
 ###Also need
 	1. To add tests.
 	2. Test Photo and PBP (still need 2k2 photo file & 2k4 photo files)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/BAD-AL/nfl2k5tool/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
