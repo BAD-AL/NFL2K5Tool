@@ -35,6 +35,7 @@
             // mLabel
             // 
             this.mLabel.AutoSize = true;
+            this.mLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.mLabel.Location = new System.Drawing.Point(2, 2);
             this.mLabel.Name = "mLabel";
             this.mLabel.Size = new System.Drawing.Size(28, 13);

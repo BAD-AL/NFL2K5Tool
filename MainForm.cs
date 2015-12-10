@@ -104,6 +104,7 @@ namespace NFL2K5Tool
         /// <param name="text"></param>
         private void SetText( string text)
         {
+            mTextBox.SelectionLength = 0;
             mTextBox.Text = text;
             MatchCollection mc = mColorizeRegex.Matches(mTextBox.Text);
             foreach (Match m in mc)
@@ -467,13 +468,15 @@ namespace NFL2K5Tool
         {
             PlayerEditForm form = new PlayerEditForm();
             form.Colleges = mTool.GetColleges();
-            form.PBPs = DataMap.ReversePBPMap;
-            form.Photos = DataMap.ReversePhotoMap;
+            form.ReversePBPs = DataMap.ReversePBPMap;
+            form.ReversePhotos = DataMap.ReversePhotoMap;
+            form.PBPs = DataMap.PBPMap;
+            form.Photos = DataMap.PhotoMap;
             form.Data = mTextBox.Text;
             form.SelectionStart = mTextBox.SelectionStart;
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                mTextBox.Text = form.Data;
+                SetText(form.Data);
                 mTextBox.SelectionStart = form.SelectionStart;
                 mTextBox.ScrollToCaret();
             }

@@ -1,6 +1,6 @@
 ﻿namespace NFL2K5Tool
 {
-    partial class IntAttrControl
+    partial class DateValueControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,44 +28,43 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.mAttrUpDown = new System.Windows.Forms.NumericUpDown();
             this.mLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.mAttrUpDown)).BeginInit();
+            this.mDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
-            // 
-            // mAttrUpDown
-            // 
-            this.mAttrUpDown.Location = new System.Drawing.Point(6, 17);
-            this.mAttrUpDown.Maximum = new decimal(new int[] {
-            128,
-            0,
-            0,
-            0});
-            this.mAttrUpDown.Name = "mAttrUpDown";
-            this.mAttrUpDown.Size = new System.Drawing.Size(47, 20);
-            this.mAttrUpDown.TabIndex = 14;
-            this.mAttrUpDown.ValueChanged += new System.EventHandler(this.mAttrUpDown_ValueChanged);
             // 
             // mLabel
             // 
             this.mLabel.AutoSize = true;
             this.mLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.mLabel.Location = new System.Drawing.Point(3, 0);
+            this.mLabel.Location = new System.Drawing.Point(0, 4);
             this.mLabel.Name = "mLabel";
-            this.mLabel.Size = new System.Drawing.Size(102, 13);
-            this.mLabel.TabIndex = 13;
-            this.mLabel.Text = "PassReadCoverage";
+            this.mLabel.Size = new System.Drawing.Size(35, 13);
+            this.mLabel.TabIndex = 0;
+            this.mLabel.Text = "label1";
             // 
-            // IntAttrControl
+            // mDateTimePicker
+            // 
+            this.mDateTimePicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.mDateTimePicker.CustomFormat = "MM/dd/yyy";
+            this.mDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.mDateTimePicker.Location = new System.Drawing.Point(4, 21);
+            this.mDateTimePicker.MaxDate = new System.DateTime(2050, 12, 31, 0, 0, 0, 0);
+            this.mDateTimePicker.MinDate = new System.DateTime(1954, 1, 1, 0, 0, 0, 0);
+            this.mDateTimePicker.Name = "mDateTimePicker";
+            this.mDateTimePicker.Size = new System.Drawing.Size(119, 20);
+            this.mDateTimePicker.TabIndex = 1;
+            this.mDateTimePicker.ValueChanged += new System.EventHandler(this.DateChanged);
+            // 
+            // DateValueControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Controls.Add(this.mAttrUpDown);
+            this.Controls.Add(this.mDateTimePicker);
             this.Controls.Add(this.mLabel);
-            this.Name = "IntAttrControl";
+            this.Name = "DateValueControl";
             this.Size = new System.Drawing.Size(126, 48);
-            ((System.ComponentModel.ISupportInitialize)(this.mAttrUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -73,7 +72,8 @@
 
         #endregion
 
-        private System.Windows.Forms.NumericUpDown mAttrUpDown;
         private System.Windows.Forms.Label mLabel;
+        private System.Windows.Forms.DateTimePicker mDateTimePicker;
+
     }
 }

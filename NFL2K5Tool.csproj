@@ -47,6 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataMap.cs" />
+    <Compile Include="DateValueControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DateValueControl.Designer.cs">
+      <DependentUpon>DateValueControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="EnumDefinitions.cs" />
     <Compile Include="IntAttrControl.cs">
       <SubType>UserControl</SubType>
@@ -80,6 +86,10 @@
     <Compile Include="PlayerValidator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DateValueControl.resx">
+      <DependentUpon>DateValueControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="IntAttrControl.resx">
       <DependentUpon>IntAttrControl.cs</DependentUpon>
       <SubType>Designer</SubType>

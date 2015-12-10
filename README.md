@@ -20,6 +20,7 @@ Currently works well in the following use cases:
 
 Currently Buggy at:
 Automatic photo/PBP update. Need to update the name and photo files.
+Scrolls after closing player edit form.
 
 ###Implemented features:
 1. Auto update depth chart. 
@@ -34,9 +35,10 @@ Automatic photo/PBP update. Need to update the name and photo files.
 10. Warns possible error conditions for weight and body type (Like when a RB weighs 300+ lbs, or has XL body type). 
 11. User defined Player sort formulas
 12. Player validator (flag players that have attributes that don't seem right.); allow user defined formulas?
+13. Player edit gui
 
 ###Next features:  
-	1. Player edit GUI -- in progress
+	1. Add functionality to add a new name (maybe add a function to ensure all players have a unique first and last name)
 	2. Editing coaches. 
 	3. Editing playbooks. 
 	4. Add support for more Photos and names. 

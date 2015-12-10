@@ -35,12 +35,22 @@ namespace NFL2K5Tool
         /// <summary>
         /// PBP names
         /// </summary>
+        public Dictionary<string, string> ReversePBPs { get; set; }
+
+        /// <summary>
+        /// Photo names
+        /// </summary>
+        public Dictionary<string,string> ReversePhotos { get; set; }
+
+        /// <summary>
+        /// PBP names
+        /// </summary>
         public Dictionary<string, string> PBPs { get; set; }
 
         /// <summary>
         /// Photo names
         /// </summary>
-        public Dictionary<string,string> Photos { get; set; }
+        public Dictionary<string, string> Photos { get; set; }
 
         private string mData = "";
         /// <summary>
@@ -137,15 +147,26 @@ namespace NFL2K5Tool
 
         private void AddSkill(string skill)
         {
-            if (skill != "PowerRunStyle")
+            Control c = null;
+            if (skill == "PowerRunStyle")
             {
-                IntAttrControl ctrl = new IntAttrControl();
-                ctrl.Name = ctrl.Text = skill;
-                int row = mSkillsTab.Controls.Count / 5;
-                int col = mSkillsTab.Controls.Count % 5;
-                ctrl.Location = new Point(col * ctrl.Width, row * ctrl.Height);
-                mSkillsTab.Controls.Add(ctrl);
+                StringSelectionControl ssc = new StringSelectionControl();
+                ssc.RepresentedValue = typeof(PowerRunStyle);
+                ssc.Name = ssc.Text = skill;
+                ssc.ValueChanged += new EventHandler(ValueChanged);
+                c = ssc;
             }
+            else
+            {
+                IntAttrControl iac = new IntAttrControl();
+                iac.Name = iac.Text = skill;
+                iac.ValueChanged += new EventHandler(ValueChanged);
+                c = iac;
+            }
+            int row = mSkillsTab.Controls.Count / 5;
+            int col = mSkillsTab.Controls.Count % 5;
+            c.Location = new Point(col * c.Width, row * c.Height);
+            mSkillsTab.Controls.Add(c);
         }
 
         private void AddAppearance(string appearance)
@@ -153,7 +174,7 @@ namespace NFL2K5Tool
             Control c = null;
             IntAttrControl intAttrCtrl = null;
             StringSelectionControl ctrl = null;
-            if( "Weight,DOB,YearsPro,".IndexOf(appearance+",") > -1)
+            if( "Weight,DOB,YearsPro,Number,".IndexOf(appearance+",") > -1)
             {
                 switch( appearance)
                 {
@@ -161,6 +182,7 @@ namespace NFL2K5Tool
                     case "YearsPro":
                         intAttrCtrl = new IntAttrControl();
                         intAttrCtrl.Name = intAttrCtrl.Text = appearance;
+                        intAttrCtrl.Max = 99;
                         break;
                     case "Weight":
                         intAttrCtrl = new IntAttrControl();
@@ -169,6 +191,10 @@ namespace NFL2K5Tool
                         intAttrCtrl.Max = intAttrCtrl.Min + 255;
                         break;
                     case "DOB":
+                        DateValueControl dvc = new DateValueControl();
+                        dvc.Name = dvc.Text = appearance;
+                        dvc.ValueChanged += new EventHandler(ValueChanged);
+                        c = dvc;
                         break;
                 }
             }
@@ -211,15 +237,15 @@ namespace NFL2K5Tool
                         ctrl.SetItems(Colleges); 
                         break;
                     case "PBP":
-                        string[] values = new string[this.PBPs.Count];
-                        this.PBPs.Values.CopyTo(values, 0);
+                        string[] values = new string[this.ReversePBPs.Count];
+                        this.ReversePBPs.Values.CopyTo(values, 0);
                         ctrl.SetItems(values);
                         ctrl.DropDownStyle = ComboBoxStyle.DropDown;
                         break;
                     case "Photo":
                         ctrl.DropDownStyle = ComboBoxStyle.DropDown;
-                        string[] vals = new string[this.Photos.Count];
-                        this.Photos.Values.CopyTo(vals, 0);
+                        string[] vals = new string[this.ReversePhotos.Count];
+                        this.ReversePhotos.Values.CopyTo(vals, 0);
                         ctrl.SetItems(vals);
                         break;
                 }
@@ -380,7 +406,7 @@ namespace NFL2K5Tool
                 tmp.Append(newPlayer);
                 tmp.Append(last);
 
-                Data = tmp.ToString();
+                mData = tmp.ToString();
             }
             else
             {
@@ -431,26 +457,33 @@ namespace NFL2K5Tool
                 {
                     IntAttrControl iac = c as IntAttrControl;
                     StringSelectionControl ssc = c as StringSelectionControl;
+                    DateValueControl dvc = c as DateValueControl;
+
                     if (iac != null)
                     {
                         iac.Value = Int32.Parse(val);
+                        return true;
+                    }
+                    else if (dvc != null)
+                    {
+                        dvc.Value = val;
                         return true;
                     }
                     else if (ssc != null)
                     {
                         if (controlName == "PBP")
                         {
-                            if (PBPs.ContainsKey(val))
+                            if (ReversePBPs.ContainsKey(val))
                             {
-                                ssc.Value = PBPs[val];
+                                ssc.Value = ReversePBPs[val];
                                 return true;
                             }
                         }
                         else if (controlName == "Photo")
                         {
-                            if (Photos.ContainsKey(val))
+                            if (ReversePhotos.ContainsKey(val))
                             {
-                                ssc.Value = Photos[val];
+                                ssc.Value = ReversePhotos[val];
                                 return true;
                             }
                         }
@@ -501,14 +534,21 @@ namespace NFL2K5Tool
                     TextBox tb = c as TextBox;
                     IntAttrControl iac = c as IntAttrControl;
                     StringSelectionControl ssc = c as StringSelectionControl;
+                    DateValueControl dvc = c as DateValueControl;
                     if (iac != null)
                         return iac.Value.ToString();
+                    else if (dvc != null)
+                        return dvc.Value;
                     else if (ssc != null)
                     {
                         if (controlName == "PBP" && PBPs.ContainsKey(ssc.Value))
+                        {
                             return PBPs[ssc.Value];
+                        }
                         else if (controlName == "Photo" && Photos.ContainsKey(ssc.Value))
+                        {
                             return Photos[ssc.Value];
+                        }
                         else if (controlName == "College" && ssc.Value.IndexOf(',') > -1)
                             return string.Concat("\"", ssc.Value, "\"");
                         return ssc.Value;
@@ -568,7 +608,7 @@ namespace NFL2K5Tool
         /// </summary>
         public string GetPlayerString_UI()
         {
-            StringBuilder sb = new StringBuilder(60);
+            StringBuilder sb = new StringBuilder(300);
             string a = "";
             for (int i = 0; i < mKeyParts.Length; i++)
             {
@@ -582,6 +622,16 @@ namespace NFL2K5Tool
             return sb.ToString();
         }
 
+        private void mPreviousButton_Click(object sender, EventArgs e)
+        {
+            if (mPlayerIndexUpDown.Value > 0)
+                mPlayerIndexUpDown.Value--;
+            else if (m_TeamsComboBox.SelectedIndex > 0)
+                m_TeamsComboBox.SelectedIndex--;
+
+            SetCurrentPlayer();
+        }
+
         private void mNextButton_Click(object sender, EventArgs e)
         {
             string[] players = GetTeamPlayers(m_TeamsComboBox.SelectedItem.ToString());
@@ -591,6 +641,8 @@ namespace NFL2K5Tool
                 m_TeamsComboBox.SelectedIndex++;
             else
                 m_TeamsComboBox.SelectedIndex = 0;
+            
+            SetCurrentPlayer();
         }
 
         private void m_TeamsComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -602,16 +654,16 @@ namespace NFL2K5Tool
                 {
                     mPlayerIndexUpDown.Value = 0;
                     mPlayerIndexUpDown.Maximum = players.Length;
+                    SetCurrentPlayer();
                 }
             }
         }
 
         private void mPlayerIndexUpDown_ValueChanged(object sender, EventArgs e)
         {
-            if (!mInitializing)
-            {
-                SetCurrentPlayer();
-            }
+            mInitializing = true;
+            SetCurrentPlayer();
+            mInitializing = false;
         }
 
         private void mOkButton_Click(object sender, EventArgs e)
@@ -626,5 +678,12 @@ namespace NFL2K5Tool
                 ReplacePlayer();
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string newPlayer = GetPlayerString_UI();
+            MessageBox.Show(newPlayer);
+        }
+
     }
 }

@@ -43,6 +43,7 @@
             this.mPreviousButton = new System.Windows.Forms.Button();
             this.mPlayerIndexUpDown = new System.Windows.Forms.NumericUpDown();
             this.Pos = new NFL2K5Tool.StringSelectionControl();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).BeginInit();
             this.SuspendLayout();
@@ -53,6 +54,7 @@
             this.fname.Name = "fname";
             this.fname.Size = new System.Drawing.Size(100, 20);
             this.fname.TabIndex = 0;
+            this.fname.Leave += new System.EventHandler(this.ValueChanged);
             // 
             // lname
             // 
@@ -60,6 +62,7 @@
             this.lname.Name = "lname";
             this.lname.Size = new System.Drawing.Size(100, 20);
             this.lname.TabIndex = 1;
+            this.lname.Leave += new System.EventHandler(this.ValueChanged);
             // 
             // label1
             // 
@@ -128,6 +131,7 @@
             // 
             // m_TeamsComboBox
             // 
+            this.m_TeamsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_TeamsComboBox.FormattingEnabled = true;
             this.m_TeamsComboBox.Location = new System.Drawing.Point(444, 24);
             this.m_TeamsComboBox.Name = "m_TeamsComboBox";
@@ -173,6 +177,7 @@
             this.mPreviousButton.TabIndex = 6;
             this.mPreviousButton.Text = "&Prev Player";
             this.mPreviousButton.UseVisualStyleBackColor = true;
+            this.mPreviousButton.Click += new System.EventHandler(this.mPreviousButton_Click);
             // 
             // mPlayerIndexUpDown
             // 
@@ -197,12 +202,25 @@
             this.Pos.Size = new System.Drawing.Size(106, 48);
             this.Pos.TabIndex = 2;
             this.Pos.Value = "";
+            this.Pos.ValueChanged += new System.EventHandler(this.ValueChanged);
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.Location = new System.Drawing.Point(291, 403);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(82, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "Show player string";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // PlayerEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(669, 427);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.Pos);
             this.Controls.Add(this.mPlayerIndexUpDown);
             this.Controls.Add(this.mPreviousButton);
@@ -242,5 +260,6 @@
         private System.Windows.Forms.Button mPreviousButton;
         private System.Windows.Forms.NumericUpDown mPlayerIndexUpDown;
         private StringSelectionControl Pos;
+        private System.Windows.Forms.Button button1;
     }
 }
