@@ -7,7 +7,7 @@ namespace NFL2K5Tool
     /// <summary>
     /// Base class for some useful things.
     /// </summary>
-    public abstract class PlayerParser
+    public class PlayerParser
     {
         private string mKey;
         private string[] mKeyParts;
@@ -33,7 +33,7 @@ namespace NFL2K5Tool
         /// <summary>
         /// Get the player's value of 'attribute'
         /// </summary>
-        protected string Get(List<string> playerParts, string attribute)
+        public string Get(List<string> playerParts, string attribute)
         {
             string retVal = "";
             int index = -1;

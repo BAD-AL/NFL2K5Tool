@@ -461,7 +461,11 @@ namespace NFL2K5Tool
 
         private void DoubleClicked()
         {
-             EditPlayer();
+            string line = InputParser.GetLine(mTextBox.SelectionStart, mTextBox.Text);
+            if (!String.IsNullOrEmpty(line) && InputParser.ParsePlayerLine(line).Count > 2)
+            {
+                EditPlayer();
+            }
         }
 
         private void EditPlayer()

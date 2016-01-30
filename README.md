@@ -21,6 +21,7 @@ Currently works well in the following use cases:
 Currently Buggy at:
 Automatic photo/PBP update. Need to update the name and photo files.
 Scrolls after closing player edit form.
+Scheduler having trouble losing games
 
 ###Implemented features:
 1. Auto update depth chart. 

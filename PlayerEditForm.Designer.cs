@@ -42,8 +42,8 @@
             this.mNextButton = new System.Windows.Forms.Button();
             this.mPreviousButton = new System.Windows.Forms.Button();
             this.mPlayerIndexUpDown = new System.Windows.Forms.NumericUpDown();
-            this.Pos = new NFL2K5Tool.StringSelectionControl();
             this.button1 = new System.Windows.Forms.Button();
+            this.Pos = new NFL2K5Tool.StringSelectionControl();
             this.tabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).BeginInit();
             this.SuspendLayout();
@@ -192,6 +192,18 @@
             this.mPlayerIndexUpDown.TabIndex = 4;
             this.mPlayerIndexUpDown.ValueChanged += new System.EventHandler(this.mPlayerIndexUpDown_ValueChanged);
             // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.Location = new System.Drawing.Point(291, 403);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(82, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "Show player string";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Pos
             // 
             this.Pos.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -203,17 +215,6 @@
             this.Pos.TabIndex = 2;
             this.Pos.Value = "";
             this.Pos.ValueChanged += new System.EventHandler(this.ValueChanged);
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(291, 403);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(82, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Show player string";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // PlayerEditForm
             // 

@@ -280,19 +280,23 @@ namespace NFL2K5Tool
             {
                 sDelim = CharCount(line, ';') > CharCount(line, ',') ? sSemiColon : sComma;
             }
-            List<string> retVal = new List<string>(line.Split(sDelim));
-            for (int i = 0; i < retVal.Count; i++)
+            List<string> retVal = null;
+            if (!String.IsNullOrEmpty(line))
             {
-                // Fixup the issue with commas inside quoted strings. 
-                // (This however only works for strings that have 1 comma inside)
-                if (retVal[i].EndsWith("\"") && i > 0 && retVal[i - 1].StartsWith("\""))
+                retVal = new List<string>(line.Split(sDelim));
+                for (int i = 0; i < retVal.Count; i++)
                 {
-                    retVal[i - 1] += ( sDelim[0] + retVal[i]);
-                    retVal.RemoveAt(i);
-                }
-                else if (retVal[i].Length == 0) // remove empty strings
-                {
-                    retVal.RemoveAt(i);
+                    // Fixup the issue with commas inside quoted strings. 
+                    // (This however only works for strings that have 1 comma inside)
+                    if (retVal[i].EndsWith("\"") && i > 0 && retVal[i - 1].StartsWith("\""))
+                    {
+                        retVal[i - 1] += (sDelim[0] + retVal[i]);
+                        retVal.RemoveAt(i);
+                    }
+                    else if (retVal[i].Length == 0) // remove empty strings
+                    {
+                        retVal.RemoveAt(i);
+                    }
                 }
             }
             return retVal;
@@ -396,6 +400,34 @@ namespace NFL2K5Tool
             }
         }
 
+        /// <summary>
+        /// get all necessary player names.
+        /// Put them in the Save file.
+        /// </summary>
+        /// <returns>a list of NameObjects we can use to reference when inserting players, sorted by name.</returns>
+        private static List<NameObject> SetupNames(GamesaveTool tool, string[] lines, string key)
+        {
+            List<string> neededNames = NameHelper.GetNeededNames(lines, key);
+            List<NameObject> allNamesInSave = NameHelper.GetAllNames(tool);
+            List<NameObject> unNeededNames = new List<NameObject>(200);
+            Dictionary<string, NameObject> nameMap = new Dictionary<string, NameObject>(3000);
+            NameObjectComparer noc = new NameObjectComparer(NameObjectCompareMode.Name);
+            allNamesInSave.Sort(noc);
+            NameObject tmp = new NameObject();
+            NameObject reference = null;
+            int index = -1;
+            //populate unneeded names
+            for (int i = 0; i < allNamesInSave.Count; i++)
+            {
+                index = neededNames.BinarySearch(allNamesInSave[i].Name);
+                if (index < 0)
+                    unNeededNames.Add(allNamesInSave[i]);
+            }
+            // populate name map
+            
+
+            return null;
+        }
 
         #region SetBytes logic
 

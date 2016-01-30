@@ -321,16 +321,19 @@ namespace NFL2K5Tool
                 m_TeamsComboBox.SelectedIndex = index;
             }
             string[] players = GetTeamPlayers(team);
-            for (int i = 0; i < players.Length; i++)
+            if (players != null)
             {
-                if (players[i].StartsWith(playerLine))
+                for (int i = 0; i < players.Length; i++)
                 {
-                    mPlayerIndexUpDown.Value = i;
-                    break;
+                    if (players[i].StartsWith(playerLine))
+                    {
+                        mPlayerIndexUpDown.Value = i;
+                        break;
+                    }
                 }
+                SetCurrentPlayer();
+                mInitializing = false; // keep it here, initialization failed
             }
-            SetCurrentPlayer();
-            mInitializing = false;
         }
 
         private void SetupTeams()
