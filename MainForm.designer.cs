@@ -412,7 +412,6 @@
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "List This many";
-            this.groupBox1.Visible = false;
             // 
             // mSaveButton
             // 

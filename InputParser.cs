@@ -164,7 +164,8 @@ namespace NFL2K5Tool
 
         public void ProcessLines(string[] lines)
         {
-            Tool.GetKey(true, true); // TODO, plumb support for specifying 'Key'; Figure out what to take in
+            //Tool.SetKey(null); // clear any previous custom key
+            Tool.GetKey(true, true);
             int i = 0;
             try
             {
@@ -198,6 +199,10 @@ namespace NFL2K5Tool
 
             if (line.StartsWith("#") || line.Length < 1)
             {
+            }
+            else if (line.StartsWith("KEY=", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Tool.SetKey(line.Substring(4));
             }
             else if (line.StartsWith("SET"))
             {
@@ -400,7 +405,7 @@ namespace NFL2K5Tool
             }
         }
 
-        /// <summary>
+        /*// <summary>
         /// get all necessary player names.
         /// Put them in the Save file.
         /// </summary>
@@ -427,7 +432,7 @@ namespace NFL2K5Tool
             
 
             return null;
-        }
+        }*/
 
         #region SetBytes logic
 

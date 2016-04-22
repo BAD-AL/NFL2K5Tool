@@ -581,7 +581,20 @@ namespace NFL2K5Tool
                 if (File.Exists(fileName))
                     File.Delete(fileName);
                 File.WriteAllBytes(fileName, GameSaveData);
-                // Can't sign just a .DAT file.
+
+                //Attempt to sign 'EXTRA' file in the same directory as the save file
+                int index = fileName.LastIndexOf('\\') +1;
+                if (index > 0)
+                {
+                    string extraFile = fileName.Substring(0, index) + "EXTRA";
+                    if (File.Exists(extraFile))
+                    {
+                        string tmpFile = Path.GetTempFileName();
+                        StaticUtils.SignNfl2K5Save(tmpFile, GameSaveData);
+                        File.Copy(tmpFile, extraFile, true);
+                        File.Delete(tmpFile);
+                    }
+                }
                 Console.WriteLine("Data successfully written to file: {0}.", fileName);
             }
             else if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) && mZipFile.Length > 4)
@@ -660,15 +673,29 @@ namespace NFL2K5Tool
 
         public int MaxPlayers { get { return mMaxPlayers; } }
 
+        private string mCustomKey = null;
         /// <summary>
         /// The attributes key
         /// </summary>
         public string GetKey(bool attributes, bool appearance)
         {
+            string retVal = "";
+            if (!string.IsNullOrEmpty(mCustomKey))
+                retVal = mCustomKey;
+            else 
+                retVal = GetDefaultKey(attributes, appearance);
+
+            if (retVal[0] != '#')
+                retVal = "#" + retVal;
+            return retVal;
+        }
+
+        private string GetDefaultKey(bool attributes, bool appearance)
+        {
             StringBuilder builder = new StringBuilder(350);
             StringBuilder dummy = new StringBuilder(200);
             int prevLength = 0;
-            builder.Append("#Pos,fname,lname,Number,");
+            builder.Append("#Position,fname,lname,JerseyNumber,");
             int size = 4;
             if (attributes)
                 size += mAttributeOrder.Length;
@@ -706,6 +733,45 @@ namespace NFL2K5Tool
             return builder.ToString();
         }
 
+        public void SetKey(string line)
+        {
+            if ( !string.IsNullOrEmpty(line) && line.StartsWith("KEY=", StringComparison.InvariantCultureIgnoreCase))
+                line = line.Substring(4);
+            mCustomKey = line;
+            if (!string.IsNullOrEmpty(mCustomKey))
+            {
+                string[] parts = mCustomKey.Split(",".ToCharArray());
+                mOrder = new int[parts.Length];
+                for (int i = 0; i < parts.Length; i++)
+                {
+                    mOrder[i] = GetAttributeValue(parts[i]);
+                }
+            }
+        }
+
+        // returns Int32.MinValue on error.
+        private int GetAttributeValue(string a)
+        {
+            if (a == "fname") return -1;
+            if (a == "lname") return -2;
+            try
+            {
+                PlayerOffsets po = (PlayerOffsets)Enum.Parse(typeof(PlayerOffsets), a);
+                return (int)po;
+            }
+            catch { }
+            try
+            {
+                AppearanceAttributes aa = (AppearanceAttributes)Enum.Parse(typeof(AppearanceAttributes), a);
+                return (int)aa;
+            }
+            catch
+            {
+                StaticUtils.AddError("Attribute '" + a + "' is invalid");
+            }
+            return Int32.MinValue;
+        }
+
         /// <summary>
         /// Default Attribute order: 
         /// #fname,lname,position,number,Speed,Agility,Strength,Jumping,Coverage,PassRush,RunCoverage,PassBlocking,RunBlocking,Catch,RunRoute,
@@ -723,18 +789,34 @@ namespace NFL2K5Tool
         public string GetPlayerData(int player, bool attributes, bool appearance)
         {
             StringBuilder builder = new StringBuilder(300);
+            int attr=0;
+            if (mOrder == null || mOrder.Length < 1)
+                GetKey(attributes, appearance);
+            for (int i = 0; i < mOrder.Length; i++)
+            {
+                attr = mOrder[i];
+                if (attr == -1)
+                    builder.Append(GetPlayerFirstName(player));
+                else if (attr == -2)
+                    builder.Append(GetPlayerLastName(player));
+                else if (attr >= (int)AppearanceAttributes.College)
+                    GetPlayerAppearanceAttribute(player, (AppearanceAttributes)attr, builder);
+                else
+                    builder.Append(GetAttribute(player, (PlayerOffsets)attr));
+                if( builder[builder.Length -1] != ',')
+                    builder.Append(",");
+            }
+            //builder.Append(GetPlayerPosition(player));
+            //builder.Append(',');
+            //builder.Append(GetPlayerName(player, ','));
+            //builder.Append(',');
+            //builder.Append(GetAttribute(player, PlayerOffsets.JerseyNumber));
+            //builder.Append(',');
 
-            builder.Append(GetPlayerPosition(player));
-            builder.Append(',');
-            builder.Append(GetPlayerName(player, ','));
-            builder.Append(',');
-            builder.Append(GetAttribute(player, PlayerOffsets.JerseyNumber));
-            builder.Append(',');
-            
-            if (attributes)
-                GetPlayerAttributes(player,builder);
-            if (appearance)
-                GetPlayerappearance(player, builder);
+            //if (attributes)
+            //    GetPlayerAttributes(player, builder);
+            //if (appearance)
+            //    GetPlayerAppearance(player, builder);
 
             return builder.ToString();
         }
@@ -750,7 +832,7 @@ namespace NFL2K5Tool
             return ret;
         }
 
-        private void GetPlayerappearance(int player, StringBuilder builder)
+        private void GetPlayerAppearance(int player, StringBuilder builder)
         {
             foreach (AppearanceAttributes attr in this.mAppearanceOrder)
             {
@@ -937,6 +1019,9 @@ namespace NFL2K5Tool
             int val = GameSaveData[loc];
             switch (attr)
             {
+                case PlayerOffsets.Position:
+                    retVal = GetPlayerPosition(player);
+                    break;
                 case PlayerOffsets.PowerRunStyle:
                     PowerRunStyle style = (PowerRunStyle)val;
                     retVal = style.ToString();

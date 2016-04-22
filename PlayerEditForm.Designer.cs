@@ -43,7 +43,7 @@
             this.mPreviousButton = new System.Windows.Forms.Button();
             this.mPlayerIndexUpDown = new System.Windows.Forms.NumericUpDown();
             this.button1 = new System.Windows.Forms.Button();
-            this.Pos = new NFL2K5Tool.StringSelectionControl();
+            this.Position = new NFL2K5Tool.StringSelectionControl();
             this.tabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).BeginInit();
             this.SuspendLayout();
@@ -183,7 +183,7 @@
             // 
             this.mPlayerIndexUpDown.Location = new System.Drawing.Point(588, 26);
             this.mPlayerIndexUpDown.Maximum = new decimal(new int[] {
-            58,
+            1158,
             0,
             0,
             0});
@@ -204,17 +204,17 @@
             this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // Pos
+            // Position
             // 
-            this.Pos.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Pos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Pos.Location = new System.Drawing.Point(227, 7);
-            this.Pos.Name = "Pos";
-            this.Pos.RepresentedValue = typeof(string);
-            this.Pos.Size = new System.Drawing.Size(106, 48);
-            this.Pos.TabIndex = 2;
-            this.Pos.Value = "";
-            this.Pos.ValueChanged += new System.EventHandler(this.ValueChanged);
+            this.Position.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Position.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Position.Location = new System.Drawing.Point(227, 7);
+            this.Position.Name = "Position";
+            this.Position.RepresentedValue = typeof(string);
+            this.Position.Size = new System.Drawing.Size(106, 48);
+            this.Position.TabIndex = 2;
+            this.Position.Value = "";
+            this.Position.ValueChanged += new System.EventHandler(this.ValueChanged);
             // 
             // PlayerEditForm
             // 
@@ -222,7 +222,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(669, 427);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.Pos);
+            this.Controls.Add(this.Position);
             this.Controls.Add(this.mPlayerIndexUpDown);
             this.Controls.Add(this.mPreviousButton);
             this.Controls.Add(this.mNextButton);
@@ -260,7 +260,7 @@
         private System.Windows.Forms.Button mNextButton;
         private System.Windows.Forms.Button mPreviousButton;
         private System.Windows.Forms.NumericUpDown mPlayerIndexUpDown;
-        private StringSelectionControl Pos;
+        private StringSelectionControl Position;
         private System.Windows.Forms.Button button1;
     }
 }

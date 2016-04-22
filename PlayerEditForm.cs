@@ -22,9 +22,9 @@ namespace NFL2K5Tool
             InitializeComponent();
 
             // issues setting these in the designer; too lazy to set the attributes on the controls to get it to work.
-            Pos.Text = "Position";
-            Pos.RepresentedValue = typeof(Positions);
-            Pos.BorderStyle = BorderStyle.None;
+            Position.Text = "Position";
+            Position.RepresentedValue = typeof(Positions);
+            Position.BorderStyle = BorderStyle.None;
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace NFL2K5Tool
         }
         private string mKeyString = "";
         private const string mSkillsString = "Speed,Agility,Strength,Jumping,Coverage,PassRush,RunCoverage,PassBlocking,RunBlocking,Catch,RunRoute,BreakTackle,HoldOntoBall,PowerRunStyle,PassAccuracy,PassArmStrength,PassReadCoverage,Tackle,KickPower,KickAccuracy,Stamina,Durability,Leadership,Scramble,Composure,Consistency,Aggressiveness,";
-        private const string mAppearanceString = "Number,College,DOB,PBP,Photo,YearsPro,Hand,Weight,Height,BodyType,Skin,Face,Dreads,Helmet,FaceMask,Visor,EyeBlack,MouthPiece,LeftGlove,RightGlove,LeftWrist,RightWrist,LeftElbow,RightElbow,Sleeves,LeftShoe,RightShoe,NeckRoll,Turtleneck,";
+        private const string mAppearanceString = "JerseyNumber,College,DOB,PBP,Photo,YearsPro,Hand,Weight,Height,BodyType,Skin,Face,Dreads,Helmet,FaceMask,Visor,EyeBlack,MouthPiece,LeftGlove,RightGlove,LeftWrist,RightWrist,LeftElbow,RightElbow,Sleeves,LeftShoe,RightShoe,NeckRoll,Turtleneck,";
         
         /// <summary>
         /// Returns true when a new key is set, false if it's the same key
@@ -76,7 +76,7 @@ namespace NFL2K5Tool
         private bool SetupKey()
         {
             bool retVal = false;
-            Regex keyReg = new Regex("^#(Pos,fname,lname,.*)", RegexOptions.IgnoreCase);
+            Regex keyReg = new Regex("^#(Position,fname,lname,.*)", RegexOptions.IgnoreCase);
             Match m = keyReg.Match(Data);
             if (m != Match.Empty )
             {
@@ -89,7 +89,7 @@ namespace NFL2K5Tool
             }
             else
             {
-                MessageBox.Show("Please make sure the key '#Pos,fname,lname...' is present at the top of the text box.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please make sure the key '#Position,fname,lname...' is present at the top of the text box.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return retVal;
         }
@@ -174,7 +174,7 @@ namespace NFL2K5Tool
             Control c = null;
             IntAttrControl intAttrCtrl = null;
             StringSelectionControl ctrl = null;
-            if( "Weight,DOB,YearsPro,Number,".IndexOf(appearance+",") > -1)
+            if( "Weight,DOB,YearsPro,JerseyNumber,".IndexOf(appearance+",") > -1)
             {
                 switch( appearance)
                 {
@@ -243,6 +243,9 @@ namespace NFL2K5Tool
                         ctrl.DropDownStyle = ComboBoxStyle.DropDown;
                         break;
                     case "Photo":
+                        ctrl.Dispose();
+                        ctrl = new PhotoChooser();
+                        ctrl.Name = ctrl.Text = appearance;
                         ctrl.DropDownStyle = ComboBoxStyle.DropDown;
                         string[] vals = new string[this.ReversePhotos.Count];
                         this.ReversePhotos.Values.CopyTo(vals, 0);

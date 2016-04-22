@@ -74,6 +74,24 @@
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PhotoChooser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PhotoChooser.Designer.cs">
+      <DependentUpon>PhotoChooser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PhotoDataEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PhotoDataEditor.Designer.cs">
+      <DependentUpon>PhotoDataEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PictureHelper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PictureHelper.Designer.cs">
+      <DependentUpon>PictureHelper.cs</DependentUpon>
+    </Compile>
     <Compile Include="PlayerEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +118,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PhotoChooser.resx">
+      <DependentUpon>PhotoChooser.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PhotoDataEditor.resx">
+      <DependentUpon>PhotoDataEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PictureHelper.resx">
+      <DependentUpon>PictureHelper.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PlayerEditForm.resx">

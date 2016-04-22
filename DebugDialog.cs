@@ -447,5 +447,17 @@ namespace NFL2K5Tool
             mResultsTextBox.Text = result.ToString();
         }
 
+        private void launchTempFormToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureHelper h = new PictureHelper();
+            h.Show();
+        }
+
+        private void launchPhotoDataEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PhotoDataEditor pde = new PhotoDataEditor();
+            pde.Show();
+        }
+
     }
 }
