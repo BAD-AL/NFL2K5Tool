@@ -325,6 +325,7 @@ namespace NFL2K5Tool
         public bool SetPlayerData(int player, string line, bool useExistingName)
         {
             bool retVal = false;
+            string attribute = "";
             if (player > -1 && player < Tool.MaxPlayers)
             {
                 int attr = -1;
@@ -334,31 +335,37 @@ namespace NFL2K5Tool
                     try
                     {
                         attr = Tool.Order[i];
+                        attribute = attributes[i];
                         if (attr == -1)
                         {
                             // Name setting perhaps should be done at another, smarter level?
                             // How we gonna decide to use pointers or not?
-                            Tool.SetPlayerFirstName(player, attributes[i], useExistingName);
+                            Tool.SetPlayerFirstName(player, attribute, useExistingName);
                         }
                         else if (attr == -2)
                         {
                             // How we gonna decide to use pointers or not?
-                            Tool.SetPlayerLastName(player, attributes[i], useExistingName);
+                            Tool.SetPlayerLastName(player, attribute, useExistingName);
+                        }
+                        else if (attribute == "?")
+                        {// do nothing
                         }
                         else if (attr >= (int)AppearanceAttributes.College)
                         {
-                            Tool.SetPlayerAppearanceAttribute(player, (AppearanceAttributes)attr, attributes[i]);
+                            if (attr != (int)AppearanceAttributes.College)
+                                attribute = attribute.Replace(" ", ""); // strip spaces
+                            Tool.SetPlayerAppearanceAttribute(player, (AppearanceAttributes)attr, attribute);
                         }
                         else
                         {
-                            Tool.SetAttribute(player, (PlayerOffsets)attr, attributes[i]);
+                            Tool.SetAttribute(player, (PlayerOffsets)attr, attribute);
                         }
                     }
                     catch (Exception)
                     {
                         string desc = attr > 99 ? ((AppearanceAttributes)attr).ToString() : ((PlayerOffsets)attr).ToString();
 
-                        StaticUtils.AddError("Error setting attribute '" + desc + "' to '" + attributes[i]);
+                        StaticUtils.AddError("Error setting attribute '" + desc + "' to '" + attribute);
                     }
                 }
                 retVal = true;

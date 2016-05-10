@@ -10,10 +10,20 @@ namespace NFL2K5Tool
 {
     public partial class MessageForm : Form
     {
+        /// <summary>
+        /// Raised when user doubleClicks in the textbox
+        /// </summary>
+        public event EventHandler TextClicked;
+
         public MessageForm(Icon icon)
         {
             InitializeComponent();
             this.Icon = icon;
+        }
+
+        public bool ShowCancelButton
+        {
+            set { this.mCancelButton.Visible = value; }
         }
 
         public bool MessageEditable
@@ -44,6 +54,33 @@ namespace NFL2K5Tool
         { 
             get { return mTextBox.Text; } 
             set { mTextBox.Text = value; } 
+        }
+
+        private void mOkButton_Click(object sender, EventArgs e)
+        {
+            if (!this.Modal)
+                Close();
+        }
+
+        private void mTextBox_DoubleClick(object sender, EventArgs e)
+        {
+            if (TextClicked != null)
+            {
+                this.TextClicked(this, new StringEventArgs(mTextBox.GetCurrentLine()));
+            }
+        }
+    }
+
+    public class StringEventArgs : EventArgs
+    {
+        /// <summary>
+        /// The string value
+        /// </summary>
+        public string Value { get; set; }
+
+        public StringEventArgs(string val)
+        {
+            Value = val;
         }
     }
 }

@@ -219,36 +219,37 @@ namespace NFL2K5Tool
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StringInputDlg));
             this.mOkButton = new System.Windows.Forms.Button();
             this.mCancelButton = new System.Windows.Forms.Button();
             this.mUserInput = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // okButton
+            // mOkButton
             // 
             this.mOkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.mOkButton.Location = new System.Drawing.Point(65, 64);
-            this.mOkButton.Name = "okButton";
+            this.mOkButton.Name = "mOkButton";
             this.mOkButton.Size = new System.Drawing.Size(60, 23);
             this.mOkButton.TabIndex = 1;
             this.mOkButton.Text = "OK";
             this.mOkButton.Click += new System.EventHandler(this.okButton_Click);
             // 
-            // cancelButton
+            // mCancelButton
             // 
             this.mCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.mCancelButton.Location = new System.Drawing.Point(141, 64);
-            this.mCancelButton.Name = "cancelButton";
+            this.mCancelButton.Name = "mCancelButton";
             this.mCancelButton.Size = new System.Drawing.Size(60, 23);
             this.mCancelButton.TabIndex = 2;
             this.mCancelButton.Text = "Cancel";
             this.mCancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
-            // userInput
+            // mUserInput
             // 
             this.mUserInput.Location = new System.Drawing.Point(56, 40);
-            this.mUserInput.Name = "userInput";
+            this.mUserInput.Name = "mUserInput";
             this.mUserInput.Size = new System.Drawing.Size(200, 20);
             this.mUserInput.TabIndex = 0;
             this.mUserInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.userInput_KeyDown);
@@ -270,6 +271,7 @@ namespace NFL2K5Tool
             this.Controls.Add(this.mCancelButton);
             this.Controls.Add(this.mOkButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "StringInputDlg";

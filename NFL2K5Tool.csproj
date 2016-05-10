@@ -74,11 +74,11 @@
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PhotoChooser.cs">
+    <Compile Include="PictureChooser.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PhotoChooser.Designer.cs">
-      <DependentUpon>PhotoChooser.cs</DependentUpon>
+    <Compile Include="PictureChooser.Designer.cs">
+      <DependentUpon>PictureChooser.cs</DependentUpon>
     </Compile>
     <Compile Include="PhotoDataEditor.cs">
       <SubType>Form</SubType>
@@ -120,8 +120,8 @@
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PhotoChooser.resx">
-      <DependentUpon>PhotoChooser.cs</DependentUpon>
+    <EmbeddedResource Include="PictureChooser.resx">
+      <DependentUpon>PictureChooser.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PhotoDataEditor.resx">

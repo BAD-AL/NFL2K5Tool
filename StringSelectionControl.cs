@@ -79,6 +79,11 @@ namespace NFL2K5Tool
 
         private void mComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            OnValueChanged(e);
+        }
+
+        protected virtual void OnValueChanged(EventArgs e)
+        {
             if (ValueChanged != null)
                 ValueChanged(this, e);
         }

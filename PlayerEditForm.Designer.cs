@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlayerEditForm));
             this.fname = new System.Windows.Forms.TextBox();
             this.lname = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -83,7 +84,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 51);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(645, 348);
+            this.tabControl1.Size = new System.Drawing.Size(645, 434);
             this.tabControl1.TabIndex = 5;
             // 
             // mSkillsTab
@@ -91,7 +92,7 @@
             this.mSkillsTab.Location = new System.Drawing.Point(4, 22);
             this.mSkillsTab.Name = "mSkillsTab";
             this.mSkillsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.mSkillsTab.Size = new System.Drawing.Size(637, 322);
+            this.mSkillsTab.Size = new System.Drawing.Size(637, 408);
             this.mSkillsTab.TabIndex = 0;
             this.mSkillsTab.Text = "Skills";
             this.mSkillsTab.UseVisualStyleBackColor = true;
@@ -101,7 +102,7 @@
             this.mAppearanceTab.Location = new System.Drawing.Point(4, 22);
             this.mAppearanceTab.Name = "mAppearanceTab";
             this.mAppearanceTab.Padding = new System.Windows.Forms.Padding(3);
-            this.mAppearanceTab.Size = new System.Drawing.Size(637, 322);
+            this.mAppearanceTab.Size = new System.Drawing.Size(637, 408);
             this.mAppearanceTab.TabIndex = 1;
             this.mAppearanceTab.Text = "Appearance";
             this.mAppearanceTab.UseVisualStyleBackColor = true;
@@ -110,7 +111,7 @@
             // 
             this.mCancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.mCancelButton.Location = new System.Drawing.Point(579, 403);
+            this.mCancelButton.Location = new System.Drawing.Point(579, 489);
             this.mCancelButton.Name = "mCancelButton";
             this.mCancelButton.Size = new System.Drawing.Size(75, 23);
             this.mCancelButton.TabIndex = 9;
@@ -121,7 +122,7 @@
             // 
             this.mOkButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mOkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.mOkButton.Location = new System.Drawing.Point(498, 403);
+            this.mOkButton.Location = new System.Drawing.Point(498, 489);
             this.mOkButton.Name = "mOkButton";
             this.mOkButton.Size = new System.Drawing.Size(75, 23);
             this.mOkButton.TabIndex = 8;
@@ -160,7 +161,7 @@
             // mNextButton
             // 
             this.mNextButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mNextButton.Location = new System.Drawing.Point(99, 401);
+            this.mNextButton.Location = new System.Drawing.Point(99, 487);
             this.mNextButton.Name = "mNextButton";
             this.mNextButton.Size = new System.Drawing.Size(82, 23);
             this.mNextButton.TabIndex = 7;
@@ -171,7 +172,7 @@
             // mPreviousButton
             // 
             this.mPreviousButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mPreviousButton.Location = new System.Drawing.Point(11, 401);
+            this.mPreviousButton.Location = new System.Drawing.Point(11, 487);
             this.mPreviousButton.Name = "mPreviousButton";
             this.mPreviousButton.Size = new System.Drawing.Size(82, 23);
             this.mPreviousButton.TabIndex = 6;
@@ -195,7 +196,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(291, 403);
+            this.button1.Location = new System.Drawing.Point(291, 489);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(82, 23);
             this.button1.TabIndex = 10;
@@ -220,7 +221,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(669, 427);
+            this.ClientSize = new System.Drawing.Size(669, 513);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Position);
             this.Controls.Add(this.mPlayerIndexUpDown);
@@ -235,6 +236,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lname);
             this.Controls.Add(this.fname);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PlayerEditForm";
             this.Text = "Edit Player";
             this.tabControl1.ResumeLayout(false);

@@ -178,7 +178,7 @@ namespace NFL2K5Tool
             {
                 switch( appearance)
                 {
-                    case "Number":
+                    case "JerseyNumber":
                     case "YearsPro":
                         intAttrCtrl = new IntAttrControl();
                         intAttrCtrl.Name = intAttrCtrl.Text = appearance;
@@ -198,7 +198,7 @@ namespace NFL2K5Tool
                         break;
                 }
             }
-            else {
+            else if( "Hand,BodyType,Skin,Face,MouthPiece,EyeBlack,Dreads,Helmet,Sleeves,Visor,Turtleneck,Height,College,PBP,".IndexOf(appearance+",") > -1) {
                 ctrl = new StringSelectionControl();
                 ctrl.Name = ctrl.Text = appearance;
                 switch (appearance)
@@ -211,18 +211,8 @@ namespace NFL2K5Tool
                     case "EyeBlack": 
                     case "Dreads":  ctrl.RepresentedValue = typeof(YesNo);  break;
                     case "Helmet": ctrl.RepresentedValue = typeof(Helmet); break;
-                    case "FaceMask": ctrl.RepresentedValue = typeof(FaceMask); break;
-                    case "Visor": ctrl.RepresentedValue = typeof(Visor); break;
-                    case "LeftGlove": 
-                    case "RightGlove": ctrl.RepresentedValue = typeof(Glove); break;
-                    case "LeftWrist": 
-                    case "RightWrist": ctrl.RepresentedValue = typeof(Wrist); break;
-                    case "LeftElbow":
-                    case "RightElbow": ctrl.RepresentedValue = typeof(Elbow); break;
                     case "Sleeves": ctrl.RepresentedValue = typeof(Sleeves); break;
-                    case "LeftShoe":
-                    case "RightShoe": ctrl.RepresentedValue = typeof(Shoe); break;
-                    case "NeckRoll": ctrl.RepresentedValue = typeof(NeckRoll); break;
+                    case "Visor": ctrl.RepresentedValue = typeof(Visor); break;
                     case "Turtleneck": ctrl.RepresentedValue = typeof(Turtleneck); break;
                     case "Height": //5'6"-7'0"
                         ctrl.SetItems(new string[] { 
@@ -231,10 +221,9 @@ namespace NFL2K5Tool
                             "6'6\"", "6'7\"", "6'8\"", "6'9\"", "6'10\"", "6'11\"", 
                             "7'0\"" });
                         break;
-                    // need to special case the setting of these items.
                     case "College":
                         ctrl.DropDownStyle = ComboBoxStyle.DropDown;
-                        ctrl.SetItems(Colleges); 
+                        ctrl.SetItems(Colleges);
                         break;
                     case "PBP":
                         string[] values = new string[this.ReversePBPs.Count];
@@ -242,11 +231,30 @@ namespace NFL2K5Tool
                         ctrl.SetItems(values);
                         ctrl.DropDownStyle = ComboBoxStyle.DropDown;
                         break;
+                }
+            }
+            else
+            {
+                ctrl = new PictureChooser();
+                ctrl.Name = ctrl.Text = appearance;
+                ctrl.ValueChanged += new EventHandler(PictureChooser_ValueChanged);
+                        
+                switch(appearance)
+                {
+                    // need to special case the setting of these items.
+                    case "FaceMask": ctrl.RepresentedValue = typeof(FaceMask); break;
+                    case "LeftElbow":
+                    case "RightElbow": ctrl.RepresentedValue = typeof(Elbow); break;
+                    case "LeftGlove":
+                    case "RightGlove": ctrl.RepresentedValue = typeof(Glove); break;
+                    case "LeftWrist":
+                    case "RightWrist": ctrl.RepresentedValue = typeof(Wrist); break;
+                    case "LeftShoe":
+                    case "RightShoe": ctrl.RepresentedValue = typeof(Shoe); break;
+                    case "NeckRoll": ctrl.RepresentedValue = typeof(NeckRoll); break;
                     case "Photo":
-                        ctrl.Dispose();
-                        ctrl = new PhotoChooser();
-                        ctrl.Name = ctrl.Text = appearance;
                         ctrl.DropDownStyle = ComboBoxStyle.DropDown;
+                        ctrl.ValueChanged += new EventHandler(PictureChooser_ValueChanged);
                         string[] vals = new string[this.ReversePhotos.Count];
                         this.ReversePhotos.Values.CopyTo(vals, 0);
                         ctrl.SetItems(vals);
@@ -270,6 +278,49 @@ namespace NFL2K5Tool
                 int col = mAppearanceTab.Controls.Count % 5;
                 c.Location = new Point(col * c.Width, row * c.Height);
                 mAppearanceTab.Controls.Add(c);
+            }
+        }
+
+        void PictureChooser_ValueChanged(object sender, EventArgs e)
+        {
+            string path = "";
+            PictureChooser chooser = sender as PictureChooser;
+            if (chooser == null) return;
+
+            switch (chooser.Name)
+            {
+                case "Photo":
+                    string dude = DataMap.PhotoMap[chooser.Value];
+                    path = String.Format("PlayerData\\PlayerPhotos\\{0}.jpg", dude);
+                    string noPhoto = "PlayerData\\PlayerPhotos\\0004.jpg";
+                    if (System.IO.File.Exists(path))
+                        chooser.PictureBox.ImageLocation = path;
+                    else if (System.IO.File.Exists(noPhoto))
+                        chooser.PictureBox.ImageLocation = noPhoto;
+                    break;
+                case "FaceMask":
+                case "RightShoe":
+                case "LeftShoe":
+                    path = String.Format("PlayerData\\EquipmentImages\\{0}.jpg", chooser.Value);
+                    if (System.IO.File.Exists(path))
+                        chooser.PictureBox.ImageLocation = path;
+                    else
+                        chooser.PictureBox.ImageLocation = null;
+                    break;
+                    // elbow == incomplete
+                case "RightElbow":
+                case "LeftElbow":
+                case "RightWrist":
+                case "LeftWrist":
+                case "NeckRoll":
+                case "LeftGlove":
+                case "RightGlove":
+                    path = String.Format("PlayerData\\EquipmentImages\\{0}{1}.jpg",chooser.RepresentedValue.Name,  chooser.Value);
+                    if (System.IO.File.Exists(path))
+                        chooser.PictureBox.ImageLocation = path;
+                    else
+                        chooser.PictureBox.ImageLocation = null;
+                    break;
             }
         }
 
@@ -336,6 +387,7 @@ namespace NFL2K5Tool
                 }
                 SetCurrentPlayer();
                 mInitializing = false; // keep it here, initialization failed
+                this.mPlayerIndexUpDown.Maximum = players.Length - 1;
             }
         }
 
@@ -488,10 +540,10 @@ namespace NFL2K5Tool
                         else if (controlName == "Photo")
                         {
                             if (ReversePhotos.ContainsKey(val))
-                            {
                                 ssc.Value = ReversePhotos[val];
-                                return true;
-                            }
+                            else
+                                ssc.Value = "NoPhoto";
+                            return true;
                         }
                         else if (controlName == "College")
                         {
@@ -653,13 +705,18 @@ namespace NFL2K5Tool
 
         private void m_TeamsComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SetMaxPlayerIndex();
+        }
+
+        private void SetMaxPlayerIndex()
+        {
             if (!mInitializing)
             {
                 string[] players = GetTeamPlayers(m_TeamsComboBox.SelectedItem.ToString());
                 if (players != null)
                 {
                     mPlayerIndexUpDown.Value = 0;
-                    mPlayerIndexUpDown.Maximum = players.Length;
+                    mPlayerIndexUpDown.Maximum = players.Length - 1;
                     SetCurrentPlayer();
                 }
             }

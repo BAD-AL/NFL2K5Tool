@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MessageForm));
             this.mOkButton = new System.Windows.Forms.Button();
-            this.mTextBox = new System.Windows.Forms.RichTextBox();
             this.mCancelButton = new System.Windows.Forms.Button();
             this.mAuxButton = new System.Windows.Forms.Button();
+            this.mTextBox = new NFL2K5Tool.SearchTextBox();
             this.SuspendLayout();
             // 
             // mOkButton
@@ -44,19 +45,7 @@
             this.mOkButton.TabIndex = 0;
             this.mOkButton.Text = "&OK";
             this.mOkButton.UseVisualStyleBackColor = true;
-            // 
-            // mTextBox
-            // 
-            this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.mTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mTextBox.Location = new System.Drawing.Point(1, 2);
-            this.mTextBox.Name = "mTextBox";
-            this.mTextBox.ReadOnly = true;
-            this.mTextBox.Size = new System.Drawing.Size(724, 408);
-            this.mTextBox.TabIndex = 1;
-            this.mTextBox.Text = "";
+            this.mOkButton.Click += new System.EventHandler(this.mOkButton_Click);
             // 
             // mCancelButton
             // 
@@ -81,6 +70,23 @@
             this.mAuxButton.UseVisualStyleBackColor = true;
             this.mAuxButton.Visible = false;
             // 
+            // mTextBox
+            // 
+            this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.mTextBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mTextBox.Location = new System.Drawing.Point(1, 2);
+            this.mTextBox.Name = "mTextBox";
+            this.mTextBox.ReadOnly = true;
+            this.mTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.mTextBox.SearchString = null;
+            this.mTextBox.Size = new System.Drawing.Size(724, 408);
+            this.mTextBox.StatusControl = null;
+            this.mTextBox.TabIndex = 1;
+            this.mTextBox.Text = "";
+            this.mTextBox.DoubleClick += new System.EventHandler(this.mTextBox_DoubleClick);
+            // 
             // MessageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -90,6 +96,7 @@
             this.Controls.Add(this.mCancelButton);
             this.Controls.Add(this.mTextBox);
             this.Controls.Add(this.mOkButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MessageForm";
             this.Text = "Message";
             this.ResumeLayout(false);
@@ -100,7 +107,7 @@
         #endregion
 
         private System.Windows.Forms.Button mOkButton;
-        private System.Windows.Forms.RichTextBox mTextBox;
+        private SearchTextBox mTextBox;
         private System.Windows.Forms.Button mCancelButton;
         private System.Windows.Forms.Button mAuxButton;
     }

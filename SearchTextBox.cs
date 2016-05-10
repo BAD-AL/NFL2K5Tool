@@ -154,6 +154,21 @@ namespace NFL2K5Tool
         }
 
         /// <summary>
+        /// Gets the line the caret is on.
+        /// </summary>
+        /// <returns></returns>
+        public string GetCurrentLine()
+        {
+            string retVal = "";
+            int ls = GetLineStart();
+            int le = GetLineEnd();
+            int length = le - ls + 1;
+            if (length > -1)
+                retVal = this.Text.Substring(ls, length);
+            return retVal;
+        }
+
+        /// <summary>
         /// Cuts the current line of text.
         /// </summary>
         private void CutLine()

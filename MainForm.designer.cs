@@ -59,7 +59,6 @@
             this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdatePhotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdatePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.reuseNamesToConserveNameSpaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.increaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.decreaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -289,8 +288,7 @@
             this.editSortFormulasToolStripMenuItem,
             this.autoUpdateDepthChartToolStripMenuItem,
             this.autoUpdatePhotoToolStripMenuItem,
-            this.autoUpdatePBPToolStripMenuItem,
-            this.reuseNamesToConserveNameSpaceToolStripMenuItem});
+            this.autoUpdatePBPToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -298,65 +296,58 @@
             // scheduleToolStripMenuItem
             // 
             this.scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
-            this.scheduleToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.scheduleToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.scheduleToolStripMenuItem.Text = "Show &Schedule Now";
             this.scheduleToolStripMenuItem.Click += new System.EventHandler(this.scheduleToolStripMenuItem_Click);
             // 
             // teamPlayersToolStripMenuItem
             // 
             this.teamPlayersToolStripMenuItem.Name = "teamPlayersToolStripMenuItem";
-            this.teamPlayersToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.teamPlayersToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.teamPlayersToolStripMenuItem.Text = "Show &Team Players Now";
             this.teamPlayersToolStripMenuItem.Click += new System.EventHandler(this.teamPlayersToolStripMenuItem_Click);
             // 
             // validateToolStripMenuItem
             // 
             this.validateToolStripMenuItem.Name = "validateToolStripMenuItem";
-            this.validateToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.validateToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.validateToolStripMenuItem.Text = "&Validate Players";
             this.validateToolStripMenuItem.Click += new System.EventHandler(this.validateToolStripMenuItem_Click);
             // 
             // sortPlayersToolStripMenuItem
             // 
             this.sortPlayersToolStripMenuItem.Name = "sortPlayersToolStripMenuItem";
-            this.sortPlayersToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.sortPlayersToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.sortPlayersToolStripMenuItem.Text = "&Sort Players";
             this.sortPlayersToolStripMenuItem.Click += new System.EventHandler(this.sortPlayersToolStripMenuItem_Click);
             // 
             // editSortFormulasToolStripMenuItem
             // 
             this.editSortFormulasToolStripMenuItem.Name = "editSortFormulasToolStripMenuItem";
-            this.editSortFormulasToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.editSortFormulasToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.editSortFormulasToolStripMenuItem.Text = "&Edit sort formulas";
             this.editSortFormulasToolStripMenuItem.Click += new System.EventHandler(this.editSortFormulasToolStripMenuItem_Click);
             // 
             // autoUpdateDepthChartToolStripMenuItem
             // 
             this.autoUpdateDepthChartToolStripMenuItem.Name = "autoUpdateDepthChartToolStripMenuItem";
-            this.autoUpdateDepthChartToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.autoUpdateDepthChartToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.autoUpdateDepthChartToolStripMenuItem.Text = "Auto Update &Depth Chart";
             this.autoUpdateDepthChartToolStripMenuItem.Click += new System.EventHandler(this.autoUpdateDepthChartToolStripMenuItem_Click);
             // 
             // autoUpdatePhotoToolStripMenuItem
             // 
             this.autoUpdatePhotoToolStripMenuItem.Name = "autoUpdatePhotoToolStripMenuItem";
-            this.autoUpdatePhotoToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.autoUpdatePhotoToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.autoUpdatePhotoToolStripMenuItem.Text = "Auto update Photo";
             this.autoUpdatePhotoToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePhotoToolStripMenuItem_Click);
             // 
             // autoUpdatePBPToolStripMenuItem
             // 
             this.autoUpdatePBPToolStripMenuItem.Name = "autoUpdatePBPToolStripMenuItem";
-            this.autoUpdatePBPToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.autoUpdatePBPToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.autoUpdatePBPToolStripMenuItem.Text = "Auto update PBP";
             this.autoUpdatePBPToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePBPToolStripMenuItem_Click);
-            // 
-            // reuseNamesToConserveNameSpaceToolStripMenuItem
-            // 
-            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Name = "reuseNamesToConserveNameSpaceToolStripMenuItem";
-            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
-            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Text = "Reuse names to conserve name space";
-            this.reuseNamesToConserveNameSpaceToolStripMenuItem.Click += new System.EventHandler(this.reuseNamesToConserveNameSpaceToolStripMenuItem_Click);
             // 
             // uIToolStripMenuItem
             // 
@@ -412,6 +403,7 @@
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "List This many";
+            this.groupBox1.Visible = false;
             // 
             // mSaveButton
             // 
@@ -520,7 +512,6 @@
         private System.Windows.Forms.ToolStripMenuItem increaseFontSizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem decreaseFontSizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nameColorToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem reuseNamesToConserveNameSpaceToolStripMenuItem;
     }
 }
 

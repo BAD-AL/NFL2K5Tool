@@ -15,7 +15,7 @@ namespace NFL2K5Tool
             List<string> playerParts = GetPlayerParts(line);
             string firstName = Get(playerParts, "fname");
             string lastName = Get(playerParts, "lname");
-            string number = Get(playerParts, "Number");
+            string number = Get(playerParts, "JerseyNumber");
             if (number.Length < 2)
                 number = "#0" + number;
             else
@@ -40,7 +40,7 @@ namespace NFL2K5Tool
             List<string> playerParts = GetPlayerParts(line);
             string firstName = Get(playerParts, "fname");
             string lastName = Get(playerParts, "lname");
-            string number = Get(playerParts, "Number");
+            string number = Get(playerParts, "JerseyNumber");
             if (number.Length < 2)
                 number = "#0" + number;
             else

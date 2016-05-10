@@ -17,7 +17,7 @@ namespace NFL2K5Tool
             
         }
 
-        string sNoPhoto = "PlayerData\\Thumbnails\\0004.jpg";
+        string sNoPhoto = "PlayerData\\PlayerPhotos\\0004.jpg";
 
         private void mPhotoUpDown_ValueChanged(object sender, EventArgs e)
         {
@@ -25,7 +25,7 @@ namespace NFL2K5Tool
             if (DataMap.ReversePhotoMap.ContainsKey(key))
                 mNameBox.Text = DataMap.ReversePhotoMap[key];
 
-            string path = String.Format("PlayerData\\Thumbnails\\{0}.jpg",key);
+            string path = String.Format("PlayerData\\PlayerPhotos\\{0}.jpg",key);
             if (File.Exists(path))
                 mPhotoPictureBox.ImageLocation = path;
             else

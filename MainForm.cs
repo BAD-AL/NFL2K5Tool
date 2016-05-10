@@ -25,6 +25,8 @@ namespace NFL2K5Tool
 
             nameColorToolStripMenuItem.BackColor = Color.White;
             nameColorToolStripMenuItem.ForeColor = Color.Blue;
+            this.Text = "NFL2K5Tool " + System.Reflection.Assembly.GetCallingAssembly().GetName().Version
+                +" beta";
         }
 
         private void mLoadSaveButton_Click(object sender, EventArgs e)
@@ -234,7 +236,7 @@ namespace NFL2K5Tool
             sw.Start();
             statusBar1.Text = "Applying data...";
             InputParser parser = new InputParser(this.mTool);
-            parser.UseExistingNames = reuseNamesToConserveNameSpaceToolStripMenuItem.Checked;
+            //parser.UseExistingNames = reuseNamesToConserveNameSpaceToolStripMenuItem.Checked;
 
             parser.ProcessText(mTextBox.Text);
             sw.Stop();
@@ -334,13 +336,47 @@ namespace NFL2K5Tool
                     builder.Append("\n");
                 }
                 MessageForm ef = new MessageForm(SystemIcons.Warning);
+                ef.TextClicked += new EventHandler(validatorForm_TextClicked);
+                ef.ShowCancelButton = false;
                 ef.MessageText = builder.ToString();
                 ef.Text = "Warning, verify player attributes";
-                ef.ShowDialog(this);
+                ef.Closed += new EventHandler(validatorForm_Closed);
+                ef.Show(this);
             }
             else
             {
                 MessageBox.Show("No Issues Found", "Player Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        void validatorForm_Closed(object sender, EventArgs e)
+        {
+            MessageForm ef = sender as MessageForm;
+            if (ef != null)
+            {
+                ef.TextClicked -= new EventHandler(validatorForm_TextClicked);
+                ef.Closed -= new EventHandler(validatorForm_Closed);
+            }
+        }
+
+        void validatorForm_TextClicked(object sender, EventArgs e)
+        {
+            StringEventArgs sea = e as StringEventArgs;
+            if (sea != null && sea.Value.Length > 0)
+            {
+                int index = sea.Value.IndexOf('\t');
+                string searchStr = "";
+                if (index > 0)
+                {
+                    searchStr = sea.Value.Substring(0, index - 2);
+                    index = this.mTextBox.Find(searchStr, RichTextBoxFinds.MatchCase);
+                    if (index > 0)
+                    {
+                        this.mTextBox.SelectionStart = index;
+                        this.mTextBox.SelectionLength = searchStr.Length;
+                        this.mTextBox.ScrollToCaret();
+                    }
+                }
             }
         }
 
@@ -437,11 +473,6 @@ namespace NFL2K5Tool
                 nameColorToolStripMenuItem.ForeColor = dlg.Color;
             }
 
-        }
-
-        private void reuseNamesToConserveNameSpaceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            reuseNamesToConserveNameSpaceToolStripMenuItem.Checked = !reuseNamesToConserveNameSpaceToolStripMenuItem.Checked;
         }
 
         private static DateTime m_LastTime;

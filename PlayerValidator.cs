@@ -53,7 +53,7 @@ namespace NFL2K5Tool
 
         private void ValidateWeight(List<string> playerParts)
         {
-            string pos = Get(playerParts, "Pos");
+            string pos = Get(playerParts, "Position");
             string[] possibilities = null;
             switch (pos)
             {
@@ -97,7 +97,7 @@ namespace NFL2K5Tool
         // Skinny = 0, Normal, Large, ExtraLarge
         private void ValidateBodyType(List<string> playerParts)
         {
-            string pos = Get(playerParts, "Pos");
+            string pos = Get(playerParts, "Position");
             string[] possibilities=null;
             switch (pos)
             {
@@ -152,8 +152,8 @@ namespace NFL2K5Tool
             }
             if (index == -1)
             {
-                AddWarning(String.Format("Player {0} {1} {2},\t attribute {3}={4} ",
-                    Get(playerParts,"Pos"), Get(playerParts,"fname"), Get(playerParts,"lname"), attribute, val
+                AddWarning(String.Format("{0},{1},{2},\t attribute {3}={4} ",
+                    Get(playerParts,"Position"), Get(playerParts,"fname"), Get(playerParts,"lname"), attribute, val
                     ));
             }
         }
