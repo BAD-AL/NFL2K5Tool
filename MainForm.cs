@@ -22,6 +22,8 @@ namespace NFL2K5Tool
             //Text = Directory.GetCurrentDirectory();
             EnableControls(false);
             mTextBox.StatusControl = statusBar1;
+            
+            autoCorrectScheduleToolStripMenuItem.Checked = SchedulerHelper.AUTO_CORRECT_SCHEDULE;
 
             nameColorToolStripMenuItem.BackColor = Color.White;
             nameColorToolStripMenuItem.ForeColor = Color.Blue;
@@ -368,7 +370,7 @@ namespace NFL2K5Tool
                 string searchStr = "";
                 if (index > 0)
                 {
-                    searchStr = sea.Value.Substring(0, index - 2);
+                    searchStr = sea.Value.Substring(0, index - 1);
                     index = this.mTextBox.Find(searchStr, RichTextBoxFinds.MatchCase);
                     if (index > 0)
                     {
@@ -515,6 +517,20 @@ namespace NFL2K5Tool
                 mTextBox.SelectionStart = form.SelectionStart;
                 mTextBox.ScrollToCaret();
             }
+        }
+
+        private void autoCorrectScheduleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            autoCorrectScheduleToolStripMenuItem.Checked = !autoCorrectScheduleToolStripMenuItem.Checked;
+            SchedulerHelper.AUTO_CORRECT_SCHEDULE = autoCorrectScheduleToolStripMenuItem.Checked;
+        }
+
+        private void formatScheduleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<string> lines = new List<string>(this.mTextBox.Lines);
+            SchedulerHelper helper = new SchedulerHelper(mTool);
+            helper.ReLayoutScheduleWeeks(lines);
+            mTextBox.Lines = lines.ToArray();
         }
     }
 }

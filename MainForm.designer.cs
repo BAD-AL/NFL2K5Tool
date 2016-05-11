@@ -67,7 +67,9 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
+            this.autoCorrectScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
+            this.formatScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -282,13 +284,15 @@
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.scheduleToolStripMenuItem,
+            this.autoCorrectScheduleToolStripMenuItem,
             this.teamPlayersToolStripMenuItem,
             this.validateToolStripMenuItem,
             this.sortPlayersToolStripMenuItem,
             this.editSortFormulasToolStripMenuItem,
             this.autoUpdateDepthChartToolStripMenuItem,
             this.autoUpdatePhotoToolStripMenuItem,
-            this.autoUpdatePBPToolStripMenuItem});
+            this.autoUpdatePBPToolStripMenuItem,
+            this.formatScheduleToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -427,6 +431,13 @@
             this.mLoadTextFileButton.UseVisualStyleBackColor = true;
             this.mLoadTextFileButton.Click += new System.EventHandler(this.mLoadTextFileButton_Click);
             // 
+            // autoCorrectScheduleToolStripMenuItem
+            // 
+            this.autoCorrectScheduleToolStripMenuItem.Name = "autoCorrectScheduleToolStripMenuItem";
+            this.autoCorrectScheduleToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.autoCorrectScheduleToolStripMenuItem.Text = "Auto Correct Schedule";
+            this.autoCorrectScheduleToolStripMenuItem.Click += new System.EventHandler(this.autoCorrectScheduleToolStripMenuItem_Click);
+            // 
             // mTextBox
             // 
             this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -442,6 +453,13 @@
             this.mTextBox.TabIndex = 2;
             this.mTextBox.Text = "";
             this.mTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TextBox_MouseDown);
+            // 
+            // formatScheduleToolStripMenuItem
+            // 
+            this.formatScheduleToolStripMenuItem.Name = "formatScheduleToolStripMenuItem";
+            this.formatScheduleToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.formatScheduleToolStripMenuItem.Text = "format Schedule";
+            this.formatScheduleToolStripMenuItem.Click += new System.EventHandler(this.formatScheduleToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -512,6 +530,8 @@
         private System.Windows.Forms.ToolStripMenuItem increaseFontSizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem decreaseFontSizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nameColorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoCorrectScheduleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem formatScheduleToolStripMenuItem;
     }
 }
 

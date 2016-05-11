@@ -29,7 +29,7 @@ Scheduler having trouble losing games
 3. Auto update Photo (This could be improved by using player position information, should possibly just update the text instead of the gamesave file directly) 
 4. works on Roster & Franchise 
 5. Command line interface. 
-6. Zip file management (Currently not signing). 
+6. Zip file management. 
 7. Scheduler.
 8. 'SET' Command support; SET(0x10, 0x2233) --> Sets the location 0x10 to '22' and location 0x11 to '33' in the gamesave file.
 9. Gamesaves are signed and loaded.
@@ -52,6 +52,11 @@ Scheduler having trouble losing games
 	1. To add tests.
 	2. Test Photo and PBP (still need 2k2 photo file & 2k4 photo files)
 
+###Schedule Notes
+The input parser gathers lines like "WEEK x" and "teamA at teamB" and runs them through the scheduler.
+When scheduling the games, you just need to make sure the teams are spelled corrrectly. Junk in front and at the end of line is ignored.
+So a line like: "1 Sun September 11 vikings at titans 1:00 PM" will end up working just fine, the parser sees "vikings at titans" and ignores the rest of the line.
+This is helpful when copying and pasting schedules from websites online.
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/BAD-AL/nfl2k5tool/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
