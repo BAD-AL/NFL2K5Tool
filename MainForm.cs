@@ -70,6 +70,7 @@ namespace NFL2K5Tool
             applyDataWithoutSavingToolStripMenuItem.Enabled =
             saveToolStripMenuItem.Enabled =
             mSaveButton.Enabled =
+            autoUpdateSpecialTeamsDepthToolStripMenuItem.Enabled =
             debugDialogMenuItem.Enabled = enable;
         }
 
@@ -82,13 +83,13 @@ namespace NFL2K5Tool
             builder.Append("\n");
             
             if( listTeamsToolStripMenuItem.Checked)
-                builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+                builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, listSpecialTeamsToolStripMenuItem.Checked));
             
             if (listFreeAgentsToolStripMenuItem.Checked)
-                builder.Append(mTool.GetTeamPlayers("FreeAgents", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+                builder.Append(mTool.GetTeamPlayers("FreeAgents", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, false));
             
             if( listDraftClassToolStripMenuItem.Checked)
-                builder.Append(mTool.GetTeamPlayers("DraftClass", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+                builder.Append(mTool.GetTeamPlayers("DraftClass", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, false));
 
             if (listScheduleToolStripMenuItem.Checked)
             {
@@ -132,13 +133,13 @@ namespace NFL2K5Tool
             builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
             builder.Append("\n");
             if (listTeamsToolStripMenuItem.Checked)
-                builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+                builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, listSpecialTeamsToolStripMenuItem.Checked));
 
             if (listFreeAgentsToolStripMenuItem.Checked)
-                builder.Append(mTool.GetTeamPlayers("FreeAgents", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+                builder.Append(mTool.GetTeamPlayers("FreeAgents", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, false));
 
             if (listDraftClassToolStripMenuItem.Checked)
-                builder.Append(mTool.GetTeamPlayers("DraftClass", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+                builder.Append(mTool.GetTeamPlayers("DraftClass", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, false));
             SetText(builder.ToString());
         }
 
@@ -531,6 +532,16 @@ namespace NFL2K5Tool
             SchedulerHelper helper = new SchedulerHelper(mTool);
             helper.ReLayoutScheduleWeeks(lines);
             mTextBox.Lines = lines.ToArray();
+        }
+
+        private void autoUpdateSpecialTeamsDepthToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTool.AutoUpdateSpecialteamsDepth();
+        }
+
+        private void listSpecialTeamsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listSpecialTeamsToolStripMenuItem.Checked = !listSpecialTeamsToolStripMenuItem.Checked;
         }
     }
 }

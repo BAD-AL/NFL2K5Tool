@@ -232,6 +232,10 @@ namespace NFL2K5Tool
             {
                 SetYear(line);
             }
+            else if (line.StartsWith("KR1,") || line.StartsWith("KR2,") || line.StartsWith("PR,") || line.StartsWith("LS,"))
+            {
+                SetSpecialTeamPlayer(line);
+            }
             else
             {
                 switch (mCurrentState)
@@ -243,6 +247,24 @@ namespace NFL2K5Tool
                         mScheduleList.Add(line);
                         break;
                 }
+            }
+        }
+
+        // Expecting a line like "KR1,CB2"
+        private void SetSpecialTeamPlayer(string line)
+        {
+            string[] parts = line.Split(",".ToCharArray());
+            try
+            {
+                SpecialTeamer guy = (SpecialTeamer)Enum.Parse(typeof(SpecialTeamer), parts[0]);
+                Positions pos = (Positions)Enum.Parse(typeof(Positions),parts[1].Substring(0, parts[1].Length-1));
+                int depth = 1;
+                Int32.TryParse(parts[1].Substring(parts[1].Length-1), out depth);
+                Tool.SetSpecialTeamPosition(mTracker.Team, guy, pos, depth);
+            }
+            catch
+            {
+                StaticUtils.AddError(string.Format("Error adding special team player {0}", line));
             }
         }
 
@@ -347,7 +369,7 @@ namespace NFL2K5Tool
                             // How we gonna decide to use pointers or not?
                             Tool.SetPlayerLastName(player, attribute, useExistingName);
                         }
-                        else if (attribute == "?")
+                        else if (attribute == "?" || attribute == "_")
                         {// do nothing
                         }
                         else if (attr >= (int)AppearanceAttributes.College)
@@ -365,7 +387,7 @@ namespace NFL2K5Tool
                     {
                         string desc = attr > 99 ? ((AppearanceAttributes)attr).ToString() : ((PlayerOffsets)attr).ToString();
 
-                        StaticUtils.AddError("Error setting attribute '" + desc + "' to '" + attribute);
+                        StaticUtils.AddError("Error setting attribute '" + desc + "' to '" + attribute +"'");
                     }
                 }
                 retVal = true;

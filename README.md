@@ -19,9 +19,7 @@ Currently works well in the following use cases:
 2. Applying data to Base gamesave files.
 
 Currently Buggy at:
-Automatic photo/PBP update. Need to update the name and photo files.
 Scrolls after closing player edit form.
-Scheduler having trouble losing games
 
 ###Implemented features:
 1. Auto update depth chart. 
@@ -37,26 +35,69 @@ Scheduler having trouble losing games
 11. User defined Player sort formulas
 12. Player validator (flag players that have attributes that don't seem right.); allow user defined formulas?
 13. Player edit gui
+14. Auto update special teams
+15. Get/Set special teams
 
 ###Next features:  
-	1. Add functionality to add a new name (maybe add a function to ensure all players have a unique first and last name)
-	2. Editing coaches. 
-	3. Editing playbooks. 
-	4. Add support for more Photos and names. 
+	1. Editing coaches. 
+	2. Editing playbooks. 
 	5. Smart input parser (Where it tries to replace players at the same position instead of overwriting some random player), name management
 	6. Auto update Player equipment (from stock file database)
 	7. Help Manual
-	8. Updating the Kick and punt returners.
 	
 ###Also need
 	1. To add tests.
-	2. Test Photo and PBP (still need 2k2 photo file & 2k4 photo files)
 
 ###Schedule Notes
 The input parser gathers lines like "WEEK x" and "teamA at teamB" and runs them through the scheduler.
 When scheduling the games, you just need to make sure the teams are spelled corrrectly. Junk in front and at the end of line is ignored.
 So a line like: "1 Sun September 11 vikings at titans 1:00 PM" will end up working just fine, the parser sees "vikings at titans" and ignores the rest of the line.
 This is helpful when copying and pasting schedules from websites online.
+
+
+###Menus
+##File
+#Load Save
+Loads a Roster or Franchise file into program memory.
+#Load Text File
+Loads a text file into the text area
+#Apply data without saving
+Apply the data currently in the text area to the current gamesave loaded in memory.
+#Save
+Applies the data currently in the text area, prompts the user to save to a file.
+#Exit
+Exits the program.
+##View
+#Find
+Enter text to search for
+#Debug Dialog
+Launches a special dialog that I use to search through the gamesave file (pretty complicated)
+#List 'x'
+Will list the selection when the 'List Contents' button is pressed.
+##Edit
+#Show Schedule now
+Appends the schedule to the text box
+#Auto Correct schedule
+Split up the listed schedule into the correct number of games per week for NFL2K5 franchise.
+#Show team players now
+List the teams out now (overwrites text box text)
+#Validate Players
+Checks through the players and shows warnings based on player weight and body type.
+#Sort Players
+Sorts the currently listed players based on 'SortFormulas.csv'
+#Edit Sort formulas
+Lets the user edit the formulas used to sort players
+#Auto Update Special teams depth
+Assigns fast (non-starting) RB,CB or WR to return punts and kicks. Assigns a Center to be long snapper. (works on gamesave data in memory, not the text)
+Use this option after you have applied data to a gamesave, before saving to a file.
+#Auto Update Depth chart
+Automatically updates the teams' depth charts (in program memory) based on player index and position.
+Players listed higher will be at the top of the depth chart, players listed lower will be lower on the depth chart.
+#Auto update Photo
+Automatically update the 'Photo' attribute of each player based on name. (uses ''ENFPhotoIndex.txt' file, operates on text )
+#Auto Update PBP
+Automatically Update what name gets called for a player (operates on text)
+
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/BAD-AL/nfl2k5tool/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 

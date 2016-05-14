@@ -296,7 +296,7 @@ namespace NFL2K5Tool
         Team,
         WhiteTeamStripe,
         Elastic,
-        Neoprine,
+        Neoprene,
         WhiteTurf,
         BlackTurf,
         Taped,
@@ -316,5 +316,13 @@ namespace NFL2K5Tool
         HourOfDay,
         MinuteOfHour,
         NullByte
+    }
+
+    public enum SpecialTeamer
+    {
+        KR1 = 0x195,
+        KR2 = 0x196,
+        LS  = 0x198,
+        PR  = 0x199
     }
 }

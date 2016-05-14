@@ -50,9 +50,9 @@ namespace NFL2K5Tool
                 string saveFileName, outputFileName, dataToApplyTextFile;
                 saveFileName = outputFileName = dataToApplyTextFile = null;
 
-                bool showAppearance, showAbilities, showPlaybooks, showSchedule, readFromStdIn,
+                bool showAppearance, showSpecialteams, showAbilities, showPlaybooks, showSchedule, readFromStdIn,
                     autoUpdateDepthChart, autoUpdatePbp, autoUpdatePhoto, showFreeAgents, showDraftClass;
-                showAppearance = showAbilities = showPlaybooks = showSchedule = readFromStdIn = 
+                showAppearance = showSpecialteams = showAbilities = showPlaybooks = showSchedule = readFromStdIn = 
                     autoUpdateDepthChart = autoUpdatePbp = autoUpdatePhoto= showFreeAgents = showDraftClass = false;
 
                 #region Argument processing
@@ -63,6 +63,7 @@ namespace NFL2K5Tool
                     switch (arg)
                     {
                         case "-app":	showAppearance = true; break;
+                        case "-st":     showSpecialteams = true; break;
                         case "-ab":     showAbilities = true; break;
                         case "-sch":    showSchedule = true;  break;
                         case "-stdin":  readFromStdIn = true; break;
@@ -154,11 +155,11 @@ namespace NFL2K5Tool
                     if (showAbilities || showAppearance)
                     {
                         builder.Append(tool.GetKey(showAbilities, showAppearance));
-                        builder.Append(tool.GetLeaguePlayers(showAbilities, showAppearance));
+                        builder.Append(tool.GetLeaguePlayers(showAbilities, showAppearance, showSpecialteams));
                         if (showFreeAgents)
-                            builder.Append(tool.GetTeamPlayers("FreeAgents", showAbilities, showAppearance));
+                            builder.Append(tool.GetTeamPlayers("FreeAgents", showAbilities, showAppearance, false));
                         if (showDraftClass)
-                            builder.Append(tool.GetTeamPlayers("DraftClass", showAbilities, showAppearance));
+                            builder.Append(tool.GetTeamPlayers("DraftClass", showAbilities, showAppearance, false));
                     }
                     if (showSchedule)
                         builder.Append(tool.GetSchedule());
@@ -195,6 +196,7 @@ with the data contained in the data file.
 The following are the available options.
 
 -app    Print appearance data.
+-st     Print Special teams players
 -ab	    Print player abilities (speed, agility, ...).
 -audc   Auto update the depth chart.
 -aupbp  Auto update the play by play info for each player.

@@ -13,7 +13,7 @@ namespace NFL2K5Tool
 
         private string[] SortOrder = new string[] {
             "Team",
-            "CB,", "DE,", "DT,", "FB,", "FS,", "G,", "RB,", "ILB,", "K,", "OLB,", "P,", "QB,", "SS,", "T,", "TE,", "WR,", "C,"
+            "CB,", "DE,", "DT,", "FB,", "FS,", "G,", "RB,", "ILB,", "K,", "OLB,", "P,", "QB,", "SS,", "T,", "TE,", "WR,", "C,", "KR1,", "KR2,", "PR,", "LS,"
         };
         private Dictionary<string, string> mFormulas;
 
@@ -131,9 +131,12 @@ namespace NFL2K5Tool
                 // get the formula for the pos
                 pos = SortOrder[i].Replace(",", "") + ":";
                 index = FormulasString.IndexOf(pos);
-                lineEnd = FormulasString.IndexOf("\n", index);
-                formula = FormulasString.Substring(index, lineEnd - index).Trim().Replace(pos, "");
-                mFormulas.Add(SortOrder[i], formula);
+                if (index > -1)
+                {
+                    lineEnd = FormulasString.IndexOf("\n", index);
+                    formula = FormulasString.Substring(index, lineEnd - index).Trim().Replace(pos, "");
+                    mFormulas.Add(SortOrder[i], formula);
+                }
             }
         }
 

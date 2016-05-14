@@ -163,7 +163,7 @@ namespace NFL2K5Tool
         private string[] mTeamsDataOrder =  {
                  "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
                  "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
-                 "Jets","Lions","Packers", "Panthers", "Patroits","Raiders","Rams","Ravens","Redskins",
+                 "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
                  "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings", 
                  
                  // these guys aren't really teams, investigate deleting these 2 from the array
@@ -174,7 +174,7 @@ namespace NFL2K5Tool
         //private string[] mTeamsPlayerOrder = {
         //           "Cardinals", "Falcons", "Ravens", "Bills", "Panthers", "Bears", "Bengals", "Cowboys",
         //           "Broncos", "Lions", "Packers", "Colts", "Jaguars", "Chiefs", "Dolphins", "Vikings", 
-        //           "Patroits", "Saints", "Giants", "Jets", "Raiders", "Eagles", "Steelers", "Rams",  "Chargers", 
+        //           "Patriots", "Saints", "Giants", "Jets", "Raiders", "Eagles", "Steelers", "Rams",  "Chargers", 
         //           "49ers", "Seahawks", "Buccaneers", "Titans", "Redskins", "Browns", "Texans", 
         //           "FreeAgents", "DraftClass"
         //           };
@@ -194,13 +194,14 @@ namespace NFL2K5Tool
         /// </summary>
         /// <param name="attributes">true to list out skills</param>
         /// <param name="appearance">true to list out appearance</param>
+        /// <param name="specialTeamers"> true to list special teams</param>
         /// <returns></returns>
-        public string GetLeaguePlayers(bool attributes, bool appearance)
+        public string GetLeaguePlayers(bool attributes, bool appearance, bool specialTeamers)
         {
             StringBuilder builder = new StringBuilder(300 * 55 * 35);
             for (int i = 0; i < 32; i++)
             {
-                builder.Append(GetTeamPlayers(mTeamsDataOrder[i], attributes, appearance));
+                builder.Append(GetTeamPlayers(mTeamsDataOrder[i], attributes, appearance, specialTeamers));
             }
             return builder.ToString();
         }
@@ -253,7 +254,7 @@ namespace NFL2K5Tool
         /// <param name="attributes">include skill attributes</param>
         /// <param name="appearance">include appearance attributes.</param>
         /// <returns>string with all the players for the given team.</returns>
-        public string GetTeamPlayers(string team, bool attributes, bool appearance)
+        public string GetTeamPlayers(string team, bool attributes, bool appearance, bool specialTeams)
         {
             int teamIndex = GetTeamIndex(team);
             int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
@@ -273,6 +274,11 @@ namespace NFL2K5Tool
             for (int i = 0; i < playerIndexes.Count; i++)
             {
                 builder.Append(GetPlayerData(playerIndexes[i], attributes, appearance));
+                builder.Append("\n");
+            }
+            if (specialTeams)
+            {
+                builder.Append(GetSpecialTeamDepthChart(team));
                 builder.Append("\n");
             }
             return builder.ToString();
@@ -542,6 +548,140 @@ namespace NFL2K5Tool
             }
         }
 
+        public void AutoUpdateSpecialteamsDepth()
+        {
+            string team;
+            for(int i = 0; i < 32; i++)
+            {
+                team = mTeamsDataOrder[i];
+                AutoUpdateSpecialTeams(team);
+            }
+        }
+
+        /// <summary>
+        /// Tries to set fastest guy not starting at CB,RB,WR as starting PR & KR, second fastest guy to KR2
+        /// and a guy playing Center to Long snapper.
+        /// </summary>
+        /// <param name="team">The team to set the special teams for.</param>
+        private void AutoUpdateSpecialTeams(string team)
+        {
+            int teamIndex = GetTeamIndex(team);
+            int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
+            List<int> playerIndexes = GetPlayerIndexesForTeam(team);
+            //GetPlayerPositionDepth
+            byte fast1 = 0;
+            byte fast2 = 0;
+            byte center = 0;
+            int speedTest1 = 0;
+            int speedTest2 = 0;
+            string playerPosition = "";
+
+            for(byte i = (byte)(playerIndexes.Count-1) ; i > 0 ; i--)
+            {
+                playerPosition = GetPlayerPosition(playerIndexes[i]) + ",";
+                if ("CB,WR,RB,".IndexOf(playerPosition) > -1)
+                {
+                    Int32.TryParse(GetAttribute(playerIndexes[i], PlayerOffsets.Speed), out speedTest1);
+                    Int32.TryParse(GetAttribute(playerIndexes[fast1], PlayerOffsets.Speed), out speedTest2);
+                    if (speedTest1 > speedTest2 && GetPlayerPositionDepth(playerIndexes[i]) > 2)
+                    {
+                        fast2 = fast1;
+                        fast1 = i;
+                    }
+                    else if (fast2 == 0)
+                    {
+                        fast2 = i;
+                    }
+                }
+                else if (playerPosition == "C," && center == 0)
+                {
+                    center = i;
+                }
+            }
+            SetByte(teamPlayerPointersStart + (int)SpecialTeamer.KR1, fast1);
+            SetByte(teamPlayerPointersStart + (int)SpecialTeamer.KR2, fast2);
+            SetByte(teamPlayerPointersStart + (int)SpecialTeamer.PR, fast1);
+            SetByte(teamPlayerPointersStart + (int)SpecialTeamer.LS, center);
+        }
+
+        /// <summary>
+        /// Returns the given team's special team set like:
+        ///         KR1,RB3
+        ///         KR2,WR3
+        ///         PR,RB3
+        ///         LS,C3
+        /// </summary>
+        /// <param name="team"></param>
+        /// <returns></returns>
+        public string GetSpecialTeamDepthChart(string team)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(GetSpecialTeamPosition(team, SpecialTeamer.KR1));
+            builder.Append("\r\n");
+            builder.Append(GetSpecialTeamPosition(team, SpecialTeamer.KR2));
+            builder.Append("\r\n");
+            builder.Append(GetSpecialTeamPosition(team, SpecialTeamer.PR));
+            builder.Append("\r\n");
+            builder.Append(GetSpecialTeamPosition(team, SpecialTeamer.LS));
+            builder.Append("\r\n");
+            return builder.ToString();
+        }
+
+
+        public string GetSpecialTeamPosition(string team, SpecialTeamer guy)
+        {
+            int teamIndex = GetTeamIndex(team);
+            int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
+            List<int> playerIndexes = GetPlayerIndexesForTeam(team);
+            int playerIndex = GameSaveData[teamPlayerPointersStart + (int)guy];
+            String pos = GetPlayerPosition(playerIndexes[playerIndex]);
+            int depth = 0;
+            for (int i = 0; i <= playerIndex; i++)
+            {
+                if (pos == GetPlayerPosition(playerIndexes[i]))
+                    depth++;
+            }
+            string retVal = String.Format("{0},{1}{2}", guy.ToString(), pos.ToString(), depth);
+            return retVal;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="team"></param>
+        /// <param name="stPosition"></param>
+        /// <param name="pos"></param>
+        /// <param name="depth">Depth 1-based (CB1 ==> first CB)</param>
+        public void SetSpecialTeamPosition(string team, SpecialTeamer stPosition, Positions pos, int depth)
+        {
+            int index = -1;
+            int teamIndex = GetTeamIndex(team);
+            int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
+            List<int> playerIndexes = GetPlayerIndexesForTeam(team);
+            int testDepth = 0;
+            string position = pos.ToString();
+            for (int i = 0; i < playerIndexes.Count; i++)
+            {
+                if (GetPlayerPosition(playerIndexes[i]) == position)
+                {
+                    testDepth++;
+                    if (testDepth == depth)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
+            if (index > -1)
+            {
+                SetByte(teamPlayerPointersStart + (int)stPosition, (byte)index);
+            }
+            else
+            {
+                throw new InvalidOperationException(string.Format("Depth {0} at position {1} does not exist", depth, pos.ToString()));
+            }
+        }
         /// <summary>
         /// Loads the gamesave fle
         /// TODO: error checking; 
@@ -756,14 +896,14 @@ namespace NFL2K5Tool
             if (a == "lname") return -2;
             try
             {
-                PlayerOffsets po = (PlayerOffsets)Enum.Parse(typeof(PlayerOffsets), a);
-                return (int)po;
+                AppearanceAttributes aa = (AppearanceAttributes)Enum.Parse(typeof(AppearanceAttributes), a);
+                return (int)aa;
             }
             catch { }
             try
             {
-                AppearanceAttributes aa = (AppearanceAttributes)Enum.Parse(typeof(AppearanceAttributes), a);
-                return (int)aa;
+                PlayerOffsets po = (PlayerOffsets)Enum.Parse(typeof(PlayerOffsets), a);
+                return (int)po;
             }
             catch
             {
@@ -1412,7 +1552,8 @@ namespace NFL2K5Tool
                 stringVal = stringVal.Substring(1, stringVal.Length - 3);
             int feet = stringVal[0] - 0x30;
             stringVal = stringVal.Replace("\"", "");
-            int inches = Int32.Parse(stringVal.Substring(2));
+            int inches = 0; // Int32.Parse(stringVal.Substring(2));
+            Int32.TryParse(stringVal.Substring(2), out inches);
             inches += feet * 12;
             return inches;
         }

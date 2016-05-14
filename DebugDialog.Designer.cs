@@ -58,6 +58,7 @@
             this.extractPhoto2K4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractTeamSectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchTempFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.launchPhotoDataEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.mNumBytes = new System.Windows.Forms.NumericUpDown();
@@ -74,7 +75,7 @@
             this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
             this.mFindBytesButton = new System.Windows.Forms.Button();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
-            this.launchPhotoDataEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listDepthChartsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -327,7 +328,8 @@
             this.extractPhoto2K4ToolStripMenuItem,
             this.extractTeamSectionsToolStripMenuItem,
             this.launchTempFormToolStripMenuItem,
-            this.launchPhotoDataEditorToolStripMenuItem});
+            this.launchPhotoDataEditorToolStripMenuItem,
+            this.listDepthChartsToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -380,6 +382,13 @@
             this.launchTempFormToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.launchTempFormToolStripMenuItem.Text = "Launch Temp Form";
             this.launchTempFormToolStripMenuItem.Click += new System.EventHandler(this.launchTempFormToolStripMenuItem_Click);
+            // 
+            // launchPhotoDataEditorToolStripMenuItem
+            // 
+            this.launchPhotoDataEditorToolStripMenuItem.Name = "launchPhotoDataEditorToolStripMenuItem";
+            this.launchPhotoDataEditorToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.launchPhotoDataEditorToolStripMenuItem.Text = "Launch Photo Data Editor";
+            this.launchPhotoDataEditorToolStripMenuItem.Click += new System.EventHandler(this.launchPhotoDataEditorToolStripMenuItem_Click);
             // 
             // mGetTeamButton
             // 
@@ -597,12 +606,12 @@
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
             // 
-            // launchPhotoDataEditorToolStripMenuItem
+            // listDepthChartsToolStripMenuItem
             // 
-            this.launchPhotoDataEditorToolStripMenuItem.Name = "launchPhotoDataEditorToolStripMenuItem";
-            this.launchPhotoDataEditorToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.launchPhotoDataEditorToolStripMenuItem.Text = "Launch Photo Data Editor";
-            this.launchPhotoDataEditorToolStripMenuItem.Click += new System.EventHandler(this.launchPhotoDataEditorToolStripMenuItem_Click);
+            this.listDepthChartsToolStripMenuItem.Name = "listDepthChartsToolStripMenuItem";
+            this.listDepthChartsToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.listDepthChartsToolStripMenuItem.Text = "List Depth charts";
+            this.listDepthChartsToolStripMenuItem.Click += new System.EventHandler(this.listDepthChartsToolStripMenuItem_Click);
             // 
             // DebugDialog
             // 
@@ -692,5 +701,6 @@
         private System.Windows.Forms.ToolStripMenuItem mathTestToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem launchTempFormToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem launchPhotoDataEditorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listDepthChartsToolStripMenuItem;
     }
 }

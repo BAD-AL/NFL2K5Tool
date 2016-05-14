@@ -171,7 +171,7 @@ namespace NFL2K5Tool
 
         private void mGetTeamButton_Click(object sender, EventArgs e)
         {
-            mResultsTextBox.Text = Tool.GetTeamPlayers(textBox1.Text, false, false);
+            mResultsTextBox.Text = Tool.GetTeamPlayers(textBox1.Text, false, false, false);
         }
 
         private void mLocationLabel_Click(object sender, EventArgs e)
@@ -422,7 +422,7 @@ namespace NFL2K5Tool
             string[] teams = {
                  "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
                  "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
-                 "Jets","Lions","Packers", "Panthers", "Patroits","Raiders","Rams","Ravens","Redskins",
+                 "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
                  "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings"};
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < teams.Length; i++)
@@ -457,6 +457,23 @@ namespace NFL2K5Tool
         {
             PhotoDataEditor pde = new PhotoDataEditor();
             pde.Show();
+        }
+
+        private void listDepthChartsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string[] teams = {
+                 "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
+                 "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
+                 "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
+                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings"};
+
+            StringBuilder builder = new StringBuilder();
+            foreach(string team in teams)
+            {
+                builder.Append(team +"\n");
+                builder.Append( Tool.GetSpecialTeamDepthChart(team));
+            }
+            mResultsTextBox.Text = builder.ToString();
         }
 
     }
