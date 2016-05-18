@@ -634,12 +634,16 @@ namespace NFL2K5Tool
             int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
             List<int> playerIndexes = GetPlayerIndexesForTeam(team);
             int playerIndex = GameSaveData[teamPlayerPointersStart + (int)guy];
-            String pos = GetPlayerPosition(playerIndexes[playerIndex]);
+            String pos = "ERROR";
             int depth = 0;
-            for (int i = 0; i <= playerIndex; i++)
+            if (playerIndex < playerIndexes.Count)
             {
-                if (pos == GetPlayerPosition(playerIndexes[i]))
-                    depth++;
+                pos = GetPlayerPosition(playerIndexes[playerIndex]);
+                for (int i = 0; i <= playerIndex; i++)
+                {
+                    if (pos == GetPlayerPosition(playerIndexes[i]))
+                        depth++;
+                }
             }
             string retVal = String.Format("{0},{1}{2}", guy.ToString(), pos.ToString(), depth);
             return retVal;

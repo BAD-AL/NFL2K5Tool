@@ -70,8 +70,9 @@
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
             this.autoUpdateSpecialTeamsDepthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mTextBox = new NFL2K5Tool.SearchTextBox();
             this.listSpecialTeamsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.playerEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mTextBox = new NFL2K5Tool.SearchTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -83,7 +84,7 @@
             this.mLoadSaveButton.Location = new System.Drawing.Point(13, 360);
             this.mLoadSaveButton.Name = "mLoadSaveButton";
             this.mLoadSaveButton.Size = new System.Drawing.Size(75, 23);
-            this.mLoadSaveButton.TabIndex = 0;
+            this.mLoadSaveButton.TabIndex = 5;
             this.mLoadSaveButton.Text = "&Load Save";
             this.mLoadSaveButton.UseVisualStyleBackColor = true;
             this.mLoadSaveButton.Click += new System.EventHandler(this.mLoadSaveButton_Click);
@@ -95,7 +96,7 @@
             this.mListContentsButton.Location = new System.Drawing.Point(191, 360);
             this.mListContentsButton.Name = "mListContentsButton";
             this.mListContentsButton.Size = new System.Drawing.Size(119, 23);
-            this.mListContentsButton.TabIndex = 1;
+            this.mListContentsButton.TabIndex = 15;
             this.mListContentsButton.Text = "List &Contents";
             this.mListContentsButton.UseVisualStyleBackColor = true;
             this.mListContentsButton.Click += new System.EventHandler(this.mListContentsButton_Click);
@@ -106,7 +107,7 @@
             this.mClearButton.Location = new System.Drawing.Point(316, 360);
             this.mClearButton.Name = "mClearButton";
             this.mClearButton.Size = new System.Drawing.Size(75, 23);
-            this.mClearButton.TabIndex = 3;
+            this.mClearButton.TabIndex = 20;
             this.mClearButton.Text = "Clear";
             this.mClearButton.UseVisualStyleBackColor = true;
             this.mClearButton.Click += new System.EventHandler(this.mClearButton_Click);
@@ -296,7 +297,8 @@
             this.autoUpdateDepthChartToolStripMenuItem,
             this.autoUpdatePhotoToolStripMenuItem,
             this.autoUpdatePBPToolStripMenuItem,
-            this.formatScheduleToolStripMenuItem});
+            this.formatScheduleToolStripMenuItem,
+            this.playerEditorToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -369,6 +371,7 @@
             this.formatScheduleToolStripMenuItem.Name = "formatScheduleToolStripMenuItem";
             this.formatScheduleToolStripMenuItem.Size = new System.Drawing.Size(253, 22);
             this.formatScheduleToolStripMenuItem.Text = "format Schedule";
+            this.formatScheduleToolStripMenuItem.Visible = false;
             this.formatScheduleToolStripMenuItem.Click += new System.EventHandler(this.formatScheduleToolStripMenuItem_Click);
             // 
             // uIToolStripMenuItem
@@ -433,7 +436,7 @@
             this.mSaveButton.Location = new System.Drawing.Point(397, 360);
             this.mSaveButton.Name = "mSaveButton";
             this.mSaveButton.Size = new System.Drawing.Size(75, 23);
-            this.mSaveButton.TabIndex = 11;
+            this.mSaveButton.TabIndex = 25;
             this.mSaveButton.Text = "&Save";
             this.mSaveButton.UseVisualStyleBackColor = true;
             this.mSaveButton.Click += new System.EventHandler(this.mSaveButton_Click);
@@ -444,7 +447,7 @@
             this.mLoadTextFileButton.Location = new System.Drawing.Point(94, 360);
             this.mLoadTextFileButton.Name = "mLoadTextFileButton";
             this.mLoadTextFileButton.Size = new System.Drawing.Size(91, 23);
-            this.mLoadTextFileButton.TabIndex = 12;
+            this.mLoadTextFileButton.TabIndex = 10;
             this.mLoadTextFileButton.Text = "Load Text File";
             this.mLoadTextFileButton.UseVisualStyleBackColor = true;
             this.mLoadTextFileButton.Click += new System.EventHandler(this.mLoadTextFileButton_Click);
@@ -455,6 +458,20 @@
             this.autoUpdateSpecialTeamsDepthToolStripMenuItem.Size = new System.Drawing.Size(253, 22);
             this.autoUpdateSpecialTeamsDepthToolStripMenuItem.Text = "Auto Update Special Teams Depth";
             this.autoUpdateSpecialTeamsDepthToolStripMenuItem.Click += new System.EventHandler(this.autoUpdateSpecialTeamsDepthToolStripMenuItem_Click);
+            // 
+            // listSpecialTeamsToolStripMenuItem
+            // 
+            this.listSpecialTeamsToolStripMenuItem.Name = "listSpecialTeamsToolStripMenuItem";
+            this.listSpecialTeamsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.listSpecialTeamsToolStripMenuItem.Text = "List Special teams";
+            this.listSpecialTeamsToolStripMenuItem.Click += new System.EventHandler(this.listSpecialTeamsToolStripMenuItem_Click);
+            // 
+            // playerEditorToolStripMenuItem
+            // 
+            this.playerEditorToolStripMenuItem.Name = "playerEditorToolStripMenuItem";
+            this.playerEditorToolStripMenuItem.Size = new System.Drawing.Size(253, 22);
+            this.playerEditorToolStripMenuItem.Text = "Player Editor";
+            this.playerEditorToolStripMenuItem.Click += new System.EventHandler(this.playerEditorToolStripMenuItem_Click);
             // 
             // mTextBox
             // 
@@ -468,16 +485,9 @@
             this.mTextBox.SearchString = null;
             this.mTextBox.Size = new System.Drawing.Size(674, 327);
             this.mTextBox.StatusControl = null;
-            this.mTextBox.TabIndex = 2;
+            this.mTextBox.TabIndex = 0;
             this.mTextBox.Text = "";
             this.mTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TextBox_MouseDown);
-            // 
-            // listSpecialTeamsToolStripMenuItem
-            // 
-            this.listSpecialTeamsToolStripMenuItem.Name = "listSpecialTeamsToolStripMenuItem";
-            this.listSpecialTeamsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.listSpecialTeamsToolStripMenuItem.Text = "List Special teams";
-            this.listSpecialTeamsToolStripMenuItem.Click += new System.EventHandler(this.listSpecialTeamsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -552,6 +562,7 @@
         private System.Windows.Forms.ToolStripMenuItem formatScheduleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoUpdateSpecialTeamsDepthToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listSpecialTeamsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem playerEditorToolStripMenuItem;
     }
 }
 

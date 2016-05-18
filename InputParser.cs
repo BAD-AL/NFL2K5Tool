@@ -264,7 +264,7 @@ namespace NFL2K5Tool
             }
             catch
             {
-                StaticUtils.AddError(string.Format("Error adding special team player {0}", line));
+                StaticUtils.AddError(string.Format("Team:{0} Error adding special team player {1}",mTracker.Team, line));
             }
         }
 

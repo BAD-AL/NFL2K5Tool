@@ -61,6 +61,9 @@ namespace NFL2K5Tool
         private void EnableControls(bool enable)
         {
             scheduleToolStripMenuItem.Enabled=
+            sortPlayersToolStripMenuItem.Enabled=
+            validateToolStripMenuItem.Enabled =
+            playerEditorToolStripMenuItem.Enabled =
             autoUpdateDepthChartToolStripMenuItem.Enabled =
             autoUpdatePBPToolStripMenuItem.Enabled =
             autoUpdatePhotoToolStripMenuItem.Enabled =
@@ -101,7 +104,7 @@ namespace NFL2K5Tool
             SetText(builder.ToString());
         }
 
-        Regex mColorizeRegex = new Regex("^[A-Z]+,[A-Za-z ']+,[A-Z,a-z ']+,", RegexOptions.Multiline);
+        Regex mColorizeRegex = new Regex("^[A-Z]+,[A-Za-z \\.']+,[A-Z,a-z ']+,", RegexOptions.Multiline);
         
         /// <summary>
         /// Sets the text box text and colorizes the player names
@@ -109,6 +112,7 @@ namespace NFL2K5Tool
         /// <param name="text"></param>
         private void SetText( string text)
         {
+            mTextBox.Visible = false;
             mTextBox.SelectionLength = 0;
             mTextBox.Text = text;
             MatchCollection mc = mColorizeRegex.Matches(mTextBox.Text);
@@ -118,6 +122,7 @@ namespace NFL2K5Tool
                 mTextBox.SelectionLength = m.Length - 1;
                 mTextBox.SelectionColor = nameColorToolStripMenuItem.ForeColor;
             }
+            mTextBox.Visible = true;
         }
 
         private void scheduleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -542,6 +547,11 @@ namespace NFL2K5Tool
         private void listSpecialTeamsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             listSpecialTeamsToolStripMenuItem.Checked = !listSpecialTeamsToolStripMenuItem.Checked;
+        }
+
+        private void playerEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditPlayer();
         }
     }
 }
