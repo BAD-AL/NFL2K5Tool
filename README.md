@@ -56,46 +56,46 @@ This is helpful when copying and pasting schedules from websites online.
 
 
 ###Menus
-##File
-#Load Save
+####File
+#####Load Save
 Loads a Roster or Franchise file into program memory.
-#Load Text File
+#####Load Text File
 Loads a text file into the text area
-#Apply data without saving
+#####Apply data without saving
 Apply the data currently in the text area to the current gamesave loaded in memory.
-#Save
+#####Save
 Applies the data currently in the text area, prompts the user to save to a file.
-#Exit
+#####Exit
 Exits the program.
-##View
-#Find
+####View
+#####Find
 Enter text to search for
-#Debug Dialog
+#####Debug Dialog
 Launches a special dialog that I use to search through the gamesave file (pretty complicated)
-#List 'x'
+#####List 'x'
 Will list the selection when the 'List Contents' button is pressed.
-##Edit
-#Show Schedule now
+####Edit
+#####Show Schedule now
 Appends the schedule to the text box
-#Auto Correct schedule
+#####Auto Correct schedule
 Split up the listed schedule into the correct number of games per week for NFL2K5 franchise.
-#Show team players now
+#####Show team players now
 List the teams out now (overwrites text box text)
-#Validate Players
+#####Validate Players
 Checks through the players and shows warnings based on player weight and body type.
-#Sort Players
+#####Sort Players
 Sorts the currently listed players based on 'SortFormulas.csv'
-#Edit Sort formulas
+#####Edit Sort formulas
 Lets the user edit the formulas used to sort players
-#Auto Update Special teams depth
+#####Auto Update Special teams depth
 Assigns fast (non-starting) RB,CB or WR to return punts and kicks. Assigns a Center to be long snapper. (works on gamesave data in memory, not the text)
 Use this option after you have applied data to a gamesave, before saving to a file.
-#Auto Update Depth chart
+#####Auto Update Depth chart
 Automatically updates the teams' depth charts (in program memory) based on player index and position.
 Players listed higher will be at the top of the depth chart, players listed lower will be lower on the depth chart.
-#Auto update Photo
+#####Auto update Photo
 Automatically update the 'Photo' attribute of each player based on name. (uses ''ENFPhotoIndex.txt' file, operates on text )
-#Auto Update PBP
+#####Auto Update PBP
 Automatically Update what name gets called for a player (operates on text)
 
 
