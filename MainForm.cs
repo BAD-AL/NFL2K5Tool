@@ -82,10 +82,13 @@ namespace NFL2K5Tool
             mTextBox.Clear();
             StringBuilder builder = new StringBuilder(5000);
 
-            builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
-            builder.Append("\n");
-            
-            if( listTeamsToolStripMenuItem.Checked)
+            if (listTeamsToolStripMenuItem.Checked || listFreeAgentsToolStripMenuItem.Checked || listDraftClassToolStripMenuItem.Checked)
+            {
+                builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+                builder.Append("\n");
+            }
+
+            if (listTeamsToolStripMenuItem.Checked)
                 builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, listSpecialTeamsToolStripMenuItem.Checked));
             
             if (listFreeAgentsToolStripMenuItem.Checked)
