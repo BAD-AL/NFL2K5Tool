@@ -45,6 +45,8 @@
             this.mAttrUpDown.Size = new System.Drawing.Size(47, 20);
             this.mAttrUpDown.TabIndex = 14;
             this.mAttrUpDown.ValueChanged += new System.EventHandler(this.mAttrUpDown_ValueChanged);
+            this.mAttrUpDown.Leave += new System.EventHandler(this.mAttrUpDown_Leave);
+            this.mAttrUpDown.Enter += new System.EventHandler(this.mAttrUpDown_Enter);
             // 
             // mLabel
             // 

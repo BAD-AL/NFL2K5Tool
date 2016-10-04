@@ -52,6 +52,8 @@
             this.mathTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdateDepthChartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUpdatePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUpdatePhotosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.includePhotePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractPHOHO2K2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractPhoto2K3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,6 +61,8 @@
             this.extractTeamSectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchTempFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchPhotoDataEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listDepthChartsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updatePlayerAppearanceFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.mNumBytes = new System.Windows.Forms.NumericUpDown();
@@ -74,8 +78,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
             this.mFindBytesButton = new System.Windows.Forms.Button();
+            this.mGetBytesButton = new System.Windows.Forms.Button();
+            this.mGetBytesTextBox = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
-            this.listDepthChartsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.coachToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.apperanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -280,7 +288,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.findToolStripMenuItem,
-            this.editToolStripMenuItem});
+            this.editToolStripMenuItem,
+            this.coachToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(532, 24);
@@ -322,6 +331,8 @@
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.autoUpdateDepthChartToolStripMenuItem,
+            this.autoUpdatePBPToolStripMenuItem,
+            this.autoUpdatePhotosToolStripMenuItem,
             this.includePhotePBPToolStripMenuItem,
             this.extractPHOHO2K2ToolStripMenuItem,
             this.extractPhoto2K3ToolStripMenuItem,
@@ -329,7 +340,8 @@
             this.extractTeamSectionsToolStripMenuItem,
             this.launchTempFormToolStripMenuItem,
             this.launchPhotoDataEditorToolStripMenuItem,
-            this.listDepthChartsToolStripMenuItem});
+            this.listDepthChartsToolStripMenuItem,
+            this.updatePlayerAppearanceFromFileToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -337,58 +349,86 @@
             // autoUpdateDepthChartToolStripMenuItem
             // 
             this.autoUpdateDepthChartToolStripMenuItem.Name = "autoUpdateDepthChartToolStripMenuItem";
-            this.autoUpdateDepthChartToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.autoUpdateDepthChartToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
             this.autoUpdateDepthChartToolStripMenuItem.Text = "Auto Update Depth Chart";
             this.autoUpdateDepthChartToolStripMenuItem.Click += new System.EventHandler(this.autoUpdateDepthChartToolStripMenuItem_Click);
+            // 
+            // autoUpdatePBPToolStripMenuItem
+            // 
+            this.autoUpdatePBPToolStripMenuItem.Name = "autoUpdatePBPToolStripMenuItem";
+            this.autoUpdatePBPToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
+            this.autoUpdatePBPToolStripMenuItem.Text = "Auto Update PBP";
+            this.autoUpdatePBPToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePBPToolStripMenuItem_Click);
+            // 
+            // autoUpdatePhotosToolStripMenuItem
+            // 
+            this.autoUpdatePhotosToolStripMenuItem.Name = "autoUpdatePhotosToolStripMenuItem";
+            this.autoUpdatePhotosToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
+            this.autoUpdatePhotosToolStripMenuItem.Text = "Auto Update Photos";
+            this.autoUpdatePhotosToolStripMenuItem.Click += new System.EventHandler(this.autoUpdatePhotosToolStripMenuItem_Click);
             // 
             // includePhotePBPToolStripMenuItem
             // 
             this.includePhotePBPToolStripMenuItem.Name = "includePhotePBPToolStripMenuItem";
-            this.includePhotePBPToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.includePhotePBPToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
             this.includePhotePBPToolStripMenuItem.Text = "Include Phote & PBP";
             this.includePhotePBPToolStripMenuItem.Click += new System.EventHandler(this.includePhotePBPToolStripMenuItem_Click);
             // 
             // extractPHOHO2K2ToolStripMenuItem
             // 
             this.extractPHOHO2K2ToolStripMenuItem.Name = "extractPHOHO2K2ToolStripMenuItem";
-            this.extractPHOHO2K2ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.extractPHOHO2K2ToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
             this.extractPHOHO2K2ToolStripMenuItem.Text = "Extract PHOHO 2K2";
             this.extractPHOHO2K2ToolStripMenuItem.Click += new System.EventHandler(this.extractPHOHO2K2ToolStripMenuItem_Click);
             // 
             // extractPhoto2K3ToolStripMenuItem
             // 
             this.extractPhoto2K3ToolStripMenuItem.Name = "extractPhoto2K3ToolStripMenuItem";
-            this.extractPhoto2K3ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.extractPhoto2K3ToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
             this.extractPhoto2K3ToolStripMenuItem.Text = "Extract Photo 2K3";
             this.extractPhoto2K3ToolStripMenuItem.Click += new System.EventHandler(this.extractPhoto2K3ToolStripMenuItem_Click);
             // 
             // extractPhoto2K4ToolStripMenuItem
             // 
             this.extractPhoto2K4ToolStripMenuItem.Name = "extractPhoto2K4ToolStripMenuItem";
-            this.extractPhoto2K4ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.extractPhoto2K4ToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
             this.extractPhoto2K4ToolStripMenuItem.Text = "Extract Photo 2K4";
             this.extractPhoto2K4ToolStripMenuItem.Click += new System.EventHandler(this.extractPhoto2K4ToolStripMenuItem_Click);
             // 
             // extractTeamSectionsToolStripMenuItem
             // 
             this.extractTeamSectionsToolStripMenuItem.Name = "extractTeamSectionsToolStripMenuItem";
-            this.extractTeamSectionsToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.extractTeamSectionsToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
             this.extractTeamSectionsToolStripMenuItem.Text = "Extract Team Sections";
             this.extractTeamSectionsToolStripMenuItem.Click += new System.EventHandler(this.extractTeamSectionsToolStripMenuItem_Click);
             // 
             // launchTempFormToolStripMenuItem
             // 
             this.launchTempFormToolStripMenuItem.Name = "launchTempFormToolStripMenuItem";
-            this.launchTempFormToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.launchTempFormToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
             this.launchTempFormToolStripMenuItem.Text = "Launch Temp Form";
             this.launchTempFormToolStripMenuItem.Click += new System.EventHandler(this.launchTempFormToolStripMenuItem_Click);
             // 
             // launchPhotoDataEditorToolStripMenuItem
             // 
             this.launchPhotoDataEditorToolStripMenuItem.Name = "launchPhotoDataEditorToolStripMenuItem";
-            this.launchPhotoDataEditorToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.launchPhotoDataEditorToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
             this.launchPhotoDataEditorToolStripMenuItem.Text = "Launch Photo Data Editor";
             this.launchPhotoDataEditorToolStripMenuItem.Click += new System.EventHandler(this.launchPhotoDataEditorToolStripMenuItem_Click);
+            // 
+            // listDepthChartsToolStripMenuItem
+            // 
+            this.listDepthChartsToolStripMenuItem.Name = "listDepthChartsToolStripMenuItem";
+            this.listDepthChartsToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
+            this.listDepthChartsToolStripMenuItem.Text = "List Depth charts";
+            this.listDepthChartsToolStripMenuItem.Click += new System.EventHandler(this.listDepthChartsToolStripMenuItem_Click);
+            // 
+            // updatePlayerAppearanceFromFileToolStripMenuItem
+            // 
+            this.updatePlayerAppearanceFromFileToolStripMenuItem.Name = "updatePlayerAppearanceFromFileToolStripMenuItem";
+            this.updatePlayerAppearanceFromFileToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
+            this.updatePlayerAppearanceFromFileToolStripMenuItem.Text = "Update Player Appearence From File";
+            this.updatePlayerAppearanceFromFileToolStripMenuItem.Click += new System.EventHandler(this.updatePlayerAppearanceFromFileToolStripMenuItem_Click);
             // 
             // mGetTeamButton
             // 
@@ -505,14 +545,17 @@
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.label5);
+            this.groupBox3.Controls.Add(this.mGetBytesTextBox);
+            this.groupBox3.Controls.Add(this.mGetBytesButton);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.mSetByteLocUpDown);
             this.groupBox3.Controls.Add(this.mSetByteButton);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.mSetByteValTextBox);
-            this.groupBox3.Location = new System.Drawing.Point(160, 316);
+            this.groupBox3.Location = new System.Drawing.Point(13, 316);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(355, 37);
+            this.groupBox3.Size = new System.Drawing.Size(502, 37);
             this.groupBox3.TabIndex = 14;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Set Bytes";
@@ -554,7 +597,7 @@
             // mSetByteButton
             // 
             this.mSetByteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.mSetByteButton.Location = new System.Drawing.Point(283, 11);
+            this.mSetByteButton.Location = new System.Drawing.Point(267, 10);
             this.mSetByteButton.Name = "mSetByteButton";
             this.mSetByteButton.Size = new System.Drawing.Size(61, 23);
             this.mSetByteButton.TabIndex = 21;
@@ -576,7 +619,7 @@
             this.mSetByteValTextBox.Location = new System.Drawing.Point(178, 12);
             this.mSetByteValTextBox.MaxLength = 80;
             this.mSetByteValTextBox.Name = "mSetByteValTextBox";
-            this.mSetByteValTextBox.Size = new System.Drawing.Size(100, 20);
+            this.mSetByteValTextBox.Size = new System.Drawing.Size(83, 20);
             this.mSetByteValTextBox.TabIndex = 1;
             this.mSetByteValTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mSetByteValTextBox_KeyDown);
             // 
@@ -590,6 +633,34 @@
             this.mFindBytesButton.Text = "Find bytes in savefile";
             this.mFindBytesButton.UseVisualStyleBackColor = true;
             this.mFindBytesButton.Click += new System.EventHandler(this.mFindBytesButton_Click);
+            // 
+            // mGetBytesButton
+            // 
+            this.mGetBytesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mGetBytesButton.Location = new System.Drawing.Point(342, 10);
+            this.mGetBytesButton.Name = "mGetBytesButton";
+            this.mGetBytesButton.Size = new System.Drawing.Size(61, 23);
+            this.mGetBytesButton.TabIndex = 23;
+            this.mGetBytesButton.Text = "Get";
+            this.mGetBytesButton.UseVisualStyleBackColor = true;
+            this.mGetBytesButton.Click += new System.EventHandler(this.mGetBytesButton_Click);
+            // 
+            // mGetBytesTextBox
+            // 
+            this.mGetBytesTextBox.Location = new System.Drawing.Point(406, 13);
+            this.mGetBytesTextBox.MaxLength = 80;
+            this.mGetBytesTextBox.Name = "mGetBytesTextBox";
+            this.mGetBytesTextBox.Size = new System.Drawing.Size(52, 20);
+            this.mGetBytesTextBox.TabIndex = 24;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(464, 15);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(32, 13);
+            this.label5.TabIndex = 25;
+            this.label5.Text = "bytes";
             // 
             // mResultsTextBox
             // 
@@ -606,12 +677,20 @@
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
             // 
-            // listDepthChartsToolStripMenuItem
+            // coachToolStripMenuItem
             // 
-            this.listDepthChartsToolStripMenuItem.Name = "listDepthChartsToolStripMenuItem";
-            this.listDepthChartsToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.listDepthChartsToolStripMenuItem.Text = "List Depth charts";
-            this.listDepthChartsToolStripMenuItem.Click += new System.EventHandler(this.listDepthChartsToolStripMenuItem_Click);
+            this.coachToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.apperanceToolStripMenuItem});
+            this.coachToolStripMenuItem.Name = "coachToolStripMenuItem";
+            this.coachToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.coachToolStripMenuItem.Text = "Coach";
+            // 
+            // apperanceToolStripMenuItem
+            // 
+            this.apperanceToolStripMenuItem.Name = "apperanceToolStripMenuItem";
+            this.apperanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.apperanceToolStripMenuItem.Text = "Apperance";
+            this.apperanceToolStripMenuItem.Click += new System.EventHandler(this.apperanceToolStripMenuItem_Click);
             // 
             // DebugDialog
             // 
@@ -702,5 +781,13 @@
         private System.Windows.Forms.ToolStripMenuItem launchTempFormToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem launchPhotoDataEditorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listDepthChartsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoUpdatePBPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoUpdatePhotosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updatePlayerAppearanceFromFileToolStripMenuItem;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox mGetBytesTextBox;
+        private System.Windows.Forms.Button mGetBytesButton;
+        private System.Windows.Forms.ToolStripMenuItem coachToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem apperanceToolStripMenuItem;
     }
 }

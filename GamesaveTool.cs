@@ -11,6 +11,9 @@ namespace NFL2K5Tool
     /// </summary>
     public class GamesaveTool
     {
+        Dictionary<string, int> mCoachMap = new Dictionary<string, int>(34);
+        Dictionary<int, string> mReverseCoachMap = new Dictionary<int, string>(34);
+
         // Duane starks is the first player in the original roster 
         private int mPlayerStart = 0xB288; // 0xAFA8 for roster
         //may be able to add strings after this section; (All 0's from 0x8f2f0 - 0x9131f)
@@ -28,6 +31,10 @@ namespace NFL2K5Tool
         private int mFreeAgentCountLocation = 0x358; // default :  c5
         private int mFreeAgentPlayersPointer = 0x35c; // points to the start of the free agent pointers
 
+        // offset from player pointer start 
+        private int mCoachPointerOffset = 0x14c;
+        private int mCoachStringSectionLength = 0x14b1; //5297 bytes
+
         private int mMaxPlayers = 2317; //1944(roster) including free agents and draft class
 
         private const int cPlayerDataLength = 0x54;
@@ -38,6 +45,90 @@ namespace NFL2K5Tool
         private SaveType SaveType = SaveType.Franchise;
 
         private string mZipFile = "";
+
+        public GamesaveTool()
+        {
+            mCoachMap.Add("Dennis Green", 0x00);
+            mCoachMap.Add("Jim Mora Jr.", 0x01);
+            mCoachMap.Add("Brian Billick", 0x02);
+            mCoachMap.Add("Mike Mularkey", 0x03);
+            mCoachMap.Add("John Fox", 0x04);
+            mCoachMap.Add("Lovie Smith", 0x05);
+            mCoachMap.Add("Marvin Lewis", 0x06);
+            mCoachMap.Add("Mike Shanahan", 0x08);
+            mCoachMap.Add("Dallas Coach", 0x07);
+            mCoachMap.Add("Steve Mariucci", 0x09);
+            mCoachMap.Add("Mike Sherman", 0x0A);
+            mCoachMap.Add("Tony Dungy", 0x0B);
+            mCoachMap.Add("Jack Del Rio", 0x0C);
+            mCoachMap.Add("Dick Vermeil", 0x0D);
+            mCoachMap.Add("Dave Wannstedt", 0x0E);
+            mCoachMap.Add("Mike Tice", 0x0F);
+            mCoachMap.Add("Bill Belichick", 0x10);
+            mCoachMap.Add("Jim Haslett", 0x11);
+            mCoachMap.Add("Tom Coughlin", 0x12);
+            mCoachMap.Add("Herman Edwards", 0x13);
+            mCoachMap.Add("Norv Turner", 0x14);
+            mCoachMap.Add("Andy Reid", 0x15);
+            mCoachMap.Add("Bill Cowher", 0x16);
+            mCoachMap.Add("Mike Martz", 0x17);
+            mCoachMap.Add("Marty Schottenheimer", 0x18);
+            mCoachMap.Add("Dennis Erickson", 0x19);
+            mCoachMap.Add("Mike Holmgren", 0x1A);
+            mCoachMap.Add("Jon Gruden", 0x1B);
+            mCoachMap.Add("Jeff Fisher", 0x1C);
+            mCoachMap.Add("Joe Gibbs", 0x1D);
+            mCoachMap.Add("Butch Davis", 0x1E);
+            mCoachMap.Add("Dom Capers", 0x25);   // Skips big here... Are 0x26-0x31 also valid?
+            mCoachMap.Add("Generic1", 0x32);
+            mCoachMap.Add("Generic2", 0x33);
+
+            mReverseCoachMap.Add(0x00, "Dennis Green");
+            mReverseCoachMap.Add(0x01, "Jim Mora Jr.");
+            mReverseCoachMap.Add(0x02, "Brian Billick");
+            mReverseCoachMap.Add(0x03, "Mike Mularkey");
+            mReverseCoachMap.Add(0x04, "John Fox");
+            mReverseCoachMap.Add(0x05, "Lovie Smith");
+            mReverseCoachMap.Add(0x06, "Marvin Lewis");
+            mReverseCoachMap.Add(0x08, "Mike Shanahan");
+            mReverseCoachMap.Add(0x07, "Dallas Coach");
+            mReverseCoachMap.Add(0x09, "Steve Mariucci");
+            mReverseCoachMap.Add(0x0A, "Mike Sherman");
+            mReverseCoachMap.Add(0x0B, "Tony Dungy");
+            mReverseCoachMap.Add(0x0C, "Jack Del Rio");
+            mReverseCoachMap.Add(0x0D, "Dick Vermeil");
+            mReverseCoachMap.Add(0x0E, "Dave Wannstedt");
+            mReverseCoachMap.Add(0x0F, "Mike Tice");
+            mReverseCoachMap.Add(0x10, "Bill Belichick");
+            mReverseCoachMap.Add(0x11, "Jim Haslett");
+            mReverseCoachMap.Add(0x12, "Tom Coughlin");
+            mReverseCoachMap.Add(0x13, "Herman Edwards");
+            mReverseCoachMap.Add(0x14, "Norv Turner");
+            mReverseCoachMap.Add(0x15, "Andy Reid");
+            mReverseCoachMap.Add(0x16, "Bill Cowher");
+            mReverseCoachMap.Add(0x17, "Mike Martz");
+            mReverseCoachMap.Add(0x18, "Marty Schottenheimer");
+            mReverseCoachMap.Add(0x19, "Dennis Erickson");
+            mReverseCoachMap.Add(0x1A, "Mike Holmgren");
+            mReverseCoachMap.Add(0x1B, "Jon Gruden");
+            mReverseCoachMap.Add(0x1C, "Jeff Fisher");
+            mReverseCoachMap.Add(0x1D, "Joe Gibbs");
+            mReverseCoachMap.Add(0x1E, "Butch Davis");
+            mReverseCoachMap.Add(0x25, "Dom Capers");
+            mReverseCoachMap.Add(0x32, "Generic1");
+            mReverseCoachMap.Add(0x33, "Generic2");
+
+            StringBuilder builder = new StringBuilder("Coach,Team,");
+            string attr = "";
+            Array attrs = Enum.GetValues(typeof(CoachOffsets));
+            for(int i=0; i < attrs.Length; i++)
+            {
+                attr = attrs.GetValue(i).ToString();
+                builder.Append(attr);
+                builder.Append(",");
+            }
+            mCoachKeyAll = builder.ToString();
+        }
 
         private void InitializeForFranchise()
         {
@@ -71,6 +162,180 @@ namespace NFL2K5Tool
 
             Year = 0; //?? does a year apply to a roster at all???
             AutoPlayerStartLocation();
+        }
+
+        private int GetCoachPointer(int teamIndex)
+        {
+            int retVal = m49ersPlayerPointersStart + mCoachPointerOffset + teamIndex * cTeamDiff;
+            return retVal;
+        }
+
+        /// <summary>
+        /// All the coach attributes.
+        /// </summary>
+        public string CoachKeyAll { get { return mCoachKeyAll; } }
+
+        private string mCoachKeyAll = "";
+        public const string DefaultCoachKey = "Coach,Team,fname,lname,Body,Photo";
+        private string mCoachKey = DefaultCoachKey;
+
+        /// <summary>
+        /// Coach attribute key
+        /// </summary>
+        public string CoachKey
+        {
+            get { return mCoachKey; }
+            set
+            {
+                string lastAttr = "";
+                try
+                {
+                    string[] parts = value.Split(",".ToCharArray());
+                    foreach (string part in parts)
+                    {
+                        if (part.Length > 0 && !part.Equals("Team", StringComparison.InvariantCultureIgnoreCase) && !part.Equals("Coach", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            lastAttr = part;
+                            Enum.Parse(typeof(CoachOffsets), part, true); // throws exception on invalid part.
+                        }
+                    }
+                    mCoachKey = value;
+                }
+                catch (Exception )
+                {
+                    StaticUtils.AddError(String.Format("Error setting CoachKey part='{0}' in '{1}'", lastAttr, value));
+                }
+            }
+        }
+
+        public void SetCoachAttribute(int teamIndex, CoachOffsets attr, string value)
+        {
+            if (teamIndex < 32)
+            {
+                int coachPointer = GetCoachPointer(teamIndex);
+                int coach_loc = GetPointerDestination(coachPointer);
+                int string_ptr = 0;
+                int loc = coach_loc + (int)attr;
+                int val, v1, v2;
+                string strVal;
+
+                switch (attr)
+                {
+                    case CoachOffsets.FirstName:
+                    case CoachOffsets.LastName:
+                    case CoachOffsets.Info1:
+                    case CoachOffsets.Info2:
+                        //string_ptr = coach_ptr + (int)attr;
+                        SetCoachString(value.Replace("\"", ""), loc);
+                        break;
+                    case CoachOffsets.Photo:
+                        val = Int32.Parse(value);
+                        v1 = val & 0xff;
+                        v2 = val >> 8;
+                        SetByte(loc, (byte)v1);
+                        SetByte(loc + 1, (byte)v2);
+                        break;
+                    case CoachOffsets.Body:
+                        strVal = value.Replace("[", "").Replace("]", "");
+                        if (mCoachMap.ContainsKey(strVal))
+                            SetByte(loc, (byte)mCoachMap[strVal]);
+                        else
+                            StaticUtils.AddError(String.Format("Error Setting Body '{0}' value for {1} Coach ",
+                                value, mTeamsDataOrder[teamIndex]));
+                        break;
+                    default:
+                        v1 = Int32.Parse(value);
+                        SetByte(loc, (byte)v1);
+                        break;
+                }
+            }
+        }
+
+        public string GetCoachAttribute(int teamIndex, CoachOffsets attr)
+        {
+            string retVal = "!!!!Invalid!!!!";
+            if (teamIndex < 32)
+            {
+                int coachPointer = GetCoachPointer(teamIndex);
+                int coach_ptr = GetPointerDestination(coachPointer);
+                int str_ptr = 0;
+                int loc = coach_ptr + (int)attr;
+                switch (attr)
+                {
+                    case CoachOffsets.FirstName:
+                    case CoachOffsets.LastName:
+                    case CoachOffsets.Info1:
+                    case CoachOffsets.Info2:
+                        str_ptr = coach_ptr + (int)attr;
+                        retVal = GetName(str_ptr);
+                        break;
+                    case CoachOffsets.Body:
+                        int body_ptr = coach_ptr + (int)CoachOffsets.Body;
+                        int bodyNumber = GameSaveData[body_ptr];
+                        retVal = mReverseCoachMap[bodyNumber];
+                        break;
+                    case CoachOffsets.Photo:
+                        int val = GameSaveData[loc + 1] << 8;
+                        val += GameSaveData[loc];
+                        retVal = "" + val;
+                        switch (retVal.Length)
+                        {
+                            case 3: retVal = "0" + retVal; break;
+                            case 2: retVal = "00" + retVal; break;
+                            case 1: retVal = "000" + retVal; break;
+                        }
+                        break;
+                    default:
+                        retVal = "" + GameSaveData[loc];
+                        break;
+                }
+            }
+            if (retVal.IndexOf(',') > -1)
+            {
+                retVal = "\"" + retVal + "\"";
+            }
+            return retVal;
+        }
+
+        /// <summary>
+        /// FirstName,LastName,Photo,Body
+        /// </summary>
+        /// <param name="teamIndex"></param>
+        /// <returns></returns>
+        public string GetCoachData(int teamIndex)
+        {
+            string retVal = "!!!!!!!!INVALID!!!!!!!!!!!!";
+            if (teamIndex < 32)
+            {
+                StringBuilder builder = new StringBuilder("Coach,");
+                builder.Append(mTeamsDataOrder[teamIndex]);
+                builder.Append(",");
+                string key = CoachKey.ToLower().Replace("fname", "FirstName").Replace("lname", "LastName");
+                string[] parts = key.Split(",".ToCharArray());
+                CoachOffsets attr = CoachOffsets.FirstName;
+                foreach (string part in parts)
+                {
+                    if ("Coach,Team".IndexOf(part, StringComparison.InvariantCultureIgnoreCase) == -1)
+                    {
+                        attr = (CoachOffsets)Enum.Parse(typeof(CoachOffsets), part, true);
+                        if ("Body".Equals(part, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            builder.Append("[");
+                            builder.Append(GetCoachAttribute(teamIndex, attr));
+                            builder.Append("],");
+                        }
+                        else
+                        {
+                            builder.Append(GetCoachAttribute(teamIndex, attr));
+                            builder.Append(",");
+                        }
+                    }
+                }
+                builder.Remove(builder.Length - 1, 1);// remove last comma
+
+                retVal = builder.ToString();
+            }
+            return retVal;
         }
 
         /// <summary>
@@ -290,14 +555,21 @@ namespace NFL2K5Tool
         public List<int> GetPlayerIndexesForTeam(string team)
         {
             List<int> retVal = new List<int>(55);
+            int numPlayers = 0;
             int teamIndex = GetTeamIndex(team);
             int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
             if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
                 teamPlayerPointersStart = GetPointerDestination( mFreeAgentPlayersPointer);
-            //else if ("DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
-            //    return GetDraftClass(attributes, appearance);
+            else if ("DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
+            {
+                int firstPlayer = 1937;
+                numPlayers = 380;
+                for (int i = firstPlayer; i < firstPlayer + numPlayers; i++) 
+                    retVal.Add(i);
+                return retVal;
+            }
 
-            int numPlayers = GetNumPlayers(team);
+            numPlayers = GetNumPlayers(team);
             int playerIndex = -1;
 
             try
@@ -399,8 +671,7 @@ namespace NFL2K5Tool
         }
 
         /// <summary>
-        /// Automatically updat the Play by play names
-        /// consider doing this in the Form, not directly applying to the save file.
+        /// Automatically update the Play by play names
         /// </summary>
         public void AutoUpdatePBP()
         {
@@ -428,12 +699,9 @@ namespace NFL2K5Tool
 
         /// <summary>
         /// Automatically update the Player photos.
-        /// consider doing this in the Form, not directly applying to the save file.
         /// </summary>
-        public string AutoUpdatePhoto()
+        public void AutoUpdatePhoto()
         {
-            StringBuilder builder = new StringBuilder();
-
             string key, firstName, lastName, number, val;
             for (int player = 0; player < MaxPlayers; player++)
             {
@@ -447,21 +715,11 @@ namespace NFL2K5Tool
 
                 key = lastName + ", " + firstName;
                 if (DataMap.PhotoMap.ContainsKey(key))
-                {
                     val = DataMap.PhotoMap[key];
-                    builder.Append("Photo for:");
-                    builder.Append(firstName);
-                    builder.Append(" ");
-                    builder.Append(lastName);
-                    builder.Append(":");
-                    builder.Append(val);
-                    builder.Append("\r\n");
-                }
                 else //if (DataMap.PhotoMap.ContainsKey(number))
-                    val = DataMap.PhotoMap[number];
+                    val = DataMap.PhotoMap["NoPhoto"];
                 SetAttribute(player, PlayerOffsets.Photo, val);
             }
-            return builder.ToString();
         }
 
         public int GetPlayerPositionDepth(int player)
@@ -686,6 +944,39 @@ namespace NFL2K5Tool
                 throw new InvalidOperationException(string.Format("Depth {0} at position {1} does not exist", depth, pos.ToString()));
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="team"></param>
+        /// <param name="stPosition"></param>
+        /// <param name="firstName"></param>
+        /// <param name="lastName"></param>
+        public void SetSpecialTeamPosition(string team, SpecialTeamer stPosition, string firstName, string lastName)
+        {
+            string theName = firstName + " " + lastName;
+            int index = -1;
+            int teamIndex = GetTeamIndex(team);
+            int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
+            List<int> playerIndexes = GetPlayerIndexesForTeam(team);
+            for (int i = 0; i < playerIndexes.Count; i++)
+            {
+                if (theName == GetPlayerName(playerIndexes[i], ' '))
+                {
+                    index = i;
+                    break;
+                }
+            }
+            if (index > -1)
+            {
+                SetByte(teamPlayerPointersStart + (int)stPosition, (byte)index);
+            }
+            else
+            {
+                throw new InvalidOperationException("Error setting special teamer! '"+ theName + "' is not on the team!");
+            }
+        }
+
         /// <summary>
         /// Loads the gamesave fle
         /// TODO: error checking; 
@@ -1360,33 +1651,36 @@ namespace NFL2K5Tool
                     SetByte(ptrLoc1+2, (byte)(0xff & (newPtrVal >> 16)));
                 }
             }
-            else 
-            {
-                string prevName = GetName(ptrLoc1);
-                if (prevName != name)
-                {
-                    int diff = 2 * (name.Length - prevName.Length);
-                    int stringLoc = GetPointerDestination(ptrLoc1);
-
-                    if (diff > 0)
-                        ShiftDataDown(stringLoc, diff);
-                    else if (diff < 0)
-                        ShiftDataUp(stringLoc, -1 * diff);
-
-                    AdjustStringPointers(stringLoc + 2 * prevName.Length, diff);
-
-                    // lay down name
-                    for (int i = 0; i < name.Length; i++)
-                    {
-                        SetByte(stringLoc, (byte)name[i]);
-                        SetByte(stringLoc + 1, 0);
-                        stringLoc += 2;
-                    }
-                    SetByte(stringLoc, 0); // set null char
-                    SetByte(stringLoc + 1, 0);
-                }
-            }
+            else
+                SetName(name, ptrLoc1);
             return retVal;
+        }
+
+        private void SetName(string name, int ptrLoc)
+        {
+            string prevName = GetName(ptrLoc);
+            if (prevName != name)
+            {
+                int diff = 2 * (name.Length - prevName.Length);
+                int stringLoc = GetPointerDestination(ptrLoc);
+
+                if (diff > 0)
+                    ShiftDataDown(stringLoc, diff);
+                else if (diff < 0)
+                    ShiftDataUp(stringLoc, -1 * diff);
+
+                AdjustPlayerNamePointers(stringLoc + 2 * prevName.Length, diff);
+
+                // lay down name
+                for (int i = 0; i < name.Length; i++)
+                {
+                    SetByte(stringLoc, (byte)name[i]);
+                    SetByte(stringLoc + 1, 0);
+                    stringLoc += 2;
+                }
+                SetByte(stringLoc, 0); // set null char
+                SetByte(stringLoc + 1, 0);
+            }
         }
 
         //0x8960f is the end of the name section; although it's not obvious 
@@ -1501,13 +1795,82 @@ namespace NFL2K5Tool
             return retVal;
         }
 
+        private void SetCoachString(string name, int ptrLoc)
+        {
+            string prevName = GetName(ptrLoc);
+            if (prevName != name)
+            {
+                int diff = 2 * (name.Length - prevName.Length);
+                int stringLoc = GetPointerDestination(ptrLoc);
+
+                if (diff > 0)
+                    ShiftDataDown(stringLoc, diff);
+                else if (diff < 0)
+                    ShiftDataUp(stringLoc, -1 * diff);
+
+                AdjustCoachStringPointers(stringLoc + 2 * prevName.Length, diff);
+
+                // lay down name
+                for (int i = 0; i < name.Length; i++)
+                {
+                    SetByte(stringLoc, (byte)name[i]);
+                    SetByte(stringLoc + 1, 0);
+                    stringLoc += 2;
+                }
+                SetByte(stringLoc, 0); // set null char
+                SetByte(stringLoc + 1, 0);
+            }
+        }
+
         /// <summary>
         /// If a pointer points to something before the changed area, leave it alone.
         /// else adjust it.
         /// </summary>
         /// <param name="locationOfChange">The location where the string table changed</param>
         /// <param name="difference">the amount to adjust the pointrs by.</param>
-        private void AdjustStringPointers(int locationOfChange, int difference)
+        private void AdjustCoachStringPointers(int locationOfChange, int difference)
+        {
+            int firstNamePtrLoc = 0;
+            int lastNamePtrLoc = 0;
+            int info1StringPtrLoc = 0;
+            int info2StringPtrLoc = 0;
+            int loc = 0;
+
+            // Assumes that the 49ers coach FirstName remained the first name in the section. Not sure if Finn's editor mandates this.
+            int coachStringEnd = GetPointerDestination(GetCoachPointer(0)) + mCoachStringSectionLength; 
+            
+            for (int coach = 0; coach <= 32; coach++)
+            {
+                firstNamePtrLoc = GetCoachPointer(coach);// data starts with first name ptr ;)
+                lastNamePtrLoc = firstNamePtrLoc + (int)CoachOffsets.LastName;
+                info1StringPtrLoc = firstNamePtrLoc + (int)CoachOffsets.Info1;
+                info2StringPtrLoc = firstNamePtrLoc + (int)CoachOffsets.Info2;
+
+                loc = GetPointerDestination(firstNamePtrLoc);
+                if (loc < coachStringEnd && loc >= locationOfChange)
+                    AdjustPointer(firstNamePtrLoc, difference);
+
+                loc = GetPointerDestination(lastNamePtrLoc);
+                if (loc < coachStringEnd && loc >= locationOfChange)
+                    AdjustPointer(lastNamePtrLoc, difference);
+
+                loc = GetPointerDestination(info1StringPtrLoc);
+                if (loc < coachStringEnd && loc >= locationOfChange)
+                    AdjustPointer(info1StringPtrLoc, difference);
+
+                loc = GetPointerDestination(info2StringPtrLoc);
+                if (loc < coachStringEnd && loc >= locationOfChange)
+                    AdjustPointer(info2StringPtrLoc, difference);
+            }
+        }
+
+        /// <summary>
+        /// If a pointer points to something before the changed area, leave it alone.
+        /// else adjust it.
+        /// </summary>
+        /// <param name="locationOfChange">The location where the string table changed</param>
+        /// <param name="difference">the amount to adjust the pointrs by.</param>
+        private void AdjustPlayerNamePointers(int locationOfChange, int difference)
         {
             int firstNamePtrLoc = 0;
             int lastNamePtrLoc = 0;

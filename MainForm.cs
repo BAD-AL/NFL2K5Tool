@@ -94,6 +94,22 @@ namespace NFL2K5Tool
             if( listDraftClassToolStripMenuItem.Checked)
                 builder.Append(mTool.GetTeamPlayers("DraftClass", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, false));
 
+            if (listCoachesToolStripMenuItem1.Checked)
+            {
+                builder.Append("\n\nCoachKEY=");
+                // hmm... how to handle this properly.....
+                if (fullCoachAttributesToolStripMenuItem.Checked)
+                    mTool.CoachKey = mTool.CoachKeyAll;
+                
+                builder.Append(mTool.CoachKey);
+                builder.Append("\n");
+                for (int i = 0; i < 32; i++)
+                {
+                    builder.Append(mTool.GetCoachData(i));
+                    builder.Append("\r\n");
+                }
+            }
+
             if (listScheduleToolStripMenuItem.Checked)
             {
                 SchedulerHelper helper = new SchedulerHelper(mTool);
@@ -501,7 +517,11 @@ namespace NFL2K5Tool
         private void DoubleClicked()
         {
             string line = InputParser.GetLine(mTextBox.SelectionStart, mTextBox.Text);
-            if (!String.IsNullOrEmpty(line) && InputParser.ParsePlayerLine(line).Count > 2)
+            if (mTool == null)
+            {
+                MessageBox.Show("You must load a save file before you can edit players in the GUI.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (!String.IsNullOrEmpty(line) && InputParser.ParsePlayerLine(line).Count > 2)
             {
                 EditPlayer();
             }
@@ -509,19 +529,26 @@ namespace NFL2K5Tool
 
         private void EditPlayer()
         {
-            PlayerEditForm form = new PlayerEditForm();
-            form.Colleges = mTool.GetColleges();
-            form.ReversePBPs = DataMap.ReversePBPMap;
-            form.ReversePhotos = DataMap.ReversePhotoMap;
-            form.PBPs = DataMap.PBPMap;
-            form.Photos = DataMap.PhotoMap;
-            form.Data = mTextBox.Text;
-            form.SelectionStart = mTextBox.SelectionStart;
-            if (form.ShowDialog(this) == DialogResult.OK)
+            try
             {
-                SetText(form.Data);
-                mTextBox.SelectionStart = form.SelectionStart;
-                mTextBox.ScrollToCaret();
+                PlayerEditForm form = new PlayerEditForm();
+                form.Colleges = mTool.GetColleges();
+                form.ReversePBPs = DataMap.ReversePBPMap;
+                form.ReversePhotos = DataMap.ReversePhotoMap;
+                form.PBPs = DataMap.PBPMap;
+                form.Photos = DataMap.PhotoMap;
+                form.Data = mTextBox.Text;
+                form.SelectionStart = mTextBox.SelectionStart;
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    SetText(form.Data);
+                    mTextBox.SelectionStart = form.SelectionStart;
+                    mTextBox.ScrollToCaret();
+                }
+            }
+            catch (InvalidOperationException e)
+            {
+                MessageBox.Show(e.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -552,6 +579,16 @@ namespace NFL2K5Tool
         private void playerEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EditPlayer();
+        }
+
+        private void listCoachesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listCoachesToolStripMenuItem1.Checked = !listCoachesToolStripMenuItem1.Checked;
+        }
+
+        private void fullCoachAttributesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fullCoachAttributesToolStripMenuItem.Checked = !fullCoachAttributesToolStripMenuItem.Checked;
         }
     }
 }
