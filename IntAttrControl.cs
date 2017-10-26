@@ -47,5 +47,15 @@ namespace NFL2K5Tool
                 ValueChanged(this, e);
         }
 
+        private void mAttrUpDown_Enter(object sender, EventArgs e)
+        {
+            this.BackColor = Color.Moccasin;
+        }
+
+        private void mAttrUpDown_Leave(object sender, EventArgs e)
+        {
+            this.BackColor = Parent.BackColor;
+        }
+
     }
 }

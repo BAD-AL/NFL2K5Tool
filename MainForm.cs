@@ -87,8 +87,11 @@ namespace NFL2K5Tool
             mTextBox.Clear();
             StringBuilder builder = new StringBuilder(5000);
 
-            builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
-            builder.Append("\n");
+            if (listTeamsToolStripMenuItem.Checked || listFreeAgentsToolStripMenuItem.Checked || listDraftClassToolStripMenuItem.Checked)
+            {
+                builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
+                builder.Append("\n");
+            }
 
             if (listTeamsToolStripMenuItem.Checked)
                 builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, listSpecialTeamsToolStripMenuItem.Checked));
@@ -98,6 +101,22 @@ namespace NFL2K5Tool
 
             if (listDraftClassToolStripMenuItem.Checked)
                 builder.Append(mTool.GetTeamPlayers("DraftClass", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, false));
+
+            if (listCoachesToolStripMenuItem1.Checked)
+            {
+                builder.Append("\n\nCoachKEY=");
+                // hmm... how to handle this properly.....
+                if (fullCoachAttributesToolStripMenuItem.Checked)
+                    mTool.CoachKey = mTool.CoachKeyAll;
+                
+                builder.Append(mTool.CoachKey);
+                builder.Append("\n");
+                for (int i = 0; i < 32; i++)
+                {
+                    builder.Append(mTool.GetCoachData(i));
+                    builder.Append("\r\n");
+                }
+            }
 
             if (listScheduleToolStripMenuItem.Checked)
             {
@@ -502,7 +521,11 @@ namespace NFL2K5Tool
         private void DoubleClicked()
         {
             string line = InputParser.GetLine(mTextBox.SelectionStart, mTextBox.Text);
-            if (!String.IsNullOrEmpty(line) && InputParser.ParsePlayerLine(line).Count > 2)
+            if (mTool == null)
+            {
+                MessageBox.Show("You must load a save file before you can edit players in the GUI.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else if (!String.IsNullOrEmpty(line) && InputParser.ParsePlayerLine(line).Count > 2)
             {
                 EditPlayer();
             }
@@ -560,6 +583,16 @@ namespace NFL2K5Tool
         private void playerEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             EditPlayer();
+        }
+
+        private void listCoachesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listCoachesToolStripMenuItem1.Checked = !listCoachesToolStripMenuItem1.Checked;
+        }
+
+        private void fullCoachAttributesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fullCoachAttributesToolStripMenuItem.Checked = !fullCoachAttributesToolStripMenuItem.Checked;
         }
     }
 }

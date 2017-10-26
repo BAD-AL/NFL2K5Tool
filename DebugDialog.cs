@@ -245,7 +245,7 @@ namespace NFL2K5Tool
 
         private void autoUpdateDepthChartToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Tool.AutoUpdateDepthChartForTeam("Packers");
+            Tool.AutoUpdateDepthChart();
         }
 
         private void includePhotePBPToolStripMenuItem_Click(object sender, EventArgs e)
@@ -484,8 +484,101 @@ namespace NFL2K5Tool
                 int year = 0;
                 Int32.TryParse(result, out year);
                 Tool.AutoUpdateYearsProFromYear(year);
+			}
+		}
+		
+        private void mGetBytesButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int length = Int32.Parse(mGetBytesTextBox.Text, System.Globalization.NumberStyles.AllowHexSpecifier);
+                int start = (int)mSetByteLocUpDown.Value;
+                int end = start + length;
+                StringBuilder builder = new StringBuilder(length * 3);
+                for (int i = start; i < end; i++)
+                {
+                    builder.Append(string.Format("{0:X2} ", Tool.GameSaveData[i]));
+                }
+                mResultsTextBox.Text = builder.ToString();
+            }
+            catch (Exception ex)
+            {
+                mStatusLabel.Text = ex.Message;
             }
         }
 
+        private void autoUpdatePBPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Tool.AutoUpdatePBP();
+        }
+
+        private void autoUpdatePhotosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Tool.AutoUpdatePhoto();
+        }
+        string mApperanceKey = "#Position,fname,lname,JerseyNumber,College,DOB,PBP,Photo,YearsPro,Hand,Weight,Height,BodyType,Skin,Face,Dreads,Helmet,FaceMask,Visor,EyeBlack,MouthPiece,LeftGlove,RightGlove,LeftWrist,RightWrist,LeftElbow,RightElbow,Sleeves,LeftShoe,RightShoe,NeckRoll,Turtleneck";
+        
+        private void updatePlayerAppearanceFromFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string fileName = null;
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.RestoreDirectory = true;
+            dlg.Title = "Select Player appearance data file";
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                fileName = dlg.FileName;
+            }
+            dlg.Dispose();
+
+            if (fileName != null)
+            {
+                String text = System.IO.File.ReadAllText(fileName).Replace("\r\n", "\n");
+                String currentLine, playerKey;
+                int index = 0;
+                int numUpdated = 0;
+                int endIndex = 0;
+                if (text != null && text.IndexOf(mApperanceKey) < 10)
+                {
+                    Tool.SetKey(mApperanceKey.Replace("#", "KEY="));
+                    InputParser inputParser = new InputParser(Tool);
+
+                    for (int i = 0; i < Tool.MaxPlayers; i++)
+                    {
+                        playerKey = String.Concat(Tool.GetAttribute(i, PlayerOffsets.Position), ",", 
+                                                  Tool.GetPlayerFirstName(i), ",", 
+                                                  Tool.GetPlayerLastName(i), ",");
+                        index = text.IndexOf(playerKey);
+                        if (index > -1)
+                        {
+                            endIndex = text.IndexOf('\n', index + 10);
+                            currentLine = text.Substring(index, endIndex-index);
+                            inputParser.SetPlayerData(i, currentLine, false);
+                            numUpdated++;
+                        }
+                    }
+                    Tool.SetKey("");
+                    mStatusLabel.Text = "Updated " + numUpdated + " Players";
+                    MessageBox.Show(mStatusLabel.Text);
+                }
+                else
+                {
+                    MessageBox.Show(this, "Error", "Use a valid Apperance file!\nExtract only 'Apperance' from another save and stash in a file.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void apperanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("#");
+            builder.Append(Tool.CoachKey);
+            builder.Append("\r\n");
+            for (int i = 0; i < 32; i++)
+            {
+                builder.Append( Tool.GetCoachData(i));
+                builder.Append("\r\n");
+            }
+            mResultsTextBox.Text = builder.ToString();
+        }
     }
 }

@@ -38,37 +38,43 @@
             this.mCancelButton = new System.Windows.Forms.Button();
             this.mOkButton = new System.Windows.Forms.Button();
             this.m_TeamsComboBox = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.mNextButton = new System.Windows.Forms.Button();
             this.mPreviousButton = new System.Windows.Forms.Button();
             this.mPlayerIndexUpDown = new System.Windows.Forms.NumericUpDown();
             this.button1 = new System.Windows.Forms.Button();
+            this.mFacePictureBox = new System.Windows.Forms.PictureBox();
+            this.mSkinColorLabel = new System.Windows.Forms.Label();
+            this.mHeightLabel = new System.Windows.Forms.Label();
+            this.mWeightLabel = new System.Windows.Forms.Label();
+            this.mBodyTypeLabel = new System.Windows.Forms.Label();
+            this.mJerseyNumberLabel = new System.Windows.Forms.Label();
             this.Position = new NFL2K5Tool.StringSelectionControl();
             this.tabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mFacePictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // fname
             // 
-            this.fname.Location = new System.Drawing.Point(15, 25);
+            this.fname.Location = new System.Drawing.Point(39, 25);
             this.fname.Name = "fname";
-            this.fname.Size = new System.Drawing.Size(100, 20);
+            this.fname.Size = new System.Drawing.Size(83, 20);
             this.fname.TabIndex = 0;
             this.fname.Leave += new System.EventHandler(this.ValueChanged);
             // 
             // lname
             // 
-            this.lname.Location = new System.Drawing.Point(121, 25);
+            this.lname.Location = new System.Drawing.Point(130, 25);
             this.lname.Name = "lname";
-            this.lname.Size = new System.Drawing.Size(100, 20);
+            this.lname.Size = new System.Drawing.Size(91, 20);
             this.lname.TabIndex = 1;
             this.lname.Leave += new System.EventHandler(this.ValueChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(36, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 2;
@@ -134,20 +140,11 @@
             // 
             this.m_TeamsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_TeamsComboBox.FormattingEnabled = true;
-            this.m_TeamsComboBox.Location = new System.Drawing.Point(444, 24);
+            this.m_TeamsComboBox.Location = new System.Drawing.Point(482, 25);
             this.m_TeamsComboBox.Name = "m_TeamsComboBox";
-            this.m_TeamsComboBox.Size = new System.Drawing.Size(121, 21);
+            this.m_TeamsComboBox.Size = new System.Drawing.Size(88, 21);
             this.m_TeamsComboBox.TabIndex = 3;
             this.m_TeamsComboBox.SelectedIndexChanged += new System.EventHandler(this.m_TeamsComboBox_SelectedIndexChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(441, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(34, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Team";
             // 
             // label3
             // 
@@ -205,6 +202,66 @@
             this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // mFacePictureBox
+            // 
+            this.mFacePictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mFacePictureBox.Location = new System.Drawing.Point(303, 5);
+            this.mFacePictureBox.Name = "mFacePictureBox";
+            this.mFacePictureBox.Size = new System.Drawing.Size(49, 50);
+            this.mFacePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.mFacePictureBox.TabIndex = 11;
+            this.mFacePictureBox.TabStop = false;
+            this.mFacePictureBox.Click += new System.EventHandler(this.mFacePictureBox_Click);
+            // 
+            // mSkinColorLabel
+            // 
+            this.mSkinColorLabel.AutoSize = true;
+            this.mSkinColorLabel.ForeColor = System.Drawing.Color.White;
+            this.mSkinColorLabel.Location = new System.Drawing.Point(358, 2);
+            this.mSkinColorLabel.Name = "mSkinColorLabel";
+            this.mSkinColorLabel.Size = new System.Drawing.Size(35, 13);
+            this.mSkinColorLabel.TabIndex = 12;
+            this.mSkinColorLabel.Text = "SkinX";
+            this.mSkinColorLabel.Click += new System.EventHandler(this.mSkinColorLabel_Click);
+            // 
+            // mHeightLabel
+            // 
+            this.mHeightLabel.AutoSize = true;
+            this.mHeightLabel.Location = new System.Drawing.Point(358, 17);
+            this.mHeightLabel.Name = "mHeightLabel";
+            this.mHeightLabel.Size = new System.Drawing.Size(38, 13);
+            this.mHeightLabel.TabIndex = 13;
+            this.mHeightLabel.Text = "Height";
+            this.mHeightLabel.Click += new System.EventHandler(this.mHeightLabel_Click);
+            // 
+            // mWeightLabel
+            // 
+            this.mWeightLabel.AutoSize = true;
+            this.mWeightLabel.Location = new System.Drawing.Point(358, 34);
+            this.mWeightLabel.Name = "mWeightLabel";
+            this.mWeightLabel.Size = new System.Drawing.Size(41, 13);
+            this.mWeightLabel.TabIndex = 14;
+            this.mWeightLabel.Text = "Weight";
+            this.mWeightLabel.Click += new System.EventHandler(this.mWeightLabel_Click);
+            // 
+            // mBodyTypeLabel
+            // 
+            this.mBodyTypeLabel.AutoSize = true;
+            this.mBodyTypeLabel.Location = new System.Drawing.Point(359, 49);
+            this.mBodyTypeLabel.Name = "mBodyTypeLabel";
+            this.mBodyTypeLabel.Size = new System.Drawing.Size(55, 13);
+            this.mBodyTypeLabel.TabIndex = 15;
+            this.mBodyTypeLabel.Text = "BodyType";
+            this.mBodyTypeLabel.Click += new System.EventHandler(this.mBodyTypeLabel_Click);
+            // 
+            // mJerseyNumberLabel
+            // 
+            this.mJerseyNumberLabel.Location = new System.Drawing.Point(8, 28);
+            this.mJerseyNumberLabel.Name = "mJerseyNumberLabel";
+            this.mJerseyNumberLabel.Size = new System.Drawing.Size(30, 17);
+            this.mJerseyNumberLabel.TabIndex = 16;
+            this.mJerseyNumberLabel.Text = "#00";
+            // 
             // Position
             // 
             this.Position.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -212,7 +269,7 @@
             this.Position.Location = new System.Drawing.Point(227, 7);
             this.Position.Name = "Position";
             this.Position.RepresentedValue = typeof(string);
-            this.Position.Size = new System.Drawing.Size(106, 48);
+            this.Position.Size = new System.Drawing.Size(70, 48);
             this.Position.TabIndex = 2;
             this.Position.Value = "";
             this.Position.ValueChanged += new System.EventHandler(this.ValueChanged);
@@ -222,13 +279,18 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(669, 513);
+            this.Controls.Add(this.mJerseyNumberLabel);
+            this.Controls.Add(this.mBodyTypeLabel);
+            this.Controls.Add(this.mWeightLabel);
+            this.Controls.Add(this.mHeightLabel);
+            this.Controls.Add(this.mSkinColorLabel);
+            this.Controls.Add(this.mFacePictureBox);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Position);
             this.Controls.Add(this.mPlayerIndexUpDown);
             this.Controls.Add(this.mPreviousButton);
             this.Controls.Add(this.mNextButton);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.m_TeamsComboBox);
             this.Controls.Add(this.mOkButton);
             this.Controls.Add(this.mCancelButton);
@@ -241,6 +303,7 @@
             this.Text = "Edit Player";
             this.tabControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mFacePictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -257,12 +320,17 @@
         private System.Windows.Forms.Button mCancelButton;
         private System.Windows.Forms.Button mOkButton;
         private System.Windows.Forms.ComboBox m_TeamsComboBox;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button mNextButton;
         private System.Windows.Forms.Button mPreviousButton;
         private System.Windows.Forms.NumericUpDown mPlayerIndexUpDown;
         private StringSelectionControl Position;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox mFacePictureBox;
+        private System.Windows.Forms.Label mSkinColorLabel;
+        private System.Windows.Forms.Label mHeightLabel;
+        private System.Windows.Forms.Label mWeightLabel;
+        private System.Windows.Forms.Label mBodyTypeLabel;
+        private System.Windows.Forms.Label mJerseyNumberLabel;
     }
 }

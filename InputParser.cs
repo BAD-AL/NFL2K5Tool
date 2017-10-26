@@ -203,6 +203,10 @@ namespace NFL2K5Tool
             {
                 Tool.SetKey(line.Substring(4));
             }
+            else if (line.StartsWith("CoachKEY=", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Tool.CoachKey = line.Substring(9);
+            }
             else if (line.StartsWith("SET"))
             {
                 ApplySet(line);
@@ -235,6 +239,10 @@ namespace NFL2K5Tool
             {
                 SetSpecialTeamPlayer(line);
             }
+            else if (line.StartsWith("Coach,", StringComparison.InvariantCultureIgnoreCase))
+            {
+                SetCoachData(line);
+            }
             else
             {
                 switch (mCurrentState)
@@ -250,21 +258,67 @@ namespace NFL2K5Tool
             return retVal;
         }
 
+        private void SetCoachData(string line)
+        {
+            //"Coach,Team,fname,lname,Body,Photo";
+            string[] keyParts = Tool.CoachKey.Split(",".ToCharArray());
+            List<string> parts = ParseCoachLine(line);
+            int teamIndex = Tool.GetTeamIndex(parts[1]);
+            string[] enumNames = Enum.GetNames(typeof(CoachOffsets));
+            CoachOffsets current = CoachOffsets.Body;
+
+            for (int i = 2; i < keyParts.Length; i++)
+            {
+                if (i == parts.Count) break; // stop processing if we're out of parts
+                switch (keyParts[i].ToLower())
+                {
+                    case "firstname":
+                    case "fname":
+                        Tool.SetCoachAttribute(teamIndex, CoachOffsets.FirstName, parts[i]);
+                        break;
+                    case "lastname":
+                    case "lname":
+                        Tool.SetCoachAttribute(teamIndex, CoachOffsets.LastName, parts[i]);
+                        break;
+                    default:
+                        current = (CoachOffsets)Enum.Parse(typeof(CoachOffsets), keyParts[i], true);
+                        Tool.SetCoachAttribute(teamIndex, current, parts[i]);
+                        break;
+                }
+            }
+        }
+
+
         // Expecting a line like "KR1,CB2"
         private void SetSpecialTeamPlayer(string line)
         {
             string[] parts = line.Split(",".ToCharArray());
-            try
+            if (parts.Length == 2)
             {
-                SpecialTeamer guy = (SpecialTeamer)Enum.Parse(typeof(SpecialTeamer), parts[0]);
-                Positions pos = (Positions)Enum.Parse(typeof(Positions),parts[1].Substring(0, parts[1].Length-1));
-                int depth = 1;
-                Int32.TryParse(parts[1].Substring(parts[1].Length-1), out depth);
-                Tool.SetSpecialTeamPosition(mTracker.Team, guy, pos, depth);
+                try
+                {
+                    SpecialTeamer guy = (SpecialTeamer)Enum.Parse(typeof(SpecialTeamer), parts[0]);
+                    Positions pos = (Positions)Enum.Parse(typeof(Positions), parts[1].Substring(0, parts[1].Length - 1));
+                    int depth = 1;
+                    Int32.TryParse(parts[1].Substring(parts[1].Length - 1), out depth);
+                    Tool.SetSpecialTeamPosition(mTracker.Team, guy, pos, depth);
+                }
+                catch
+                {
+                    StaticUtils.AddError(string.Format("Team:{0} Error adding special team player {1}", mTracker.Team, line));
+                }
             }
-            catch
+            else if (parts.Length == 3)
             {
-                StaticUtils.AddError(string.Format("Team:{0} Error adding special team player {1}",mTracker.Team, line));
+                try
+                {
+                    SpecialTeamer guy = (SpecialTeamer)Enum.Parse(typeof(SpecialTeamer), parts[0]);
+                    Tool.SetSpecialTeamPosition(mTracker.Team, guy, parts[1], parts[2]);
+                }
+                catch
+                {
+                    StaticUtils.AddError(string.Format("Team:{0} Error adding special team player {1}", mTracker.Team, line));
+                }
             }
         }
 
@@ -329,6 +383,40 @@ namespace NFL2K5Tool
             }
             return retVal;
         }
+        /// <summary>
+        /// Parses a line of text into a list of strings.
+        /// </summary>
+        /// <param name="line">a comma deliminated string of attributes.</param>
+        /// <returns>a list of strings</returns>
+        public static List<string> ParseCoachLine(string line)
+        {
+            if (sDelim == null)
+            {
+                sDelim = CharCount(line, ';') > CharCount(line, ',') ? sSemiColon : sComma;
+            }
+            List<string> retVal = new List<string>();
+            if (!String.IsNullOrEmpty(line))
+            {
+                int quoteCount = 0;
+                StringBuilder builder = new StringBuilder(line);
+                for (int i = 0; i < builder.Length; i++)
+                {
+                    if (builder[i] == '"')
+                        quoteCount++;
+                    else if (quoteCount % 2 == 1 && builder[i] == sDelim[0])
+                        builder[i] = '|';
+                }
+
+                retVal = new List<string>(builder.ToString().Split(sDelim));
+                for (int i = 0; i < retVal.Count; i++)
+                {
+                    if (retVal[i].IndexOf('|') > -1)
+                        retVal[i] = retVal[i].Replace('|', ',');
+                }
+            }
+            return retVal;
+        }
+
 
         static int CharCount(string input, char thingToCount)
         {
@@ -392,12 +480,14 @@ namespace NFL2K5Tool
                         {
                             // Name setting perhaps should be done at another, smarter level?
                             // How we gonna decide to use pointers or not?
-                            Tool.SetPlayerFirstName(player, attribute, useExistingName);
+                            if( !Tool.SetPlayerFirstName(player, attribute, useExistingName))
+                                StaticUtils.AddError("Error setting FirstName >" + attribute + "< for '" + line + "' Can only use existing names for college players.");
                         }
                         else if (attr == -2)
                         {
                             // How we gonna decide to use pointers or not?
-                            Tool.SetPlayerLastName(player, attribute, useExistingName);
+                            if( !Tool.SetPlayerLastName(player, attribute, useExistingName))
+                                StaticUtils.AddError("Error setting LastName >" + attribute + "< for '" + line + "' Can only use existing names for college players.");
                         }
                         else if (attribute == "?" || attribute == "_")
                         {// do nothing
@@ -460,6 +550,10 @@ namespace NFL2K5Tool
             {
                 mTracker.Team = team;
                 mTracker.Reset();
+                if (team == "DraftClass")
+                    UseExistingNames = true;
+                else
+                    UseExistingNames = false;
             }
             return true;
         }

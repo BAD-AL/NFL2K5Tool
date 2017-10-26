@@ -89,7 +89,7 @@ namespace NFL2K5Tool
             }
             else
             {
-                MessageBox.Show("Please make sure the key '#Position,fname,lname...' is present at the top of the text box.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw new InvalidOperationException("Please make sure the key '#Position,fname,lname...' is present at the top of the text box.");
             }
             return retVal;
         }
@@ -179,6 +179,11 @@ namespace NFL2K5Tool
                 switch( appearance)
                 {
                     case "JerseyNumber":
+                        intAttrCtrl = new IntAttrControl();
+                        intAttrCtrl.Name = intAttrCtrl.Text = appearance;
+                        intAttrCtrl.Max = 99;
+                        intAttrCtrl.ValueChanged += new EventHandler(jersey_ValueChanged);
+                        break;
                     case "YearsPro":
                         intAttrCtrl = new IntAttrControl();
                         intAttrCtrl.Name = intAttrCtrl.Text = appearance;
@@ -189,6 +194,8 @@ namespace NFL2K5Tool
                         intAttrCtrl.Name = intAttrCtrl.Text = appearance;
                         intAttrCtrl.Min = 150;
                         intAttrCtrl.Max = intAttrCtrl.Min + 255;
+                        intAttrCtrl.ValueChanged += new EventHandler(weight_ValueChanged);
+
                         break;
                     case "DOB":
                         DateValueControl dvc = new DateValueControl();
@@ -204,8 +211,14 @@ namespace NFL2K5Tool
                 switch (appearance)
                 {
                     case "Hand": ctrl.RepresentedValue = typeof(Hand); break;
-                    case "BodyType": ctrl.RepresentedValue = typeof(Body); break;
-                    case "Skin": ctrl.RepresentedValue = typeof(Skin); break;
+                    case "BodyType": 
+                        ctrl.RepresentedValue = typeof(Body);
+                        ctrl.ValueChanged += new EventHandler(bodyType_ValueChanged);
+                        break;
+                    case "Skin": 
+                        ctrl.RepresentedValue = typeof(Skin);
+                        ctrl.ValueChanged += new EventHandler(skin_ValueChanged);
+                        break;
                     case "Face": ctrl.RepresentedValue = typeof(Face); break;
                     case "MouthPiece": 
                     case "EyeBlack": 
@@ -220,6 +233,7 @@ namespace NFL2K5Tool
                             "6'0\"", "6'1\"", "6'2\"", "6'3\"", "6'4\"",  "6'5\"", 
                             "6'6\"", "6'7\"", "6'8\"", "6'9\"", "6'10\"", "6'11\"", 
                             "7'0\"" });
+                        ctrl.ValueChanged += new EventHandler(height_ValueChanged);
                         break;
                     case "College":
                         ctrl.DropDownStyle = ComboBoxStyle.DropDown;
@@ -281,6 +295,105 @@ namespace NFL2K5Tool
             }
         }
 
+        void jersey_ValueChanged(object sender, EventArgs e)
+        {
+            IntAttrControl ctrl = sender as IntAttrControl;
+            mJerseyNumberLabel.Text = "#"+ctrl.Value;
+        }
+
+        void bodyType_ValueChanged(object sender, EventArgs e)
+        {
+            StringSelectionControl ctrl = sender as StringSelectionControl;
+            mBodyTypeLabel.Text = "Body Type:" + ctrl.Value;
+        }
+
+        void skin_ValueChanged(object sender, EventArgs e)
+        {
+            StringSelectionControl ctrl = sender as StringSelectionControl;
+            mSkinColorLabel.Text = ctrl.Value;
+            Color backColor = Color.Black;
+            Color foreColor = Color.White;
+            switch (mSkinColorLabel.Text)
+            {
+                case "Skin1":// white guys
+                case "Skin9":
+                case "Skin17":
+                    backColor = Color.FromArgb(242, 212, 202);
+                    foreColor = Color.Black;
+                    break;
+
+                case "Skin2":  // mixed White&black(light) guys, Samoans
+                case "Skin18": // mixed White&black(light) guys, Samoans, Latino, White,
+                    backColor = Color.FromArgb(200, 140, 132);
+                    break;
+                case "Skin3": // inconsistently assigned 
+                    backColor = Color.FromArgb(142, 92, 79);
+                    break;
+                case "Skin4":
+                    backColor = Color.FromArgb(123,75, 65);
+                    break;
+                case "Skin5":
+                    backColor = Color.FromArgb(101,61 ,53 );
+                    break;
+                case "Skin6":
+                    backColor = Color.FromArgb(78,47 ,42 );
+                    break;
+                //case "Skin7": No one has these
+                //    c = Color.FromArgb(, , );
+                //    break; 
+                //case "Skin8":
+                //    c = Color.FromArgb(, , );
+                //    break;
+                //case "Skin15":
+                //    c = Color.FromArgb(, , );
+                //    break;
+                //case "Skin16":
+                //    c = Color.FromArgb(, , );
+                //    break;
+                case "Skin10":
+                    backColor = Color.FromArgb(163,106 ,95 );
+                    break;
+                case "Skin11":
+                    backColor = Color.FromArgb(198,141 ,130 );
+                    break;
+                case "Skin12":
+                    backColor = Color.FromArgb(101,61 ,53 );
+                    break;
+                case "Skin13":
+                    backColor = Color.FromArgb(123,75 ,65 );
+                    break;
+                case "Skin14":
+                    backColor = Color.FromArgb(100,62 ,49 );
+                    break;
+                case "Skin19":
+                    backColor = Color.FromArgb(101,61 ,53 );
+                    break;
+                case "Skin20":
+                    backColor = Color.FromArgb(102,62 ,53 );
+                    break;
+                case "Skin21": // pretty dark skin tone
+                    backColor = Color.FromArgb(90,55 ,48 );
+                    break;
+                case "Skin22": // generally the darkest skin tone
+                    backColor = Color.FromArgb(72, 45,38 );
+                    break;
+            }
+            mSkinColorLabel.BackColor = backColor;
+            mSkinColorLabel.ForeColor = foreColor;
+        }
+
+        void height_ValueChanged(object sender, EventArgs e)
+        {
+            StringSelectionControl ctrl = sender as StringSelectionControl;
+            mHeightLabel.Text = ctrl.Value;
+        }
+
+        void weight_ValueChanged(object sender, EventArgs e)
+        {
+            IntAttrControl ctrl = sender as IntAttrControl;
+            mWeightLabel.Text = ctrl.Value + " lbs";
+        }
+
         void PictureChooser_ValueChanged(object sender, EventArgs e)
         {
             string path = "";
@@ -297,6 +410,7 @@ namespace NFL2K5Tool
                         chooser.PictureBox.ImageLocation = path;
                     else if (System.IO.File.Exists(noPhoto))
                         chooser.PictureBox.ImageLocation = noPhoto;
+                    mFacePictureBox.ImageLocation = chooser.PictureBox.ImageLocation;
                     break;
                 case "FaceMask":
                 case "RightShoe":
@@ -585,36 +699,42 @@ namespace NFL2K5Tool
         /// </summary>
         private string GetControlValue(Control parentControl, string controlName)
         {
-            foreach (Control c in parentControl.Controls)
+            Control c = FindControl(parentControl, controlName);
+            if (c != null)
             {
-                if (c.Name == controlName)
+                TextBox tb = c as TextBox;
+                IntAttrControl iac = c as IntAttrControl;
+                StringSelectionControl ssc = c as StringSelectionControl;
+                DateValueControl dvc = c as DateValueControl;
+                if (iac != null)
+                    return iac.Value.ToString();
+                else if (dvc != null)
+                    return dvc.Value;
+                else if (ssc != null)
                 {
-                    TextBox tb = c as TextBox;
-                    IntAttrControl iac = c as IntAttrControl;
-                    StringSelectionControl ssc = c as StringSelectionControl;
-                    DateValueControl dvc = c as DateValueControl;
-                    if (iac != null)
-                        return iac.Value.ToString();
-                    else if (dvc != null)
-                        return dvc.Value;
-                    else if (ssc != null)
+                    if (controlName == "PBP" && PBPs.ContainsKey(ssc.Value))
                     {
-                        if (controlName == "PBP" && PBPs.ContainsKey(ssc.Value))
-                        {
-                            return PBPs[ssc.Value];
-                        }
-                        else if (controlName == "Photo" && Photos.ContainsKey(ssc.Value))
-                        {
-                            return Photos[ssc.Value];
-                        }
-                        else if (controlName == "College" && ssc.Value.IndexOf(',') > -1)
-                            return string.Concat("\"", ssc.Value, "\"");
-                        return ssc.Value;
+                        return PBPs[ssc.Value];
                     }
-                    else if (tb != null)
-                        return tb.Text;
+                    else if (controlName == "Photo" && Photos.ContainsKey(ssc.Value))
+                    {
+                        return Photos[ssc.Value];
+                    }
+                    else if (controlName == "College" && ssc.Value.IndexOf(',') > -1)
+                        return string.Concat("\"", ssc.Value, "\"");
+                    return ssc.Value;
                 }
+                else if (tb != null)
+                    return tb.Text;
             }
+            return null;
+        }
+
+        private Control FindControl(Control parentControl, string controlName)
+        {
+            foreach (Control c in parentControl.Controls)
+                if (c.Name == controlName)
+                    return c;
             return null;
         }
 
@@ -746,6 +866,41 @@ namespace NFL2K5Tool
         {
             string newPlayer = GetPlayerString_UI();
             MessageBox.Show(newPlayer);
+        }
+
+        private void mSkinColorLabel_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedIndex = 1;
+            Control c = FindControl(mAppearanceTab, "Skin");
+            if (c != null) c.Focus();
+        }
+
+        private void mHeightLabel_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedIndex = 1;
+            Control c = FindControl(mAppearanceTab, "Height");
+            if (c != null) c.Focus();
+        }
+
+        private void mWeightLabel_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedIndex = 1;
+            Control c = FindControl(mAppearanceTab, "Weight");
+            if (c != null) c.Focus();
+        }
+
+        private void mBodyTypeLabel_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedIndex = 1;
+            Control c = FindControl(mAppearanceTab, "BodyType");
+            if (c != null) c.Focus();
+        }
+
+        private void mFacePictureBox_Click(object sender, EventArgs e)
+        {
+            FaceForm form = new FaceForm();
+            form.ShowDialog(this);
+            form.Dispose();
         }
 
     }

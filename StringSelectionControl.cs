@@ -87,5 +87,15 @@ namespace NFL2K5Tool
             if (ValueChanged != null)
                 ValueChanged(this, e);
         }
+
+        private void mComboBox_Enter(object sender, EventArgs e)
+        {
+            this.BackColor = Color.Moccasin;
+        }
+
+        private void mComboBox_Leave(object sender, EventArgs e)
+        {
+            this.BackColor = Parent.BackColor;
+        }
     }
 }

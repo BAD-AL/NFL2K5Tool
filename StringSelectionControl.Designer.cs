@@ -53,6 +53,8 @@
             this.mComboBox.Size = new System.Drawing.Size(118, 21);
             this.mComboBox.TabIndex = 15;
             this.mComboBox.SelectedIndexChanged += new System.EventHandler(this.mComboBox_SelectedIndexChanged);
+            this.mComboBox.Leave += new System.EventHandler(this.mComboBox_Leave);
+            this.mComboBox.Enter += new System.EventHandler(this.mComboBox_Enter);
             // 
             // StringSelectionControl
             // 
