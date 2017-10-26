@@ -40,19 +40,15 @@ namespace NFL2K5Tool
             List<string> playerParts = GetPlayerParts(line);
             string firstName = Get(playerParts, "fname");
             string lastName = Get(playerParts, "lname");
-            string number = Get(playerParts, "JerseyNumber");
-            if (number.Length < 2)
-                number = "#0" + number;
-            else
-                number = "#" + number;
-
+            string noPhoto = "NoPhoto";
+            
             string key = lastName + ", " + firstName;
             if (DataMap.PhotoMap.ContainsKey(key))
                 val = DataMap.PhotoMap[key];
             else if (DataMap.PhotoMap.ContainsKey(lastName))
                 val = DataMap.PhotoMap[lastName];
-            else if( DataMap.PhotoMap.ContainsKey(number))
-                val = DataMap.PhotoMap[number];
+            else if (DataMap.PhotoMap.ContainsKey(noPhoto))
+                val = DataMap.PhotoMap[noPhoto];
             if (val.Length > 0 && Set(playerParts, "Photo", val))
                 retVal = StringifyPlayerParts(playerParts);
             return retVal;

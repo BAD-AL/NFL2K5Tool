@@ -234,7 +234,7 @@
             this.debugDialogMenuItem.Name = "debugDialogMenuItem";
             this.debugDialogMenuItem.Size = new System.Drawing.Size(167, 22);
             this.debugDialogMenuItem.Text = "&Debug Dialog";
-            this.debugDialogMenuItem.Click += new System.EventHandler(this.stringToHexToolStripMenuItem_Click);
+            this.debugDialogMenuItem.Click += new System.EventHandler(this.debugDialogMenuItem_Click);
             // 
             // listTeamsToolStripMenuItem
             // 

@@ -4,6 +4,12 @@ using System.Text;
 
 namespace NFL2K5Tool
 {
+    public enum SaveType
+    {
+        Roster,
+        Franchise
+    }
+
     // Addresses are based on a franchise file, not a roster file.
     /// <summary> Code to map player attributes to locations </summary>
     public enum PlayerOffsets

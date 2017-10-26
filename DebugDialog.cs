@@ -476,5 +476,16 @@ namespace NFL2K5Tool
             mResultsTextBox.Text = builder.ToString();
         }
 
+        private void autoUpdateYearsProToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string result = StringInputDlg.GetString("Base year:", "Enter the year for the season", "2004");
+            if (!String.IsNullOrEmpty(result))
+            {
+                int year = 0;
+                Int32.TryParse(result, out year);
+                Tool.AutoUpdateYearsProFromYear(year);
+            }
+        }
+
     }
 }

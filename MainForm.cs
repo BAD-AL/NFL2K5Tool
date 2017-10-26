@@ -79,19 +79,24 @@ namespace NFL2K5Tool
 
         private void mListContentsButton_Click(object sender, EventArgs e)
         {
+            ListContents();
+        }
+
+        private void ListContents()
+        {
             mTextBox.Clear();
             StringBuilder builder = new StringBuilder(5000);
 
             builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
             builder.Append("\n");
-            
-            if( listTeamsToolStripMenuItem.Checked)
+
+            if (listTeamsToolStripMenuItem.Checked)
                 builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, listSpecialTeamsToolStripMenuItem.Checked));
-            
+
             if (listFreeAgentsToolStripMenuItem.Checked)
                 builder.Append(mTool.GetTeamPlayers("FreeAgents", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, false));
-            
-            if( listDraftClassToolStripMenuItem.Checked)
+
+            if (listDraftClassToolStripMenuItem.Checked)
                 builder.Append(mTool.GetTeamPlayers("DraftClass", listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, false));
 
             if (listScheduleToolStripMenuItem.Checked)
@@ -163,7 +168,7 @@ namespace NFL2K5Tool
             mTextBox.SetSearchString();
         }
 
-        private void stringToHexToolStripMenuItem_Click(object sender, EventArgs e)
+        private void debugDialogMenuItem_Click(object sender, EventArgs e)
         {
             DebugDialog form = new DebugDialog();
             form.Tool = mTool;
@@ -205,6 +210,7 @@ namespace NFL2K5Tool
             listScheduleToolStripMenuItem.Checked = !listScheduleToolStripMenuItem.Checked;
         }
 
+        // hidden button;  used in debugging
         private void mListPlayersButton2_Click(object sender, EventArgs e)
         {
             mTextBox.Clear();
@@ -217,15 +223,9 @@ namespace NFL2K5Tool
                 builder.Append(mTool.GetPlayerData(i, listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
                 builder.Append("\n");
             }
-            //builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, true, true));
             mTextBox.AppendText(builder.ToString());
         }
         
-        private void mApplyButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void mSaveButton_Click(object sender, EventArgs e)
         {
             SaveFileDialog dlg = new SaveFileDialog();
@@ -407,6 +407,7 @@ namespace NFL2K5Tool
                 string result = allInput;
                 do
                 {
+                    // Sort team by team
                     index = allInput.IndexOf(teamPattern, index);
                     if (index > -1)
                     {
@@ -509,19 +510,26 @@ namespace NFL2K5Tool
 
         private void EditPlayer()
         {
-            PlayerEditForm form = new PlayerEditForm();
-            form.Colleges = mTool.GetColleges();
-            form.ReversePBPs = DataMap.ReversePBPMap;
-            form.ReversePhotos = DataMap.ReversePhotoMap;
-            form.PBPs = DataMap.PBPMap;
-            form.Photos = DataMap.PhotoMap;
-            form.Data = mTextBox.Text;
-            form.SelectionStart = mTextBox.SelectionStart;
-            if (form.ShowDialog(this) == DialogResult.OK)
+            if (mTool != null)
             {
-                SetText(form.Data);
-                mTextBox.SelectionStart = form.SelectionStart;
-                mTextBox.ScrollToCaret();
+                PlayerEditForm form = new PlayerEditForm();
+                form.Colleges = mTool.GetColleges();
+                form.ReversePBPs = DataMap.ReversePBPMap;
+                form.ReversePhotos = DataMap.ReversePhotoMap;
+                form.PBPs = DataMap.PBPMap;
+                form.Photos = DataMap.PhotoMap;
+                form.Data = mTextBox.Text;
+                form.SelectionStart = mTextBox.SelectionStart;
+                if (form.ShowDialog(this) == DialogResult.OK)
+                {
+                    SetText(form.Data);
+                    mTextBox.SelectionStart = form.SelectionStart;
+                    mTextBox.ScrollToCaret();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please open a gamesave file first", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

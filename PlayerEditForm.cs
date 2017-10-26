@@ -693,9 +693,9 @@ namespace NFL2K5Tool
         private void mNextButton_Click(object sender, EventArgs e)
         {
             string[] players = GetTeamPlayers(m_TeamsComboBox.SelectedItem.ToString());
-            if (mPlayerIndexUpDown.Value < players.Length)
+            if (mPlayerIndexUpDown.Value < players.Length-1)
                 mPlayerIndexUpDown.Value++;
-            else if (m_TeamsComboBox.SelectedIndex < m_TeamsComboBox.Items.Count)
+            else if (m_TeamsComboBox.SelectedIndex < m_TeamsComboBox.Items.Count-1)
                 m_TeamsComboBox.SelectedIndex++;
             else
                 m_TeamsComboBox.SelectedIndex = 0;

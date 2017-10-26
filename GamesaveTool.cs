@@ -30,6 +30,9 @@ namespace NFL2K5Tool
 
         private int mMaxPlayers = 2317; //1944(roster) including free agents and draft class
 
+        public const int FirstDraftClassPlayer = 1937;
+        private const int mDraftClassSize = 380;
+
         private const int cPlayerDataLength = 0x54;
         private const int cTeamDiff = 0x1f4; // 500 bytes
         
@@ -215,20 +218,18 @@ namespace NFL2K5Tool
         /// <returns>string with all the players for the given team.</returns>
         public string GetDraftClass(bool attributes, bool appearance)
         {
-            int firstPlayer = 1937;
-            int numPlayers = 380;
-            int limit  = firstPlayer +  numPlayers;
+            int limit  = FirstDraftClassPlayer +  mDraftClassSize;
             if( SaveType == SaveType.Roster)
-                limit = firstPlayer + 7;
+                limit = FirstDraftClassPlayer + 7;
 
-            StringBuilder builder = new StringBuilder(300 * numPlayers + 1);
+            StringBuilder builder = new StringBuilder(300 * mDraftClassSize + 1);
             builder.Append("\nTeam = ");
             builder.Append("DraftClass");
             builder.Append("    Players:");
-            builder.Append(numPlayers);
+            builder.Append(mDraftClassSize);
             builder.Append("\n");
-            
-            for (int i = firstPlayer; i < limit; i++)
+
+            for (int i = FirstDraftClassPlayer; i < limit; i++)
             {
                 builder.Append(GetPlayerData(i, attributes, appearance));
                 builder.Append("\n");
@@ -294,8 +295,14 @@ namespace NFL2K5Tool
             int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
             if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
                 teamPlayerPointersStart = GetPointerDestination( mFreeAgentPlayersPointer);
-            //else if ("DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
-            //    return GetDraftClass(attributes, appearance);
+            else if ("DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
+            {
+                int lastDraftClassPlayer = FirstDraftClassPlayer + mDraftClassSize + 1;
+                for (int i = FirstDraftClassPlayer; i < lastDraftClassPlayer; i++)
+                    retVal.Add(i);
+                
+                return retVal;
+            }
 
             int numPlayers = GetNumPlayers(team);
             int playerIndex = -1;
@@ -462,6 +469,41 @@ namespace NFL2K5Tool
                 SetAttribute(player, PlayerOffsets.Photo, val);
             }
             return builder.ToString();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentYear"></param>
+        public void AutoUpdateYearsProFromYear(int currentYear)
+        {
+            string dob = "";
+            string[] parts;
+            char[] chars = new char[] {'/'};
+            int birthYear = 0;
+            int yearsPro = 0;
+            for (int i = 0; i <= mMaxPlayers; i++)
+            {
+                dob = GetAttribute(i, PlayerOffsets.DOB); // retVal = string.Concat(new object[] { month, "/", day, "/", year });
+                parts = dob.Split(chars);
+                if (parts.Length > 2 && Int32.TryParse(parts[2], out birthYear))
+                {
+                    yearsPro = currentYear - (birthYear + 22);
+                    if (yearsPro < 0)
+                        yearsPro = 0;
+                    SetAttribute(i, PlayerOffsets.YearsPro, yearsPro.ToString());
+                }
+            }
+            // Draft class
+            int end = FirstDraftClassPlayer + mDraftClassSize +1;
+            int targetYear = currentYear - 21;
+            for (int i = FirstDraftClassPlayer; i < end; i++)
+            {
+                dob = GetAttribute(i, PlayerOffsets.DOB);
+                parts = dob.Split(chars);
+                dob = string.Concat(new object[] { parts[0], "/", parts[1], "/", targetYear.ToString() });
+                SetAttribute(i, PlayerOffsets.DOB, dob);
+            }
         }
 
         public int GetPlayerPositionDepth(int player)
@@ -950,18 +992,6 @@ namespace NFL2K5Tool
                 if( builder[builder.Length -1] != ',')
                     builder.Append(",");
             }
-            //builder.Append(GetPlayerPosition(player));
-            //builder.Append(',');
-            //builder.Append(GetPlayerName(player, ','));
-            //builder.Append(',');
-            //builder.Append(GetAttribute(player, PlayerOffsets.JerseyNumber));
-            //builder.Append(',');
-
-            //if (attributes)
-            //    GetPlayerAttributes(player, builder);
-            //if (appearance)
-            //    GetPlayerAppearance(player, builder);
-
             return builder.ToString();
         }
 
@@ -1345,8 +1375,10 @@ namespace NFL2K5Tool
                 ptrLoc1 += 4;
             if (useExistingName)
             {
-                // we'll look through the college player names because we're not changing those.
-                List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, mCollegePlayerNameSectionStart, mCollegePlayerNameSectionEnd, true);
+                //size = 0xDF41
+                //int start = mCollegePlayerNameSectionStart;  // we'll look through the college player names because we're not changing those.
+                int start = mModifiableNameSectionEnd - 0xDF4; // first player's name is here, (I think)
+                List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, start, mCollegePlayerNameSectionEnd, true);
                 if (locations.Count < 1)
                 {
                     retVal = false;
@@ -1385,6 +1417,51 @@ namespace NFL2K5Tool
                     SetByte(stringLoc, 0); // set null char
                     SetByte(stringLoc + 1, 0);
                 }
+            }
+            return retVal;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name">first or last name</param>
+        /// <returns></returns>
+        public bool CheckCollegeNameExists(string name)
+        {
+            bool retVal = false;
+            int start = 0x75c40; // mCollegePlayerNameSectionStart
+            List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, start, mCollegePlayerNameSectionEnd, true);
+            if (locations != null && locations.Count > 0)
+                retVal = true;
+            return retVal;
+        }
+
+        /// <summary>
+        /// Set Attribute, Name, Appearence
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="fieldName">the field to set</param>
+        /// <param name="val">the value to set</param>
+        /// <returns></returns>
+        public bool SetPlayerField(int player, string fieldName, string val)
+        {
+            bool retVal = false;
+            if ("firstName".Equals(fieldName, StringComparison.InvariantCultureIgnoreCase) || "fname".Equals(fieldName, StringComparison.InvariantCultureIgnoreCase))
+                retVal = SetPlayerFirstName(player, val, false);
+            else if ("lastName".Equals(fieldName, StringComparison.InvariantCultureIgnoreCase) || "lname".Equals(fieldName, StringComparison.InvariantCultureIgnoreCase))
+                retVal =  SetPlayerLastName(player, val, false);
+            else if (Enum.IsDefined(typeof(AppearanceAttributes), val))
+            {
+                AppearanceAttributes aa =(AppearanceAttributes)Enum.Parse(typeof(AppearanceAttributes), fieldName);
+                if (aa != AppearanceAttributes.College)
+                    val = val.Replace(" ", ""); // strip spaces
+                SetPlayerAppearanceAttribute(player, aa, val);
+                retVal = true;
+            }
+            else if (Enum.IsDefined(typeof(PlayerOffsets), val))
+            {
+                PlayerOffsets po = (PlayerOffsets)Enum.Parse(typeof(PlayerOffsets), fieldName);
+                SetAttribute(player, po, val);
             }
             return retVal;
         }
@@ -1552,11 +1629,16 @@ namespace NFL2K5Tool
         // input like 6'3"
         private int GetInches(string stringVal)
         {
+            int inches = 0; // Int32.Parse(stringVal.Substring(2));
+            if (stringVal.Length == 3 && stringVal[2] == '"')
+            {
+                Int32.TryParse(stringVal.Substring(0,2), out inches);
+                return inches;
+            }
             if (stringVal[0] == '"' && stringVal[stringVal.Length - 1] == '"')
                 stringVal = stringVal.Substring(1, stringVal.Length - 3);
             int feet = stringVal[0] - 0x30;
             stringVal = stringVal.Replace("\"", "");
-            int inches = 0; // Int32.Parse(stringVal.Substring(2));
             Int32.TryParse(stringVal.Substring(2), out inches);
             inches += feet * 12;
             return inches;
@@ -2189,9 +2271,4 @@ namespace NFL2K5Tool
 
     }
 
-    public enum SaveType
-    {
-        Roster,
-        Franchise
-    }
 }

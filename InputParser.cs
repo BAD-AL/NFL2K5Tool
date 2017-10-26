@@ -8,7 +8,6 @@ namespace NFL2K5Tool
 {
     public class InputParser
     {
-        List<string> mErrors = new List<string>();
         private Regex mTeamRegex = new Regex("Team\\s*=\\s*([0-9a-zA-Z]+)");
         private Regex mWeekRegex  = new Regex("(?i)Week(?-i) ([1-9][0-7]?)");
         private Regex mGameRegex  = new Regex("([0-9a-z]+)\\s+at\\s+([0-9a-zA-Z]+)");
@@ -164,7 +163,6 @@ namespace NFL2K5Tool
 
         public void ProcessLines(string[] lines)
         {
-            //Tool.SetKey(null); // clear any previous custom key
             Tool.GetKey(true, true);
             int i = 0;
             try
@@ -191,8 +189,9 @@ namespace NFL2K5Tool
 
         private Match mTeamMatch = Match.Empty;
 
-        protected virtual void ProcessLine(string line)
+        protected virtual bool ProcessLine(string line)
         {
+            bool retVal = true;
             line = line.Trim();
             if (line.EndsWith(","))
                 line = line.Substring(0, line.Length - 1);
@@ -218,7 +217,7 @@ namespace NFL2K5Tool
                 {
                     StaticUtils.AddError(string.Format("ERROR with line '{0}'.", line));
                     StaticUtils.AddError(string.Format("Team input must be in the form 'TEAM = team '"));
-                    return;
+                    return false;
                 }
             }
             else if (mWeekRegex.Match(line) != Match.Empty)  //line.StartsWith("WEEK"))
@@ -241,13 +240,14 @@ namespace NFL2K5Tool
                 switch (mCurrentState)
                 {
                     case ParsingStates.PlayerModification:
-                        InsertPlayer(line);
+                        retVal = InsertPlayer(line);
                         break;
                     case ParsingStates.Schedule:
-                        mScheduleList.Add(line);
+                        mScheduleList.Add(line.ToLower());
                         break;
                 }
             }
+            return retVal;
         }
 
         // Expecting a line like "KR1,CB2"
@@ -268,10 +268,11 @@ namespace NFL2K5Tool
             }
         }
 
-        private void InsertPlayer(string line)
+        private bool InsertPlayer(string line)
         {
             int playerIndex = GetPlayerIndex(line);
-            SetPlayerData(playerIndex, line, this.UseExistingNames);
+            bool useExisting = this.UseExistingNames || (playerIndex >= GamesaveTool.FirstDraftClassPlayer);
+            return SetPlayerData(playerIndex, line, useExisting);
         }
 
         private int GetPlayerIndex(string line)
@@ -346,12 +347,41 @@ namespace NFL2K5Tool
         /// <param name="line">The data tp apply.</param>
         public bool SetPlayerData(int player, string line, bool useExistingName)
         {
-            bool retVal = false;
+            return SetPlayerStuff1(player, line, useExistingName);
+        }
+
+        private void SetPlayerStuff2(int player, string line, bool useExistingName)
+        {
             string attribute = "";
+            if (player > -1 && player < Tool.MaxPlayers)
+            {
+                string[] keyParts = Tool.GetKey(true, true).Replace("#", "").Split(",".ToCharArray());
+                string field = "";
+                List<string> attributes = ParsePlayerLine(line);
+                for (int i = 0; i < attributes.Count; i++)
+                {
+                    field = keyParts[i];
+                    attribute = attributes[i];
+                    if (attribute != "?" && attribute != "_")
+                        Tool.SetPlayerField(player, field, attribute);
+                }
+            }
+        }
+
+        // About 6 x faster than SetPlayerStuff2
+        private bool SetPlayerStuff1(int player, string line, bool useExistingName)
+        {
+            string attribute = "";
+            string playerName = "";
             if (player > -1 && player < Tool.MaxPlayers)
             {
                 int attr = -1;
                 List<string> attributes = ParsePlayerLine(line);
+                if ( useExistingName && !CheckPlayerNameExists( attributes, out playerName ))
+                {
+                    StaticUtils.AddError("Could not find matching name in string database. player not added: "+ playerName);
+                    return false;
+                }
                 for (int i = 0; i < attributes.Count; i++)
                 {
                     try
@@ -386,12 +416,36 @@ namespace NFL2K5Tool
                     catch (Exception)
                     {
                         string desc = attr > 99 ? ((AppearanceAttributes)attr).ToString() : ((PlayerOffsets)attr).ToString();
-
-                        StaticUtils.AddError("Error setting attribute '" + desc + "' to '" + attribute +"'");
+                        StaticUtils.AddError("Error setting attribute '" + desc + "' to '" + attribute + "'");
                     }
                 }
-                retVal = true;
             }
+            return true;
+        }
+
+        public List<string> MissingNames = new List<string>();
+
+        private bool CheckPlayerNameExists(List<string> attributes, out string playerName)
+        {
+            int firstNameIndex = Array.IndexOf(Tool.Order, -1);
+            int lastNameIndex = Array.IndexOf(Tool.Order, -2);
+
+            string firstName = attributes[firstNameIndex];
+            string lastName = attributes[lastNameIndex];
+            bool firstNameExists = Tool.CheckCollegeNameExists(firstName);
+            bool lastNameExists  = Tool.CheckCollegeNameExists(lastName);
+            bool retVal = firstNameExists && lastNameExists;
+            if (!retVal)
+            {
+                playerName = String.Format("{0} {1} firstNameExists={2} lastNameExists={3}",
+                    firstName, lastName, firstNameExists, lastNameExists);
+                if (!firstNameExists)
+                    MissingNames.Add(firstName);
+                else
+                    MissingNames.Add(lastName);
+            }
+            else
+                playerName = "";
             return retVal;
         }
 
@@ -399,7 +453,7 @@ namespace NFL2K5Tool
         {
             if (Tool.GetTeamIndex(team) < 0)
             {//error condition
-                mErrors.Add(string.Format("Team '{0}' is Invalid.", team));
+                StaticUtils.AddError(string.Format("Team '{0}' is Invalid.", team));
                 return false;
             }
             else
