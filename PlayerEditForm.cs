@@ -413,6 +413,13 @@ namespace NFL2K5Tool
                     mFacePictureBox.ImageLocation = chooser.PictureBox.ImageLocation;
                     break;
                 case "FaceMask":
+                    path = String.Format("PlayerData\\EquipmentImages\\{0}.jpg", chooser.Value);
+                    if (System.IO.File.Exists(path))
+                        chooser.PictureBox.ImageLocation = path;
+                    else
+                        chooser.PictureBox.ImageLocation = null;
+                    mFaceMaskPictureBox.ImageLocation = chooser.PictureBox.ImageLocation;
+                    break;
                 case "RightShoe":
                 case "LeftShoe":
                     path = String.Format("PlayerData\\EquipmentImages\\{0}.jpg", chooser.Value);
@@ -896,11 +903,19 @@ namespace NFL2K5Tool
             if (c != null) c.Focus();
         }
 
+        FaceForm mFaceForm = null;
+
         private void mFacePictureBox_Click(object sender, EventArgs e)
         {
-            FaceForm form = new FaceForm();
-            form.ShowDialog(this);
-            form.Dispose();
+            if( mFaceForm == null)
+                mFaceForm = new FaceForm();
+
+            if (mFaceForm.ShowDialog(this) == DialogResult.OK)
+            {
+                SetControlValue("Photo", mFaceForm.SelectedFace);
+            }
+            //form.Dispose();
+
         }
 
     }

@@ -34,7 +34,10 @@ namespace NFL2K5Tool
             builder.Append("0x");
             foreach (char c in textBox1.Text)
             {
-                ch = (int)c;
+                if (c == '*')
+                    ch = 0;
+                else 
+                    ch = (int)c;
                 builder.Append(ch.ToString("X2"));
                 if (checkBox1.Checked)
                 {
@@ -352,13 +355,14 @@ namespace NFL2K5Tool
         private void SetBytes()
         {
             byte b1 = 0;
-
+            int loc = (int)mSetByteLocUpDown.Value;
             try
             {
                 for (int i = 0; i < mSetByteValTextBox.Text.Length; i += 2)
                 {
                     b1 = (byte)UInt16.Parse(mSetByteValTextBox.Text.Substring(i, 2), System.Globalization.NumberStyles.AllowHexSpecifier);
-                    Tool.GameSaveData[(int)mSetByteLocUpDown.Value + i] = b1;
+                    Tool.GameSaveData[loc] = b1;
+                    loc++;
                 }
             }
             catch
@@ -478,12 +482,25 @@ namespace NFL2K5Tool
 
         private void autoUpdateYearsProToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string result = StringInputDlg.GetString("Base year:", "Enter the year for the season", "2004");
-            if (!String.IsNullOrEmpty(result))
+            string baseYear = StringInputDlg.GetString("Base year:", "Enter the year for the season", "2004");
+            string teamsString = StringInputDlg.GetString("Teams:", "Enter the teams you wish to update (seperated by comma), blank for all teams", "");
+            string[] teams = teamsString.Split(new char[] { ',' });
+            if (teamsString == "" || teams.Length < 1)
+            {
+                teams =  new string[]  {
+                 "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
+                 "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
+                 "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
+                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings", 
+                 "FreeAgents", "DraftClass" 
+                 };
+            }
+            
+            if (!String.IsNullOrEmpty(baseYear))
             {
                 int year = 0;
-                Int32.TryParse(result, out year);
-                Tool.AutoUpdateYearsProFromYear(year);
+                Int32.TryParse(baseYear, out year);
+                Tool.AutoUpdateYearsProFromYear(year, teams);
 			}
 		}
 		
@@ -580,5 +597,13 @@ namespace NFL2K5Tool
             }
             mResultsTextBox.Text = builder.ToString();
         }
+
+        private void gatherFaceSkinDtaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringBuilder builder = new StringBuilder();
+            Tool.GetSkinPhotoMappings(builder);
+            mResultsTextBox.Text = builder.ToString();
+        }
+
     }
 }

@@ -50,9 +50,11 @@
             this.mBodyTypeLabel = new System.Windows.Forms.Label();
             this.mJerseyNumberLabel = new System.Windows.Forms.Label();
             this.Position = new NFL2K5Tool.StringSelectionControl();
+            this.mFaceMaskPictureBox = new System.Windows.Forms.PictureBox();
             this.tabControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFacePictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mFaceMaskPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // fname
@@ -140,9 +142,9 @@
             // 
             this.m_TeamsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_TeamsComboBox.FormattingEnabled = true;
-            this.m_TeamsComboBox.Location = new System.Drawing.Point(482, 25);
+            this.m_TeamsComboBox.Location = new System.Drawing.Point(498, 25);
             this.m_TeamsComboBox.Name = "m_TeamsComboBox";
-            this.m_TeamsComboBox.Size = new System.Drawing.Size(88, 21);
+            this.m_TeamsComboBox.Size = new System.Drawing.Size(83, 21);
             this.m_TeamsComboBox.TabIndex = 3;
             this.m_TeamsComboBox.SelectedIndexChanged += new System.EventHandler(this.m_TeamsComboBox_SelectedIndexChanged);
             // 
@@ -151,9 +153,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(585, 9);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 13);
+            this.label3.Size = new System.Drawing.Size(63, 13);
             this.label3.TabIndex = 9;
-            this.label3.Text = "Player Index";
+            this.label3.Text = "Team Index";
             // 
             // mNextButton
             // 
@@ -247,11 +249,11 @@
             // mBodyTypeLabel
             // 
             this.mBodyTypeLabel.AutoSize = true;
-            this.mBodyTypeLabel.Location = new System.Drawing.Point(359, 49);
+            this.mBodyTypeLabel.Location = new System.Drawing.Point(302, 56);
             this.mBodyTypeLabel.Name = "mBodyTypeLabel";
-            this.mBodyTypeLabel.Size = new System.Drawing.Size(55, 13);
+            this.mBodyTypeLabel.Size = new System.Drawing.Size(94, 13);
             this.mBodyTypeLabel.TabIndex = 15;
-            this.mBodyTypeLabel.Text = "BodyType";
+            this.mBodyTypeLabel.Text = "BodyType: Normal";
             this.mBodyTypeLabel.Click += new System.EventHandler(this.mBodyTypeLabel_Click);
             // 
             // mJerseyNumberLabel
@@ -274,11 +276,22 @@
             this.Position.Value = "";
             this.Position.ValueChanged += new System.EventHandler(this.ValueChanged);
             // 
+            // mFaceMaskPictureBox
+            // 
+            this.mFaceMaskPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mFaceMaskPictureBox.Location = new System.Drawing.Point(430, 5);
+            this.mFaceMaskPictureBox.Name = "mFaceMaskPictureBox";
+            this.mFaceMaskPictureBox.Size = new System.Drawing.Size(49, 50);
+            this.mFaceMaskPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.mFaceMaskPictureBox.TabIndex = 17;
+            this.mFaceMaskPictureBox.TabStop = false;
+            // 
             // PlayerEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(669, 513);
+            this.Controls.Add(this.mFaceMaskPictureBox);
             this.Controls.Add(this.mJerseyNumberLabel);
             this.Controls.Add(this.mBodyTypeLabel);
             this.Controls.Add(this.mWeightLabel);
@@ -304,6 +317,7 @@
             this.tabControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFacePictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mFaceMaskPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -332,5 +346,6 @@
         private System.Windows.Forms.Label mWeightLabel;
         private System.Windows.Forms.Label mBodyTypeLabel;
         private System.Windows.Forms.Label mJerseyNumberLabel;
+        private System.Windows.Forms.PictureBox mFaceMaskPictureBox;
     }
 }

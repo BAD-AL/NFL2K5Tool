@@ -25,6 +25,9 @@ namespace NFL2K5Tool
         private int mCollegePlayerNameSectionStart = 0x8bab0;
         private int mCollegePlayerNameSectionEnd = 0x8f2ef;
 
+        private int mStringTableStart = 0x75c40;
+        private int mStringTableEnd   = 0x94d10;
+
         private int m49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
         private int m49ersNumPlayersAddress = 0x45c4; //  35
         //const int cTeamNameOffset = 0x104;// interesting, but not used 
@@ -140,6 +143,10 @@ namespace NFL2K5Tool
             mModifiableNameSectionEnd = 0x8906f;
             mCollegePlayerNameSectionStart = 0x8bab0;
             mCollegePlayerNameSectionEnd = 0x8f2ef;
+
+            mStringTableStart = 0x75c40;
+            mStringTableEnd   = 0x94d10;
+
             mFreeAgentPlayersPointer = 0x35c;
             mFreeAgentCountLocation = 0x358; // default :  c5 00
             m49ersPlayerPointersStart = 0x44a8; // playerLoc = ptrLoc + ptrVal -1;
@@ -157,6 +164,10 @@ namespace NFL2K5Tool
             mModifiableNameSectionEnd = 0x88d8f;
             mCollegePlayerNameSectionStart = 0x8b7d0;
             mCollegePlayerNameSectionEnd = 0x8f00f;
+
+            mStringTableStart = 0x75960;
+            mStringTableEnd   = 0x88d80;
+
             mFreeAgentPlayersPointer = 0x7c;
             mFreeAgentCountLocation = 0x78; // default : 00 c5 // guess???
             m49ersPlayerPointersStart = 0x41c8; // playerLoc = ptrLoc + ptrVal -1;
@@ -727,34 +738,47 @@ namespace NFL2K5Tool
         /// 
         /// </summary>
         /// <param name="currentYear"></param>
-        public void AutoUpdateYearsProFromYear(int currentYear)
+        /// <param name="teams">Teams to update</param>
+        public void AutoUpdateYearsProFromYear(int currentYear, string[] teams)
         {
             string dob = "";
             string[] parts;
             char[] chars = new char[] {'/'};
             int birthYear = 0;
             int yearsPro = 0;
-            for (int i = 0; i <= mMaxPlayers; i++)
+            List<int> playerPointers = null;
+
+            for (int t = 0; t < teams.Length; t++)
             {
-                dob = GetAttribute(i, PlayerOffsets.DOB); // retVal = string.Concat(new object[] { month, "/", day, "/", year });
-                parts = dob.Split(chars);
-                if (parts.Length > 2 && Int32.TryParse(parts[2], out birthYear))
+                if ("DraftClass".Equals(teams[t]))
+                    continue;
+                playerPointers = GetPlayerIndexesForTeam(teams[t]);
+                for (int i = 0; i <= playerPointers.Count; i++)
                 {
-                    yearsPro = currentYear - (birthYear + 22);
-                    if (yearsPro < 0)
-                        yearsPro = 0;
-                    SetAttribute(i, PlayerOffsets.YearsPro, yearsPro.ToString());
+                    dob = GetAttribute(playerPointers[i], PlayerOffsets.DOB); // retVal = string.Concat(new object[] { month, "/", day, "/", year });
+                    parts = dob.Split(chars);
+                    if (parts.Length > 2 && Int32.TryParse(parts[2], out birthYear))
+                    {
+                        yearsPro = currentYear - (birthYear + 22);
+                        if (yearsPro < 0)
+                            yearsPro = 0;
+                        SetAttribute(playerPointers[i], PlayerOffsets.YearsPro, yearsPro.ToString());
+                    }
                 }
             }
-            // Draft class
-            int end = FirstDraftClassPlayer + mDraftClassSize +1;
-            int targetYear = currentYear - 21;
-            for (int i = FirstDraftClassPlayer; i < end; i++)
+            if (Array.IndexOf(teams, "DraftClass") > -1)
             {
-                dob = GetAttribute(i, PlayerOffsets.DOB);
-                parts = dob.Split(chars);
-                dob = string.Concat(new object[] { parts[0], "/", parts[1], "/", targetYear.ToString() });
-                SetAttribute(i, PlayerOffsets.DOB, dob);
+                // Draft class
+                int end = FirstDraftClassPlayer + mDraftClassSize + 1;
+                int targetYear = currentYear - 21;
+                for (int i = FirstDraftClassPlayer; i < end; i++)
+                {
+                    dob = GetAttribute(i, PlayerOffsets.DOB);
+                    parts = dob.Split(chars);
+                    dob = string.Concat(new object[] { parts[0], "/", parts[1], "/", targetYear.ToString() });
+                    SetAttribute(i, PlayerOffsets.DOB, dob);
+                    SetAttribute(i, PlayerOffsets.YearsPro, "0");
+                }
             }
         }
 
@@ -1662,8 +1686,9 @@ namespace NFL2K5Tool
             {
                 //size = 0xDF41
                 //int start = mCollegePlayerNameSectionStart;  // we'll look through the college player names because we're not changing those.
-                int start = mModifiableNameSectionEnd - 0xDF4; // first player's name is here, (I think)
-                List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, start, mCollegePlayerNameSectionEnd, true);
+                //int start = mModifiableNameSectionEnd - 0xDF4; // first player's name is here, (I think)
+                //List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, start, mCollegePlayerNameSectionEnd, true);
+                List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, mStringTableStart, mStringTableEnd, true);
                 if (locations.Count < 1)
                 {
                     retVal = false;
@@ -1709,15 +1734,14 @@ namespace NFL2K5Tool
             }
         }
         /// <summary>
-        /// 
+        /// checks to see if the gamesave file contains the given name
         /// </summary>
         /// <param name="name">first or last name</param>
         /// <returns></returns>
-        public bool CheckCollegeNameExists(string name)
+        public bool CheckNameExists(string name)
         {
             bool retVal = false;
-            int start = 0x75c40; // mCollegePlayerNameSectionStart
-            List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, start, mCollegePlayerNameSectionEnd, true);
+            List<long> locations = StaticUtils.FindStringInFile(name, GameSaveData, mStringTableStart, mStringTableEnd, true);
             if (locations != null && locations.Count > 0)
                 retVal = true;
             return retVal;
@@ -2035,6 +2059,7 @@ namespace NFL2K5Tool
         /// <param name="val">string representation of the face enum</param>
         private void SetFaceMask(int player, String val)
         {
+            val = val.Replace("Type", "FaceMask");// Legacy NFL2K5 history format
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.FaceMask;
             FaceMask ret = (FaceMask)Enum.Parse(typeof(FaceMask), val);
             int dude = (int)ret;
@@ -2331,6 +2356,7 @@ namespace NFL2K5Tool
 
         private void SetLeftShoe(int player, String shoe)
         {
+            shoe = shoe.Replace("Style", "Shoe");// Legacy NFL2K5 history format
             Shoe h = (Shoe)Enum.Parse(typeof(Shoe), shoe);
             int loc = GetPlayerDataStart(player) + (int)PlayerOffsets.Helmet_LeftShoe_RightShoe;
             //LShoe is last 3 bits; 
@@ -2353,6 +2379,7 @@ namespace NFL2K5Tool
 
         private void SetRightShoe(int player, String shoe)
         {
+            shoe = shoe.Replace("Style", "Shoe");// Legacy NFL2K5 history format
             Shoe h = (Shoe)Enum.Parse(typeof(Shoe), shoe);
             int loc = GetPlayerDataStart(player) + (int) PlayerOffsets.Helmet_LeftShoe_RightShoe;
             // RShoe is bits 4,5,6 
@@ -2624,6 +2651,28 @@ namespace NFL2K5Tool
             }
         }
         #endregion
+
+        public void GetSkinPhotoMappings(StringBuilder builder)
+        {
+            StringBuilder tmp = new StringBuilder();
+            string currentSkin;
+            for (int j = 1; j < 23; j++)
+            {
+                currentSkin = "Skin" + j;
+                builder.Append(currentSkin);
+                builder.Append(":[");
+                for (int i = 0; i <= mMaxPlayers; i++)
+                {
+                    tmp.Length = 0;
+                    GetSkin(i, tmp);
+                    if (tmp.ToString().IndexOf(currentSkin) > -1)
+                    {
+                        GetPlayerAppearanceAttribute(i, AppearanceAttributes.Photo, builder);
+                    }
+                }
+                builder.Append("],\r\n");
+            }
+        }
 
     }
 

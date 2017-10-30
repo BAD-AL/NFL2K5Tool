@@ -522,8 +522,8 @@ namespace NFL2K5Tool
 
             string firstName = attributes[firstNameIndex];
             string lastName = attributes[lastNameIndex];
-            bool firstNameExists = Tool.CheckCollegeNameExists(firstName);
-            bool lastNameExists  = Tool.CheckCollegeNameExists(lastName);
+            bool firstNameExists = Tool.CheckNameExists(firstName);
+            bool lastNameExists  = Tool.CheckNameExists(lastName);
             bool retVal = firstNameExists && lastNameExists;
             if (!retVal)
             {

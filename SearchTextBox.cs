@@ -127,27 +127,30 @@ namespace NFL2K5Tool
         public int FindNextMatch()
         {
             int retVal = -1;
-
             if (SearchString != null && !SearchString.Equals(""))
             {
-                Regex r;
-                r = new Regex(SearchString, RegexOptions.IgnoreCase);
-                int startAt = this.SelectionStart + 1;
-                if (startAt > this.Text.Length)
-                    startAt = 0;
-
-                Match m = r.Match(this.Text, startAt);
-
-                if (m.Length == 0)
-                { // continue at the top if not found
-                    m = r.Match(this.Text);
-                }
-                if (m.Length > 0)
+                try
                 {
-                    this.SelectionStart = m.Index;
-                    this.SelectionLength = m.Length;
-                    retVal = this.GetLineFromCharIndex(this.SelectionStart);
+                    Regex r;
+                    r = new Regex(SearchString, RegexOptions.IgnoreCase);
+                    int startAt = this.SelectionStart + 1;
+                    if (startAt > this.Text.Length)
+                        startAt = 0;
+
+                    Match m = r.Match(this.Text, startAt);
+
+                    if (m.Length == 0)
+                    { // continue at the top if not found
+                        m = r.Match(this.Text);
+                    }
+                    if (m.Length > 0)
+                    {
+                        this.SelectionStart = m.Index;
+                        this.SelectionLength = m.Length;
+                        retVal = this.GetLineFromCharIndex(this.SelectionStart);
+                    }
                 }
+                catch { }
             }
             UpdateStatusControl(retVal);
             return retVal;
