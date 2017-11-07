@@ -57,6 +57,7 @@
             // 
             // mSkinComboBox
             // 
+            this.mSkinComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.mSkinComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.mSkinComboBox.FormattingEnabled = true;
             this.mSkinComboBox.Items.AddRange(new object[] {
@@ -73,6 +74,7 @@
             // 
             // mLastNameTextBox
             // 
+            this.mLastNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.mLastNameTextBox.Location = new System.Drawing.Point(230, 390);
             this.mLastNameTextBox.Name = "mLastNameTextBox";
             this.mLastNameTextBox.Size = new System.Drawing.Size(150, 20);
@@ -81,6 +83,7 @@
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(166, 393);
             this.label1.Name = "label1";

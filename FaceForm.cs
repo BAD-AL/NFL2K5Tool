@@ -20,6 +20,7 @@ namespace NFL2K5Tool
         private string[] mPhotoFiles = null;
         private string[] mAllPhotoFiles = null;
         private SkinObj Skin_Photo_map = null;
+        private FaceFormToolTipList Tool_Tip_List = null;
 
         private List<PictureBox> mPictureBoxList = new List<PictureBox>();
 
@@ -58,6 +59,11 @@ namespace NFL2K5Tool
                 DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SkinObj));
                 Skin_Photo_map = (SkinObj)ser.ReadObject(fs);
             }
+            using (System.IO.FileStream fs = new System.IO.FileStream("PlayerData\\FaceData.json", System.IO.FileMode.Open))
+            {
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(FaceFormToolTipList));
+                Tool_Tip_List = (FaceFormToolTipList)ser.ReadObject(fs);
+            }
         }
 
         void mPhotoScrollBar_ValueChanged(object sender, EventArgs e)
@@ -72,7 +78,7 @@ namespace NFL2K5Tool
             for (int i = 0; i < mPictureBoxList.Count; i++)
             {
                 if (mPhotoFiles.Length > (i + StartingPictureIndex))
-                    mPictureBoxList[i].ImageLocation = mPhotoFiles[i + StartingPictureIndex];
+                    mPictureBoxList[i].Image = StaticUtils.GetImageFromPath( mPhotoFiles[i + StartingPictureIndex]);
                 else
                     mPictureBoxList[i].ImageLocation = null;
             }
@@ -148,6 +154,57 @@ namespace NFL2K5Tool
             else
                 mPhotoScrollBar_ValueChanged(mPhotoScrollBar, EventArgs.Empty);
         }
+
+        /*private void WriteBigfaceImage()
+        {
+            string[] files = System.IO.Directory.GetFiles(sFaceDir, "*.jpg");
+            Image dude = Image.FromFile(files[0]);
+            // 50,50
+            int numberOfRows = files.Length / 10;
+            numberOfRows++;
+            string toolTip = "";
+            Bitmap bmp = new Bitmap(500, numberOfRows * 50);
+            Graphics g = Graphics.FromImage(bmp);
+            
+            int index = 0;
+            Rectangle srcRect = new Rectangle(0, 0, dude.Width, dude.Height);
+            Rectangle destRect = new Rectangle(0, 0, 50, 50);
+            FaceFormToolTipObj tip = null;
+            FaceFormToolTipList list = new FaceFormToolTipList();
+            int slashIndex = 0;
+
+            for (int row = 0; row < numberOfRows; row++)
+            {
+                for (int col = 0; col < 10; col++)
+                {
+                    if (index < files.Length)
+                    {
+                        destRect.X = col * 50;
+                        destRect.Y = row * 50;
+                        dude = Image.FromFile(files[index]);
+                        g.DrawImage(dude, destRect, srcRect, GraphicsUnit.Pixel);
+
+                        tip = new FaceFormToolTipObj();
+                        slashIndex = files[index].LastIndexOf(System.IO.Path.DirectorySeparatorChar);
+                        tip.Location = new Rectangle(destRect.X, destRect.Y, destRect.Width, destRect.Height);
+                        toolTip = files[index].Substring(slashIndex + 1).Replace(".jpg", "");// image number
+                        if (DataMap.ReversePhotoMap.ContainsKey(toolTip))
+                            tip.Tip = string.Concat(toolTip, "\r\n", DataMap.ReversePhotoMap[toolTip]);
+                        else
+                            tip.Tip = toolTip;
+                        list.List.Add(tip);
+                        index++;
+                    }
+                }
+            }
+
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(FaceFormToolTipList));
+            using (System.IO.FileStream stream = new System.IO.FileStream(".\\FaceData.json", System.IO.FileMode.OpenOrCreate))
+            {
+                ser.WriteObject(stream, list);
+            }
+            bmp.Save(".\\BigFaces.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+        }/**/
 
     }
 
@@ -241,5 +298,28 @@ namespace NFL2K5Tool
             }
             return retVal;
         }
+    }
+
+
+    [DataContract]
+    public class FaceFormToolTipList
+    {
+        public FaceFormToolTipList()
+        {
+            List = new List<FaceFormToolTipObj>();
+        }
+
+        [DataMember]
+        public List<FaceFormToolTipObj> List { get; set; }
+    }
+
+    [DataContract]
+    public class FaceFormToolTipObj
+    {
+        [DataMember]
+        public string Tip { get; set; }
+
+        [DataMember]
+        public Rectangle Location { get; set; }
     }
 }

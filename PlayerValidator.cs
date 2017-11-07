@@ -21,8 +21,9 @@ namespace NFL2K5Tool
         /// Adds warnings when something seems like it may be incorrect.
         /// </summary>
         /// <param name="text">The league/ team data</param>
-        public void ValidatePlayers(string text)
+        public string ValidatePlayers(string text)
         {
+            StringBuilder builder = new StringBuilder(); 
             text = text.Replace("\r\n", "\n");
             char[] chars = "\n".ToCharArray();
             string[] lines = text.Split(chars);
@@ -35,23 +36,37 @@ namespace NFL2K5Tool
                 }
                 else if (line.IndexOf(",") > -1 && line.Length > 60)
                 {
-                    ValidatePlayer(line);
+                    builder.Append( ValidatePlayer(line) );
                 }
             }
+            if (builder.Length > 0)
+            {
+                builder.Insert(0, "Key=Position,fname,lname,BodyType,Height,Weight\n");
+            }
+            return builder.ToString();
         }
 
         /// <summary>
         /// Will add warnings if there is an issue with the player. 
         /// </summary>
         /// <param name="line">The player line</param>
-        public void ValidatePlayer(string line)
+        public string ValidatePlayer(string line)
         {
             List<string> playerParts = InputParser.ParsePlayerLine(line);
-            ValidateBodyType(playerParts);
-            ValidateWeight(playerParts);
+            PlayerValidationResult res = new PlayerValidationResult(Get(playerParts, "Position"), Get(playerParts, "fname"), Get(playerParts, "lname"));
+            ValidateBodyType(playerParts, res);
+            ValidateWeight(playerParts, res);
+            if (res.Invalid)
+            {
+                res.Height = Get(playerParts, "Height");
+                res.BodyType = Get(playerParts, "BodyType");
+                res.Weight = Get(playerParts, "Weight");
+                return String.Format("{0},{1},{2},{3},{4},{5}\n", res.Position, res.FirstName, res.LastName, res.BodyType, res.Height, res.Weight);
+            }
+            return "";
         }
 
-        private void ValidateWeight(List<string> playerParts)
+        private void ValidateWeight(List<string> playerParts, PlayerValidationResult res)
         {
             string pos = Get(playerParts, "Position");
             string[] possibilities = null;
@@ -91,11 +106,14 @@ namespace NFL2K5Tool
                     possibilities = GetRange(260, 390);
                     break;
             }
-            ValidateAttribute("Weight", possibilities, playerParts);
+            if (!ValidateAttribute("Weight", possibilities, playerParts))
+            {
+                res.Invalid = true;
+            }
         }
 
         // Skinny = 0, Normal, Large, ExtraLarge
-        private void ValidateBodyType(List<string> playerParts)
+        private void ValidateBodyType(List<string> playerParts, PlayerValidationResult res)
         {
             string pos = Get(playerParts, "Position");
             string[] possibilities=null;
@@ -129,7 +147,10 @@ namespace NFL2K5Tool
                     possibilities = new string[] { /*"Skinny",*/ "Normal", "Large", "ExtraLarge" };
                     break;
             }
-            ValidateAttribute("BodyType", possibilities, playerParts);
+            if (!ValidateAttribute("BodyType", possibilities, playerParts))
+            {
+                res.Invalid = true;
+            }
         }
 
         /// <summary>
@@ -138,7 +159,7 @@ namespace NFL2K5Tool
         /// <param name="attribute">the attribute to validate (BodyType, Weight...)</param>
         /// <param name="validValues"></param>
         /// <param name="playerParts"></param>
-        private void ValidateAttribute(string attribute, string[] validValues, List<string> playerParts)
+        private bool ValidateAttribute(string attribute, string[] validValues, List<string> playerParts)
         {
             string val = Get(playerParts, attribute);
             int index = -1;
@@ -151,11 +172,9 @@ namespace NFL2K5Tool
                 }
             }
             if (index == -1)
-            {
-                AddWarning(String.Format("{0},{1},{2},\t attribute {3}={4} ",
-                    Get(playerParts,"Position"), Get(playerParts,"fname"), Get(playerParts,"lname"), attribute, val
-                    ));
-            }
+                return false;
+            
+            return true;
         }
 
         /// <summary>
@@ -195,5 +214,26 @@ namespace NFL2K5Tool
             return retVal;
         }
 
+    }
+
+    public class PlayerValidationResult
+    {
+        public PlayerValidationResult(string position, string firstName, string lastName)
+        {
+            this.Position = position;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Invalid = false;
+        }
+
+        public string Position  { get; set; }
+        public string FirstName { get; set; }
+        public string LastName  { get; set; }
+
+        public String BodyType  { get; set; }
+        public String Height    { get; set; }
+        public String Weight    { get; set; }
+
+        public bool Invalid { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using System.IO;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Security.Cryptography;
+using System.Drawing;
 
 namespace NFL2K5Tool
 {
@@ -15,6 +16,63 @@ namespace NFL2K5Tool
     /// </summary>
     public static class StaticUtils
     {
+        private static Dictionary<string,Image> sImageMap = null;
+        private static Dictionary<string, Image> ImageMap 
+        {
+            get
+            {
+                if (sImageMap == null)
+                    sImageMap = new Dictionary<string, Image>();
+                return sImageMap;
+            }
+        }
+        private static PlayerParser pp = null;
+        /// <summary>
+        /// Get an image from the assembly; caches the image.
+        /// </summary>
+        public static Image GetEmbeddedImage(string file)
+        {
+            Image ret = null;
+            try
+            {
+                if (pp == null)
+                    pp = new PlayerParser("");
+                if (ImageMap.ContainsKey(file))
+                    ret = ImageMap[file];
+                else
+                {
+                    System.IO.Stream s =
+                        pp.GetType().Assembly.GetManifestResourceStream(file);
+                    if (s != null)
+                        ret = Image.FromStream(s);
+                    sImageMap.Add(file, ret);
+                }
+            }
+            catch (Exception e)
+            {
+                AddError("Error getting image "+ file);
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Gets an image from the path; caches the image.
+        /// </summary>
+        public static Image GetImageFromPath(string path)
+        {
+            Image ret = null;
+
+            if (ImageMap.ContainsKey(path))
+                ret = ImageMap[path];
+            else
+            {
+                ret = Image.FromFile(path);
+                ImageMap.Add(path, ret);
+            }
+            return ret;
+        }
+
+        #region Error functionality 
         /// <summary>
         /// a place to keep all the processing errors.
         /// </summary>
@@ -58,6 +116,8 @@ namespace NFL2K5Tool
         {
             Errors.Add(error);
         }
+
+        #endregion
 
         /// <summary>
         /// Find string 'str' (unicode string) in the data byte array.

@@ -69,6 +69,28 @@ namespace NFL2K5Tool
                 this.TextClicked(this, new StringEventArgs(mTextBox.GetCurrentLine()));
             }
         }
+
+        /// <summary>
+        /// Get a string from the user.
+        /// </summary>
+        /// <param name="title">The title of the dialog</param>
+        /// <param name="message">The initial message to display.</param>
+        /// <returns>valid string when the user hits 'ok', null when they cancel.</returns>
+        public static string GetString(string title, string message)
+        {
+            string retVal = null;
+            MessageForm mf = new MessageForm(SystemIcons.Question);
+            mf.MessageEditable = true;
+            mf.Text = title;
+            mf.MessageText = message;
+
+            if (mf.ShowDialog() == DialogResult.OK)
+            {
+                retVal = mf.MessageText;
+            }
+            mf.Dispose();
+            return retVal;
+        }
     }
 
     public class StringEventArgs : EventArgs

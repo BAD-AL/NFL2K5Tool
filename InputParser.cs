@@ -211,6 +211,10 @@ namespace NFL2K5Tool
             {
                 ApplySet(line);
             }
+            else if (line.IndexOf("LookupAndModify", StringComparison.InvariantCultureIgnoreCase) > -1)
+            {
+                mCurrentState = ParsingStates.PlayerLookupAndApply;
+            }
             else if ((mTeamMatch = mTeamRegex.Match(line)) != Match.Empty)
             {
                 //Console.WriteLine("'{0}' ", line);
@@ -253,8 +257,26 @@ namespace NFL2K5Tool
                     case ParsingStates.Schedule:
                         mScheduleList.Add(line.ToLower());
                         break;
+                    case ParsingStates.PlayerLookupAndApply:
+                        retVal = LookupPlayerAndApply(line);
+                        break;
                 }
             }
+            return retVal;
+        }
+
+        private bool LookupPlayerAndApply(string line)
+        {
+            bool retVal = false;
+            List<string> attributes = ParsePlayerLine(line);
+            string pos = attributes[0];
+            string firstName = attributes[1];
+            string lastName = attributes[2];
+
+            List<int> playersToApplyTo = Tool.FindPlayer(pos, firstName, lastName);
+            if(playersToApplyTo.Count > 0)
+                retVal = SetPlayerData(playersToApplyTo[0], line, false);
+
             return retVal;
         }
 
@@ -426,6 +448,25 @@ namespace NFL2K5Tool
                     retVal++;
 
             return retVal;
+        }
+
+        /// <summary>
+        /// Returns the index of the nth occurrence of the given character
+        /// </summary>
+        public static int NthIndex(string input, char thingToCount, int index)
+        {
+            int count = 0;
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == thingToCount)
+                {
+                    count++;
+                    if (count == index)
+                        return i;
+                }
+            }
+
+            return -1;
         }
 
         /// <summary>
@@ -706,6 +747,7 @@ namespace NFL2K5Tool
     public enum ParsingStates
     {
         PlayerModification,
+        PlayerLookupAndApply,
         Schedule
     }
 

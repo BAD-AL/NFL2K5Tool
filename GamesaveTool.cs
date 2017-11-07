@@ -753,7 +753,7 @@ namespace NFL2K5Tool
                 if ("DraftClass".Equals(teams[t]))
                     continue;
                 playerPointers = GetPlayerIndexesForTeam(teams[t]);
-                for (int i = 0; i <= playerPointers.Count; i++)
+                for (int i = 0; i < playerPointers.Count; i++)
                 {
                     dob = GetAttribute(playerPointers[i], PlayerOffsets.DOB); // retVal = string.Concat(new object[] { month, "/", day, "/", year });
                     parts = dob.Split(chars);
@@ -952,6 +952,7 @@ namespace NFL2K5Tool
             int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
             List<int> playerIndexes = GetPlayerIndexesForTeam(team);
             int playerIndex = GameSaveData[teamPlayerPointersStart + (int)guy];
+            
             String pos = "ERROR";
             int depth = 0;
             if (playerIndex < playerIndexes.Count)
@@ -2006,7 +2007,29 @@ namespace NFL2K5Tool
 
         #region Get/Set attributes
 
-        // input like 6'3"
+        public byte[] GetPlayerBytes(int player)
+        {
+            byte[] retVal = new byte[0x54];
+            int loc = GetPlayerDataStart(player);
+
+            for(int i=0; i < retVal.Length; i++)
+            {
+                retVal[i] = GameSaveData[loc+i];
+            }
+            return retVal;
+        }
+
+        public byte[] GetPlayerBytes(string position, string firstName, string lastName )
+        {
+            List<int> players = FindPlayer(position, firstName, lastName);
+            if (players.Count > 0)
+            {
+                return GetPlayerBytes(players[0]);
+            }
+            return null;
+        }
+
+        // input like 6'3" or 70"
         private int GetInches(string stringVal)
         {
             int inches = 0; // Int32.Parse(stringVal.Substring(2));
@@ -2674,6 +2697,19 @@ namespace NFL2K5Tool
             }
         }
 
+        /// <summary>
+        /// returns a list of ints representing the players with the given firstName, lastName & position
+        /// </summary>
+        public List<int> FindPlayer(string pos, string firstName, string lastName)
+        {
+            List<int> retVal = new List<int>();
+            for(int i = 0; i < mMaxPlayers;i++)
+            {
+                if (GetPlayerLastName(i) == lastName && GetPlayerFirstName(i) == firstName && GetPlayerPosition(i) == pos)
+                    retVal.Add(i);
+            }
+            return retVal;
+        }
     }
 
 }

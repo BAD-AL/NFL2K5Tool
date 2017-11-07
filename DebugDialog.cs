@@ -605,5 +605,161 @@ namespace NFL2K5Tool
             mResultsTextBox.Text = builder.ToString();
         }
 
+        private void applyDataToCurrentSaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "This process will apply the given data to the current save file in memory.\r\n"+
+                "You will be prompted for for the data, it must like be in the following example (does not need to be facemask and glove data):\r\n"+
+                "   Key=Position,fname,lname,FaceMask,LeftGlove,RightGlove\r\n"+
+                "   LookupAndModify \r\n" +
+                "   QB,Steve,Young,FaceMask2,None,Team1\r\n"+
+                "   QB,Joe,Montana,FaceMask3,Team1,None\r\n\r\n" +
+                "In the example above thie feature will search through all players named 'Steve Young' playing QB and\r\n"+
+                "set his facemask, left glove and right glove to the data given. Will do the same with 'Joe Montana'"
+                ,"Info");
+            string dataToApply = MessageForm.GetString("Paste data below", "");
+            if (dataToApply != null)
+            {
+                dataToApply = dataToApply.Replace("Team =","#Team =");
+                string key = Tool.GetKey(true, true).Replace("#", "");
+                InputParser inputParser = new InputParser(Tool);
+                inputParser.ProcessText("LookupAndModify\r\n");
+                inputParser.ProcessText(dataToApply);
+                Tool.SetKey("Key=");
+                Tool.GetKey(true, true);
+            }
+        }
+
+        /// <summary>
+        /// Takes list of position , names, looks up those players (if they exist) puts their data into the textbox.
+        /// </summary>
+        private void getPlayersByPositionAndNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringBuilder builder = new StringBuilder();
+            List<int> playersToApplyTo = null;
+            List<string> attributes = null;
+            MessageBox.Show(
+                     "This process willget the players specified by position,fname,lname.\r\n" +
+                     "You will be prompted for for the data, it must like be in the following example:\r\n" +
+                     "   QB,Steve,Young\r\n" +
+                     "   QB,Joe,Montana\r\n" +
+                     "In the example above thie feature will search through all players named 'Steve Young' and 'Joe Montana' playing QB and\r\n" +
+                     "retrieve their data."
+                     , "Info");
+            string dataToApply = MessageForm.GetString("Paste data below", "");
+            if (String.IsNullOrEmpty(dataToApply))
+                return;
+
+            string[] lines = dataToApply.Replace("\r\n", "\n").Split(new char[] { '\n' });
+            foreach (string line in lines)
+            {
+                if (line.StartsWith("#") || line.Length < 3)
+                    ;// skip comments
+                else
+                {
+                    attributes = InputParser.ParsePlayerLine(line);
+                    if (attributes != null && attributes.Count > 2)
+                    {
+                        playersToApplyTo = Tool.FindPlayer(attributes[0], attributes[1], attributes[2]);
+                        if (playersToApplyTo.Count > 0)
+                        {
+                            builder.Append(Tool.GetPlayerData(playersToApplyTo[0], true, true));
+                            builder.Append("\r\n");
+                        }
+                        else
+                        {
+                            //builder.Append("# notFound> ");
+                            //builder.Append(line);
+                            //builder.Append("\r\n");
+                        }
+                    }
+                }
+            }
+            this.mResultsTextBox.Text = builder.ToString();
+        }
+        /// <summary>
+        /// Goes through the Text in the results text box, removes players (lookup by name) who are on teams (above FreeAgents)
+        /// </summary>
+        private void removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringBuilder builder = new StringBuilder(mResultsTextBox.Text.Length);
+            int freeAgentIndex = mResultsTextBox.Text.IndexOf("FreeAgents");
+            if (freeAgentIndex < 100)
+            {
+                mStatusLabel.Text = "No data to process";
+                return;
+            }
+            string teamsText = mResultsTextBox.Text.Substring(0, freeAgentIndex);
+            string freeAgentText = mResultsTextBox.Text.Substring(freeAgentIndex);
+            string[] lines = freeAgentText.Replace("\r\n","\n").Split(new char[]{'\n'});
+
+            int commaIndex = 0;
+            builder.Append(teamsText);
+            string dude = "";
+            foreach (string line in lines)
+            {
+                commaIndex = InputParser.NthIndex(line, ',', 3);
+                if (commaIndex > -1)
+                {
+                    dude = line.Substring(0, commaIndex);
+                    if (teamsText.IndexOf(dude) > -1)
+                        ;
+                    else
+                        builder.Append(line + "\r\n");
+                }
+            }
+            mResultsTextBox.Text = builder.ToString();
+            mStatusLabel.Text = "Updated free agent data";
+        }
+
+        private void getPlayerBytesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringBuilder builder = new StringBuilder();
+            List<string> attributes = null;
+            MessageBox.Show(
+                     "This process will get the players specified by position,fname,lname.\r\n" +
+                     "You will be prompted for for the data, it must like be in the following example:\r\n" +
+                     "   QB,Steve,Young\r\n" +
+                     "   QB,Joe,Montana\r\n" +
+                     "In the example above thie feature will search through all players named 'Steve Young' and 'Joe Montana' playing QB and\r\n" +
+                     "retrieve their data."
+                     , "Info");
+            string dataToApply = MessageForm.GetString("Paste data below", "");
+            byte[] playerBytes = null;
+            if (dataToApply != null)
+            {
+                string[] lines = dataToApply.Replace("\r\n", "\n").Split(new Char[] { '\n' });
+                foreach (string line in lines)
+                {
+                    if (line.StartsWith("#") || line.Length < 3)
+                        ;// skip comments
+                    else
+                    {
+                        attributes = InputParser.ParsePlayerLine(line);
+                        if (attributes != null && attributes.Count > 2)
+                        {
+                            playerBytes = Tool.GetPlayerBytes(attributes[0], attributes[1], attributes[2]);
+                            if (playerBytes != null)
+                            {
+                                for (int i = 0; i < playerBytes.Length; i++)
+                                {
+                                    builder.Append(playerBytes[i].ToString("X2"));
+                                    builder.Append(" ");
+                                }
+                                builder.Append("\r\n");
+                            }
+                            else
+                            {
+                                builder.Append("# notFound> ");
+                                builder.Append(line);
+                                builder.Append("\r\n");
+                            }
+                        }
+                    }
+                }
+                mResultsTextBox.Text = builder.ToString();
+            }
+        }
+
     }
 }

@@ -352,20 +352,13 @@ namespace NFL2K5Tool
         private void ValidatePlayers()
         {
             PlayerValidator v = new PlayerValidator(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
-            v.ValidatePlayers(mTextBox.Text);
-            List<String> warnings = v.GetWarnings();
-            if (warnings.Count > 0)
+            string results =  v.ValidatePlayers(mTextBox.Text);
+            if (results.Length > 0)
             {
-                StringBuilder builder = new StringBuilder();
-                foreach (string w in warnings)
-                {
-                    builder.Append(w);
-                    builder.Append("\n");
-                }
                 MessageForm ef = new MessageForm(SystemIcons.Warning);
                 ef.TextClicked += new EventHandler(validatorForm_TextClicked);
                 ef.ShowCancelButton = false;
-                ef.MessageText = builder.ToString();
+                ef.MessageText = results;
                 ef.Text = "Warning, verify player attributes";
                 ef.Closed += new EventHandler(validatorForm_Closed);
                 ef.Show(this);
@@ -525,9 +518,30 @@ namespace NFL2K5Tool
             {
                 MessageBox.Show("You must load a save file before you can edit players in the GUI.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            else if (line.StartsWith("Coach", StringComparison.InvariantCultureIgnoreCase))
+            {
+                EditCoach();
+            }
             else if (!String.IsNullOrEmpty(line) && InputParser.ParsePlayerLine(line).Count > 2)
             {
                 EditPlayer();
+            }
+        }
+
+        private void EditCoach()
+        {
+            CoachEditForm form = new CoachEditForm();
+            form.ReversePBPs = DataMap.ReversePBPMap;
+            form.ReversePhotos = DataMap.ReversePhotoMap;
+            form.PBPs = DataMap.PBPMap;
+            form.Photos = DataMap.PhotoMap;
+            form.Data = mTextBox.Text;
+            form.SelectionStart = mTextBox.SelectionStart;
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                SetText(form.Data);
+                mTextBox.SelectionStart = form.SelectionStart;
+                mTextBox.ScrollToCaret();
             }
         }
 
