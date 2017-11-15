@@ -288,25 +288,31 @@ namespace NFL2K5Tool
             int teamIndex = Tool.GetTeamIndex(parts[1]);
             string[] enumNames = Enum.GetNames(typeof(CoachOffsets));
             CoachOffsets current = CoachOffsets.Body;
-
-            for (int i = 2; i < keyParts.Length; i++)
+            try
             {
-                if (i == parts.Count) break; // stop processing if we're out of parts
-                switch (keyParts[i].ToLower())
+                for (int i = 2; i < keyParts.Length; i++)
                 {
-                    case "firstname":
-                    case "fname":
-                        Tool.SetCoachAttribute(teamIndex, CoachOffsets.FirstName, parts[i]);
-                        break;
-                    case "lastname":
-                    case "lname":
-                        Tool.SetCoachAttribute(teamIndex, CoachOffsets.LastName, parts[i]);
-                        break;
-                    default:
-                        current = (CoachOffsets)Enum.Parse(typeof(CoachOffsets), keyParts[i], true);
-                        Tool.SetCoachAttribute(teamIndex, current, parts[i]);
-                        break;
+                    if (i == parts.Count) break; // stop processing if we're out of parts
+                    switch (keyParts[i].ToLower())
+                    {
+                        case "firstname":
+                        case "fname":
+                            Tool.SetCoachAttribute(teamIndex, CoachOffsets.FirstName, parts[i]);
+                            break;
+                        case "lastname":
+                        case "lname":
+                            Tool.SetCoachAttribute(teamIndex, CoachOffsets.LastName, parts[i]);
+                            break;
+                        default:
+                            current = (CoachOffsets)Enum.Parse(typeof(CoachOffsets), keyParts[i], true);
+                            Tool.SetCoachAttribute(teamIndex, current, parts[i]);
+                            break;
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                StaticUtils.AddError(string.Format("Error setting data for line:\r\n{0}\r\n\r\nPerhaps check '{1}' attribute.", line, current.ToString()));
             }
         }
 

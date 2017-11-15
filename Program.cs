@@ -10,11 +10,11 @@ namespace NFL2K5Tool
 {
     static class Program
     {
-        [DllImport("kernel32.dll")]
+        /*[DllImport("kernel32.dll")]
         static extern IntPtr GetConsoleWindow();
 
         [DllImport("user32.dll")]
-        static extern bool ShowWindow(IntPtr hWnd, WindowShowStyle nCmdShow);
+        static extern bool ShowWindow(IntPtr hWnd, WindowShowStyle nCmdShow);*/
 
         public static bool GUI_MODE = false;
         public static string Version
@@ -35,13 +35,13 @@ namespace NFL2K5Tool
             if (args.Length == 0) //GUI mode
             {
                 GUI_MODE = true;
-                ShowWindow(GetConsoleWindow(), WindowShowStyle.Hide);
+                //ShowWindow(GetConsoleWindow(), WindowShowStyle.Hide);
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainForm());
                 
-                ShowWindow(GetConsoleWindow(), WindowShowStyle.Show);
+                //ShowWindow(GetConsoleWindow(), WindowShowStyle.Show);
             }
             else
             {

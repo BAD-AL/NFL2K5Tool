@@ -65,8 +65,13 @@
             this.autoUpdateYearsProToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gatherFaceSkinDtaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.applyDataToCurrentSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getPlayersByPositionAndNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getPlayerBytesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coachToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.apperanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miscToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageCaptureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updatePlayerAppearanceFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -86,10 +91,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
             this.mFindBytesButton = new System.Windows.Forms.Button();
-            this.getPlayersByPositionAndNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
-            this.getPlayerBytesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -295,7 +297,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.findToolStripMenuItem,
             this.editToolStripMenuItem,
-            this.coachToolStripMenuItem});
+            this.coachToolStripMenuItem,
+            this.miscToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(532, 24);
@@ -455,6 +458,27 @@
             this.applyDataToCurrentSaveToolStripMenuItem.Text = "Apply Data To Current Save";
             this.applyDataToCurrentSaveToolStripMenuItem.Click += new System.EventHandler(this.applyDataToCurrentSaveToolStripMenuItem_Click);
             // 
+            // getPlayersByPositionAndNameToolStripMenuItem
+            // 
+            this.getPlayersByPositionAndNameToolStripMenuItem.Name = "getPlayersByPositionAndNameToolStripMenuItem";
+            this.getPlayersByPositionAndNameToolStripMenuItem.Size = new System.Drawing.Size(361, 22);
+            this.getPlayersByPositionAndNameToolStripMenuItem.Text = "Get Players By Position and Name";
+            this.getPlayersByPositionAndNameToolStripMenuItem.Click += new System.EventHandler(this.getPlayersByPositionAndNameToolStripMenuItem_Click);
+            // 
+            // removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem
+            // 
+            this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem.Name = "removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem";
+            this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem.Size = new System.Drawing.Size(361, 22);
+            this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem.Text = "Remove free agents that are on a team (text operation)";
+            this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem.Click += new System.EventHandler(this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem_Click);
+            // 
+            // getPlayerBytesToolStripMenuItem
+            // 
+            this.getPlayerBytesToolStripMenuItem.Name = "getPlayerBytesToolStripMenuItem";
+            this.getPlayerBytesToolStripMenuItem.Size = new System.Drawing.Size(361, 22);
+            this.getPlayerBytesToolStripMenuItem.Text = "Get Player Bytes";
+            this.getPlayerBytesToolStripMenuItem.Click += new System.EventHandler(this.getPlayerBytesToolStripMenuItem_Click);
+            // 
             // coachToolStripMenuItem
             // 
             this.coachToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -467,6 +491,21 @@
             // 
             this.apperanceToolStripMenuItem.Name = "apperanceToolStripMenuItem";
             this.apperanceToolStripMenuItem.Size = new System.Drawing.Size(67, 22);
+            // 
+            // miscToolStripMenuItem
+            // 
+            this.miscToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.imageCaptureToolStripMenuItem});
+            this.miscToolStripMenuItem.Name = "miscToolStripMenuItem";
+            this.miscToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.miscToolStripMenuItem.Text = "&Misc";
+            // 
+            // imageCaptureToolStripMenuItem
+            // 
+            this.imageCaptureToolStripMenuItem.Name = "imageCaptureToolStripMenuItem";
+            this.imageCaptureToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.imageCaptureToolStripMenuItem.Text = "ImageCapture";
+            this.imageCaptureToolStripMenuItem.Click += new System.EventHandler(this.imageCaptureToolStripMenuItem_Click);
             // 
             // updatePlayerAppearanceFromFileToolStripMenuItem
             // 
@@ -707,20 +746,6 @@
             this.mFindBytesButton.UseVisualStyleBackColor = true;
             this.mFindBytesButton.Click += new System.EventHandler(this.mFindBytesButton_Click);
             // 
-            // getPlayersByPositionAndNameToolStripMenuItem
-            // 
-            this.getPlayersByPositionAndNameToolStripMenuItem.Name = "getPlayersByPositionAndNameToolStripMenuItem";
-            this.getPlayersByPositionAndNameToolStripMenuItem.Size = new System.Drawing.Size(361, 22);
-            this.getPlayersByPositionAndNameToolStripMenuItem.Text = "Get Players By Position and Name";
-            this.getPlayersByPositionAndNameToolStripMenuItem.Click += new System.EventHandler(this.getPlayersByPositionAndNameToolStripMenuItem_Click);
-            // 
-            // removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem
-            // 
-            this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem.Name = "removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem";
-            this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem.Size = new System.Drawing.Size(361, 22);
-            this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem.Text = "Remove free agents that are on a team (text operation)";
-            this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem.Click += new System.EventHandler(this.removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem_Click);
-            // 
             // mResultsTextBox
             // 
             this.mResultsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -735,13 +760,6 @@
             this.mResultsTextBox.StatusControl = null;
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
-            // 
-            // getPlayerBytesToolStripMenuItem
-            // 
-            this.getPlayerBytesToolStripMenuItem.Name = "getPlayerBytesToolStripMenuItem";
-            this.getPlayerBytesToolStripMenuItem.Size = new System.Drawing.Size(361, 22);
-            this.getPlayerBytesToolStripMenuItem.Text = "Get Player Bytes";
-            this.getPlayerBytesToolStripMenuItem.Click += new System.EventHandler(this.getPlayerBytesToolStripMenuItem_Click);
             // 
             // DebugDialog
             // 
@@ -846,5 +864,7 @@
         private System.Windows.Forms.ToolStripMenuItem getPlayersByPositionAndNameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeFreeAgentsThatAreOnATeamtextOperationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem getPlayerBytesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem miscToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem imageCaptureToolStripMenuItem;
     }
 }

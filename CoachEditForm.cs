@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace NFL2K5Tool
 {
@@ -31,6 +32,10 @@ namespace NFL2K5Tool
         /// </summary>
         public Dictionary<string, string> Photos { get; set; }
 
+        private string mKeyString = "";
+
+        private string[] mKeyParts = null;
+
         /// <summary>
         /// Form for editing Coaches.
         /// </summary>
@@ -51,8 +56,123 @@ namespace NFL2K5Tool
             set
             {
                 mData = value;
-                
+                SetupGui();
             }
+        }
+
+
+        /// <summary>
+        /// Initializes the Form.
+        /// Call this after Colleges, Photos & PBPs have been set.
+        /// </summary>
+        private void SetupGui()
+        {
+            if (SetupKey())
+            {
+                //ClearControls(mStatsTab);
+                //ClearControls(mStrategyTab);
+
+                foreach (string attr in mKeyParts)
+                {
+                    if (attr.Length > 0 && sCoachStats.IndexOf(attr + ",") > -1)
+                    {
+                        AddStat(attr);
+                    }
+                }
+
+                foreach (string attr in mKeyParts)
+                {
+                    if (attr.Length > 0 && sCoachStrategyAttrs.IndexOf(attr + ",") > -1)
+                    {
+                        AddStrategy(attr);
+                    }
+                }
+            }
+        }
+
+        private void AddStat(string stat)
+        {
+            Control c = null;
+            IntAttrControl iac = new IntAttrControl();
+            iac.Name = iac.Text = stat;
+            iac.ValueChanged += new EventHandler(ValueChanged);
+            c = iac;
+            int row = mStrategyTab.Controls.Count / 5;
+            int col = mStrategyTab.Controls.Count % 5;
+            c.Location = new Point(col * c.Width, row * c.Height);
+            mStrategyTab.Controls.Add(c);
+        }
+
+        private void AddStrategy(string strat)
+        {
+            Control c = null;
+            if (strat == "PowerRunStyle")
+            {
+                StringSelectionControl ssc = new StringSelectionControl();
+                ssc.RepresentedValue = typeof(PowerRunStyle);
+                ssc.Name = ssc.Text = strat;
+                ssc.ValueChanged += new EventHandler(ValueChanged);
+                c = ssc;
+            }
+            else
+            {
+                IntAttrControl iac = new IntAttrControl();
+                iac.Name = iac.Text = strat;
+                iac.ValueChanged += new EventHandler(ValueChanged);
+                c = iac;
+            }
+            int row = mStrategyTab.Controls.Count / 5;
+            int col = mStrategyTab.Controls.Count % 5;
+            c.Location = new Point(col * c.Width, row * c.Height);
+            mStrategyTab.Controls.Add(c);
+        }
+
+        private void ValueChanged(object sender, System.EventArgs e)
+        {
+            // need to have cached current coach, replace him with 'GetCoachString_UI()'
+        }
+
+        /// <summary>
+        /// Returns the text representation of what the GUI is presenting.
+        /// </summary>
+        public string GetCoachString_UI()
+        {
+            StringBuilder sb = new StringBuilder(300);
+            string a = "";
+            for (int i = 0; i < mKeyParts.Length; i++)
+            {
+                a = GetControlValue(mKeyParts[i]);
+                if (!String.IsNullOrEmpty(a))
+                {
+                    sb.Append(a);
+                    sb.Append(",");
+                }
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Returns true when a new key is set, false if it's the same key
+        /// </summary>
+        private bool SetupKey()
+        {
+            bool retVal = false;
+            Regex keyReg = new Regex("^CoachKey=(.*)", RegexOptions.IgnoreCase);
+            Match m = keyReg.Match(Data);
+            if (m != Match.Empty)
+            {
+                if (mKeyString != m.Groups[1].Value)
+                {
+                    mKeyString = m.Groups[1].Value;
+                    mKeyParts = mKeyString.Split(new char[] { ',' });
+                    retVal = true;
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Please make sure the Coach key is present in the text.");
+            }
+            return retVal;
         }
 
         private int mSelectionStart = 0;
@@ -100,8 +220,10 @@ namespace NFL2K5Tool
             //}
         }
 
-        private const string sIntAttrs = ",SeasonsWithTeam,totalSeasons,Wins,Losses,Ties,WinningSeasons,SuperBowls,PlayoffLosses,SuperBowlWins,SuperBowlLosses,PlayoffWins,PlayoffWins,Overall,OvrallOffense,RushFor,PassFor,OverallDefense,PassRush,PassCoverage,QB,RB,TE,WR,OL,DL,LB,SpecialTeams,Professionalism,Preparation,Conditioning,Motivation,Leadership,Discipline,Respect,PlaycallingRun,ShotgunRun,ShotgunRun,SplitbackRun,SplitbackRun,ShotgunPass,SplitbackPass,IFormPass,LoneBackPass,EmptyPass,";
-        private const string sStringAttrs = ",Team,FirstName,LastName,Info1,Info2,Body,";
+        private const string sCoachStats         = ",SeasonsWithTeam,totalSeasons,Wins,Losses,Ties,WinningSeasons,SuperBowls,PlayoffLosses,SuperBowlWins,SuperBowlLosses,PlayoffWins,PlayoffWins,";
+        private const string sCoachStrategyAttrs = ",Overall,OvrallOffense,RushFor,PassFor,OverallDefense,PassRush,PassCoverage,QB,RB,TE,WR,OL,DL,LB,SpecialTeams,Professionalism,Preparation,Conditioning,Motivation,Leadership,Discipline,Respect,PlaycallingRun,ShotgunRun,ShotgunRun,SplitbackRun,SplitbackRun,ShotgunPass,SplitbackPass,IFormPass,LoneBackPass,EmptyPass,";
+        private const string sStringAttrs        = ",Team,FirstName,LastName,Info1,Info2,Body,";
+        private string sIntAttrs = sCoachStrategyAttrs + sCoachStats;
 
         public Control GetControl(string attribute)
         {
@@ -129,9 +251,9 @@ namespace NFL2K5Tool
         /// <summary>
         /// returns null when control is not found, control value otherwise
         /// </summary>
-        private string GetControlValue(Control parentControl, string controlName)
+        private string GetControlValue( string controlName)
         {
-            Control c = FindControl(parentControl, controlName);
+            Control c = FindControl(this, controlName);
             if (c != null)
             {
                 TextBox tb = c as TextBox;
@@ -163,11 +285,20 @@ namespace NFL2K5Tool
         }
 
 
-        private Control FindControl(Control parentControl, string controlName)
+        private static Control FindControl(Control parentControl, string controlName)
         {
+            Control ctrl = null;
             foreach (Control c in parentControl.Controls)
+            {
                 if (c.Name == controlName)
                     return c;
+                if (c.Controls.Count > 0)
+                {
+                    ctrl = FindControl(c, controlName);
+                    if (ctrl != null)
+                        return ctrl;
+                }
+            }
             return null;
         }
 
@@ -182,5 +313,12 @@ namespace NFL2K5Tool
             "[Brian Billick]",        "[Joe Gibbs]",      "[Jim Haslett]",    "[Mike Holmgren]",  
             "[Bill Cowher]",          "[Dom Capers]",     "[Jeff Fisher]",    "[Mike Tice]"
         };
+
+        private void mBodySelectionControl_ValueChanged(object sender, EventArgs e)
+        {
+            string file = String.Concat(System.IO.Directory.GetCurrentDirectory(), "\\PlayerData\\CoachBodies\\", mBodySelectionControl.Value);
+            Image img = StaticUtils.GetImageFromPath(file);
+            mBodyPictureBox.Image = img;
+        }
     }
 }

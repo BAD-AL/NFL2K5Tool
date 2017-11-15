@@ -761,5 +761,14 @@ namespace NFL2K5Tool
             }
         }
 
+        ScreenCaptureForm mImageCaptureForm = null;
+
+        private void imageCaptureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mImageCaptureForm == null)
+                mImageCaptureForm = new ScreenCaptureForm();
+            mImageCaptureForm.Show(this);
+        }
+
     }
 }
