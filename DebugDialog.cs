@@ -770,5 +770,83 @@ namespace NFL2K5Tool
             mImageCaptureForm.Show(this);
         }
 
+        private void apperanceToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            string number = StringInputDlg.GetString("Enter Coach number", "(0-31", "0");
+            try
+            {
+                int num = Int32.Parse(number);
+                if (num > -1 && num < 32)
+                {
+                    Tool.CoachKey = Tool.CoachKeyAll;
+                    mResultsTextBox.Text = String.Format("#coach:{0}\n{1}\n{2}",num,  Tool.CoachKeyAll, Tool.GetCoachData(num));
+                }
+            }
+            catch { 
+                
+            }
+        }
+
+        private void replaceStringToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string searchStr = StringInputDlg.GetString("Enter Search String", "");
+            string replaceStr = StringInputDlg.GetString("Enter String to replace it with", "");
+
+            if (replaceStr.Length > searchStr.Length)
+            {
+                MessageBox.Show("Error, cannot replace a string with a longer string");
+                return;
+            }
+            while (replaceStr.Length < searchStr.Length)
+                replaceStr = replaceStr + " ";
+
+            List<long> locs = StaticUtils.FindStringInFile(searchStr, SaveFile, 0, SaveFile.Length);
+            for (int i = 0; i < locs.Count; i++)
+            {
+                int stringLoc = (int)locs[i];
+                for (int j = 0; j < replaceStr.Length; j++)
+                {
+                    Tool.SetByte(stringLoc, (byte)replaceStr[j]);
+                    Tool.SetByte(stringLoc + 1, 0);
+                    stringLoc += 2;
+                }
+            }
+        }
+
+        private void fixupRookieYearsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string[] teams = {
+                 "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
+                 "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
+                 "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
+                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings", "FreeAgents" };
+
+            List<int> playerPointers = null;
+            int yearsPro =0;
+
+            for (int t = 0; t < teams.Length; t++)
+            {
+                playerPointers = Tool.GetPlayerIndexesForTeam(teams[t]);
+                for (int player = 0; player < playerPointers.Count; player++)
+                {
+                    yearsPro = Int32.Parse( Tool.GetAttribute(playerPointers[player], PlayerOffsets.YearsPro));
+                    if (yearsPro == 0)
+                        Tool.SetAttribute(playerPointers[player], PlayerOffsets.YearsPro, "1");
+                    else if (yearsPro == 1)
+                        Tool.SetAttribute(playerPointers[player], PlayerOffsets.YearsPro, "2");
+                    
+                    //dob = GetAttribute(playerPointers[i], PlayerOffsets.DOB); // retVal = string.Concat(new object[] { month, "/", day, "/", year });
+                    //parts = dob.Split(chars);
+                    //if (parts.Length > 2 && Int32.TryParse(parts[2], out birthYear))
+                    //{
+                    //    yearsPro = currentYear - (birthYear + 22);
+                    //    if (yearsPro < 0)
+                    //        yearsPro = 0;
+                    //    SetAttribute(playerPointers[i], PlayerOffsets.YearsPro, yearsPro.ToString());
+                    //}
+                }
+            }
+        }
+
     }
 }

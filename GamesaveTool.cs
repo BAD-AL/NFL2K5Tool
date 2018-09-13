@@ -123,17 +123,6 @@ namespace NFL2K5Tool
             mReverseCoachMap.Add(0x25, "Dom Capers");
             mReverseCoachMap.Add(0x32, "Generic1");
             mReverseCoachMap.Add(0x33, "Generic2");
-
-            StringBuilder builder = new StringBuilder("Coach,Team,");
-            string attr = "";
-            Array attrs = Enum.GetValues(typeof(CoachOffsets));
-            for(int i=0; i < attrs.Length; i++)
-            {
-                attr = attrs.GetValue(i).ToString();
-                builder.Append(attr);
-                builder.Append(",");
-            }
-            mCoachKeyAll = builder.ToString();
         }
 
         private void InitializeForFranchise()
@@ -189,8 +178,12 @@ namespace NFL2K5Tool
         /// </summary>
         public string CoachKeyAll { get { return mCoachKeyAll; } }
 
-        private string mCoachKeyAll = "";
-        public const string DefaultCoachKey = "Coach,Team,fname,lname,Body,Photo";
+        private string mCoachKeyAll = 
+            "Coach,Team,FirstName,LastName,Info1,Info2,Info3,Body,Photo,Wins,Losses,Ties,SeasonsWithTeam,totalSeasons,WinningSeasons,SuperBowls,SuperBowlWins,SuperBowlLosses,PlayoffWins,"+
+            "PlayoffLosses,Overall,OvrallOffense,RushFor,PassFor,OverallDefense,PassRush,PassCoverage,QB,RB,TE,WR,OL,DL,LB,SpecialTeams,Professionalism,Preparation,"+
+            "Conditioning,Motivation,Leadership,Discipline,Respect,PlaycallingRun,ShotgunRun,IFormRun,SplitbackRun,EmptyRun,ShotgunPass,SplitbackPass,IFormPass,LoneBackPass,EmptyPass";
+
+        public const string DefaultCoachKey = "Coach,Team,FirstName,LastName,Body,Photo";
         private string mCoachKey = DefaultCoachKey;
 
         /// <summary>
@@ -228,7 +221,6 @@ namespace NFL2K5Tool
             {
                 int coachPointer = GetCoachPointer(teamIndex);
                 int coach_loc = GetPointerDestination(coachPointer);
-                int string_ptr = 0;
                 int loc = coach_loc + (int)attr;
                 int val, v1, v2;
                 string strVal;
@@ -241,6 +233,18 @@ namespace NFL2K5Tool
                     case CoachOffsets.Info2:
                         //string_ptr = coach_ptr + (int)attr;
                         SetCoachString(value.Replace("\"", ""), loc);
+                        //if (attr == CoachOffsets.Info2) // clear Info3
+                        //{
+                        //    int coachStringEnd = GetPointerDestination(GetPointerDestination(GetCoachPointer(0))) + mCoachStringSectionLength;
+                        //    loc = coach_loc + (int)CoachOffsets.Info3;
+                        //    byte b1 = (byte)(coachStringEnd & 0xff);
+                        //    byte b2 = (byte)((coachStringEnd >> 8) & 0xff);
+                        //    byte b3 = (byte)((coachStringEnd >> 16) & 0xff);
+                        //    SetByte(loc, (byte)b1);
+                        //    SetByte(loc + 1, (byte)b2);
+                        //    SetByte(loc + 2, (byte)b3);
+                        //    //SetByte(loc + 3, (byte)0);
+                        //}
                         break;
                     case CoachOffsets.Photo:
                         val = Int32.Parse(value);
@@ -280,6 +284,7 @@ namespace NFL2K5Tool
                     case CoachOffsets.LastName:
                     case CoachOffsets.Info1:
                     case CoachOffsets.Info2:
+                    case CoachOffsets.Info3:
                         str_ptr = coach_ptr + (int)attr;
                         retVal = GetName(str_ptr);
                         break;
@@ -1717,9 +1722,9 @@ namespace NFL2K5Tool
                 int stringLoc = GetPointerDestination(ptrLoc);
 
                 if (diff > 0)
-                    ShiftDataDown(stringLoc, diff);
+                    ShiftDataDown(stringLoc, diff, mModifiableNameSectionEnd);
                 else if (diff < 0)
-                    ShiftDataUp(stringLoc, -1 * diff);
+                    ShiftDataUp(stringLoc, -1 * diff, mModifiableNameSectionEnd);
 
                 AdjustPlayerNamePointers(stringLoc + 2 * prevName.Length, diff);
 
@@ -1780,18 +1785,18 @@ namespace NFL2K5Tool
 
         //0x8960f is the end of the name section; although it's not obvious 
         // that the stuff after that section is useful (it's all 2a 00 repeating)
-        private void ShiftDataDown(int startIndex, int amount)
+        private void ShiftDataDown(int startIndex, int amount, int dataEnd)
         {
-            for (int i = mModifiableNameSectionEnd - amount; i > startIndex; i--)
+            for (int i = dataEnd - amount; i > startIndex; i--)
             {
                 SetByte(i, GameSaveData[i - amount]); // for debugging
                 //GameSaveData[i] = GameSaveData[i - amount]; // for speed
             }
         }
 
-        private void ShiftDataUp(int startIndex, int amount)
+        private void ShiftDataUp(int startIndex, int amount, int dataEnd)
         {
-            for (int i = startIndex; i < mModifiableNameSectionEnd; i++)
+            for (int i = startIndex; i < dataEnd; i++)
             {
                 SetByte(i, GameSaveData[i + amount]); // for debugging
                 //GameSaveData[i] = GameSaveData[i + amount]; // for speed
@@ -1898,10 +1903,12 @@ namespace NFL2K5Tool
                 int diff = 2 * (name.Length - prevName.Length);
                 int stringLoc = GetPointerDestination(ptrLoc);
 
+                int coachStringEnd = GetPointerDestination(GetPointerDestination(GetCoachPointer(0))) + mCoachStringSectionLength;
+
                 if (diff > 0)
-                    ShiftDataDown(stringLoc, diff);
+                    ShiftDataDown(stringLoc, diff, coachStringEnd);
                 else if (diff < 0)
-                    ShiftDataUp(stringLoc, -1 * diff);
+                    ShiftDataUp(stringLoc, -1 * diff, coachStringEnd);
 
                 AdjustCoachStringPointers(stringLoc + 2 * prevName.Length, diff);
 
@@ -1932,11 +1939,11 @@ namespace NFL2K5Tool
             int loc = 0;
 
             // Assumes that the 49ers coach FirstName remained the first name in the section. Not sure if Finn's editor mandates this.
-            int coachStringEnd = GetPointerDestination(GetCoachPointer(0)) + mCoachStringSectionLength; 
+            int coachStringEnd = GetPointerDestination(GetPointerDestination(GetCoachPointer(0))) + mCoachStringSectionLength;
             
-            for (int coach = 0; coach <= 32; coach++)
+            for (int coach = 0; coach < 32; coach++)
             {
-                firstNamePtrLoc = GetCoachPointer(coach);// data starts with first name ptr ;)
+                firstNamePtrLoc = GetPointerDestination(GetCoachPointer(coach));// data starts with first name ptr ;)
                 lastNamePtrLoc = firstNamePtrLoc + (int)CoachOffsets.LastName;
                 info1StringPtrLoc = firstNamePtrLoc + (int)CoachOffsets.Info1;
                 info2StringPtrLoc = firstNamePtrLoc + (int)CoachOffsets.Info2;

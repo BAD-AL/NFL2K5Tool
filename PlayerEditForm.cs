@@ -903,16 +903,16 @@ namespace NFL2K5Tool
             if (c != null) c.Focus();
         }
 
-        FaceForm mFaceForm = null;
+        static FaceForm sFaceForm = null;
 
         private void mFacePictureBox_Click(object sender, EventArgs e)
         {
-            if( mFaceForm == null)
-                mFaceForm = new FaceForm();
+            if( sFaceForm == null)
+                sFaceForm = new FaceForm();
 
-            if (mFaceForm.ShowDialog(this) == DialogResult.OK)
+            if (sFaceForm.ShowDialog(this) == DialogResult.OK)
             {
-                SetControlValue("Photo", mFaceForm.SelectedFace);
+                SetControlValue("Photo", sFaceForm.SelectedFace);
             }
             //form.Dispose();
 

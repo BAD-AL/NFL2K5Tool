@@ -78,9 +78,15 @@ namespace NFL2K5Tool
             for (int i = 0; i < mPictureBoxList.Count; i++)
             {
                 if (mPhotoFiles.Length > (i + StartingPictureIndex))
-                    mPictureBoxList[i].Image = StaticUtils.GetImageFromPath( mPhotoFiles[i + StartingPictureIndex]);
+                {
+                    mPictureBoxList[i].Image = StaticUtils.GetImageFromPath(mPhotoFiles[i + StartingPictureIndex]);
+                    mPictureBoxList[i].Tag = mPhotoFiles[i + StartingPictureIndex];
+                }
                 else
-                    mPictureBoxList[i].ImageLocation = null;
+                {
+                    mPictureBoxList[i].Image = null;
+                    mPictureBoxList[i].Tag = "";
+                }
             }
             mPictureBoxPanel.ResumeLayout();
         }
@@ -117,10 +123,10 @@ namespace NFL2K5Tool
         void box_Click(object sender, EventArgs e)
         {
             PictureBox box = sender as PictureBox;
-            int slashIndex = box.ImageLocation.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
-            this.SelectedFace = box.ImageLocation.Substring(slashIndex+1).Replace(".jpg", "");
+            string path = box.Tag.ToString();
+            int slashIndex = path.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
+            this.SelectedFace = path.Substring(slashIndex+1).Replace(".jpg", "");
             this.DialogResult = DialogResult.OK;
-
         }
 
 

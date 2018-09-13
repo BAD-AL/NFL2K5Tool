@@ -52,6 +52,23 @@ namespace NFL2K5Tool
             return team;
         }
 
+        public static List<string> GetCoaches(string data)
+        {
+            Regex r = new Regex("^(Coach,.*)", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            MatchCollection mc = r.Matches(data);
+            Match theMatch = null;
+            List<String> retVal = null;
+            if (mc.Count > 0)
+            {
+                retVal = new List<string>();
+                foreach (Match m in mc)
+                {
+                    retVal.Add(m.Groups[1].Value);
+                }
+            }
+            return retVal;
+        }
+
         /// <summary>
         /// returns the line that linePosition falls on in data
         /// </summary>
@@ -552,8 +569,9 @@ namespace NFL2K5Tool
                     }
                     catch (Exception)
                     {
+                        string name = line.Substring(0, 15) + "...";
                         string desc = attr > 99 ? ((AppearanceAttributes)attr).ToString() : ((PlayerOffsets)attr).ToString();
-                        StaticUtils.AddError("Error setting attribute '" + desc + "' to '" + attribute + "'");
+                        StaticUtils.AddError("Error setting attribute '" + desc + "' to '" + attribute + "' for line:" + name );
                     }
                 }
             }

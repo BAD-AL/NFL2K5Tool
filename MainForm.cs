@@ -518,7 +518,7 @@ namespace NFL2K5Tool
             {
                 MessageBox.Show("You must load a save file before you can edit players in the GUI.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else if (line.StartsWith("Coach", StringComparison.InvariantCultureIgnoreCase))
+            else if (!String.IsNullOrEmpty(line) && line.StartsWith("Coach", StringComparison.InvariantCultureIgnoreCase))
             {
                 EditCoach();
             }
@@ -530,19 +530,19 @@ namespace NFL2K5Tool
 
         private void EditCoach()
         {
-            CoachEditForm form = new CoachEditForm();
-            form.ReversePBPs = DataMap.ReversePBPMap;
-            form.ReversePhotos = DataMap.ReversePhotoMap;
-            form.PBPs = DataMap.PBPMap;
-            form.Photos = DataMap.PhotoMap;
-            form.Data = mTextBox.Text;
-            form.SelectionStart = mTextBox.SelectionStart;
-            if (form.ShowDialog(this) == DialogResult.OK)
-            {
-                SetText(form.Data);
-                mTextBox.SelectionStart = form.SelectionStart;
-                mTextBox.ScrollToCaret();
-            }
+            //CoachEditForm form = new CoachEditForm();
+            //form.ReversePBPs = DataMap.ReversePBPMap;
+            //form.ReversePhotos = DataMap.ReversePhotoMap;
+            //form.PBPs = DataMap.PBPMap;
+            //form.Photos = DataMap.PhotoMap;
+            //form.Data = mTextBox.Text;
+            //form.SelectionStart = mTextBox.SelectionStart;
+            //if (form.ShowDialog(this) == DialogResult.OK)
+            //{
+            //    SetText(form.Data);
+            //    mTextBox.SelectionStart = form.SelectionStart;
+            //    mTextBox.ScrollToCaret();
+            //}
         }
 
         private void EditPlayer()

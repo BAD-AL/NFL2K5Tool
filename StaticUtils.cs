@@ -64,7 +64,7 @@ namespace NFL2K5Tool
 
             if (ImageMap.ContainsKey(path))
                 ret = ImageMap[path];
-            else
+            else if( File.Exists(path))
             {
                 ret = Image.FromFile(path);
                 ImageMap.Add(path, ret);

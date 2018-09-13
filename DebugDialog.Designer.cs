@@ -91,7 +91,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
             this.mFindBytesButton = new System.Windows.Forms.Button();
+            this.replaceStringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
+            this.fixupRookieYearsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -490,12 +492,16 @@
             // apperanceToolStripMenuItem
             // 
             this.apperanceToolStripMenuItem.Name = "apperanceToolStripMenuItem";
-            this.apperanceToolStripMenuItem.Size = new System.Drawing.Size(67, 22);
+            this.apperanceToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.apperanceToolStripMenuItem.Text = "GetCoach";
+            this.apperanceToolStripMenuItem.Click += new System.EventHandler(this.apperanceToolStripMenuItem_Click_1);
             // 
             // miscToolStripMenuItem
             // 
             this.miscToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.imageCaptureToolStripMenuItem});
+            this.imageCaptureToolStripMenuItem,
+            this.replaceStringToolStripMenuItem,
+            this.fixupRookieYearsToolStripMenuItem});
             this.miscToolStripMenuItem.Name = "miscToolStripMenuItem";
             this.miscToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.miscToolStripMenuItem.Text = "&Misc";
@@ -503,7 +509,7 @@
             // imageCaptureToolStripMenuItem
             // 
             this.imageCaptureToolStripMenuItem.Name = "imageCaptureToolStripMenuItem";
-            this.imageCaptureToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.imageCaptureToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.imageCaptureToolStripMenuItem.Text = "ImageCapture";
             this.imageCaptureToolStripMenuItem.Click += new System.EventHandler(this.imageCaptureToolStripMenuItem_Click);
             // 
@@ -746,6 +752,13 @@
             this.mFindBytesButton.UseVisualStyleBackColor = true;
             this.mFindBytesButton.Click += new System.EventHandler(this.mFindBytesButton_Click);
             // 
+            // replaceStringToolStripMenuItem
+            // 
+            this.replaceStringToolStripMenuItem.Name = "replaceStringToolStripMenuItem";
+            this.replaceStringToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.replaceStringToolStripMenuItem.Text = "Replace String";
+            this.replaceStringToolStripMenuItem.Click += new System.EventHandler(this.replaceStringToolStripMenuItem_Click);
+            // 
             // mResultsTextBox
             // 
             this.mResultsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -760,6 +773,13 @@
             this.mResultsTextBox.StatusControl = null;
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
+            // 
+            // fixupRookieYearsToolStripMenuItem
+            // 
+            this.fixupRookieYearsToolStripMenuItem.Name = "fixupRookieYearsToolStripMenuItem";
+            this.fixupRookieYearsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.fixupRookieYearsToolStripMenuItem.Text = "Fixup Rookie years";
+            this.fixupRookieYearsToolStripMenuItem.Click += new System.EventHandler(this.fixupRookieYearsToolStripMenuItem_Click);
             // 
             // DebugDialog
             // 
@@ -866,5 +886,7 @@
         private System.Windows.Forms.ToolStripMenuItem getPlayerBytesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem miscToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem imageCaptureToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem replaceStringToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fixupRookieYearsToolStripMenuItem;
     }
 }

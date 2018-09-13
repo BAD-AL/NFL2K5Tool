@@ -338,8 +338,8 @@ namespace NFL2K5Tool
         LastName = 0x4,
         Info1 = 0x8,
         Info2 = 0xC,
+        Info3 = 0x10,
         Body = 0x18,
-        Photo = 0x40,
         Wins = 0x20,
         Losses = 0x22,
         Ties = 0x24,
@@ -349,8 +349,12 @@ namespace NFL2K5Tool
         SuperBowls = 0x32,
         SuperBowlWins = 0x38,
         SuperBowlLosses = 0x3A,
-        PlayoffWins = 0x40,
+        PlayoffWins = 0x34,
         PlayoffLosses = 0x36,
+        
+        Photo = 0x40,
+
+        // where do you see this stuff anyways?
         Overall = 0x42,
         OvrallOffense = 0x43,
         RushFor = 0x44,
@@ -365,6 +369,7 @@ namespace NFL2K5Tool
         OL = 0x4D,
         DL = 0x4E,
         LB = 0x4F,
+        DB = 0x50,
         SpecialTeams = 0x51,
         Professionalism = 0x52,
         Preparation = 0x53,
@@ -373,6 +378,8 @@ namespace NFL2K5Tool
         Leadership = 0x56,
         Discipline = 0x57,
         Respect = 0x58,
+
+        // Play tendency
         PlaycallingRun = 0x59,
         ShotgunRun = 0x83,
         IFormRun = 0x83,
