@@ -97,5 +97,10 @@ namespace NFL2K5Tool
         {
             this.BackColor = Parent.BackColor;
         }
+
+        public void SetToInitialValue()
+        {
+            this.mComboBox.SelectedIndex = 0;
+        }
     }
 }

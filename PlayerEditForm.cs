@@ -20,11 +20,35 @@ namespace NFL2K5Tool
         public PlayerEditForm()
         {
             InitializeComponent();
+            mGenericFacePictureBox.Parent = null;
 
             // issues setting these in the designer; too lazy to set the attributes on the controls to get it to work.
             Position.Text = "Position";
             Position.RepresentedValue = typeof(Positions);
             Position.BorderStyle = BorderStyle.None;
+        }
+
+        private void UpdateGenericFacePictureBox()
+        {
+            // Get photo, Skin, Face;
+            // mGenericFacePictureBox.Visible = photo == NOPhoto;
+            // mGenericFacePictureBox.Image = GetGenericFace(skin, face);
+            StringSelectionControl pc = FindControl(mAppearanceTab, "Photo") as StringSelectionControl;
+            StringSelectionControl sc = FindControl(mAppearanceTab, "Skin") as StringSelectionControl;
+            StringSelectionControl fc = FindControl(mAppearanceTab, "Face") as StringSelectionControl;
+
+            if (pc.Value == "NoPhoto")
+            {
+                mGenericFacePictureBox.Visible = true;
+                string fileName = ".\\PlayerData\\GenericFaces\\" + sc.Value.Replace("kin", "") + fc.Value.Replace("ace", "") + ".jpg";
+                mGenericFacePictureBox.ImageLocation = fileName;
+                if(mGenericFacePictureBox.Parent  == null)
+                    mGenericFacePictureBox.Parent = mAppearanceTab;
+            }
+            else
+            {
+                mGenericFacePictureBox.Visible = false;
+            }
         }
 
         /// <summary>
@@ -219,7 +243,10 @@ namespace NFL2K5Tool
                         ctrl.RepresentedValue = typeof(Skin);
                         ctrl.ValueChanged += new EventHandler(skin_ValueChanged);
                         break;
-                    case "Face": ctrl.RepresentedValue = typeof(Face); break;
+                    case "Face": 
+                        ctrl.RepresentedValue = typeof(Face); 
+                        ctrl.ValueChanged += new EventHandler(face_ValueChanged);
+                        break;
                     case "MouthPiece": 
                     case "EyeBlack": 
                     case "Dreads":  ctrl.RepresentedValue = typeof(YesNo);  break;
@@ -307,6 +334,11 @@ namespace NFL2K5Tool
             mBodyTypeLabel.Text = "Body Type:" + ctrl.Value;
         }
 
+        void face_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateGenericFacePictureBox();
+        }
+
         void skin_ValueChanged(object sender, EventArgs e)
         {
             StringSelectionControl ctrl = sender as StringSelectionControl;
@@ -380,6 +412,7 @@ namespace NFL2K5Tool
             }
             mSkinColorLabel.BackColor = backColor;
             mSkinColorLabel.ForeColor = foreColor;
+            UpdateGenericFacePictureBox();
         }
 
         void height_ValueChanged(object sender, EventArgs e)
@@ -411,6 +444,7 @@ namespace NFL2K5Tool
                     else if (System.IO.File.Exists(noPhoto))
                         chooser.PictureBox.ImageLocation = noPhoto;
                     mFacePictureBox.ImageLocation = chooser.PictureBox.ImageLocation;
+                    UpdateGenericFacePictureBox();
                     break;
                 case "FaceMask":
                     path = String.Format("PlayerData\\EquipmentImages\\{0}.jpg", chooser.Value);
@@ -509,6 +543,7 @@ namespace NFL2K5Tool
                 SetCurrentPlayer();
                 mInitializing = false; // keep it here, initialization failed
                 this.mPlayerIndexUpDown.Maximum = players.Length - 1;
+                UpdateGenericFacePictureBox();
             }
         }
 

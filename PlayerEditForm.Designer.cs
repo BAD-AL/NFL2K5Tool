@@ -49,12 +49,15 @@
             this.mWeightLabel = new System.Windows.Forms.Label();
             this.mBodyTypeLabel = new System.Windows.Forms.Label();
             this.mJerseyNumberLabel = new System.Windows.Forms.Label();
-            this.Position = new NFL2K5Tool.StringSelectionControl();
             this.mFaceMaskPictureBox = new System.Windows.Forms.PictureBox();
+            this.mGenericFacePictureBox = new System.Windows.Forms.PictureBox();
+            this.Position = new NFL2K5Tool.StringSelectionControl();
             this.tabControl1.SuspendLayout();
+            this.mAppearanceTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFacePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFaceMaskPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mGenericFacePictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // fname
@@ -107,6 +110,7 @@
             // 
             // mAppearanceTab
             // 
+            this.mAppearanceTab.Controls.Add(this.mGenericFacePictureBox);
             this.mAppearanceTab.Location = new System.Drawing.Point(4, 22);
             this.mAppearanceTab.Name = "mAppearanceTab";
             this.mAppearanceTab.Padding = new System.Windows.Forms.Padding(3);
@@ -264,6 +268,26 @@
             this.mJerseyNumberLabel.TabIndex = 16;
             this.mJerseyNumberLabel.Text = "#00";
             // 
+            // mFaceMaskPictureBox
+            // 
+            this.mFaceMaskPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.mFaceMaskPictureBox.Location = new System.Drawing.Point(430, 5);
+            this.mFaceMaskPictureBox.Name = "mFaceMaskPictureBox";
+            this.mFaceMaskPictureBox.Size = new System.Drawing.Size(49, 50);
+            this.mFaceMaskPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.mFaceMaskPictureBox.TabIndex = 17;
+            this.mFaceMaskPictureBox.TabStop = false;
+            // 
+            // mGenericFacePictureBox
+            // 
+            this.mGenericFacePictureBox.BackColor = System.Drawing.Color.MistyRose;
+            this.mGenericFacePictureBox.Location = new System.Drawing.Point(3, 293);
+            this.mGenericFacePictureBox.Name = "mGenericFacePictureBox";
+            this.mGenericFacePictureBox.Size = new System.Drawing.Size(220, 109);
+            this.mGenericFacePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.mGenericFacePictureBox.TabIndex = 1;
+            this.mGenericFacePictureBox.TabStop = false;
+            // 
             // Position
             // 
             this.Position.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -276,20 +300,11 @@
             this.Position.Value = "";
             this.Position.ValueChanged += new System.EventHandler(this.ValueChanged);
             // 
-            // mFaceMaskPictureBox
-            // 
-            this.mFaceMaskPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.mFaceMaskPictureBox.Location = new System.Drawing.Point(430, 5);
-            this.mFaceMaskPictureBox.Name = "mFaceMaskPictureBox";
-            this.mFaceMaskPictureBox.Size = new System.Drawing.Size(49, 50);
-            this.mFaceMaskPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.mFaceMaskPictureBox.TabIndex = 17;
-            this.mFaceMaskPictureBox.TabStop = false;
-            // 
             // PlayerEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.mCancelButton;
             this.ClientSize = new System.Drawing.Size(669, 513);
             this.Controls.Add(this.mFaceMaskPictureBox);
             this.Controls.Add(this.mJerseyNumberLabel);
@@ -315,9 +330,11 @@
             this.Name = "PlayerEditForm";
             this.Text = "Edit Player";
             this.tabControl1.ResumeLayout(false);
+            this.mAppearanceTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFacePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFaceMaskPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mGenericFacePictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -347,5 +364,6 @@
         private System.Windows.Forms.Label mBodyTypeLabel;
         private System.Windows.Forms.Label mJerseyNumberLabel;
         private System.Windows.Forms.PictureBox mFaceMaskPictureBox;
+        private System.Windows.Forms.PictureBox mGenericFacePictureBox;
     }
 }
