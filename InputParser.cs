@@ -286,9 +286,25 @@ namespace NFL2K5Tool
         {
             bool retVal = false;
             List<string> attributes = ParsePlayerLine(line);
-            string pos = attributes[0];
-            string firstName = attributes[1];
-            string lastName = attributes[2];
+
+            // find first name position (-1); last name position (-2)
+            int firstNameIndex = -1;
+            int lastNameIndex = -1;
+            int positionIndex = -1;
+            for (int i = 0; i < Tool.Order.Length; i++)
+            {
+                if (Tool.Order[i] == -1)
+                    firstNameIndex = i;
+                else if (Tool.Order[i] == -2)
+                    lastNameIndex = i;
+                else if (Tool.Order[i] == (int) PlayerOffsets.Position)
+                    positionIndex = i;
+                if (firstNameIndex > -1 && lastNameIndex > -1 && positionIndex > -1)
+                    break;
+            }
+            string pos = attributes[positionIndex];
+            string firstName = attributes[firstNameIndex];
+            string lastName = attributes[lastNameIndex];
 
             List<int> playersToApplyTo = Tool.FindPlayer(pos, firstName, lastName);
             if(playersToApplyTo.Count > 0)

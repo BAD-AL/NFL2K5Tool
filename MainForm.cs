@@ -73,6 +73,7 @@ namespace NFL2K5Tool
             applyDataWithoutSavingToolStripMenuItem.Enabled =
             saveToolStripMenuItem.Enabled =
             mSaveButton.Enabled =
+            globalEditorToolStripMenuItem.Enabled =
             autoUpdateSpecialTeamsDepthToolStripMenuItem.Enabled =
             debugDialogMenuItem.Enabled = enable;
         }
@@ -607,6 +608,23 @@ namespace NFL2K5Tool
         private void fullCoachAttributesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fullCoachAttributesToolStripMenuItem.Checked = !fullCoachAttributesToolStripMenuItem.Checked;
+        }
+
+        private void globalEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GlobalEditForm form = new GlobalEditForm(this.mTool );
+            form.ShowDialog(this);
+            form.Dispose();
+        }
+
+        private void lookupAndModifyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.mTextBox.AppendText(
+@"# This feature is typically used to update player apperance in a mass edit.
+#Paste Key and data below 
+LookupAndModify
+
+");
         }
     }
 }

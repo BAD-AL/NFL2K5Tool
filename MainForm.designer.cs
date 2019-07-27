@@ -67,6 +67,7 @@
             this.autoUpdatePBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.formatScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playerEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.globalEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.increaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.decreaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,6 +77,7 @@
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
+            this.lookupAndModifyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -332,7 +334,9 @@
             this.autoUpdatePhotoToolStripMenuItem,
             this.autoUpdatePBPToolStripMenuItem,
             this.formatScheduleToolStripMenuItem,
-            this.playerEditorToolStripMenuItem});
+            this.playerEditorToolStripMenuItem,
+            this.globalEditorToolStripMenuItem,
+            this.lookupAndModifyToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -421,6 +425,13 @@
             this.playerEditorToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
             this.playerEditorToolStripMenuItem.Text = "Player Editor";
             this.playerEditorToolStripMenuItem.Click += new System.EventHandler(this.playerEditorToolStripMenuItem_Click);
+            // 
+            // globalEditorToolStripMenuItem
+            // 
+            this.globalEditorToolStripMenuItem.Name = "globalEditorToolStripMenuItem";
+            this.globalEditorToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
+            this.globalEditorToolStripMenuItem.Text = "&Global Editor";
+            this.globalEditorToolStripMenuItem.Click += new System.EventHandler(this.globalEditorToolStripMenuItem_Click);
             // 
             // uIToolStripMenuItem
             // 
@@ -516,6 +527,13 @@
             this.mTextBox.Text = "";
             this.mTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TextBox_MouseDown);
             // 
+            // lookupAndModifyToolStripMenuItem
+            // 
+            this.lookupAndModifyToolStripMenuItem.Name = "lookupAndModifyToolStripMenuItem";
+            this.lookupAndModifyToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
+            this.lookupAndModifyToolStripMenuItem.Text = "LookupAndModify";
+            this.lookupAndModifyToolStripMenuItem.Click += new System.EventHandler(this.lookupAndModifyToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -593,6 +611,8 @@
         private System.Windows.Forms.ToolStripMenuItem coachOptionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listCoachesToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem fullCoachAttributesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem globalEditorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lookupAndModifyToolStripMenuItem;
     }
 }
 

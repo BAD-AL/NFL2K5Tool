@@ -264,6 +264,7 @@ namespace NFL2K5Tool
             // StringInputDlg
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.CancelButton = this.mCancelButton;
             this.ClientSize = new System.Drawing.Size(282, 104);
             this.ControlBox = false;
             this.Controls.Add(this.label1);

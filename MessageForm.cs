@@ -78,11 +78,25 @@ namespace NFL2K5Tool
         /// <returns>valid string when the user hits 'ok', null when they cancel.</returns>
         public static string GetString(string title, string message)
         {
+            return ShowMessage(title, message, SystemIcons.Question, true, true);
+        }
+
+        /// <summary>
+        /// Returns the MessageText of the Form
+        /// </summary>
+        /// <param name="title">The title bar text</param>
+        /// <param name="message">The initial message text to display</param>
+        /// <param name="icon">the Icon to use</param>
+        /// <param name="editable">true to allow the user to edit the MessageText</param>
+        /// <returns>The resulting MessageText</returns>
+        public static string ShowMessage(string title, string message, Icon icon, bool editable, bool showCancelButton)
+        {
             string retVal = null;
-            MessageForm mf = new MessageForm(SystemIcons.Question);
-            mf.MessageEditable = true;
+            MessageForm mf = new MessageForm(icon);
+            mf.MessageEditable = editable;
             mf.Text = title;
             mf.MessageText = message;
+            mf.ShowCancelButton = showCancelButton;
 
             if (mf.ShowDialog() == DialogResult.OK)
             {
@@ -90,6 +104,16 @@ namespace NFL2K5Tool
             }
             mf.Dispose();
             return retVal;
+        }
+
+        /// <summary>
+        /// Shows a message
+        /// </summary>
+        /// <param name="title">the title bar text</param>
+        /// <param name="message">the message to show</param>
+        public static void ShowMessage(string title, string message)
+        {
+            ShowMessage(title, message, SystemIcons.Hand, false, false);
         }
     }
 

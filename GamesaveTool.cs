@@ -1191,7 +1191,7 @@ namespace NFL2K5Tool
             return retVal;
         }
 
-        private string GetDefaultKey(bool attributes, bool appearance)
+        public string GetDefaultKey(bool attributes, bool appearance)
         {
             StringBuilder builder = new StringBuilder(350);
             StringBuilder dummy = new StringBuilder(200);
@@ -1239,13 +1239,19 @@ namespace NFL2K5Tool
             if ( !string.IsNullOrEmpty(line) && line.StartsWith("KEY=", StringComparison.InvariantCultureIgnoreCase))
                 line = line.Substring(4);
             mCustomKey = line;
+            int tmp = 0;
             if (!string.IsNullOrEmpty(mCustomKey))
             {
                 string[] parts = mCustomKey.Split(",".ToCharArray());
                 mOrder = new int[parts.Length];
                 for (int i = 0; i < parts.Length; i++)
                 {
-                    mOrder[i] = GetAttributeValue(parts[i]);
+                    tmp = GetAttributeValue(parts[i]);
+                    if (tmp == Int32.MinValue)
+                    {
+                        throw new Exception("Error Setting Key");
+                    }
+                    mOrder[i] = tmp;                    
                 }
             }
         }
@@ -1767,7 +1773,7 @@ namespace NFL2K5Tool
                 retVal = SetPlayerFirstName(player, val, false);
             else if ("lastName".Equals(fieldName, StringComparison.InvariantCultureIgnoreCase) || "lname".Equals(fieldName, StringComparison.InvariantCultureIgnoreCase))
                 retVal = SetPlayerLastName(player, val, false);
-            else if (Enum.IsDefined(typeof(AppearanceAttributes), val))
+            else if (Enum.IsDefined(typeof(AppearanceAttributes), fieldName))
             {
                 AppearanceAttributes aa = (AppearanceAttributes)Enum.Parse(typeof(AppearanceAttributes), fieldName);
                 if (aa != AppearanceAttributes.College)
@@ -1775,10 +1781,39 @@ namespace NFL2K5Tool
                 SetPlayerAppearanceAttribute(player, aa, val);
                 retVal = true;
             }
-            else if (Enum.IsDefined(typeof(PlayerOffsets), val))
+            else if (Enum.IsDefined(typeof(PlayerOffsets), fieldName))
             {
                 PlayerOffsets po = (PlayerOffsets)Enum.Parse(typeof(PlayerOffsets), fieldName);
                 SetAttribute(player, po, val);
+            }
+            return retVal;
+        }
+
+        /// <summary>
+        /// Get a player's field.
+        /// </summary>
+        /// <param name="player">the player index to get</param>
+        /// <param name="fieldName">the name of the field to get</param>
+        /// <returns>String representation of the field.</returns>
+        public string GetPlayerField(int player, string fieldName)
+        {
+            string retVal = "";
+            if ("firstName".Equals(fieldName, StringComparison.InvariantCultureIgnoreCase) || "fname".Equals(fieldName, StringComparison.InvariantCultureIgnoreCase))
+                retVal = GetPlayerFirstName(player);
+            else if ("lastName".Equals(fieldName, StringComparison.InvariantCultureIgnoreCase) || "lname".Equals(fieldName, StringComparison.InvariantCultureIgnoreCase))
+                retVal = GetPlayerLastName(player);
+            else if (Enum.IsDefined(typeof(AppearanceAttributes), fieldName))
+            {
+                AppearanceAttributes aa = (AppearanceAttributes)Enum.Parse(typeof(AppearanceAttributes), fieldName);
+                StringBuilder sb = new StringBuilder(15);
+                GetPlayerAppearanceAttribute(player, aa, sb);
+                sb.Length -= 1;   // get rid of trailing comma
+                retVal = sb.ToString();
+            }
+            else if (Enum.IsDefined(typeof(PlayerOffsets), fieldName))
+            {
+                PlayerOffsets po = (PlayerOffsets)Enum.Parse(typeof(PlayerOffsets), fieldName);
+                retVal = GetAttribute(player, po);
             }
             return retVal;
         }
@@ -2717,6 +2752,130 @@ namespace NFL2K5Tool
             }
             return retVal;
         }
+
+        #region GetPlayersByFormulaRegion
+        /// <summary>
+        /// Returns the indexes of the players matching the specified formula.
+        /// </summary>
+        /// <param name="formula">the formula to match with</param>
+        /// <param name="positions">the positions to search, null for all positions</param>
+        /// <returns>a list of player indexes.</returns>
+        public List<int> GetPlayersByFormula(string formula, List<string> positions)
+        {
+            List<int> retVal = new List<int>();
+            if (formula != null)
+            {
+                System.Data.DataTable table = new System.Data.DataTable();
+                string evaluationString = "";
+                formula = formula.Replace("||", " or ").Replace("&&", " and ").Replace("=", " = ").Replace("!=", " <> ");
+                while (formula.Contains("  ")) // replace 2 spaces with 1 space
+                    formula = formula.Replace("  ", " ");
+
+                bool addMe = false;
+                string pos = "";
+                for (int i = 0; i < mMaxPlayers; i++)
+                {
+                    pos = this.GetAttribute(i, PlayerOffsets.Position);
+                    if (positions == null || positions.IndexOf(pos) > -1)
+                    {
+                        evaluationString = SubstituteAttributesForValues(i, formula);
+                        Object result = table.Compute(evaluationString, "");
+                        addMe = (bool)result;
+                        if (addMe)
+                            retVal.Add(i);
+                    }
+                }
+            }
+            return retVal;
+        }
+
+        private string SubstituteAttributesForValues(int playerIndex, string formula)
+        {
+            string retVal = GetAppearanceAttributeExpression(formula, playerIndex);
+            string playerTeam = "";
+            string[] parts = ("Team,"+GetDefaultKey(true, false)).Split(",".ToCharArray());
+            
+            StringBuilder sb = new StringBuilder(10);
+            string tmp = "";
+
+            foreach (string attr in parts)
+            {
+                if (attr == "Team")
+                {
+                    playerTeam = ""+GetTeamIndex(GetPlayerTeam(playerIndex));
+                    retVal = retVal.Replace("Team", playerTeam);
+                    for (int j = 0; j < mTeamsDataOrder.Length; j++)
+                    {
+                        if( retVal.IndexOf(mTeamsDataOrder[j]) > -1)
+                        {
+                            retVal = retVal.Replace(mTeamsDataOrder[j], "" + j);
+                        }
+                    }
+                }
+                else if (!String.IsNullOrEmpty(attr) && formula.IndexOf(attr) > -1)
+                {
+                    tmp = this.GetPlayerField(playerIndex, attr);
+                    retVal = retVal.Replace(attr, tmp);
+                }
+            }
+            return retVal;
+        }
+
+        private string GetAppearanceAttributeExpression(string expr, int player)
+        {
+            string[] attrs = new string[] {
+                //"DOB","YearsPro","PBP","Photo","Height",
+                "Hand","BodyType","Skin","Face","Dreads","Helmet","FaceMask","Visor",
+                "EyeBlack","MouthPiece","LeftGlove","RightGlove","LeftWrist","RightWrist","LeftElbow",
+                "RightElbow","Sleeves","LeftShoe","RightShoe","NeckRoll","Turtleneck"
+            };
+            StringBuilder sb = new StringBuilder(15);
+            string v = "";
+            foreach (string attr in attrs)
+            {
+                sb.Length = 0;
+                if (expr.Contains(attr))
+                {
+                    Type t = mTypeMap[attr];
+                    List<string> values = new List<string>( Enum.GetNames(t));
+                    for (int i = 0; i < values.Count; i++)
+                    {
+                        if (expr.Contains(values[i]))
+                            expr = expr.Replace(values[i], "" + i);
+                    }
+                    v = GetPlayerField(player, attr);
+                    expr = expr.Replace(attr, values.IndexOf(v)+"");
+                }
+            }
+            return expr;
+        }
+
+        private Dictionary<string, Type> mTypeMap = new Dictionary<string, Type>(){
+	            {"BodyType", typeof(Body)}, 
+	            {"Dreads", typeof(YesNo)}, 
+	            {"EyeBlack", typeof(YesNo)}, 
+	            {"MouthPiece", typeof(YesNo)},
+	            {"LeftGlove", typeof(Glove)},
+	            {"RightGlove", typeof(Glove)},
+	            {"LeftWrist", typeof(Wrist)},
+	            {"RightWrist", typeof(Wrist)},
+	            {"LeftElbow", typeof(Elbow)},
+	            {"RightElbow", typeof(Elbow)},
+	            {"LeftShoe", typeof(Shoe)},
+	            {"RightShoe", typeof(Shoe)},
+
+	            {"Hand", typeof(Hand)},
+	            {"Skin", typeof(Skin)}, 
+	            {"Face", typeof(Face)}, 
+	            {"Helmet", typeof(Helmet)}, 
+	            {"FaceMask", typeof(FaceMask)}, 
+	            {"Visor", typeof(Visor)}, 
+	            {"Sleeves", typeof(Sleeves)},
+	            {"NeckRoll", typeof(NeckRoll)},
+	            {"Turtleneck", typeof(Turtleneck)},
+	            {"PowerRunStyle", typeof(PowerRunStyle)}
+        };
+        #endregion
     }
 
 }
