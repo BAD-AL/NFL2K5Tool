@@ -72,6 +72,8 @@
             this.apperanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miscToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageCaptureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.replaceStringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fixupRookieYearsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updatePlayerAppearanceFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -91,9 +93,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
             this.mFindBytesButton = new System.Windows.Forms.Button();
-            this.replaceStringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
-            this.fixupRookieYearsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -122,10 +123,10 @@
             this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox2.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(12, 108);
+            this.textBox2.Location = new System.Drawing.Point(74, 108);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(507, 20);
+            this.textBox2.Size = new System.Drawing.Size(445, 20);
             this.textBox2.TabIndex = 1;
             // 
             // checkBox1
@@ -513,6 +514,20 @@
             this.imageCaptureToolStripMenuItem.Text = "ImageCapture";
             this.imageCaptureToolStripMenuItem.Click += new System.EventHandler(this.imageCaptureToolStripMenuItem_Click);
             // 
+            // replaceStringToolStripMenuItem
+            // 
+            this.replaceStringToolStripMenuItem.Name = "replaceStringToolStripMenuItem";
+            this.replaceStringToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.replaceStringToolStripMenuItem.Text = "Replace String";
+            this.replaceStringToolStripMenuItem.Click += new System.EventHandler(this.replaceStringToolStripMenuItem_Click);
+            // 
+            // fixupRookieYearsToolStripMenuItem
+            // 
+            this.fixupRookieYearsToolStripMenuItem.Name = "fixupRookieYearsToolStripMenuItem";
+            this.fixupRookieYearsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.fixupRookieYearsToolStripMenuItem.Text = "Fixup Rookie years";
+            this.fixupRookieYearsToolStripMenuItem.Click += new System.EventHandler(this.fixupRookieYearsToolStripMenuItem_Click);
+            // 
             // updatePlayerAppearanceFromFileToolStripMenuItem
             // 
             this.updatePlayerAppearanceFromFileToolStripMenuItem.Name = "updatePlayerAppearanceFromFileToolStripMenuItem";
@@ -752,13 +767,6 @@
             this.mFindBytesButton.UseVisualStyleBackColor = true;
             this.mFindBytesButton.Click += new System.EventHandler(this.mFindBytesButton_Click);
             // 
-            // replaceStringToolStripMenuItem
-            // 
-            this.replaceStringToolStripMenuItem.Name = "replaceStringToolStripMenuItem";
-            this.replaceStringToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.replaceStringToolStripMenuItem.Text = "Replace String";
-            this.replaceStringToolStripMenuItem.Click += new System.EventHandler(this.replaceStringToolStripMenuItem_Click);
-            // 
             // mResultsTextBox
             // 
             this.mResultsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -774,18 +782,21 @@
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
             // 
-            // fixupRookieYearsToolStripMenuItem
+            // label6
             // 
-            this.fixupRookieYearsToolStripMenuItem.Name = "fixupRookieYearsToolStripMenuItem";
-            this.fixupRookieYearsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.fixupRookieYearsToolStripMenuItem.Text = "Fixup Rookie years";
-            this.fixupRookieYearsToolStripMenuItem.Click += new System.EventHandler(this.fixupRookieYearsToolStripMenuItem_Click);
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 111);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(56, 13);
+            this.label6.TabIndex = 23;
+            this.label6.Text = "input (hex)";
             // 
             // DebugDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(532, 458);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.mFindBytesButton);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -888,5 +899,6 @@
         private System.Windows.Forms.ToolStripMenuItem imageCaptureToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem replaceStringToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fixupRookieYearsToolStripMenuItem;
+        private System.Windows.Forms.Label label6;
     }
 }

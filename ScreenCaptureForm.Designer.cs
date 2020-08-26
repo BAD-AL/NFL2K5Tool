@@ -30,6 +30,8 @@
         {
             this.mPictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.mCaptureButton = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.mHeightUpDown = new System.Windows.Forms.NumericUpDown();
@@ -41,8 +43,7 @@
             this.mXUpDown = new System.Windows.Forms.NumericUpDown();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.mLocationTextBox = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.mCancelButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mPictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mHeightUpDown)).BeginInit();
@@ -80,6 +81,26 @@
             this.groupBox1.Size = new System.Drawing.Size(155, 224);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 152);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(127, 23);
+            this.button1.TabIndex = 19;
+            this.button1.Text = "Save PB img";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(0, 188);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(108, 17);
+            this.checkBox1.TabIndex = 18;
+            this.checkBox1.Text = "Save on PB click";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // mCaptureButton
             // 
@@ -230,31 +251,24 @@
             this.mLocationTextBox.Size = new System.Drawing.Size(364, 20);
             this.mLocationTextBox.TabIndex = 0;
             // 
-            // checkBox1
+            // mCancelButton
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(0, 188);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(108, 17);
-            this.checkBox1.TabIndex = 18;
-            this.checkBox1.Text = "Save on PB click";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(6, 152);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(127, 23);
-            this.button1.TabIndex = 19;
-            this.button1.Text = "Save PB img";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.mCancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.mCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.mCancelButton.Location = new System.Drawing.Point(402, 262);
+            this.mCancelButton.Name = "mCancelButton";
+            this.mCancelButton.Size = new System.Drawing.Size(75, 23);
+            this.mCancelButton.TabIndex = 11;
+            this.mCancelButton.Text = "&Cancel";
+            this.mCancelButton.UseVisualStyleBackColor = true;
             // 
             // ScreenCaptureForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.mCancelButton;
             this.ClientSize = new System.Drawing.Size(394, 335);
+            this.Controls.Add(this.mCancelButton);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.mPictureBox);
@@ -290,5 +304,6 @@
         private System.Windows.Forms.TextBox mLocationTextBox;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button mCancelButton;
     }
 }

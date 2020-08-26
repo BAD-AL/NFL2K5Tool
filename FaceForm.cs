@@ -71,16 +71,20 @@ namespace NFL2K5Tool
             StartingPictureIndex = mPhotoScrollBar.Value * (mPictureBoxPanel.Width  / pbWidth) ;
         }
         // pbsize = 50,50
+        ToolTip mTip = new ToolTip();
 
         private void OnStartingPictureIndexChanged()
         {
+            string filename = "";
             mPictureBoxPanel.SuspendLayout();
             for (int i = 0; i < mPictureBoxList.Count; i++)
             {
                 if (mPhotoFiles.Length > (i + StartingPictureIndex))
                 {
-                    mPictureBoxList[i].Image = StaticUtils.GetImageFromPath(mPhotoFiles[i + StartingPictureIndex]);
-                    mPictureBoxList[i].Tag = mPhotoFiles[i + StartingPictureIndex];
+                    filename = mPhotoFiles[i + StartingPictureIndex];
+                    mPictureBoxList[i].Image = StaticUtils.GetImageFromPath(filename);
+                    mPictureBoxList[i].Tag = filename;
+                    mTip.SetToolTip(mPictureBoxList[i], filename.Substring(filename.LastIndexOf("\\")+1) );
                 }
                 else
                 {

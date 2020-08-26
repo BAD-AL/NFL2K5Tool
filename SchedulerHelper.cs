@@ -470,6 +470,7 @@ namespace NFL2K5Tool
 
             offset += gameOfweek * 8;
             int location = WeekOneStartLoc + offset;
+            Console.WriteLine("Week{0}; Game {1}; Location = 0x{2:x}", week + 1, gameOfweek+1, location);
             return location;
         }
 
