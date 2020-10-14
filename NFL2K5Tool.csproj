@@ -211,6 +211,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Include="NFL2004-05.nfl2k5" />
+    <None Include="NFL2K5Tool_Usage.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -252,9 +255,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ICSharpCode.SharpZipLib.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="logo.ico" />
-    <Content Include="NFL2K5Info.txt" />
+    <Content Include="NFL2K5Info.txt">
+    </Content>
     <Content Include="BaseTeamData.txt" />
+    <EmbeddedResource Include="TextCommand.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

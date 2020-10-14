@@ -230,6 +230,7 @@ namespace NFL2K5Tool
             }
             else if (line.IndexOf("LookupAndModify", StringComparison.InvariantCultureIgnoreCase) > -1)
             {
+                Console.WriteLine("LookupAndModifyMode");
                 mCurrentState = ParsingStates.PlayerLookupAndApply;
             }
             else if ((mTeamMatch = mTeamRegex.Match(line)) != Match.Empty)
@@ -260,9 +261,25 @@ namespace NFL2K5Tool
             {
                 SetSpecialTeamPlayer(line);
             }
+            else if (line.Equals("AutoUpdateDepthChart"))
+            {
+                Tool.AutoUpdateDepthChart();
+            }
+            else if (line.Equals("AutoUpdatePBP"))
+            {
+                Tool.AutoUpdatePBP();
+            }
+            else if (line.Equals("AutoUpdatePhoto"))
+            {
+                Tool.AutoUpdatePhoto();
+            }
             else if (line.StartsWith("Coach,", StringComparison.InvariantCultureIgnoreCase))
             {
                 SetCoachData(line);
+            }
+            else if (line.StartsWith("ApplyFormula"))
+            {
+                ApplyFormula(line);
             }
             else
             {
@@ -278,6 +295,79 @@ namespace NFL2K5Tool
                         retVal = LookupPlayerAndApply(line);
                         break;
                 }
+            }
+            return retVal;
+        }
+
+        // (<formula>,<targetAttribute>, <targetValue>, [positions],<mode>)
+
+        /// <summary>
+        /// Expects input like 
+        /// ApplyFormula('true','RightGlove','None', [QB])
+        /// ApplyFormula('RightGlove <> None','RightGlove','None', [QB])
+        /// ApplyFormula('Speed > 0','RightGlove','None', [QB])
+        /// ApplyFormula('Speed > 80','RightGlove','None', [QB])
+        /// ApplyFormula('Speed > 80','Stamina','95', [QB], Percent)
+        /// </summary>
+        /// <param name="line"></param>
+        private void ApplyFormula(string line)
+        {
+            int index = line.IndexOf("(") + 1;
+            int endPos = line.IndexOf(']') + 1;
+            if (index != 0 && endPos != 0 )
+            {
+                FormulaMode fm = FormulaMode.Normal;
+                string argString = line.Substring(index).Replace(")", ""); // get rid of last paren too.
+                string[] args = argString.Split(new char[] { ',' });
+                // need 6 args
+                string formula = args[0].Trim("' ".ToCharArray());
+                string attr = args[1].Trim("' ".ToCharArray());
+                string val = args[2].Trim("' ".ToCharArray());
+                List<string> positions = GetFormulaPositions(line);
+
+                if (line.ToLower().Contains("add"))
+                    fm = FormulaMode.Percent;
+                else if (line.ToLower().Contains("increment"))
+                    fm = FormulaMode.Add;
+
+                string results =
+                    Tool.ApplyFormula(formula, attr, val, positions, fm, true);
+                string message = "";
+                if (results == null)
+                    message = String.Format("Warning. No players selected by formula:\n\t\"{0}\"", line);
+                else if (results.StartsWith("Exception!"))
+                    message = "Error, Check formula\n"+ results;
+                else
+                    message = "#Affected  Players\n" + results;
+                Console.WriteLine(message);
+            }
+        }
+
+        private List<string> GetFormulaPositions(string line)
+        {
+            List<string> retVal = new List<string>();
+            int index1 = line.IndexOf("[")+1;
+            int index2 = line.IndexOf("]", index1 + 1) +1;
+            if (index1 > 0 && index2 > 0)
+            {
+                string ps = line.Substring(index1, index2 - index1).Replace("]","");
+                string[] positions = ps.Split(new char[] {','});
+                foreach (string pos in positions)
+                {
+                    retVal.Add(pos.Trim());
+                }
+            }
+            return retVal;
+        }
+
+        private string GetSingleQuoteString(string line, int index)
+        {
+            string retVal = null;
+            int index1  = line.IndexOf("'", index); // first single-quote
+            int index2  = line.IndexOf("'", index1+1);
+            if (index1 >= index && index2 > index)
+            {
+                retVal = line.Substring(index1, index2 - index1);
             }
             return retVal;
         }

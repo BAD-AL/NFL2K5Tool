@@ -72,12 +72,14 @@
             this.increaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.decreaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutNFL2K5ToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textCommandsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mListPlayersButton2 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
-            this.lookupAndModifyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -156,7 +158,8 @@
             this.fileToolStripMenuItem,
             this.viewToolStripMenuItem,
             this.editToolStripMenuItem,
-            this.uIToolStripMenuItem});
+            this.uIToolStripMenuItem,
+            this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(678, 24);
@@ -335,8 +338,7 @@
             this.autoUpdatePBPToolStripMenuItem,
             this.formatScheduleToolStripMenuItem,
             this.playerEditorToolStripMenuItem,
-            this.globalEditorToolStripMenuItem,
-            this.lookupAndModifyToolStripMenuItem});
+            this.globalEditorToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -464,6 +466,29 @@
             this.nameColorToolStripMenuItem.Text = "&Name Color";
             this.nameColorToolStripMenuItem.Click += new System.EventHandler(this.nameColorToolStripMenuItem_Click);
             // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutNFL2K5ToolToolStripMenuItem,
+            this.textCommandsToolStripMenuItem});
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            // 
+            // aboutNFL2K5ToolToolStripMenuItem
+            // 
+            this.aboutNFL2K5ToolToolStripMenuItem.Name = "aboutNFL2K5ToolToolStripMenuItem";
+            this.aboutNFL2K5ToolToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.aboutNFL2K5ToolToolStripMenuItem.Text = "About NFL2K5Tool";
+            this.aboutNFL2K5ToolToolStripMenuItem.Click += new System.EventHandler(this.aboutNFL2K5ToolToolStripMenuItem_Click);
+            // 
+            // textCommandsToolStripMenuItem
+            // 
+            this.textCommandsToolStripMenuItem.Name = "textCommandsToolStripMenuItem";
+            this.textCommandsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.textCommandsToolStripMenuItem.Text = "Text Commands";
+            this.textCommandsToolStripMenuItem.Click += new System.EventHandler(this.textCommandsToolStripMenuItem_Click);
+            // 
             // mListPlayersButton2
             // 
             this.mListPlayersButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -526,13 +551,6 @@
             this.mTextBox.TabIndex = 0;
             this.mTextBox.Text = "";
             this.mTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TextBox_MouseDown);
-            // 
-            // lookupAndModifyToolStripMenuItem
-            // 
-            this.lookupAndModifyToolStripMenuItem.Name = "lookupAndModifyToolStripMenuItem";
-            this.lookupAndModifyToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
-            this.lookupAndModifyToolStripMenuItem.Text = "LookupAndModify";
-            this.lookupAndModifyToolStripMenuItem.Click += new System.EventHandler(this.lookupAndModifyToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -612,7 +630,9 @@
         private System.Windows.Forms.ToolStripMenuItem listCoachesToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem fullCoachAttributesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem globalEditorToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem lookupAndModifyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutNFL2K5ToolToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem textCommandsToolStripMenuItem;
     }
 }
 

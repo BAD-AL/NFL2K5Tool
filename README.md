@@ -37,6 +37,8 @@ Scrolls after closing player edit form.
 13. Player edit gui
 14. Auto update special teams
 15. Get/Set special teams
+16. Global Edit Form + applyable formulas
+17. Drag/drop gamesave files into text area.
 
 ### Next features:  
 	1. Editing coaches. 

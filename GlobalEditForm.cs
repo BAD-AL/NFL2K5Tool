@@ -82,130 +82,74 @@ namespace NFL2K5Tool
 
         private string GetFormula()
         {
-            string formula = "true";
-            string f = mFormulaTextBox.Text.Trim();
-            if (f != "" && !f.Equals("Always", StringComparison.InvariantCultureIgnoreCase))
-                formula = f;
-            return formula;
+            return mFormulaTextBox.Text.Trim();
+        }
+
+        private FormulaMode GetFormulaMode()
+        {
+            FormulaMode retVal = FormulaMode.Normal;
+            if (intAttrControl1.Visible && mPercentCheckbox.Checked)
+                retVal = FormulaMode.Percent;
+            //else if (mIncreaseYearsPro)
+            //    retVal = FormulaMode.Increment;
+            return retVal;
         }
 
         private void mShowAffectedPlayersButton_Click(object sender, EventArgs e)
         {
-            ProcessFormula(false);
+            string result =
+                Tool.ApplyFormula(GetFormula(), GetTargetAttribute(), GetTargetValue(), GetPositions(), GetFormulaMode(), false);
+            ShowResults(result);
         }
 
         private void mSetAttributeButton_Click(object sender, EventArgs e)
         {
-            ProcessFormula(true);
+            string result =
+                Tool.ApplyFormula(GetFormula(), GetTargetAttribute(), GetTargetValue(), GetPositions(), GetFormulaMode(), true);
+            ShowResults(result);
         }
-
-
-        private bool mIncreaseYearsPro = false;
 
         private void mAddOneYear_Click(object sender, EventArgs e)
         {
-            mIncreaseYearsPro = true;
-            ProcessFormula(true);
-            mIncreaseYearsPro = false;
+            string result =
+                Tool.ApplyFormula(GetFormula(), "YearsPro", "1", GetPositions(), FormulaMode.Add, true);
+            ShowResults(result);
         }
 
-        /// <summary>
-        /// get tle players that the formulaand positions checkboxes apply to.
-        /// Sets the players attributes when 'applyChanges' = true.
-        /// </summary>
-        private void ProcessFormula(bool applyChanges)
+        private void ShowResults(string results)
         {
-            try
+            if (results == null)
             {
-                List<int> playerIndexes = GetPlayerIntexesFor(GetFormula(), GetPositions());
-                if (playerIndexes.Count > 0)
-                {
-                    String tmp = "";
-                    int temp_i = 0;
-                    StringBuilder sb = new StringBuilder(30 * playerIndexes.Count);
-                    int p = 0;
-                    string attr = mAttributeComboBox.Items[mAttributeComboBox.SelectedIndex].ToString();
-                    if (mIncreaseYearsPro)
-                        attr = "YearsPro";
-                    string val = intAttrControl1.Visible ? intAttrControl1.Value + "" : stringSelectionControl1.Value;
-                    sb.Append("Team,FirstName,LastName,");
-                    sb.Append(attr);
-                    sb.Append("\n");
-                    for (int i = 0; i < playerIndexes.Count; i++)
-                    {
-                        p = playerIndexes[i];
-                        if (applyChanges)
-                        {
-                            if (mIncreaseYearsPro)
-                            {
-                                tmp = Tool.GetPlayerField(p,attr);
-                                temp_i = Int32.Parse(tmp);
-                                temp_i++;
-                                val = temp_i.ToString();
-                            }
-                            else if (intAttrControl1.Visible && mPercentCheckbox.Checked)
-                            {
-                                tmp = Tool.GetPlayerField(p, attr);
-                                temp_i = Int32.Parse(tmp);
-                                val = ((int)(temp_i * (intAttrControl1.Value * 0.01))).ToString();
-                            }
-                            this.Tool.SetPlayerField(p, attr, val);
-                        }
-
-                        sb.Append(Tool.GetPlayerTeam(p));
-                        sb.Append(",");
-                        sb.Append(Tool.GetPlayerFirstName(p));
-                        sb.Append(",");
-                        sb.Append(Tool.GetPlayerLastName(p));
-                        sb.Append(",");
-                        sb.Append(Tool.GetPlayerField(p, attr));
-                        sb.Append("\n");
-                    }
-                    MessageForm.ShowMessage("Players affected = "+playerIndexes.Count, sb.ToString(), SystemIcons.Question, false, true);
-                }
-                else
-                {
-                    MessageBox.Show(this,
+                MessageBox.Show(this,
                     "Check formula and Positions Check boxes ",
                     "No Players"
                     );
-                }
             }
-            catch (Exception ex)
+            else if (results.StartsWith("Exception!"))
             {
                 MessageBox.Show(this,
-                    "Ensure the formula is correct: " + GetFormula() + "\n" + ex.Message,
+                    results,
                     "Error, Check formula"
                     );
             }
+            else
+            {
+                MessageForm.ShowMessage("Affected  Players", results, SystemIcons.Question, false, false);
+            }
         }
 
-        //private string GetPlayerText(List<int> playerIndexes)
-        //{
-        //    int p = 0;
-        //    StringBuilder sb = new StringBuilder();
-        //    sb.Append("Number of players = ");
-        //    sb.Append(playerIndexes.Count);
-        //    sb.Append("\n");
-        //    for (int i = 0; i < playerIndexes.Count; i++)
-        //    {
-        //        p = playerIndexes[i];
-        //        sb.Append(Tool.GetPlayerTeam(p));
-        //        sb.Append(",");
-        //        sb.Append(Tool.GetPlayerFirstName(p));
-        //        sb.Append(",");
-        //        sb.Append(Tool.GetPlayerLastName(p));
-        //        sb.Append("\n");
-        //    }
-        //    return sb.ToString();
-        //}
-
-        private List<int> GetPlayerIntexesFor(string formula, List<string> positions)
+        private string GetTargetAttribute()
         {
-            List<int> playerIndexes = Tool.GetPlayersByFormula(formula, positions);
-            return playerIndexes;
+            string attr = mAttributeComboBox.Items[mAttributeComboBox.SelectedIndex].ToString();// GetTargetAttribute(); //include line below
+            return attr;
         }
 
+        private string GetTargetValue()
+        {
+            string val = intAttrControl1.Visible ? intAttrControl1.Value + "" : stringSelectionControl1.Value; // GetTargetValue();
+            return val;
+        }
+        
         private void mCheckAllButton_Click(object sender, EventArgs e)
         {
             bool check = !mQBcheckBox.Checked;
@@ -242,8 +186,10 @@ or
 =
 <> (Not Equal)
 
+Check the Console output to see the formula the editor uses.
+You can use these formulas in the Main Text area as well.
 ";
-            MessageForm.ShowMessage("Usage", howTo, SystemIcons.Question, false, true);
+            MessageForm.ShowMessage("Usage", howTo, SystemIcons.Question, false, false);
         }
 
     }

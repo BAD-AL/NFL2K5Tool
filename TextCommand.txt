@@ -1,0 +1,137 @@
+﻿
+The following 'commands' can be used to change the order in which attributes are displayed:
+	Key 
+	CoachKEY
+	
+The following command can be used to apply arbitraty edits which would normally be 
+applied with a hex editor:
+	SET
+
+
+The following commands can be processed to perform common operations instead of having to run them from
+the menus.
+
+Modification Commands:
+	LookupAndModify
+	AutoUpdateDepthChart
+	AutoUpdatePBP
+	AutoUpdatePhoto
+	ApplyFormula(<arguments>)
+
+	
+Note: 
+To Apply Data without saving to the gamesave file.
+Use:
+ File -> Apply Data without saving 
+
+This will update the gamesave file in-memory, but won't save to a file. (sometimes useful)
+I like to use this feature when appling multiple sets of data to a gamesave file.
+
+
+====== Key ======
+To change the displayed attributes of players listed you can set the 'Key' to list
+only the attributes you wish to see.
+This will also apply when setting player data.
+
+Example:
+	Key=Position,fname,lname,Photo,Skin
+
+
+To reset the key to default use:
+	<clear text content>
+	type/paste into text area:
+	Key=
+	<apply data without saving >
+
+Note: 
+	The player Gui only works with the default Key 
+	
+====== CoachKEY ======
+Similar in functionality as 'Key', only for Coaches 
+
+
+
+====== SET ======
+Sets data in the gamesave 
+
+Example:
+	#"St. Louis" -> "L.A.     "
+	SET(0x7633e,0x4C002E0041002E0020002000200020002000)
+	SET(0x79898,0x4C002E0041002E0020002000200020002000)
+
+In the above example the intent is to set the string "St. Louis" to "L.A.     ".
+The locations of strings changes with each gamesave file. You can find string and their 
+locations in the DebugDialog.
+
+
+====== LookupAndModify ======
+If we wish to modify player data without specifying all the data we can use this feature.
+It is meant to be used in conjunction with the 'Key' command.
+The 'Position','fname' and 'lname' attributes must be specified for player lookup.
+
+Example:
+	LookupAndModify
+	Key= Position,fname,lname,Photo
+	QB,Jimmy,Garoppolo,0481,
+	QB,Nick,Mullens,0799,
+	RB,Tevin,Coleman,0187,
+	RB,Matt,Breida,0242,
+
+The above example will lookup the specified players and set their photo the the one specified.
+
+====== AutoUpdateDepthChart ======
+Simple command that will update the depth chart according to player occurance in the gamesave.
+So for QB, the first QB to occur on a roster will become the starter, the 2nd QB to occur will
+become 2nd string the 3rd QB to occur will become 3rd string on the depth chart.
+Same for the other positions too.
+
+Example:
+	<clear data>
+	type/paste into text area:
+	AutoUpdateDepthChart
+	<apply data without saving>
+
+====== AutoUpdatePBP ======
+The "PBP" stands for 'Play by play' name used by the commentators in the game.
+So for all the players with the last name 'Smith', the 'Smith' name will be mentioned
+by the commentators when they talk about the player.
+The name to pbp mappings are stored in 'PlayerData\ENFNameIndex.txt'
+
+Example:
+	<clear data>
+	type/paste into text area :
+	AutoUpdatePBP
+	<apply data without saving>
+
+====== AutoUpdatePhoto ======
+Updates the player photos according to their names.
+Name file is located at 'PlayerData\ENFPhotoIndex.txt'.
+
+Example:
+	<clear data>
+	type/paste into text area :
+	AutoUpdatePhoto
+	<apply data without saving>
+
+====== ApplyFormula ======
+Can be used to modify players meeting specified attributes.
+The 'Global Edit Form' Can be used to craft and apply formulas.
+The formulas will print to the console when they are run from the 
+Global edit form so you can more easily see/create/use/re-use them.
+
+Basic syntax:
+	ApplyFormula(<formula>, <target attribute>, < target value>, [positions], <Mode (optional)>)
+
+Examples:
+	# For all kickers, punters or quarterbacks who have a white turtleneck, take away 1 speed point
+	ApplyFormula('Turtleneck = White','Speed',-1, [K,P,QB], Add)
+	
+	# For all quarterbacks who wear a RightGlove, set their RightGlove to 'None'
+	ApplyFormula('RightGlove <> None','RightGlove','None', [QB])
+	
+	# For all quarterbacks who have speed greater than 80, set their 'Stamana' to 95% of what it currently is
+	ApplyFormula('Speed > 80','Stamina',95, [QB], Percent)
+	
+	# For all kickers and punters, set their stanama to '95' 
+	ApplyFormula('Always','Stamina',95, [K,P])
+	

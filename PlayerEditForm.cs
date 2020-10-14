@@ -113,7 +113,7 @@ namespace NFL2K5Tool
             }
             else
             {
-                throw new InvalidOperationException("Please make sure the key '#Position,fname,lname...' is present at the top of the text box.");
+                throw new InvalidOperationException("Please make sure the key '#Position,fname,lname...' is present at the top of the text box. (Did you list content yet?)");
             }
             return retVal;
         }

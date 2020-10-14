@@ -33,6 +33,8 @@ namespace NFL2K5Tool
         {
             if (source == mCutMenuItem)
                 this.Cut();
+            else if( source == this.mClearMenuItem)
+                this.Clear();
             else if (source == mCopyMenuItem)
                 this.Copy();
             else if (source == mPasteMenuItem)
@@ -45,6 +47,7 @@ namespace NFL2K5Tool
                 this.SelectAll();
             else if (source == mFindMenuItem)
                 if (SetSearchString()) FindNextMatch();
+
         }
 
         /// <summary>

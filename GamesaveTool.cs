@@ -692,6 +692,7 @@ namespace NFL2K5Tool
         /// </summary>
         public void AutoUpdatePBP()
         {
+            Console.WriteLine("AutoUpdatePBP");
             string key, firstName, lastName, number, val;
             for (int player = 0; player < MaxPlayers; player++)
             {
@@ -719,6 +720,7 @@ namespace NFL2K5Tool
         /// </summary>
         public void AutoUpdatePhoto()
         {
+            Console.WriteLine("AutoUpdatePhoto");
             string key, firstName, lastName, number, val;
             for (int player = 0; player < MaxPlayers; player++)
             {
@@ -804,6 +806,7 @@ namespace NFL2K5Tool
         /// </summary>
         public void AutoUpdateDepthChart()
         {
+            Console.WriteLine("AutoUpdateDepthChart");
             for (int i = 0; i < 32; i++)
             {
                 AutoUpdateDepthChartForTeam(mTeamsDataOrder[i]);
@@ -1062,6 +1065,10 @@ namespace NFL2K5Tool
                 {
                     GameSaveData = StaticUtils.ExtractFileFromZip(fileName, null, "SAVEGAME.DAT");
                     mZipFile = fileName;
+                }
+                else
+                {
+                    return false;
                 }
                 mColleges.Clear();
                 if (GameSaveData[0] == (byte)'R' && GameSaveData[1] == (byte)'O' &&
@@ -2753,7 +2760,120 @@ namespace NFL2K5Tool
             return retVal;
         }
 
-        #region GetPlayersByFormulaRegion
+        #region FormulaRegionStuff
+
+
+        /// <summary>
+        /// Aplies a formulaic change to players.
+        /// Formulas are printed to the console when the function is run so that the user can see the 
+        /// formula when executed from the Global editor.
+        /// </summary>
+        /// <param name="formula">The formula used to select players.</param>
+        /// <param name="targetAttribute">The attribute you want to set.</param>
+        /// <param name="targetValue">The target value you want to set.</param>
+        /// <param name="positions">The list of positions to search.</param>
+        /// <param name="formulaMode"> The formula mode to use. </param>
+        /// <param name="applyChanges">false to not apply the changed (just want to see who's affected)</param>
+        /// <returns>
+        /// Null if no players are selected
+        /// string starting with 'Exception!' if an exception occured
+        /// string list of players changed if successful
+        /// </returns>
+        public string ApplyFormula(string formula, 
+                                    string targetAttribute, 
+                                    string targetValue, 
+                                    List<string> positions, 
+                                    FormulaMode formulaMode, 
+                                    bool applyChanges )
+        {
+            string retVal = null;
+            try
+            {
+                if (formulaMode != FormulaMode.Normal)
+                {
+                    Console.WriteLine("ApplyFormula('{0}','{1}','{2}', [{3}], {4})",
+                        formula, targetAttribute, targetValue, String.Join(",", positions.ToArray()),
+                        formulaMode
+                        );
+                }
+                else
+                {
+                    Console.WriteLine("ApplyFormula('{0}','{1}','{2}', [{3}])",
+                        formula, targetAttribute, targetValue, String.Join(",", positions.ToArray()));
+                }
+
+                if ("Always".Equals(formula, StringComparison.InvariantCultureIgnoreCase))
+                    formula = "true";
+                List<int> playerIndexes = GetPlayersByFormula(formula, positions);
+                string targetValueParam = targetValue; // save a copy for the 'usePercent' case
+
+                if (playerIndexes.Count > 0)
+                {
+                    String tmp = "";
+                    int temp_i = 0;
+                    StringBuilder sb = new StringBuilder(30 * playerIndexes.Count);
+                    int p = 0;
+                    
+                    sb.Append("#Players affected = ");
+                    sb.Append(playerIndexes.Count);
+                    sb.Append("\n");
+                    sb.Append("#Team,FirstName,LastName,");
+                    sb.Append(targetAttribute);
+                    sb.Append("\n");
+                    int tmp_2 = 0;
+                    for (int i = 0; i < playerIndexes.Count; i++)
+                    {
+                        p = playerIndexes[i];
+                        if (formulaMode == FormulaMode.Add )
+                        {
+                            tmp = GetPlayerField(p, targetAttribute);
+                            if (Int32.TryParse(tmp, out temp_i)) 
+                            {
+                                if( Int32.TryParse(targetValueParam, out tmp_2))
+                                    targetValue = (temp_i += tmp_2 ).ToString();
+                                else
+                                    return String.Format("Exception! value '{0}' is not an integer!", targetValueParam);
+                            }
+                            else
+                                return String.Format( "Exception! Field '{0}' is not a number!", targetAttribute);
+                        }
+                        else if ( formulaMode == FormulaMode.Percent)
+                        {
+                            tmp = GetPlayerField(p, targetAttribute);
+                            if (Int32.TryParse(tmp, out temp_i))
+                            {
+                                double percent = double.Parse(targetValueParam) * 0.01;
+                                //Console.WriteLine("Test: {0}", ((int)(temp_i * percent)).ToString());
+                                targetValue = ((int)(temp_i * percent)).ToString();
+                            }
+                            else
+                                return String.Format("Exception! Cannot take a percent of '{0}'!", targetAttribute);
+                        }
+                        if (applyChanges)
+                        {
+                            this.SetPlayerField(p, targetAttribute, targetValue);
+                        }
+                        
+                        sb.Append(GetPlayerTeam(p));
+                        sb.Append(",");
+                        sb.Append(GetPlayerFirstName(p));
+                        sb.Append(",");
+                        sb.Append(GetPlayerLastName(p));
+                        sb.Append(",");
+                        //sb.Append(GetPlayerField(p, targetAttribute));
+                        sb.Append(targetValue);
+                        sb.Append("\n");
+                    }
+                    retVal = sb.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                retVal = "Exception! Check formula: " + ex.Message;
+            }
+            return retVal;
+        }
+
         /// <summary>
         /// Returns the indexes of the players matching the specified formula.
         /// </summary>
@@ -2765,6 +2885,7 @@ namespace NFL2K5Tool
             List<int> retVal = new List<int>();
             if (formula != null)
             {
+                //Console.WriteLine("GetPlayersByFormula: '{0}'; [{1}] ", formula , String.Join(",", positions.ToArray()) );
                 System.Data.DataTable table = new System.Data.DataTable();
                 string evaluationString = "";
                 formula = formula.Replace("||", " or ").Replace("&&", " and ").Replace("=", " = ").Replace("!=", " <> ");
@@ -2788,6 +2909,7 @@ namespace NFL2K5Tool
             }
             return retVal;
         }
+
 
         private string SubstituteAttributesForValues(int playerIndex, string formula)
         {

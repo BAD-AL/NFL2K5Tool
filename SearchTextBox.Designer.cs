@@ -37,6 +37,7 @@
             this.mFindNextMenuItem = new System.Windows.Forms.MenuItem();
             this.mFindPrevMenuItem = new System.Windows.Forms.MenuItem();
             this.mSelectAllMenuItem = new System.Windows.Forms.MenuItem();
+            this.mClearMenuItem = new System.Windows.Forms.MenuItem();
 
             this.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 
@@ -82,6 +83,10 @@
             this.mFindPrevMenuItem.Index = 7;
             this.mFindPrevMenuItem.Text = "Find &Prev (F2)";
             this.mFindPrevMenuItem.Click += new System.EventHandler(this.ContextMenuItem_Click);
+
+            this.mClearMenuItem.Index = 8;
+            this.mClearMenuItem.Text = "Clear";
+            this.mClearMenuItem.Click += new System.EventHandler(this.ContextMenuItem_Click);
             // 
             // mContextMenu
             // 
@@ -93,6 +98,7 @@
                 this.mFindMenuItem,
                 this.mFindNextMenuItem,
                 this.mFindPrevMenuItem,
+                this.mClearMenuItem,
             });
 
             this.ContextMenu = this.mContextMenu;
@@ -106,6 +112,7 @@
         private System.Windows.Forms.MenuItem mFindNextMenuItem;
         private System.Windows.Forms.MenuItem mFindPrevMenuItem;
         private System.Windows.Forms.MenuItem mSelectAllMenuItem;
+        private System.Windows.Forms.MenuItem mClearMenuItem;
         #endregion
     }
 }

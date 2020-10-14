@@ -29,6 +29,14 @@ namespace NFL2K5Tool
             nameColorToolStripMenuItem.ForeColor = Color.Blue;
             this.Text = "NFL2K5Tool " + System.Reflection.Assembly.GetCallingAssembly().GetName().Version
                 +" beta";
+
+            mTextBox.AllowDrop = true;
+            mTextBox.DragOver += new DragEventHandler(file_DragOver);
+            mTextBox.DragDrop += new DragEventHandler(file_DragDrop);
+
+            mLoadSaveButton.AllowDrop = true;
+            mLoadSaveButton.DragOver += new DragEventHandler(file_DragOver);
+            mLoadSaveButton.DragDrop += new DragEventHandler(file_DragDrop);
         }
 
         private void mLoadSaveButton_Click(object sender, EventArgs e)
@@ -44,14 +52,30 @@ namespace NFL2K5Tool
             dlg.Filter = "XBOX Save files (*.DAT, *.zip)|*.DAT;*.zip";
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                mTool = new GamesaveTool();
-                mTool.LoadSaveFile(dlg.FileName);
-                string shortName = dlg.FileName.Substring(dlg.FileName.LastIndexOf(Path.DirectorySeparatorChar) + 1);
+                LoadSaveFile(dlg.FileName);
+            }
+            dlg.Dispose();
+            StaticUtils.ShowErrors(false);
+        }
+
+        private void LoadSaveFile(string filename)
+        {
+            mTool = new GamesaveTool();
+            if (mTool.LoadSaveFile(filename))
+            {
+                string shortName = filename.Substring(filename.LastIndexOf(Path.DirectorySeparatorChar) + 1);
                 Text = "NFL2K5Tool - " + shortName;
-                statusBar1.Text = dlg.FileName + " loaded";
+                statusBar1.Text = filename + " loaded";
                 EnableControls(true);
             }
-            StaticUtils.ShowErrors(false);
+            else
+            {
+                mTool = null;
+                if (filename.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase))
+                    SetText(File.ReadAllText(filename));
+                else 
+                    MessageBox.Show("Is the requested file a .zip or .dat file?","Error!");
+            }
         }
 
 
@@ -525,7 +549,14 @@ namespace NFL2K5Tool
             }
             else if (!String.IsNullOrEmpty(line) && InputParser.ParsePlayerLine(line).Count > 2)
             {
-                EditPlayer();
+                try
+                {
+                    EditPlayer();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show( ex.Message, "Error!");
+                }
             }
         }
 
@@ -617,14 +648,40 @@ namespace NFL2K5Tool
             form.Dispose();
         }
 
-        private void lookupAndModifyToolStripMenuItem_Click(object sender, EventArgs e)
+        private void textCommandsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.mTextBox.AppendText(
-@"# This feature is typically used to update player apperance in a mass edit.
-#Paste Key and data below 
-LookupAndModify
+            string content = Program.GetEmbeddedTextFile("TextCommand.txt");
+            MessageForm form = new MessageForm(System.Drawing.SystemIcons.Information);
+            form.Text = "Text Commands";
+            form.MessageText = content;
+            form.ShowCancelButton = false;
+            form.Show();
+        }
 
-");
+        private void aboutNFL2K5ToolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string version = 
+                System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+            MessageBox.Show("Version " + version , "About NFL2K5Tool");
+        }
+
+        private void file_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void file_DragDrop(object sender, DragEventArgs e)
+        {
+            Control tb = sender as Control;
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files != null && files.Length == 1 && tb != null)
+            {
+                LoadSaveFile( files[0]);
+            }
         }
     }
 }

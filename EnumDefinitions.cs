@@ -391,4 +391,11 @@ namespace NFL2K5Tool
         LoneBackPass = 0x8B,
         EmptyPass = 0x8C
     }
+
+    public enum FormulaMode
+    {
+        Normal = 0,
+        Add,
+        Percent
+    }
 }

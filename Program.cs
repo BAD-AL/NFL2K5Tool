@@ -176,6 +176,48 @@ namespace NFL2K5Tool
                 StaticUtils.ShowErrors(true);
             }
         }
+        private static Control assemblyControl = null;
+
+        /// <summary>
+        /// Gets an embedded text file.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static String GetEmbeddedTextFile(string file)
+        {
+            String ret = null;
+            try
+            {
+                if (!String.IsNullOrEmpty(file) && !file.StartsWith("NFL2K5Tool."))
+                {
+                    file = "NFL2K5Tool." + file;
+                }
+
+                if (assemblyControl == null)
+                    assemblyControl = new SearchTextBox();
+                System.IO.Stream s = null;
+                StreamReader reader = null;
+                try
+                {
+                    s = assemblyControl.GetType().Assembly.GetManifestResourceStream(file);
+                    if (s != null)
+                    {
+                        reader = new StreamReader(s);
+                        ret = reader.ReadToEnd();
+                    }
+                }
+                finally
+                {
+                    if(reader != null) reader.Dispose();
+                    if(s!= null) s.Dispose();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            return ret;
+        }
 
         private static void PrintUsage()
         {
