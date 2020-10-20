@@ -85,6 +85,7 @@
             this.mTextBox.StatusControl = null;
             this.mTextBox.TabIndex = 1;
             this.mTextBox.Text = "";
+            this.mTextBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.mTextBox_LinkClicked);
             this.mTextBox.DoubleClick += new System.EventHandler(this.mTextBox_DoubleClick);
             // 
             // MessageForm

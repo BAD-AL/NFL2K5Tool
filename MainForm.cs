@@ -130,10 +130,6 @@ namespace NFL2K5Tool
             if (listCoachesToolStripMenuItem1.Checked)
             {
                 builder.Append("\n\nCoachKEY=");
-                // hmm... how to handle this properly.....
-                if (fullCoachAttributesToolStripMenuItem.Checked)
-                    mTool.CoachKey = mTool.CoachKeyAll;
-                
                 builder.Append(mTool.CoachKey);
                 builder.Append("\n");
                 for (int i = 0; i < 32; i++)
@@ -143,11 +139,18 @@ namespace NFL2K5Tool
                 }
             }
 
-            if (listScheduleToolStripMenuItem.Checked)
+            if (listScheduleToolStripMenuItem.Checked  )
             {
-                SchedulerHelper helper = new SchedulerHelper(mTool);
-                builder.Append("\n\n#Schedule\n");
-                builder.Append(helper.GetSchedule());
+                if (mTool.SaveType == SaveType.Franchise)
+                {
+                    SchedulerHelper helper = new SchedulerHelper(mTool);
+                    builder.Append("\n\n#Schedule\n");
+                    builder.Append(helper.GetSchedule());
+                }
+                else
+                {
+                    Console.WriteLine("Cannot list schedule of {0} GameSave file", mTool.SaveType);
+                }
             }
 
             SetText(builder.ToString());
@@ -549,32 +552,32 @@ namespace NFL2K5Tool
             }
             else if (!String.IsNullOrEmpty(line) && InputParser.ParsePlayerLine(line).Count > 2)
             {
-                try
-                {
-                    EditPlayer();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show( ex.Message, "Error!");
-                }
+                //try
+                //{
+                EditPlayer();
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show( ex.Message, "Error!");
+                //}
             }
         }
 
         private void EditCoach()
         {
-            //CoachEditForm form = new CoachEditForm();
-            //form.ReversePBPs = DataMap.ReversePBPMap;
-            //form.ReversePhotos = DataMap.ReversePhotoMap;
-            //form.PBPs = DataMap.PBPMap;
-            //form.Photos = DataMap.PhotoMap;
-            //form.Data = mTextBox.Text;
-            //form.SelectionStart = mTextBox.SelectionStart;
-            //if (form.ShowDialog(this) == DialogResult.OK)
-            //{
-            //    SetText(form.Data);
-            //    mTextBox.SelectionStart = form.SelectionStart;
-            //    mTextBox.ScrollToCaret();
-            //}
+            CoachEditForm form = new CoachEditForm();
+            form.ReversePBPs = DataMap.ReversePBPMap;
+            form.ReversePhotos = DataMap.ReversePhotoMap;
+            form.PBPs = DataMap.PBPMap;
+            form.Photos = DataMap.PhotoMap;
+            form.Data = mTextBox.Text;
+            form.SelectionStart = mTextBox.SelectionStart;
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                SetText(form.Data);
+                mTextBox.SelectionStart = form.SelectionStart;
+                mTextBox.ScrollToCaret();
+            }
         }
 
         private void EditPlayer()
@@ -639,6 +642,11 @@ namespace NFL2K5Tool
         private void fullCoachAttributesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             fullCoachAttributesToolStripMenuItem.Checked = !fullCoachAttributesToolStripMenuItem.Checked;
+            
+            if (fullCoachAttributesToolStripMenuItem.Checked)
+                mTool.CoachKey = mTool.CoachKeyAll;
+            else
+                mTool.CoachKey = GamesaveTool.DefaultCoachKey;
         }
 
         private void globalEditorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -663,7 +671,21 @@ namespace NFL2K5Tool
             string version = 
                 System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-            MessageBox.Show("Version " + version , "About NFL2K5Tool");
+            string content = String.Format(
+@"About NFL2K5Tool
+Version {0}
+
+YouTube Tutorial: https://youtu.be/NCqsq_2GqYs 
+GitHub: https://github.com/BAD-AL/NFL2K5Tool 
+Forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/881901-nfl2k5tool.html
+", version);
+                ;
+            MessageForm form = new MessageForm(System.Drawing.SystemIcons.Information);
+            form.Text = "NFL2K5Tool Version " + version;
+            form.MessageText = content;
+            form.ShowCancelButton = false;
+            form.ShowDialog();
+            form.Dispose();
         }
 
         private void file_DragOver(object sender, DragEventArgs e)

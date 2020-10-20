@@ -40,8 +40,11 @@ namespace NFL2K5Tool
             if (pc.Value == "NoPhoto")
             {
                 mGenericFacePictureBox.Visible = true;
-                string fileName = ".\\PlayerData\\GenericFaces\\" + sc.Value.Replace("kin", "") + fc.Value.Replace("ace", "") + ".jpg";
-                mGenericFacePictureBox.ImageLocation = fileName;
+                if (pc != null && sc != null && fc != null)
+                {
+                    string fileName = ".\\PlayerData\\GenericFaces\\" + sc.Value.Replace("kin", "") + fc.Value.Replace("ace", "") + ".jpg";
+                    mGenericFacePictureBox.ImageLocation = fileName;
+                }
                 if(mGenericFacePictureBox.Parent  == null)
                     mGenericFacePictureBox.Parent = mAppearanceTab;
             }

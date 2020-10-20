@@ -115,6 +115,11 @@ namespace NFL2K5Tool
         {
             ShowMessage(title, message, SystemIcons.Hand, false, false);
         }
+
+        private void mTextBox_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.LinkText);
+        }
     }
 
     public class StringEventArgs : EventArgs

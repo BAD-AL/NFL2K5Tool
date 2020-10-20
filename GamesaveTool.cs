@@ -48,7 +48,17 @@ namespace NFL2K5Tool
         
         const string NFL2K5Folder = "53450030";
 
-        private SaveType SaveType = SaveType.Franchise;
+        public SaveType SaveType 
+        { 
+            get { return mSaveType; }
+            private set
+            {
+                mSaveType = value;
+                Console.WriteLine("Loading SaveType:{0}", mSaveType);
+            }
+        }
+
+        private SaveType mSaveType = SaveType.Franchise;
 
         private string mZipFile = "";
 
@@ -500,7 +510,7 @@ namespace NFL2K5Tool
         public string GetDraftClass(bool attributes, bool appearance)
         {
             int limit  = FirstDraftClassPlayer +  mDraftClassSize;
-            if( SaveType == SaveType.Roster)
+            if( mSaveType == SaveType.Roster)
                 limit = FirstDraftClassPlayer + 7;
 
             StringBuilder builder = new StringBuilder(300 * mDraftClassSize + 1);

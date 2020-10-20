@@ -70,6 +70,7 @@
             this.mSkinComboBox.Name = "mSkinComboBox";
             this.mSkinComboBox.Size = new System.Drawing.Size(121, 21);
             this.mSkinComboBox.TabIndex = 2;
+            this.mSkinComboBox.Visible = false;
             this.mSkinComboBox.SelectedIndexChanged += new System.EventHandler(this.mSkinComboBox_SelectedIndexChanged);
             // 
             // mLastNameTextBox
@@ -79,6 +80,7 @@
             this.mLastNameTextBox.Name = "mLastNameTextBox";
             this.mLastNameTextBox.Size = new System.Drawing.Size(150, 20);
             this.mLastNameTextBox.TabIndex = 3;
+            this.mLastNameTextBox.Visible = false;
             this.mLastNameTextBox.TextChanged += new System.EventHandler(this.mLastNameTextBox_TextChanged);
             // 
             // label1
@@ -90,6 +92,7 @@
             this.label1.Size = new System.Drawing.Size(58, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Last Name";
+            this.label1.Visible = false;
             // 
             // FaceForm
             // 

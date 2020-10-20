@@ -226,7 +226,7 @@ namespace NFL2K5Tool
             string retVal = null;
             List<string> parts =  InputParser.ParseCoachLine(line);
             int i = Array.IndexOf(mKeyParts, attr);
-            if (i > -1)
+            if (i > -1 && i < parts.Count)
                 retVal = parts[i];
 
             return retVal;
@@ -300,6 +300,9 @@ namespace NFL2K5Tool
                 if(val != null)
                     SetControlValue(attribute, val);
             }
+            // disable perm fields that are not present in key
+            Info1.Enabled = Array.IndexOf(mKeyParts, "Info1") > -1;
+            Info2.Enabled = Array.IndexOf(mKeyParts, "Info2") > -1;
         }
 
         /// <summary>
@@ -373,7 +376,7 @@ namespace NFL2K5Tool
 
             foreach (Control c in parentControl.Controls)
             {
-                Console.WriteLine("control name="+ c.Name);
+                //Console.WriteLine("control name="+ c.Name);
                 if (c.Name == controlName)
                     return c;
                 if (c.Controls.Count > 0)

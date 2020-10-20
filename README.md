@@ -8,6 +8,10 @@ It's purpose is to make it super easy to apply data to NFL2K5 gamesave files. As
 the data in text format.
 Simply copy and paste text into the program.
 
+YouTube Tutorial: https://youtu.be/NCqsq_2GqYs 
+GitHub: https://github.com/BAD-AL/NFL2K5Tool 
+Forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/881901-nfl2k5tool.html
+
 ### Project Status:
 Can read and write player data successfully! 
 Can read all 2317 players from save file and write them back with no file differences!
