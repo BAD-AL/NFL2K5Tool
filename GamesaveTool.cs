@@ -54,7 +54,7 @@ namespace NFL2K5Tool
             private set
             {
                 mSaveType = value;
-                Console.WriteLine("Loading SaveType:{0}", mSaveType);
+                Console.WriteLine("#Loading SaveType:{0}", mSaveType);
             }
         }
 
@@ -365,6 +365,20 @@ namespace NFL2K5Tool
                 retVal = builder.ToString();
             }
             return retVal;
+        }
+
+        public string GetCoachData()
+        {
+            StringBuilder builder = new StringBuilder(1000);
+            builder.Append("\n\nCoachKEY=");
+            builder.Append(this.CoachKey);
+            builder.Append("\n");
+            for (int i = 0; i < 32; i++)
+            {
+                builder.Append(this.GetCoachData(i));
+                builder.Append("\r\n");
+            }
+            return builder.ToString();
         }
 
         /// <summary>
@@ -1094,7 +1108,12 @@ namespace NFL2K5Tool
 
         public void SaveFile(string fileName)
         {
-            if (fileName.EndsWith(".dat", StringComparison.InvariantCultureIgnoreCase))
+            FileInfo fi = new FileInfo(fileName);
+            if (fi.IsReadOnly)
+            {
+                StaticUtils.AddError( String.Format("File: '{0}' is Read only", fileName) );
+            }
+            else if (fileName.EndsWith(".dat", StringComparison.InvariantCultureIgnoreCase))
             {
                 if (File.Exists(fileName))
                     File.Delete(fileName);
@@ -1113,7 +1132,7 @@ namespace NFL2K5Tool
                         File.Delete(tmpFile);
                     }
                 }
-                Console.WriteLine("Data successfully written to file: {0}.", fileName);
+                Console.WriteLine("# Data successfully written to file: {0}.", fileName);
             }
             else if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) && mZipFile.Length > 4)
             {

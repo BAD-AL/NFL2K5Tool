@@ -37,7 +37,7 @@ namespace NFL2K5Tool
             StringSelectionControl sc = FindControl(mAppearanceTab, "Skin") as StringSelectionControl;
             StringSelectionControl fc = FindControl(mAppearanceTab, "Face") as StringSelectionControl;
 
-            if (pc.Value == "NoPhoto")
+            if (pc != null && pc.Value == "NoPhoto")
             {
                 mGenericFacePictureBox.Visible = true;
                 if (pc != null && sc != null && fc != null)
@@ -103,7 +103,7 @@ namespace NFL2K5Tool
         private bool SetupKey()
         {
             bool retVal = false;
-            Regex keyReg = new Regex("^#(Position,fname,lname,.*)", RegexOptions.IgnoreCase);
+            Regex keyReg = new Regex("^[\\s]*#(Position,fname,lname,.*)", RegexOptions.IgnoreCase);
             Match m = keyReg.Match(Data);
             if (m != Match.Empty )
             {

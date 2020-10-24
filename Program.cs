@@ -35,13 +35,10 @@ namespace NFL2K5Tool
             if (args.Length == 0) //GUI mode
             {
                 GUI_MODE = true;
-                //ShowWindow(GetConsoleWindow(), WindowShowStyle.Hide);
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainForm());
-                
-                //ShowWindow(GetConsoleWindow(), WindowShowStyle.Show);
             }
             else
             {
@@ -49,11 +46,14 @@ namespace NFL2K5Tool
                 // arguments 
                 string saveFileName, outputFileName, dataToApplyTextFile;
                 saveFileName = outputFileName = dataToApplyTextFile = null;
+                string key = "";
+                string coachKey = "";
 
                 bool showAppearance, showSpecialteams, showAbilities, showPlaybooks, showSchedule, readFromStdIn,
-                    autoUpdateDepthChart, autoUpdatePbp, autoUpdatePhoto, showFreeAgents, showDraftClass;
+                    autoUpdateDepthChart, autoUpdatePbp, autoUpdatePhoto, showFreeAgents, showDraftClass, showCoaches;
                 showAppearance = showSpecialteams = showAbilities = showPlaybooks = showSchedule = readFromStdIn = 
-                    autoUpdateDepthChart = autoUpdatePbp = autoUpdatePhoto= showFreeAgents = showDraftClass = false;
+                    autoUpdateDepthChart = autoUpdatePbp = autoUpdatePhoto= showFreeAgents = showDraftClass = 
+                    showCoaches = false;
 
                 #region Argument processing
                 string arg = "";
@@ -73,6 +73,7 @@ namespace NFL2K5Tool
                         case "-auph":   autoUpdatePhoto = true; break;
                         case "-fa"  :   showFreeAgents = true; break;
                         case "-dc":     showDraftClass = true; break;
+                        case "-coach":  showCoaches = true; break;
                         case "-help":   // common help message arguments
                         case "--help":
                         case "/help":
@@ -80,18 +81,21 @@ namespace NFL2K5Tool
                             PrintUsage();
                             return;
                         default:
-                            if ( arg.StartsWith("-") )
-                            {
-                                Console.Error.WriteLine("Invalid argument: " + arg);
-                            }
+                            if (args[i].StartsWith("-out:"))
+                                outputFileName = args[i].Substring(5);
+                            else if (args[i].EndsWith(".txt"))
+                                dataToApplyTextFile = args[i];
+                            else if (args[i].EndsWith(".dat", StringComparison.InvariantCultureIgnoreCase) || args[i].EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase))
+                                saveFileName = args[i];
+                            else if (args[i].StartsWith("-Key:"))
+                                key = args[i].Substring(5);
+                            else if (args[i].StartsWith("-CoachKey:"))
+                                coachKey = args[i].Substring(10);
+                            else
+                                Console.Error.WriteLine("Argument not applied: " + args[i]);
                             break;
                     }
-                    if (args[i].StartsWith("-out:"))
-                        outputFileName = args[i].Substring(5);
-                    else if (args[i].EndsWith(".txt"))
-                        dataToApplyTextFile = args[i];
-                    else if (args[i].EndsWith(".dat", StringComparison.InvariantCultureIgnoreCase) || args[i].EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase))
-                        saveFileName = args[i];
+
                 }
                 #endregion
                 
@@ -114,6 +118,11 @@ namespace NFL2K5Tool
                     }
                 }
                 #endregion
+                InputParser parser = new InputParser(tool);
+                if (key != "")
+                    parser.ProcessText("Key=" + key);
+                if( coachKey != "")
+                    parser.ProcessText("CoachKey=" + coachKey);
 
                 #region apply text data
                 if ((dataToApplyTextFile != null || readFromStdIn) && outputFileName != null)  // apply data to save file
@@ -124,7 +133,6 @@ namespace NFL2K5Tool
                         PrintUsage();
                         return;
                     }
-                    InputParser parser = new InputParser(tool);
                     if (readFromStdIn)
                         parser.ReadFromStdin();
                     else
@@ -138,11 +146,13 @@ namespace NFL2K5Tool
                     try // write to the file specified.
                     {
                         tool.SaveFile(outputFileName);
-                        return;
+                        //return;
                     }
                     catch (Exception e)
                     {
-                        Console.Error.WriteLine("Error writing to file: {0}. {1}", outputFileName, e.Message);
+                        Console.Error.WriteLine("Error writing to file: {0}. {1}", outputFileName, 
+                            e.Message + "\n" + e.StackTrace
+                            );
                     }
                 }
                 #endregion
@@ -160,6 +170,8 @@ namespace NFL2K5Tool
                             builder.Append(tool.GetTeamPlayers("FreeAgents", showAbilities, showAppearance, false));
                         if (showDraftClass)
                             builder.Append(tool.GetTeamPlayers("DraftClass", showAbilities, showAppearance, false));
+                        if (showCoaches)
+                            builder.Append(tool.GetCoachData());
                     }
                     if (showSchedule)
                         builder.Append(tool.GetSchedule());
@@ -224,10 +236,24 @@ namespace NFL2K5Tool
             Console.WriteLine(string.Format(
 @"NFL2K5Tool.exe Version {0}
 
-Modifies and extracts info from NFL2K5 game save files.
-
-Usage: NFL2K5Tool <filename.dat>|<filename.zip> <data_to_apply.txt> [options]
 This program can extract data from and import data into a NFL2K5 Save game files.
+
+Usage: 
+    NFL2K5Tool.exe <filename.dat>|<filename.zip> <data_to_apply.txt> [options]
+
+Examples:
+    [Print all player attributes]
+    NFL2K5Tool.exe MyRoster.zip -ab -app
+
+    [Print only specified player attributes]
+    NFL2K5Tool.exe MyRoster.zip -ab  -Key:Position,fname,lname,Photo,Skin
+
+    [Reads in 'MyRoster.zip', applies the data from input.txt, saves to MyRoster_mod.zip]
+    NFL2K5Tool.exe MyRoster.zip input.txt -out:MyRoster_mod.zip
+
+    [Reads in 'MyRoster.zip', applies input.txt, prints all player abilities including free agents and draft class]
+    NFL2K5Tool.exe MyRoster.zip input.txt -dc -fa -ab -app
+
 
 The default behavior when called with a .dat or .zip filename and no options is to print player inormation from the given NFL2K5 save file.
 To launch the GUI, simply call the program with no arguments or double click on it. 
@@ -237,19 +263,21 @@ with the data contained in the data file.
 
 The following are the available options.
 
--app    Print appearance data.
--st     Print Special teams players
--ab	    Print player abilities (speed, agility, ...).
--audc   Auto update the depth chart.
--aupbp  Auto update the play by play info for each player.
--auph   Auto update the photo for each player.
--sch    Print schedule.
--fa     Print Free Agents
--dc     Print draft class
--stdin  Read data from standard in.
--pb		Show Playbooks
+-app            Print appearance data.
+-st             Print Special teams players
+-ab             Print player abilities (speed, agility, ...).
+-audc           Auto update the depth chart.
+-aupbp          Auto update the play by play info for each player.
+-auph           Auto update the photo for each player.
+-sch            Print schedule.
+-fa             Print Free Agents
+-dc             Print draft class
+-coach          Print coaches
+-stdin          Read data from standard in.
+-Key:<key>      Specify key 
+-CoachKey:<key> Specify Coach Key
 -out:filename	Save modified Save file  to <filename>.
--help   Show this help message.
+-help           Show this help message.
 ", Program.Version));
         }
     }

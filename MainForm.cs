@@ -60,6 +60,11 @@ namespace NFL2K5Tool
 
         private void LoadSaveFile(string filename)
         {
+            if (filename.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase))
+            {
+                SetText(File.ReadAllText(filename));
+                return;
+            }
             mTool = new GamesaveTool();
             if (mTool.LoadSaveFile(filename))
             {
@@ -71,10 +76,7 @@ namespace NFL2K5Tool
             else
             {
                 mTool = null;
-                if (filename.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase))
-                    SetText(File.ReadAllText(filename));
-                else 
-                    MessageBox.Show("Is the requested file a .zip or .dat file?","Error!");
+                MessageBox.Show("Is the requested file a .txt, .zip or .dat file?","Error!");
             }
         }
 
@@ -129,14 +131,7 @@ namespace NFL2K5Tool
 
             if (listCoachesToolStripMenuItem1.Checked)
             {
-                builder.Append("\n\nCoachKEY=");
-                builder.Append(mTool.CoachKey);
-                builder.Append("\n");
-                for (int i = 0; i < 32; i++)
-                {
-                    builder.Append(mTool.GetCoachData(i));
-                    builder.Append("\r\n");
-                }
+                builder.Append(mTool.GetCoachData());
             }
 
             if (listScheduleToolStripMenuItem.Checked  )
@@ -542,24 +537,13 @@ namespace NFL2K5Tool
         private void DoubleClicked()
         {
             string line = InputParser.GetLine(mTextBox.SelectionStart, mTextBox.Text);
-            if (mTool == null)
-            {
-                MessageBox.Show("You must load a save file before you can edit players in the GUI.", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else if (!String.IsNullOrEmpty(line) && line.StartsWith("Coach", StringComparison.InvariantCultureIgnoreCase))
+            if (!String.IsNullOrEmpty(line) && line.StartsWith("Coach", StringComparison.InvariantCultureIgnoreCase))
             {
                 EditCoach();
             }
             else if (!String.IsNullOrEmpty(line) && InputParser.ParsePlayerLine(line).Count > 2)
             {
-                //try
-                //{
                 EditPlayer();
-                //}
-                //catch (Exception ex)
-                //{
-                //    MessageBox.Show( ex.Message, "Error!");
-                //}
             }
         }
 
@@ -578,6 +562,7 @@ namespace NFL2K5Tool
                 mTextBox.SelectionStart = form.SelectionStart;
                 mTextBox.ScrollToCaret();
             }
+            form.Dispose();
         }
 
         private void EditPlayer()
@@ -598,6 +583,7 @@ namespace NFL2K5Tool
                     mTextBox.SelectionStart = form.SelectionStart;
                     mTextBox.ScrollToCaret();
                 }
+                form.Dispose();
             }
             else
             {

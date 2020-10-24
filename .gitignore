@@ -47,3 +47,9 @@ Temporary Items
 *.suo
 bin/
 obj/
+
+
+#don't ignore the json & text files under 
+!bin/Debug/PlayerData/*.json
+!bin/Debug/PlayerData/*.txt
+

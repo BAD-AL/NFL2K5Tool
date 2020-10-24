@@ -25,11 +25,13 @@ Currently works well in the following use cases:
 Currently Buggy at:
 Scrolls after closing player edit form.
 
+Markdown cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+
 ### Implemented features:
 1. Auto update depth chart. 
-2. Auto update PBP (should possibly just update the text instead of the gamesave file directly) 
-3. Auto update Photo (This could be improved by using player position information, should possibly just update the text instead of the gamesave file directly) 
-4. works on Roster & Franchise 
+2. Auto update PBP   (text only option, text command, menu option in DebugDialog) 
+3. Auto update Photo (text only option, text command, menu option in DebugDialog) 
+4. Roster & Franchise Supported
 5. Command line interface. 
 6. Zip file management. 
 7. Scheduler.
@@ -40,19 +42,37 @@ Scrolls after closing player edit form.
 12. Player validator (flag players that have attributes that don't seem right.); allow user defined formulas?
 13. Player edit gui
 14. Auto update special teams
-15. Get/Set special teams
-16. Global Edit Form + applyable formulas
-17. Drag/drop gamesave files into text area.
+15. Auto update depth charts (based on player position in team's player list)
+16. Get/Set special teams roles
+17. Global Edit Form + applyable formulas
+18. Drag/drop gamesave files into text area.
+19. Text commands added [LookupAndModify, AutoUpdateDepthChart, AutoUpdatePBP, AutoUpdatePhoto, ApplyFormula]
+20. Resizable face form
 
 ### Next features:  
-	1. Editing coaches. 
-	2. Editing playbooks. 
-	5. Smart input parser (Where it tries to replace players at the same position instead of overwriting some random player), name management
-	6. Auto update Player equipment (from stock file database)
-	7. Help Manual
+* Editing coaches (currently limited support) 
+* Editing playbooks. 
+* Smart input parser (Where it tries to replace players at the same position instead of overwriting some random player), name management
+* Help Manual
 	
-### Also need
-	1. To add tests.
+### Notes
+1. Add tests.
+2. Consider removing these photos:
+	PlayerData\PlayerPhotos\434a.jpg
+	PlayerData\PlayerPhotos\444a.jpg
+	PlayerData\PlayerPhotos\454a.jpg
+	PlayerData\PlayerPhotos\454e.jpg
+	PlayerData\PlayerPhotos\464a.jpg
+	
+3. Files/directories referenced by the program:
+	"PlayerData\\CoachBodies\\"
+	"PlayerData\\ENFPhotoIndex.txt"
+	"PlayerData\\ENFNameIndex.txt"
+	"PlayerData\\FaceFormCategories.json"
+	"PlayerData\\PlayerPhotos\\"
+	"PlayerData\\SortFormulas.txt"
+	"PlayerData\\GenericFaces\\"
+	"PlayerData\\EquipmentImages\\"
 
 ### Schedule Notes
 The input parser gathers lines like "WEEK x" and "teamA at teamB" and runs them through the scheduler.

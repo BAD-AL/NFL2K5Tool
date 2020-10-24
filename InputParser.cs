@@ -56,7 +56,6 @@ namespace NFL2K5Tool
         {
             Regex r = new Regex("^(Coach,.*)", RegexOptions.IgnoreCase | RegexOptions.Multiline);
             MatchCollection mc = r.Matches(data);
-            Match theMatch = null;
             List<String> retVal = null;
             if (mc.Count > 0)
             {
@@ -433,7 +432,7 @@ namespace NFL2K5Tool
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 StaticUtils.AddError(string.Format("Error setting data for line:\r\n{0}\r\n\r\nPerhaps check '{1}' attribute.", line, current.ToString()));
             }

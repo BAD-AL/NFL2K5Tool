@@ -654,7 +654,9 @@ namespace NFL2K5Tool
             foreach (string line in lines)
             {
                 if (line.StartsWith("#") || line.Length < 3)
-                    ;// skip comments
+                {
+                    // skip comments
+                }
                 else
                 {
                     attributes = InputParser.ParsePlayerLine(line);
@@ -703,7 +705,8 @@ namespace NFL2K5Tool
                 {
                     dude = line.Substring(0, commaIndex);
                     if (teamsText.IndexOf(dude) > -1)
-                        ;
+                    {
+                    }
                     else
                         builder.Append(line + "\r\n");
                 }
@@ -732,7 +735,9 @@ namespace NFL2K5Tool
                 foreach (string line in lines)
                 {
                     if (line.StartsWith("#") || line.Length < 3)
-                        ;// skip comments
+                    {
+                        // skip comments
+                    }
                     else
                     {
                         attributes = InputParser.ParsePlayerLine(line);

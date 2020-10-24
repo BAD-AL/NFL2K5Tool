@@ -35,7 +35,6 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.mBodyTab = new System.Windows.Forms.TabPage();
             this.mBodyPictureBox = new System.Windows.Forms.PictureBox();
-            this.Body = new NFL2K5Tool.StringSelectionControl();
             this.mStrategyTab = new System.Windows.Forms.TabPage();
             this.mStatsTab = new System.Windows.Forms.TabPage();
             this.m_TeamsComboBox = new System.Windows.Forms.ComboBox();
@@ -43,6 +42,9 @@
             this.Info2 = new System.Windows.Forms.TextBox();
             this.mOkButton = new System.Windows.Forms.Button();
             this.mCancelButton = new System.Windows.Forms.Button();
+            this.mPrevButton = new System.Windows.Forms.Button();
+            this.mNextButton = new System.Windows.Forms.Button();
+            this.Body = new NFL2K5Tool.StringSelectionControl();
             ((System.ComponentModel.ISupportInitialize)(this.Photo)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.mBodyTab.SuspendLayout();
@@ -53,9 +55,9 @@
             // 
             this.Photo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Photo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Photo.Location = new System.Drawing.Point(219, 4);
+            this.Photo.Location = new System.Drawing.Point(226, 4);
             this.Photo.Name = "Photo";
-            this.Photo.Size = new System.Drawing.Size(49, 50);
+            this.Photo.Size = new System.Drawing.Size(94, 107);
             this.Photo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.Photo.TabIndex = 19;
             this.Photo.TabStop = false;
@@ -75,7 +77,7 @@
             this.LastName.Location = new System.Drawing.Point(101, 28);
             this.LastName.Name = "LastName";
             this.LastName.Size = new System.Drawing.Size(91, 20);
-            this.LastName.TabIndex = 17;
+            this.LastName.TabIndex = 2;
             this.LastName.Leave += new System.EventHandler(this.ValueChanged);
             // 
             // FirstName
@@ -83,7 +85,7 @@
             this.FirstName.Location = new System.Drawing.Point(10, 28);
             this.FirstName.Name = "FirstName";
             this.FirstName.Size = new System.Drawing.Size(83, 20);
-            this.FirstName.TabIndex = 16;
+            this.FirstName.TabIndex = 1;
             this.FirstName.Leave += new System.EventHandler(this.ValueChanged);
             // 
             // tabControl1
@@ -94,11 +96,11 @@
             this.tabControl1.Controls.Add(this.mBodyTab);
             this.tabControl1.Controls.Add(this.mStrategyTab);
             this.tabControl1.Controls.Add(this.mStatsTab);
-            this.tabControl1.Location = new System.Drawing.Point(6, 107);
+            this.tabControl1.Location = new System.Drawing.Point(6, 117);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(489, 375);
-            this.tabControl1.TabIndex = 22;
+            this.tabControl1.Size = new System.Drawing.Size(489, 381);
+            this.tabControl1.TabIndex = 6;
             // 
             // mBodyTab
             // 
@@ -106,7 +108,7 @@
             this.mBodyTab.Controls.Add(this.Body);
             this.mBodyTab.Location = new System.Drawing.Point(4, 22);
             this.mBodyTab.Name = "mBodyTab";
-            this.mBodyTab.Size = new System.Drawing.Size(481, 349);
+            this.mBodyTab.Size = new System.Drawing.Size(481, 355);
             this.mBodyTab.TabIndex = 2;
             this.mBodyTab.Text = "Body";
             this.mBodyTab.UseVisualStyleBackColor = true;
@@ -117,23 +119,9 @@
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.mBodyPictureBox.Location = new System.Drawing.Point(3, 3);
             this.mBodyPictureBox.Name = "mBodyPictureBox";
-            this.mBodyPictureBox.Size = new System.Drawing.Size(296, 347);
+            this.mBodyPictureBox.Size = new System.Drawing.Size(296, 353);
             this.mBodyPictureBox.TabIndex = 0;
             this.mBodyPictureBox.TabStop = false;
-            // 
-            // Body
-            // 
-            this.Body.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Body.BackColor = System.Drawing.Color.Moccasin;
-            this.Body.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Body.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Body.Location = new System.Drawing.Point(350, 3);
-            this.Body.Name = "Body";
-            this.Body.RepresentedValue = typeof(string);
-            this.Body.Size = new System.Drawing.Size(126, 48);
-            this.Body.TabIndex = 21;
-            this.Body.Value = "";
-            this.Body.ValueChanged += new System.EventHandler(this.mBodySelectionControl_ValueChanged);
             // 
             // mStrategyTab
             // 
@@ -162,7 +150,7 @@
             this.m_TeamsComboBox.Location = new System.Drawing.Point(408, 7);
             this.m_TeamsComboBox.Name = "m_TeamsComboBox";
             this.m_TeamsComboBox.Size = new System.Drawing.Size(83, 21);
-            this.m_TeamsComboBox.TabIndex = 23;
+            this.m_TeamsComboBox.TabIndex = 5;
             this.m_TeamsComboBox.SelectedIndexChanged += new System.EventHandler(this.m_TeamsComboBox_SelectedIndexChanged);
             // 
             // Info1
@@ -170,7 +158,7 @@
             this.Info1.Location = new System.Drawing.Point(10, 54);
             this.Info1.Name = "Info1";
             this.Info1.Size = new System.Drawing.Size(203, 20);
-            this.Info1.TabIndex = 24;
+            this.Info1.TabIndex = 3;
             this.Info1.Leave += new System.EventHandler(this.ValueChanged);
             // 
             // Info2
@@ -178,17 +166,17 @@
             this.Info2.Location = new System.Drawing.Point(10, 81);
             this.Info2.Name = "Info2";
             this.Info2.Size = new System.Drawing.Size(203, 20);
-            this.Info2.TabIndex = 25;
+            this.Info2.TabIndex = 4;
             this.Info2.Leave += new System.EventHandler(this.ValueChanged);
             // 
             // mOkButton
             // 
             this.mOkButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mOkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.mOkButton.Location = new System.Drawing.Point(335, 485);
+            this.mOkButton.Location = new System.Drawing.Point(335, 501);
             this.mOkButton.Name = "mOkButton";
             this.mOkButton.Size = new System.Drawing.Size(75, 23);
-            this.mOkButton.TabIndex = 26;
+            this.mOkButton.TabIndex = 9;
             this.mOkButton.Text = "&OK";
             this.mOkButton.UseVisualStyleBackColor = true;
             this.mOkButton.Click += new System.EventHandler(this.mOkButton_Click);
@@ -197,19 +185,57 @@
             // 
             this.mCancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.mCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.mCancelButton.Location = new System.Drawing.Point(416, 485);
+            this.mCancelButton.Location = new System.Drawing.Point(416, 501);
             this.mCancelButton.Name = "mCancelButton";
             this.mCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.mCancelButton.TabIndex = 27;
+            this.mCancelButton.TabIndex = 10;
             this.mCancelButton.Text = "&Cancel";
             this.mCancelButton.UseVisualStyleBackColor = true;
+            // 
+            // mPrevButton
+            // 
+            this.mPrevButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mPrevButton.Location = new System.Drawing.Point(10, 500);
+            this.mPrevButton.Name = "mPrevButton";
+            this.mPrevButton.Size = new System.Drawing.Size(56, 23);
+            this.mPrevButton.TabIndex = 7;
+            this.mPrevButton.Text = "Prev";
+            this.mPrevButton.UseVisualStyleBackColor = true;
+            this.mPrevButton.Click += new System.EventHandler(this.mPrevButton_Click);
+            // 
+            // mNextButton
+            // 
+            this.mNextButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mNextButton.Location = new System.Drawing.Point(72, 500);
+            this.mNextButton.Name = "mNextButton";
+            this.mNextButton.Size = new System.Drawing.Size(56, 23);
+            this.mNextButton.TabIndex = 8;
+            this.mNextButton.Text = "Next";
+            this.mNextButton.UseVisualStyleBackColor = true;
+            this.mNextButton.Click += new System.EventHandler(this.mNextButton_Click);
+            // 
+            // Body
+            // 
+            this.Body.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Body.BackColor = System.Drawing.Color.Moccasin;
+            this.Body.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Body.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Body.Location = new System.Drawing.Point(350, 3);
+            this.Body.Name = "Body";
+            this.Body.RepresentedValue = typeof(string);
+            this.Body.Size = new System.Drawing.Size(126, 48);
+            this.Body.TabIndex = 5;
+            this.Body.Value = "";
+            this.Body.ValueChanged += new System.EventHandler(this.mBodySelectionControl_ValueChanged);
             // 
             // CoachEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.mCancelButton;
-            this.ClientSize = new System.Drawing.Size(498, 508);
+            this.ClientSize = new System.Drawing.Size(498, 524);
+            this.Controls.Add(this.mNextButton);
+            this.Controls.Add(this.mPrevButton);
             this.Controls.Add(this.mOkButton);
             this.Controls.Add(this.mCancelButton);
             this.Controls.Add(this.Info2);
@@ -248,5 +274,7 @@
         private System.Windows.Forms.TextBox Info2;
         private System.Windows.Forms.Button mOkButton;
         private System.Windows.Forms.Button mCancelButton;
+        private System.Windows.Forms.Button mPrevButton;
+        private System.Windows.Forms.Button mNextButton;
     }
 }

@@ -18,7 +18,7 @@ namespace NFL2K5Tool
         private const string sCoachStrategyAttrs = ",Overall,OvrallOffense,RushFor,PassFor,OverallDefense,PassRush,PassCoverage,QB,RB,TE,WR,OL,DL,LB,SpecialTeams,Professionalism,Preparation,Conditioning,Motivation,Leadership,Discipline,Respect,PlaycallingRun,ShotgunRun,ShotgunRun,SplitbackRun,SplitbackRun,ShotgunPass,SplitbackPass,IFormPass,LoneBackPass,EmptyPass,";
         
         private const string sStringAttrs = ",Team,FirstName,LastName,Info1,Info2,Body,";
-        private string sIntAttrs = sCoachStrategyAttrs + sCoachStats;
+        //private string sIntAttrs = sCoachStrategyAttrs + sCoachStats;
 
         /// <summary>
         /// PBP names
@@ -344,6 +344,8 @@ namespace NFL2K5Tool
             return null;
         }
 
+        private ToolTip photoTip = new ToolTip();
+
         private void SetControlValue(string controlName, string val)
         {
             //if ("coach".Equals(controlName, StringComparison.InvariantCultureIgnoreCase) )
@@ -358,6 +360,7 @@ namespace NFL2K5Tool
             {
                 this.Photo.Image = StaticUtils.GetImageFromPath(String.Format("PlayerData\\PlayerPhotos\\{0}.jpg", val));
                 this.Photo.Tag = val;
+                photoTip.SetToolTip(this.Photo, val);
                 //ValueChanged(this.Photo, EventArgs.Empty);
             }
             else if (iac != null)
@@ -430,6 +433,22 @@ namespace NFL2K5Tool
         private void mOkButton_Click(object sender, EventArgs e)
         {
             ReplaceCoach();
+        }
+
+        private void mPrevButton_Click(object sender, EventArgs e)
+        {
+            if (m_TeamsComboBox.SelectedIndex != 0)
+                m_TeamsComboBox.SelectedIndex--;
+            else
+                m_TeamsComboBox.SelectedIndex = m_TeamsComboBox.Items.Count - 1;
+        }
+
+        private void mNextButton_Click(object sender, EventArgs e)
+        {
+            if (m_TeamsComboBox.SelectedIndex == m_TeamsComboBox.Items.Count - 1)
+                m_TeamsComboBox.SelectedIndex = 0;
+            else
+                m_TeamsComboBox.SelectedIndex++;
         }
     }
 }

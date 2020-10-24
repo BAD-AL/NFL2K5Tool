@@ -48,7 +48,7 @@ namespace NFL2K5Tool
                     sImageMap.Add(file, ret);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 AddError("Error getting image "+ file);
             }

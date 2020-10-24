@@ -70,7 +70,7 @@ namespace NFL2K5Tool
             List<string> nameLines = new List<string>(mTextBox1.Lines);
             //string number = "";
             //int index = -1;
-            string line = "";
+            //string line = "";
             for (int i = 0; i < nameLines.Count; i++)
             {
                 //line = nameLines[i];
