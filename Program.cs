@@ -173,8 +173,13 @@ namespace NFL2K5Tool
                         if (showCoaches)
                             builder.Append(tool.GetCoachData());
                     }
-                    if (showSchedule)
+                    if (showSchedule && tool.SaveType == SaveType.Franchise)
                         builder.Append(tool.GetSchedule());
+
+                    string lookupPlayers = parser.GetLookupPlayers();
+                    if (lookupPlayers != null)
+                        builder.Append(lookupPlayers);
+
                     Console.Write(builder.ToString());
                 }
                 else

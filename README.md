@@ -50,10 +50,12 @@ Markdown cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheat
 20. Resizable face form
 
 ### Next features:  
+* Salary Cap 
+	# Set Salary Cap -> 198.2M
+	SET(0x9ACCC, 0x38060300)
 * Editing coaches (currently limited support) 
 * Editing playbooks. 
-* Smart input parser (Where it tries to replace players at the same position instead of overwriting some random player), name management
-* Help Manual
+* PS2 .max support
 	
 ### Notes
 1. Add tests.

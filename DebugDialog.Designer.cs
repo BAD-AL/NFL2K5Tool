@@ -95,6 +95,7 @@
             this.mFindBytesButton = new System.Windows.Forms.Button();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.findPlayersMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -493,7 +494,7 @@
             // apperanceToolStripMenuItem
             // 
             this.apperanceToolStripMenuItem.Name = "apperanceToolStripMenuItem";
-            this.apperanceToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.apperanceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.apperanceToolStripMenuItem.Text = "GetCoach";
             this.apperanceToolStripMenuItem.Click += new System.EventHandler(this.apperanceToolStripMenuItem_Click_1);
             // 
@@ -502,7 +503,8 @@
             this.miscToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.imageCaptureToolStripMenuItem,
             this.replaceStringToolStripMenuItem,
-            this.fixupRookieYearsToolStripMenuItem});
+            this.fixupRookieYearsToolStripMenuItem,
+            this.findPlayersMenuItem});
             this.miscToolStripMenuItem.Name = "miscToolStripMenuItem";
             this.miscToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.miscToolStripMenuItem.Text = "&Misc";
@@ -510,21 +512,21 @@
             // imageCaptureToolStripMenuItem
             // 
             this.imageCaptureToolStripMenuItem.Name = "imageCaptureToolStripMenuItem";
-            this.imageCaptureToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.imageCaptureToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
             this.imageCaptureToolStripMenuItem.Text = "ImageCapture";
             this.imageCaptureToolStripMenuItem.Click += new System.EventHandler(this.imageCaptureToolStripMenuItem_Click);
             // 
             // replaceStringToolStripMenuItem
             // 
             this.replaceStringToolStripMenuItem.Name = "replaceStringToolStripMenuItem";
-            this.replaceStringToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.replaceStringToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
             this.replaceStringToolStripMenuItem.Text = "Replace String";
             this.replaceStringToolStripMenuItem.Click += new System.EventHandler(this.replaceStringToolStripMenuItem_Click);
             // 
             // fixupRookieYearsToolStripMenuItem
             // 
             this.fixupRookieYearsToolStripMenuItem.Name = "fixupRookieYearsToolStripMenuItem";
-            this.fixupRookieYearsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.fixupRookieYearsToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
             this.fixupRookieYearsToolStripMenuItem.Text = "Fixup Rookie years";
             this.fixupRookieYearsToolStripMenuItem.Click += new System.EventHandler(this.fixupRookieYearsToolStripMenuItem_Click);
             // 
@@ -791,6 +793,13 @@
             this.label6.TabIndex = 23;
             this.label6.Text = "input (hex)";
             // 
+            // findPlayersMenuItem
+            // 
+            this.findPlayersMenuItem.Name = "findPlayersMenuItem";
+            this.findPlayersMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.findPlayersMenuItem.Text = "Find Players (Pos, fname,lname in text field) ";
+            this.findPlayersMenuItem.Click += new System.EventHandler(this.findPlayersMenuItem_Click);
+            // 
             // DebugDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -900,5 +909,6 @@
         private System.Windows.Forms.ToolStripMenuItem replaceStringToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fixupRookieYearsToolStripMenuItem;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ToolStripMenuItem findPlayersMenuItem;
     }
 }

@@ -35,6 +35,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.mSkillsTab = new System.Windows.Forms.TabPage();
             this.mAppearanceTab = new System.Windows.Forms.TabPage();
+            this.mGenericFacePictureBox = new System.Windows.Forms.PictureBox();
             this.mCancelButton = new System.Windows.Forms.Button();
             this.mOkButton = new System.Windows.Forms.Button();
             this.m_TeamsComboBox = new System.Windows.Forms.ComboBox();
@@ -50,14 +51,13 @@
             this.mBodyTypeLabel = new System.Windows.Forms.Label();
             this.mJerseyNumberLabel = new System.Windows.Forms.Label();
             this.mFaceMaskPictureBox = new System.Windows.Forms.PictureBox();
-            this.mGenericFacePictureBox = new System.Windows.Forms.PictureBox();
             this.Position = new NFL2K5Tool.StringSelectionControl();
             this.tabControl1.SuspendLayout();
             this.mAppearanceTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mGenericFacePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFacePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFaceMaskPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mGenericFacePictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // fname
@@ -118,6 +118,16 @@
             this.mAppearanceTab.TabIndex = 1;
             this.mAppearanceTab.Text = "Appearance";
             this.mAppearanceTab.UseVisualStyleBackColor = true;
+            // 
+            // mGenericFacePictureBox
+            // 
+            this.mGenericFacePictureBox.BackColor = System.Drawing.Color.MistyRose;
+            this.mGenericFacePictureBox.Location = new System.Drawing.Point(3, 293);
+            this.mGenericFacePictureBox.Name = "mGenericFacePictureBox";
+            this.mGenericFacePictureBox.Size = new System.Drawing.Size(220, 109);
+            this.mGenericFacePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.mGenericFacePictureBox.TabIndex = 1;
+            this.mGenericFacePictureBox.TabStop = false;
             // 
             // mCancelButton
             // 
@@ -262,6 +272,7 @@
             // 
             // mJerseyNumberLabel
             // 
+            this.mJerseyNumberLabel.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.mJerseyNumberLabel.Location = new System.Drawing.Point(8, 28);
             this.mJerseyNumberLabel.Name = "mJerseyNumberLabel";
             this.mJerseyNumberLabel.Size = new System.Drawing.Size(30, 17);
@@ -277,16 +288,6 @@
             this.mFaceMaskPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.mFaceMaskPictureBox.TabIndex = 17;
             this.mFaceMaskPictureBox.TabStop = false;
-            // 
-            // mGenericFacePictureBox
-            // 
-            this.mGenericFacePictureBox.BackColor = System.Drawing.Color.MistyRose;
-            this.mGenericFacePictureBox.Location = new System.Drawing.Point(3, 293);
-            this.mGenericFacePictureBox.Name = "mGenericFacePictureBox";
-            this.mGenericFacePictureBox.Size = new System.Drawing.Size(220, 109);
-            this.mGenericFacePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.mGenericFacePictureBox.TabIndex = 1;
-            this.mGenericFacePictureBox.TabStop = false;
             // 
             // Position
             // 
@@ -331,10 +332,10 @@
             this.Text = "Edit Player";
             this.tabControl1.ResumeLayout(false);
             this.mAppearanceTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.mGenericFacePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFacePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFaceMaskPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mGenericFacePictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

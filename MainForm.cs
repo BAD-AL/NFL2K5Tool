@@ -60,7 +60,9 @@ namespace NFL2K5Tool
 
         private void LoadSaveFile(string filename)
         {
-            if (filename.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase))
+            if (filename.EndsWith(".txt", StringComparison.InvariantCultureIgnoreCase) ||
+                filename.EndsWith(".csv", StringComparison.InvariantCultureIgnoreCase)
+                )
             {
                 SetText(File.ReadAllText(filename));
                 return;
@@ -76,7 +78,7 @@ namespace NFL2K5Tool
             else
             {
                 mTool = null;
-                MessageBox.Show("Is the requested file a .txt, .zip or .dat file?","Error!");
+                MessageBox.Show("Is the requested file a .txt, .csv, .zip or .dat file?","Error!");
             }
         }
 
@@ -292,6 +294,10 @@ namespace NFL2K5Tool
             sw.Stop();
             statusBar1.Text = "Done Applying data." + (sw.ElapsedMilliseconds / 1000.0) + "s";
             StaticUtils.ShowErrors(false);
+
+            string lookupPlayers = parser.GetLookupPlayers();
+            if (lookupPlayers != null)
+                MessageForm.ShowMessage("Lookup Players", lookupPlayers, SystemIcons.Information, false, false);
         }
 
         private void autoUpdateDepthChartToolStripMenuItem_Click(object sender, EventArgs e)
@@ -664,6 +670,11 @@ Version {0}
 YouTube Tutorial: https://youtu.be/NCqsq_2GqYs 
 GitHub: https://github.com/BAD-AL/NFL2K5Tool 
 Forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/881901-nfl2k5tool.html
+
+====== NFL2K5 Related Sites ====== 
+NFL2K5 Rosters site: http://nfl2k5rosters.com/
+Operation Sports NFL2K5 forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/
+
 ", version);
                 ;
             MessageForm form = new MessageForm(System.Drawing.SystemIcons.Information);

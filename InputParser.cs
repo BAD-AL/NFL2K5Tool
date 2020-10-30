@@ -203,7 +203,18 @@ namespace NFL2K5Tool
             }
         }
 
+        public string GetLookupPlayers()
+        {
+            string retVal = null;
+            if (mLookupedPlayers != null)
+            {
+                retVal = mLookupedPlayers.ToString();
+            }
+            return retVal;
+        }
+
         private Match mTeamMatch = Match.Empty;
+        private StringBuilder mLookupedPlayers = null;
 
         protected virtual bool ProcessLine(string line)
         {
@@ -276,6 +287,11 @@ namespace NFL2K5Tool
             {
                 SetCoachData(line);
             }
+            else if (line.StartsWith("LookupPlayer"))
+            {
+                mCurrentState = ParsingStates.PlayerLookup;
+                mLookupedPlayers = new StringBuilder(1000);
+            }
             else if (line.StartsWith("ApplyFormula"))
             {
                 ApplyFormula(line);
@@ -286,6 +302,10 @@ namespace NFL2K5Tool
                 {
                     case ParsingStates.PlayerModification:
                         retVal = InsertPlayer(line);
+                        break;
+                    case ParsingStates.PlayerLookup:
+                        mLookupedPlayers.Append(LookupPlayer(line));
+                        mLookupedPlayers.Append("\n");
                         break;
                     case ParsingStates.Schedule:
                         mScheduleList.Add(line.ToLower());
@@ -399,6 +419,52 @@ namespace NFL2K5Tool
             if(playersToApplyTo.Count > 0)
                 retVal = SetPlayerData(playersToApplyTo[0], line, false);
 
+            return retVal;
+        }
+
+        /// <summary>
+        /// Looks up a player 
+        /// </summary>
+        /// <param name="line">The line containing the player, must start with  Pos,fname,lname</param>
+        /// <param name="builder">The StringBuilder to put the result into</param>
+        /// <returns>The player's data (according to current key) or the line passed in if not in the gamesave.</returns>
+        public string LookupPlayer(string line)
+        {
+            List<string> attributes = ParsePlayerLine(line);
+            string retVal = "#NotFound: "+line; 
+
+            // find first name position (-1); last name position (-2)
+            int firstNameIndex = -1;
+            int lastNameIndex = -1;
+            int positionIndex = -1;
+            for (int i = 0; i < Tool.Order.Length; i++)
+            {
+                if (Tool.Order[i] == -1)
+                    firstNameIndex = i;
+                else if (Tool.Order[i] == -2)
+                    lastNameIndex = i;
+                else if (Tool.Order[i] == (int)PlayerOffsets.Position)
+                    positionIndex = i;
+                if (firstNameIndex > -1 && lastNameIndex > -1 && positionIndex > -1)
+                    break;
+            }
+            string pos = attributes[positionIndex];
+            string firstName = attributes[firstNameIndex];
+            string lastName = attributes[lastNameIndex];
+
+            StringBuilder builder = new StringBuilder();
+            List<int> playerIndexes = Tool.FindPlayer(pos, firstName, lastName);
+            
+            for (int i = 0; i < playerIndexes.Count; i++)
+            {
+                builder.Append(Tool.GetPlayerData(playerIndexes[i], true, true));
+                builder.Append("\n");
+            }
+            if (builder.Length > 0)
+            {
+                builder.Remove(builder.Length - 1, 1);// remove last '\n'
+                retVal = builder.ToString();
+            }
             return retVal;
         }
 
@@ -877,6 +943,7 @@ namespace NFL2K5Tool
     {
         PlayerModification,
         PlayerLookupAndApply,
+        PlayerLookup,
         Schedule
     }
 

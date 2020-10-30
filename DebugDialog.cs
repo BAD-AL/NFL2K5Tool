@@ -853,5 +853,16 @@ namespace NFL2K5Tool
             }
         }
 
+        private void findPlayersMenuItem_Click(object sender, EventArgs e)
+        {
+            String content = "LookupPlayer\r\n" + 
+                mResultsTextBox.Text;
+            InputParser parser = new InputParser(Tool);
+            parser.ProcessText(content);
+            string results = Tool.GetKey(true, true) + "\r\n" +
+                parser.GetLookupPlayers();
+            MessageForm.ShowMessage("Results", results, SystemIcons.Information, false, false);
+        }
+
     }
 }

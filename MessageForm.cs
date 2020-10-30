@@ -19,6 +19,7 @@ namespace NFL2K5Tool
         {
             InitializeComponent();
             this.Icon = icon;
+            mTextBox.StatusControl = this.mStatusLabel;
         }
 
         public bool ShowCancelButton

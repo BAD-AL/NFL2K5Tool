@@ -2905,6 +2905,7 @@ namespace NFL2K5Tool
 
         /// <summary>
         /// Returns the indexes of the players matching the specified formula.
+        /// Formula reference: https://docs.microsoft.com/en-us/dotnet/api/system.data.datacolumn.expression
         /// </summary>
         /// <param name="formula">the formula to match with</param>
         /// <param name="positions">the positions to search, null for all positions</param>
@@ -2929,12 +2930,34 @@ namespace NFL2K5Tool
                     if (positions == null || positions.IndexOf(pos) > -1)
                     {
                         evaluationString = SubstituteAttributesForValues(i, formula);
+                        evaluationString = SubstituteRandom(formula);
                         Object result = table.Compute(evaluationString, "");
                         addMe = (bool)result;
                         if (addMe)
                             retVal.Add(i);
                     }
                 }
+            }
+            return retVal;
+        }
+
+        Regex mRandomRegex = new Regex("[Rr]andom_([0-9]+)_([0-9]+)");
+        Random mRand = new Random();
+        /// <summary>
+        /// Random_1_100
+        /// </summary>
+        /// <param name="formula"></param>
+        /// <returns></returns>
+        private string SubstituteRandom(string formula)
+        {
+            string retVal = formula;
+            Match m = mRandomRegex.Match(formula);
+            if (m != Match.Empty)
+            {
+                int min = Int32.Parse(m.Groups[1].ToString());
+                int max = Int32.Parse(m.Groups[2].ToString());
+                int val = mRand.Next(min, max);
+                retVal = formula.Substring(0, m.Index) + val + formula.Substring(m.Index + m.Length);
             }
             return retVal;
         }

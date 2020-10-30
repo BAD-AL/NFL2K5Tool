@@ -164,7 +164,7 @@ namespace NFL2K5Tool
 
         private void mFormulaButton_Click(object sender, EventArgs e)
         {
-            string howTo = 
+            string howTo =
 @"When selecting players to modify you can use the following player attributes:
     Number,Speed,Agility,Strength,Jumping,Coverage,PassRush,RunCoverage,
     PassBlocking,RunBlocking,Catch,RunRoute,BreakTackle,HoldOnToBall,
@@ -177,6 +177,12 @@ namespace NFL2K5Tool
 
 Expressions like the following will work:
     Hand = Left and (Speed > 80 or Jumping < 50)
+
+Random numbers:
+Random_<min>_<max>  => will generate a Random number between <min> and <max>
+   Examples:
+     Random_1_100 > 70
+     Random_0_10 = 5
 
 Math Operators:
 / * - +

@@ -255,6 +255,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ARMaxDLL.dll" />
     <Content Include="ICSharpCode.SharpZipLib.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

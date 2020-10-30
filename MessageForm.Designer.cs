@@ -33,6 +33,7 @@
             this.mCancelButton = new System.Windows.Forms.Button();
             this.mAuxButton = new System.Windows.Forms.Button();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
+            this.mStatusLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // mOkButton
@@ -88,12 +89,22 @@
             this.mTextBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.mTextBox_LinkClicked);
             this.mTextBox.DoubleClick += new System.EventHandler(this.mTextBox_DoubleClick);
             // 
+            // mStatusLabel
+            // 
+            this.mStatusLabel.AutoSize = true;
+            this.mStatusLabel.Location = new System.Drawing.Point(13, 417);
+            this.mStatusLabel.Name = "mStatusLabel";
+            this.mStatusLabel.Size = new System.Drawing.Size(10, 13);
+            this.mStatusLabel.TabIndex = 4;
+            this.mStatusLabel.Text = " ";
+            // 
             // MessageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.mCancelButton;
             this.ClientSize = new System.Drawing.Size(726, 442);
+            this.Controls.Add(this.mStatusLabel);
             this.Controls.Add(this.mAuxButton);
             this.Controls.Add(this.mCancelButton);
             this.Controls.Add(this.mTextBox);
@@ -112,5 +123,6 @@
         private SearchTextBox mTextBox;
         private System.Windows.Forms.Button mCancelButton;
         private System.Windows.Forms.Button mAuxButton;
+        private System.Windows.Forms.Label mStatusLabel;
     }
 }
