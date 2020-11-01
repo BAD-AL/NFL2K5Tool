@@ -10,15 +10,38 @@ namespace NFL2K5Tool
         private static Dictionary<string, string> sPhotoMap;
         private static Dictionary<string, string> sPBPMap;
 
-        private const string cPhotoMapPath = "PlayerData\\ENFPhotoIndex.txt";
-        private const string cPBPMapPath = "PlayerData\\ENFNameIndex.txt";
+        private const string cPhotoMapPath = ".\\PlayerData\\ENFPhotoIndex.txt";
+        private const string cPBPMapPath = ".\\PlayerData\\ENFNameIndex.txt";
+
+        public static void EnsureFiles()
+        {
+            if (!File.Exists(cPhotoMapPath))
+            {
+                if (!Directory.Exists(".\\PlayerData\\"))
+                    Directory.CreateDirectory(".\\PlayerData\\");
+                Console.WriteLine("Couldn't fine 'ENFPhotoIndex.txt', retrieving embedded file...");
+                string content = StaticUtils.GetEmbeddedTextFile("ENFPhotoIndex.txt");
+                File.WriteAllText(cPhotoMapPath, content);
+            }
+            if (!File.Exists(cPBPMapPath))
+            {
+                if (!Directory.Exists(".\\PlayerData\\"))
+                    Directory.CreateDirectory(".\\PlayerData\\");
+                Console.WriteLine("Couldn't fine 'ENFNameIndex.txt', retrieving embedded file...");
+                string content = StaticUtils.GetEmbeddedTextFile("ENFNameIndex.txt");
+                File.WriteAllText(cPBPMapPath, content);
+            }
+        }
 
         public static Dictionary<string, string> PhotoMap
         {
             get
             {
-                if (sPhotoMap == null )
+                if (sPhotoMap == null)
+                {
+                    EnsureFiles();
                     sPhotoMap = ReadIntoMap(cPhotoMapPath, false);
+                }
                 return sPhotoMap;
             }
         }
@@ -28,7 +51,10 @@ namespace NFL2K5Tool
             get
             {
                 if (sPBPMap == null)
+                {
+                    EnsureFiles();
                     sPBPMap = ReadIntoMap(cPBPMapPath, false);
+                }
                 return sPBPMap;
             }
         }
@@ -100,7 +126,10 @@ namespace NFL2K5Tool
             get 
             {
                 if (sReversePhotoMap == null)
+                {
+                    EnsureFiles();
                     sReversePhotoMap = ReadIntoMap(cPhotoMapPath, true);
+                }
                 return sReversePhotoMap; 
             }
         }
@@ -117,8 +146,8 @@ namespace NFL2K5Tool
                 case 3: number = "0" + number; break;
             }
 
-            if (sReversePhotoMap.ContainsKey(number))
-                return sReversePhotoMap[number];
+            if (ReversePhotoMap.ContainsKey(number))
+                return ReversePhotoMap[number];
             return "UNKNOWN!";
         }
 
@@ -129,7 +158,10 @@ namespace NFL2K5Tool
             get 
             {
                 if (sReversePBPMap == null)
+                {
+                    EnsureFiles();
                     sReversePBPMap = ReadIntoMap(cPBPMapPath, true);
+                }
                 return sReversePBPMap; 
             }
         }
@@ -146,8 +178,8 @@ namespace NFL2K5Tool
                 case 2: number = "00" + number; break;
                 case 3: number = "0" + number; break;
             }
-            if (sReversePBPMap.ContainsKey(number))
-                return sReversePBPMap[number];
+            if (ReversePBPMap.ContainsKey(number))
+                return ReversePBPMap[number];
             return "UNKNOWN!";
         }
     }

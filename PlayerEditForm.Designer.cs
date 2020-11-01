@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlayerEditForm));
             this.fname = new System.Windows.Forms.TextBox();
             this.lname = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.mNameLabel = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.mSkillsTab = new System.Windows.Forms.TabPage();
             this.mAppearanceTab = new System.Windows.Forms.TabPage();
@@ -51,6 +52,8 @@
             this.mBodyTypeLabel = new System.Windows.Forms.Label();
             this.mJerseyNumberLabel = new System.Windows.Forms.Label();
             this.mFaceMaskPictureBox = new System.Windows.Forms.PictureBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyPlayerNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Position = new NFL2K5Tool.StringSelectionControl();
             this.tabControl1.SuspendLayout();
             this.mAppearanceTab.SuspendLayout();
@@ -58,6 +61,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFacePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFaceMaskPictureBox)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // fname
@@ -76,14 +80,14 @@
             this.lname.TabIndex = 1;
             this.lname.Leave += new System.EventHandler(this.ValueChanged);
             // 
-            // label1
+            // mNameLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(36, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Name";
+            this.mNameLabel.AutoSize = true;
+            this.mNameLabel.Location = new System.Drawing.Point(36, 9);
+            this.mNameLabel.Name = "mNameLabel";
+            this.mNameLabel.Size = new System.Drawing.Size(35, 13);
+            this.mNameLabel.TabIndex = 2;
+            this.mNameLabel.Text = "Name";
             // 
             // tabControl1
             // 
@@ -289,6 +293,20 @@
             this.mFaceMaskPictureBox.TabIndex = 17;
             this.mFaceMaskPictureBox.TabStop = false;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyPlayerNameToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(173, 26);
+            // 
+            // copyPlayerNameToolStripMenuItem
+            // 
+            this.copyPlayerNameToolStripMenuItem.Name = "copyPlayerNameToolStripMenuItem";
+            this.copyPlayerNameToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.copyPlayerNameToolStripMenuItem.Text = "Copy Player Name";
+            this.copyPlayerNameToolStripMenuItem.Click += new System.EventHandler(this.copyPlayerNameToolStripMenuItem_Click);
+            // 
             // Position
             // 
             this.Position.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -324,18 +342,20 @@
             this.Controls.Add(this.mOkButton);
             this.Controls.Add(this.mCancelButton);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.mNameLabel);
             this.Controls.Add(this.lname);
             this.Controls.Add(this.fname);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PlayerEditForm";
             this.Text = "Edit Player";
+            this.Click += new System.EventHandler(this.PlayerEditForm_Click);
             this.tabControl1.ResumeLayout(false);
             this.mAppearanceTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mGenericFacePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerIndexUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFacePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mFaceMaskPictureBox)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -345,7 +365,7 @@
 
         private System.Windows.Forms.TextBox fname;
         private System.Windows.Forms.TextBox lname;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label mNameLabel;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage mSkillsTab;
         private System.Windows.Forms.TabPage mAppearanceTab;
@@ -366,5 +386,7 @@
         private System.Windows.Forms.Label mJerseyNumberLabel;
         private System.Windows.Forms.PictureBox mFaceMaskPictureBox;
         private System.Windows.Forms.PictureBox mGenericFacePictureBox;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem copyPlayerNameToolStripMenuItem;
     }
 }

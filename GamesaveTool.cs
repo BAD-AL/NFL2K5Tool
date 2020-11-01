@@ -61,6 +61,7 @@ namespace NFL2K5Tool
         private SaveType mSaveType = SaveType.Franchise;
 
         private string mZipFile = "";
+        private string mPS2SaveFile = "";
 
         public GamesaveTool()
         {
@@ -813,10 +814,76 @@ namespace NFL2K5Tool
             }
         }
 
+        public string GetDepthCharts()
+        {
+            StringBuilder sb = new StringBuilder(1000);
+            for (int i = 0; i < 32; i++)
+            {
+                sb.Append(mTeamsDataOrder[i]);
+                sb.Append(" DepthChart:\n");
+                sb.Append(GetDepthChartForTeam(mTeamsDataOrder[i]));
+                sb.Append("\n\n");
+            }
+            return sb.ToString();
+        }
+
+        public string GetDepthChartForTeam(string team)
+        {
+            // QB = 0, K, P, WR, CB, FS, SS, RB, FB, TE, OLB, ILB, C, G, T, DT, DE
+            byte[] positions = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int teamIndex = GetTeamIndex(team);
+            int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
+            if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase) || "DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
+                return "" ;
+            List<int> playerIndexes = GetPlayerIndexesForTeam(team);
+            List<string> depthChart = new List<string>(55);
+
+            for (int i = 0; i <playerIndexes.Count; i++)
+            {
+                depthChart.Add(string.Format("{0}{1},{2}", 
+                    GetPlayerPosition(playerIndexes[i]),
+                    GetHumanReadablePositionDepth(playerIndexes[i]),
+                    GetPlayerName(playerIndexes[i], ',')
+                    ));
+            }
+            depthChart.Sort();
+            return String.Join("\n", depthChart.ToArray());
+        }
+
+        public int GetHumanReadablePositionDepth(int player)
+        {
+            int retVal = 0;
+            int playerLocation = GetPlayerDataStart(player);
+            byte depthVal = GameSaveData[playerLocation + (int)PlayerOffsets.Depth];
+
+            Positions pos = GetPlayerPositionEnum(player);
+            switch (pos)
+            {
+                case Positions.QB:
+                case Positions.TE:
+                case Positions.C:
+                case Positions.FB:
+                case Positions.FS:
+                case Positions.K:
+                case Positions.P:
+                case Positions.RB:
+                case Positions.SS:
+                    retVal = Array.IndexOf(mSinglePosDepthArray, depthVal);
+                    break;
+                default:
+                    retVal = Array.IndexOf(mMultiDepthArray, depthVal);
+                    break;
+            }
+            retVal++;
+            return retVal;
+        }
+
         public int GetPlayerPositionDepth(int player)
         {
+            int retVal = 0;
             int playerLocation = GetPlayerDataStart(player);
-            return GameSaveData[playerLocation + (int)PlayerOffsets.Depth];
+            retVal = GameSaveData[playerLocation + (int)PlayerOffsets.Depth];
+            return retVal;
         }
 
         public void SetPlayerPositionDepth(int player, byte depth)
@@ -1083,12 +1150,20 @@ namespace NFL2K5Tool
                 if (fileName.EndsWith(".dat", StringComparison.InvariantCultureIgnoreCase))
                 {
                     mZipFile = "";
+                    mPS2SaveFile = "";
                     GameSaveData = File.ReadAllBytes(fileName);
                 }
                 else if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase))
                 {
+                    mPS2SaveFile = "";
                     GameSaveData = StaticUtils.ExtractFileFromZip(fileName, null, "SAVEGAME.DAT");
                     mZipFile = fileName;
+                }
+                else if (fileName.EndsWith(".max", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    mZipFile = "";
+                    GameSaveData = StaticUtils.ExtractFileFromPS2Save(fileName);
+                    mPS2SaveFile = fileName;
                 }
                 else
                 {
@@ -1148,9 +1223,29 @@ namespace NFL2K5Tool
                 StaticUtils.ReplaceFileInArchive(fileName, null, "EXTRA", tmpFile);
                 File.Delete(tmpFile);
             }
+            else if (fileName.EndsWith(".max", StringComparison.InvariantCultureIgnoreCase) )
+            {
+                if (mPS2SaveFile != fileName)
+                    File.Copy(mPS2SaveFile, fileName, true);
+                PS2FileHelper helper = null;
+                
+                helper = new PS2FileHelper(fileName);
+                string tmpFile = Path.GetTempFileName();
+                File.WriteAllBytes(tmpFile, GameSaveData);
+                helper.ReplaceFile(helper.MainSaveFileName, tmpFile);
+
+                if (helper.HasFile("EXTRA"))
+                {
+                    tmpFile = Path.GetTempFileName();
+                    StaticUtils.SignNfl2K5Save(tmpFile, GameSaveData);
+                    helper.ReplaceFile("EXTRA", tmpFile);
+                }
+                helper.Dispose();
+                File.Delete(tmpFile);
+            }
             else
             {
-                StaticUtils.AddError("Error! Need to specify a .zip or .DAT file name. If specifying a zip file, the original file loaded must have come from a zip.");
+                StaticUtils.AddError("Error! Need to specify a .zip, .max or .DAT file name. If specifying a zip file, the original file loaded must have come from a zip.");
             }
         }
 
@@ -2783,7 +2878,9 @@ namespace NFL2K5Tool
             List<int> retVal = new List<int>();
             for(int i = 0; i < mMaxPlayers;i++)
             {
-                if (GetPlayerLastName(i) == lastName && GetPlayerFirstName(i) == firstName && GetPlayerPosition(i) == pos)
+                if ( pos == null && GetPlayerLastName(i) == lastName && GetPlayerFirstName(i) == firstName )
+                    retVal.Add(i);
+                else if (GetPlayerLastName(i) == lastName && GetPlayerFirstName(i) == firstName && GetPlayerPosition(i) == pos)
                     retVal.Add(i);
             }
             return retVal;

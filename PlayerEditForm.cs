@@ -103,7 +103,7 @@ namespace NFL2K5Tool
         private bool SetupKey()
         {
             bool retVal = false;
-            Regex keyReg = new Regex("^[\\s]*#(Position,fname,lname,.*)", RegexOptions.IgnoreCase);
+            Regex keyReg = new Regex("[\\s]*[#|Key=](Position,fname,lname,.*)", RegexOptions.IgnoreCase);
             Match m = keyReg.Match(Data);
             if (m != Match.Empty )
             {
@@ -954,6 +954,20 @@ namespace NFL2K5Tool
             }
             //form.Dispose();
 
+        }
+
+        private void copyPlayerNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(fname.Text + " " + lname.Text);
+        }
+
+        private void PlayerEditForm_Click(object sender, EventArgs e)
+        {
+            MouseEventArgs mea = e as MouseEventArgs;
+            if (mea != null && mea.Button == MouseButtons.Right) // show context menu
+            {
+                this.contextMenuStrip1.Show(mNameLabel,new Point(10,10));
+            }
         }
 
     }

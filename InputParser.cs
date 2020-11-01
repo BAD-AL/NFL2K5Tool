@@ -411,13 +411,22 @@ namespace NFL2K5Tool
                 if (firstNameIndex > -1 && lastNameIndex > -1 && positionIndex > -1)
                     break;
             }
-            string pos = attributes[positionIndex];
-            string firstName = attributes[firstNameIndex];
-            string lastName = attributes[lastNameIndex];
+            if (firstNameIndex > -1 && lastNameIndex > -1)
+            {
+                string pos = null;
+                if( positionIndex > -1)
+                    pos = attributes[positionIndex];
+                string firstName = attributes[firstNameIndex];
+                string lastName = attributes[lastNameIndex];
 
-            List<int> playersToApplyTo = Tool.FindPlayer(pos, firstName, lastName);
-            if(playersToApplyTo.Count > 0)
-                retVal = SetPlayerData(playersToApplyTo[0], line, false);
+                List<int> playersToApplyTo = Tool.FindPlayer(pos, firstName, lastName);
+                if (playersToApplyTo.Count > 0)
+                    retVal = SetPlayerData(playersToApplyTo[0], line, false);
+            }
+            else
+            {
+                StaticUtils.AddError("In 'LookupAndModify' mode, you must specify fname and lname in the 'Key' for proper lookup:" + line);
+            }
 
             return retVal;
         }

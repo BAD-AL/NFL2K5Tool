@@ -49,7 +49,7 @@ namespace NFL2K5Tool
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.InitialDirectory = Directory.GetCurrentDirectory();
             dlg.RestoreDirectory = true;
-            dlg.Filter = "XBOX Save files (*.DAT, *.zip)|*.DAT;*.zip";
+            dlg.Filter = "XBOX Save files (*.DAT, *.zip, *.max)|*.DAT;*.zip;*.max";
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 LoadSaveFile(dlg.FileName);
@@ -577,10 +577,10 @@ namespace NFL2K5Tool
             {
                 PlayerEditForm form = new PlayerEditForm();
                 form.Colleges = mTool.GetColleges();
-                form.ReversePBPs = DataMap.ReversePBPMap;
-                form.ReversePhotos = DataMap.ReversePhotoMap;
                 form.PBPs = DataMap.PBPMap;
                 form.Photos = DataMap.PhotoMap;
+                form.ReversePBPs = DataMap.ReversePBPMap;
+                form.ReversePhotos = DataMap.ReversePhotoMap;                
                 form.Data = mTextBox.Text;
                 form.SelectionStart = mTextBox.SelectionStart;
                 if (form.ShowDialog(this) == DialogResult.OK)
@@ -650,7 +650,7 @@ namespace NFL2K5Tool
 
         private void textCommandsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string content = Program.GetEmbeddedTextFile("TextCommand.txt");
+            string content = StaticUtils.GetEmbeddedTextFile("TextCommand.txt");
             MessageForm form = new MessageForm(System.Drawing.SystemIcons.Information);
             form.Text = "Text Commands";
             form.MessageText = content;

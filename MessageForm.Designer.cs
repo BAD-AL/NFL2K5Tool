@@ -32,8 +32,8 @@
             this.mOkButton = new System.Windows.Forms.Button();
             this.mCancelButton = new System.Windows.Forms.Button();
             this.mAuxButton = new System.Windows.Forms.Button();
-            this.mTextBox = new NFL2K5Tool.SearchTextBox();
             this.mStatusLabel = new System.Windows.Forms.Label();
+            this.mTextBox = new NFL2K5Tool.SearchTextBox();
             this.SuspendLayout();
             // 
             // mOkButton
@@ -71,6 +71,16 @@
             this.mAuxButton.UseVisualStyleBackColor = true;
             this.mAuxButton.Visible = false;
             // 
+            // mStatusLabel
+            // 
+            this.mStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.mStatusLabel.AutoSize = true;
+            this.mStatusLabel.Location = new System.Drawing.Point(13, 417);
+            this.mStatusLabel.Name = "mStatusLabel";
+            this.mStatusLabel.Size = new System.Drawing.Size(10, 13);
+            this.mStatusLabel.TabIndex = 4;
+            this.mStatusLabel.Text = " ";
+            // 
             // mTextBox
             // 
             this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -88,15 +98,6 @@
             this.mTextBox.Text = "";
             this.mTextBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.mTextBox_LinkClicked);
             this.mTextBox.DoubleClick += new System.EventHandler(this.mTextBox_DoubleClick);
-            // 
-            // mStatusLabel
-            // 
-            this.mStatusLabel.AutoSize = true;
-            this.mStatusLabel.Location = new System.Drawing.Point(13, 417);
-            this.mStatusLabel.Name = "mStatusLabel";
-            this.mStatusLabel.Size = new System.Drawing.Size(10, 13);
-            this.mStatusLabel.TabIndex = 4;
-            this.mStatusLabel.Text = " ";
             // 
             // MessageForm
             // 

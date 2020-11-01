@@ -60,11 +60,43 @@ namespace NFL2K5Tool
             else
                 MessageBox.Show("Expected Folder '" + sFaceDir + "\\' to exist!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+            if (!File.Exists(sCategoryFile))
+            {
+                String txf = StaticUtils.GetEmbeddedTextFile("FaceFormCategories.json");
+                if (!Directory.Exists(".\\PlayerData\\"))
+                    Directory.CreateDirectory(".\\PlayerData\\");
+                Console.WriteLine("Couldn't fine 'FaceFormCategories.json', retrieving embedded file...");
+                File.WriteAllText(sCategoryFile, txf);
+            }
             if (File.Exists(sCategoryFile))
             {
                 mCategories = GenericArrayArray.FromFile(sCategoryFile);
                 PopulateCategories();
             }
+        }
+
+        public int[] GetFacesFromCategory(string key)
+        {
+            if (mCategories != null)
+            {
+                for (int i = 0; i < mCategories.categories.Length; i++)
+                {
+                    if (mCategories.categories[i].key == key)
+                        return mCategories.categories[i].values;
+                }
+            }
+            return null;
+        }
+
+        public bool CheckFace(int faceNum, string category)
+        {
+            bool retVal = false;
+            int[] faces = GetFacesFromCategory(category);
+            if (faces != null && Array.IndexOf(faces,faceNum) > -1)
+            {
+                retVal = true;
+            }
+            return retVal;
         }
 
         void mPhotoScrollBar_ValueChanged(object sender, EventArgs e)
@@ -231,15 +263,16 @@ namespace NFL2K5Tool
         private string GetSpecialString()
         {
             StringBuilder sb = new StringBuilder(1000);
-            sb.Append("{ \"leftClickPlayers\":[");
+            sb.Append("{\n");
+            sb.Append("   {\"key\": \"leftClickPlayers\",\"values\":[");
             sb.Append(String.Join(",", leftClickPlayers.ToArray()));
-            sb.Append("],\n");
-            sb.Append(" \"rightClickPlayers\":[");
+            sb.Append("]},\n");
+            sb.Append("   {\"key\": \"rightClickPlayers\",\"values\":[");
             sb.Append(String.Join(",", rightClickPlayers.ToArray()));
-            sb.Append("],\n");
-            sb.Append(" \"middleClickPlayers\":[");
+            sb.Append("]},\n");
+            sb.Append("   {\"key\": \"middleClickPlayers\",\"values\":[");
             sb.Append(String.Join(",", middleClickPlayers.ToArray()));
-            sb.Append("]\n}");
+            sb.Append("]}\n}");
             return sb.ToString();
         }
 
@@ -328,7 +361,7 @@ namespace NFL2K5Tool
             MouseEventArgs mea = e as MouseEventArgs;
             if (mea != null && mea.Button == MouseButtons.Right) // show context menu
             {
-                this.contextMenuStrip1.Show(mea.Location);
+                this.contextMenuStrip1.Show(this, mea.Location);
             }
         }
 

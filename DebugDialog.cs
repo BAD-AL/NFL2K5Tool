@@ -864,5 +864,76 @@ namespace NFL2K5Tool
             MessageForm.ShowMessage("Results", results, SystemIcons.Information, false, false);
         }
 
+        private void listDepthChartsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            MessageForm.ShowMessage("Results", Tool.GetDepthCharts(), SystemIcons.Information, false, false);
+            
+        }
+
+        private void checkFacesskinMismatchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FaceForm ff = new FaceForm();
+            string[] teams = {
+                 "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
+                 "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
+                 "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
+                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings", "FreeAgents" };
+
+            List<int> playerIndexes = null;
+            int yearsPro = 0;
+            StringBuilder sb = new StringBuilder();
+            Tool.SetKey("Key=Position,fname,lname,Photo,Skin");
+            sb.Append(Tool.GetKey(true, true));
+            sb.Append("\n");
+
+            for (int t = 0; t < teams.Length; t++)
+            {
+                playerIndexes = Tool.GetPlayerIndexesForTeam(teams[t]);
+                string skin = "";
+                string face = "";
+                int faceInt = 0;
+                for (int player = 0; player < playerIndexes.Count; player++)
+                {
+                    skin = Tool.GetPlayerField(playerIndexes[player], "Skin");
+                    face = Tool.GetAttribute(playerIndexes[player], PlayerOffsets.Photo);
+                    faceInt = Int32.Parse(face);
+                    switch (skin)
+                    {
+                        case "Skin1":   // white guys
+                        case "Skin9":
+                        case "Skin17":
+                            if (!ff.CheckFace(faceInt, "lightPlayers"))
+                            {
+                                sb.Append(Tool.GetPlayerData(playerIndexes[player], true, true));
+                                sb.Append("\n");
+                            }
+                            break;
+                        case "Skin2":  // mixed White&black(light) guys, Samoans
+                        case "Skin18": // mixed White&black(light) guys, Samoans, Latino, White,
+                            break;
+                        // dark guys 
+                        case "Skin3": // inconsistently assigned 
+                        case "Skin4":  case "Skin5":  case "Skin6":
+                        case "Skin10": case "Skin11": case "Skin12":
+                        case "Skin13": case "Skin14": case "Skin19":
+                        case "Skin20": case "Skin21": case "Skin22":
+                            if (!ff.CheckFace(faceInt, "darkPlayers"))
+                            {
+                                sb.Append(Tool.GetPlayerData(playerIndexes[player], true, true));
+                                sb.Append("\n");
+                            }
+                            break;
+                    }
+                }
+            }
+            MessageForm.ShowMessage("Results", sb.ToString(), SystemIcons.Information, false, false);
+        }
+
+        private void tryPS2FileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ARMaxTestForm form = new ARMaxTestForm();
+            form.Show();
+        }
+
     }
 }

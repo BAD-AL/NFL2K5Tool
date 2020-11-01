@@ -48,6 +48,7 @@ Markdown cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheat
 18. Drag/drop gamesave files into text area.
 19. Text commands added [LookupAndModify, AutoUpdateDepthChart, AutoUpdatePBP, AutoUpdatePhoto, ApplyFormula]
 20. Resizable face form
+21. PS2 .max support https://github.com/PMStanley/ARMax (PS2 Save Tools: http://www.ps2savetools.com/)
 
 ### Next features:  
 * Salary Cap 
@@ -55,7 +56,7 @@ Markdown cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheat
 	SET(0x9ACCC, 0x38060300)
 * Editing coaches (currently limited support) 
 * Editing playbooks. 
-* PS2 .max support
+
 	
 ### Notes
 1. Add tests.

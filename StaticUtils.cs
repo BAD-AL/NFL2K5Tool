@@ -26,6 +26,52 @@ namespace NFL2K5Tool
                 return sImageMap;
             }
         }
+
+        /// <summary>
+        /// Gets an embedded text file.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static String GetEmbeddedTextFile(string file)
+        {
+            String ret = null;
+            try
+            {
+                if (pp == null)
+                    pp = new PlayerParser("");
+                System.IO.Stream s = null;
+                StreamReader reader = null;
+                try
+                {
+                    string[] embeddedFiles = pp.GetType().Assembly.GetManifestResourceNames();
+                    for (int i = 0; i < embeddedFiles.Length; i++)
+                    {
+                        if (embeddedFiles[i].EndsWith(file, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            s = pp.GetType().Assembly.GetManifestResourceStream(embeddedFiles[i]);
+                            break;
+                        }
+                    }
+                    if (s != null)
+                    {
+                        reader = new StreamReader(s);
+                        ret = reader.ReadToEnd();
+                    }
+                }
+                finally
+                {
+                    if (reader != null) reader.Dispose();
+                    if (s != null) s.Dispose();
+                }
+            }
+            catch (Exception )
+            {
+                AddError("Error getting file " + file);
+            }
+            return ret;
+        }
+
+
         private static PlayerParser pp = null;
         /// <summary>
         /// Get an image from the assembly; caches the image.
@@ -304,7 +350,25 @@ namespace NFL2K5Tool
                 }
             }
         }
-        
+
+        private static string UnpackMaxToTempFolder(string maxFileName)
+        {
+            string dirName = Path.GetTempPath() + "NFL2K5ToolTmpPS2Unpack\\";
+
+            if (Directory.Exists(dirName))
+                Directory.Delete(dirName, true);
+            Directory.CreateDirectory(dirName);
+
+            PS2FileHelper helper = new PS2FileHelper(maxFileName);
+            List<String> files = helper.FilesInSave;
+            foreach (string file in files)
+                helper.ExtractFile(file, dirName);
+            
+            helper.Dispose();
+
+            return dirName;
+        }
+
         private static string UnzipToTempFolder(string archiveFilenameIn, string password)
         {
             string dirName = Path.GetTempPath() + "NFL2K5ToolTmpZipUnpack";
@@ -315,6 +379,32 @@ namespace NFL2K5Tool
             ExtractZipFile(archiveFilenameIn, password, dirName);
 
             return dirName;
+        }
+        
+        /// <summary>
+        /// Extract a specific file from a zip file.
+        /// </summary>
+        /// <param name="archiveFilenameIn">the zip file to search.</param>
+        /// <param name="password">the password for the file</param>
+        /// <param name="fileToExtract">the name of the fuile to extract.</param>
+        /// <returns>null if file was not found, byte array if it was successfully extracted.</returns>
+        public static byte[] ExtractFileFromPS2Save(string archiveFilenameIn)
+        {
+            byte[] retVal = null;
+            string dirName = UnpackMaxToTempFolder(archiveFilenameIn);
+            string[] files = Directory.GetFiles(dirName);
+            foreach (string file in files)
+            {
+                if (file.Contains("\\BASLUS"))
+                {
+                    retVal = File.ReadAllBytes(file);
+                    break;
+                }
+            }
+            if (Directory.Exists(dirName))
+                Directory.Delete(dirName, true);
+            
+            return retVal;
         }
 
         /// <summary>

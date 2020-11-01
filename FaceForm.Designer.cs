@@ -118,14 +118,14 @@
             // runSpecialActionToolStripMenuItem
             // 
             this.runSpecialActionToolStripMenuItem.Name = "runSpecialActionToolStripMenuItem";
-            this.runSpecialActionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.runSpecialActionToolStripMenuItem.Text = "Run Special Action";
+            this.runSpecialActionToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.runSpecialActionToolStripMenuItem.Text = "Display Classifications";
             this.runSpecialActionToolStripMenuItem.Click += new System.EventHandler(this.runSpecialActionItem_Click);
             // 
             // classifyMode
             // 
             this.classifyMode.Name = "classifyMode";
-            this.classifyMode.Size = new System.Drawing.Size(173, 22);
+            this.classifyMode.Size = new System.Drawing.Size(209, 22);
             this.classifyMode.Text = "Classify Mode";
             this.classifyMode.Click += new System.EventHandler(this.classifyMode_Click);
             // 

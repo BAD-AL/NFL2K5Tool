@@ -55,6 +55,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ARMaxNativeMethods.cs" />
+    <Compile Include="ARMaxTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ARMaxTestForm.designer.cs">
+      <DependentUpon>ARMaxTestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CoachEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,6 +218,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <EmbeddedResource Include="NFL2004-05.nfl2k5" />
+    <EmbeddedResource Include="PlayerData\FaceFormCategories.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="NFL2K5Tool_Usage.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -224,6 +234,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="PS2FileHelper.cs" />
     <Compile Include="SchedulerHelper.cs" />
     <Compile Include="ScreenCaptureForm.cs">
       <SubType>Form</SubType>
@@ -255,7 +266,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ARMaxDLL.dll" />
+    <Content Include="ARMaxDLL.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="ARMaxTestForm.resx">
+      <DependentUpon>ARMaxTestForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlayerData\ENFNameIndex.txt" />
+    <EmbeddedResource Include="PlayerData\ENFPhotoIndex.txt" />
     <Content Include="ICSharpCode.SharpZipLib.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
