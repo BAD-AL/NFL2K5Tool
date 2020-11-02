@@ -190,7 +190,7 @@ namespace NFL2K5Tool
             result = ARMaxNativeMethods.LoadSave(filename);
             if (result != 0)
                 throw new Exception("Could not load file:" + filename);
-            result = ARMaxNativeMethods.FileExistsInSavePos(filename);
+            result = ARMaxNativeMethods.FileExistsInSavePos(mFileExistsTextBox.Text);
             if (result > 0)
                 mFileExistsLabel.Text = "File Exists";
             else

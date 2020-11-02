@@ -98,6 +98,7 @@
             this.mFindBytesButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
+            this.aRMaxFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -508,7 +509,8 @@
             this.fixupRookieYearsToolStripMenuItem,
             this.findPlayersMenuItem,
             this.listDepthChartsToolStripMenuItem1,
-            this.checkFacesskinMismatchToolStripMenuItem});
+            this.checkFacesskinMismatchToolStripMenuItem,
+            this.aRMaxFormToolStripMenuItem});
             this.miscToolStripMenuItem.Name = "miscToolStripMenuItem";
             this.miscToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.miscToolStripMenuItem.Text = "&Misc";
@@ -818,6 +820,13 @@
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
             // 
+            // aRMaxFormToolStripMenuItem
+            // 
+            this.aRMaxFormToolStripMenuItem.Name = "aRMaxFormToolStripMenuItem";
+            this.aRMaxFormToolStripMenuItem.Size = new System.Drawing.Size(308, 22);
+            this.aRMaxFormToolStripMenuItem.Text = "ARMax form";
+            this.aRMaxFormToolStripMenuItem.Click += new System.EventHandler(this.tryPS2FileToolStripMenuItem_Click);
+            // 
             // DebugDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -930,5 +939,6 @@
         private System.Windows.Forms.ToolStripMenuItem findPlayersMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listDepthChartsToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem checkFacesskinMismatchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aRMaxFormToolStripMenuItem;
     }
 }

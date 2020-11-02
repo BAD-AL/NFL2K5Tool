@@ -1184,7 +1184,7 @@ namespace NFL2K5Tool
         public void SaveFile(string fileName)
         {
             FileInfo fi = new FileInfo(fileName);
-            if (fi.IsReadOnly)
+            if (File.Exists(fileName)&& fi.IsReadOnly)
             {
                 StaticUtils.AddError( String.Format("File: '{0}' is Read only", fileName) );
             }
@@ -1240,6 +1240,7 @@ namespace NFL2K5Tool
                     StaticUtils.SignNfl2K5Save(tmpFile, GameSaveData);
                     helper.ReplaceFile("EXTRA", tmpFile);
                 }
+                helper.SaveMaxFileAs(fileName);
                 helper.Dispose();
                 File.Delete(tmpFile);
             }
