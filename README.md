@@ -16,14 +16,12 @@ Forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/881901-nf
 Can read and write player data successfully! 
 Can read all 2317 players from save file and write them back with no file differences!
 Can Schedule games; Specifying a year will auto update the dates in the Game (to 'close' dates, not the exact dates the games are actually played)
-Can load gamesave files onto your XBOX.
-Need to work on solution for setting mass data when some names are mapped to multiple players.
+Can load and save XBOX gamesave files.
+Can load and save (.max) PS2 gamesave files.
+
 Currently works well in the following use cases:
 1. Extracting text data from gamesaves.
 2. Applying data to Base gamesave files.
-
-Currently Buggy at:
-Scrolls after closing player edit form.
 
 Markdown cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 
@@ -104,7 +102,7 @@ Launches a special dialog that I use to search through the gamesave file (pretty
 ##### List 'x'
 Will list the selection when the 'List Contents' button is pressed.
 #### Edit
-#####Show Schedule now
+##### Show Schedule now
 Appends the schedule to the text box
 ##### Auto Correct schedule
 Split up the listed schedule into the correct number of games per week for NFL2K5 franchise.
@@ -128,5 +126,10 @@ Automatically update the 'Photo' attribute of each player based on name. (uses '
 Automatically Update what name gets called for a player (operates on text)
 
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/BAD-AL/nfl2k5tool/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+## Uses solutions from Projects:
+https://github.com/icsharpcode/SharpZipLib
+https://github.com/PMStanley/ARMax
+
+## Stats Link
+https://somsubhra.com/github-release-stats/?username=BAD-AL&repository=NFL2K5Tool
 

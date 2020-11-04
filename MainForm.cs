@@ -674,6 +674,7 @@ Forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/881901-nf
 ====== NFL2K5 Related Sites ====== 
 NFL2K5 Rosters site: http://nfl2k5rosters.com/
 Operation Sports NFL2K5 forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/
+NFL 2K5 Discord Community: https://discord.gg/sBVXzYb
 
 ", version);
                 ;
