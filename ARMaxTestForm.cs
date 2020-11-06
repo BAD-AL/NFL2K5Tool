@@ -117,7 +117,7 @@ namespace NFL2K5Tool
         {
 
             int result = ARMaxNativeMethods.InitMaxSave();
-            Console.WriteLine("DLL version: ", ARMaxNativeMethods.DLLVersion());
+            Console.WriteLine("#DLL version: ", ARMaxNativeMethods.DLLVersion());
 
             if (result != 0)
                 throw new Exception("Could not load initialize ARMax DLL!");

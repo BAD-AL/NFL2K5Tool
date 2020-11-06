@@ -147,6 +147,10 @@ namespace NFL2K5Tool
                         AddAppearance(attr);
                     }
                 }
+                if (mSkillsTab.Controls.Count == 0 && mAppearanceTab.Controls.Count > 0)
+                {
+                    tabControl1.SelectedIndex = 1;
+                }
             }
         }
 

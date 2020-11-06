@@ -25,14 +25,14 @@ namespace NFL2K5Tool
             {
                 result = ARMaxNativeMethods.LoadSave(filename);
 
-                Console.WriteLine("ARMax version: {0}, Number of files:{1}; RootDir: {2}",
+                Console.WriteLine("#ARMax version: {0}, Number of files:{1}; RootDir: {2}",
                     ARMaxNativeMethods.DLLVersion(),
                     ARMaxNativeMethods.NumberOfFiles()
                     ,this.RootDir
                     );
             }
             else
-                Console.Error.WriteLine("Error calling 'ARMaxNativeMethods.InitMaxSave()' result:{0}", result);
+                Console.Error.WriteLine("#Error calling 'ARMaxNativeMethods.InitMaxSave()' result:{0}", result);
         }
 
         public string RootDir
@@ -70,7 +70,7 @@ namespace NFL2K5Tool
                             result = ARMaxNativeMethods.FileDetails(i, buff, 256, ref fileSize);
                             mFilesInSave.Add(buff.ToString());
                         }
-                        catch (Exception exc)
+                        catch (Exception)
                         {
                             Console.Error.WriteLine("Error calling 'ARMaxNativeMethods.GetRootDir()' LastError:{0}",
                                 Marshal.GetLastWin32Error()

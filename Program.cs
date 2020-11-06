@@ -193,8 +193,7 @@ namespace NFL2K5Tool
                 StaticUtils.ShowErrors(true);
             }
         }
-        private static Control assemblyControl = null;
-
+        
         private static void PrintUsage()
         {
             Console.WriteLine(string.Format(

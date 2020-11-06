@@ -103,7 +103,10 @@ namespace NFL2K5Tool
             mSaveButton.Enabled =
             globalEditorToolStripMenuItem.Enabled =
             autoUpdateSpecialTeamsDepthToolStripMenuItem.Enabled =
-            debugDialogMenuItem.Enabled = enable;
+            debugDialogMenuItem.Enabled = 
+            resetKeyToolStripMenuItem.Enabled =
+            checkToolStripMenuItem.Enabled = 
+                enable;
         }
 
         private void mListContentsButton_Click(object sender, EventArgs e)
@@ -269,10 +272,24 @@ namespace NFL2K5Tool
             }
             mTextBox.AppendText(builder.ToString());
         }
-        
+
+        private void saveTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Title = "Save Text As";
+            dlg.Filter = "txt/csv (*.txt, *.csv|*.txt;*.csv)";
+            dlg.RestoreDirectory = true;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(dlg.FileName, this.mTextBox.Text);
+            }
+            dlg.Dispose();
+        }
+
         private void mSaveButton_Click(object sender, EventArgs e)
         {
             SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Title = "Apply and Save data to";
             dlg.RestoreDirectory = true;
             if (dlg.ShowDialog() == DialogResult.OK)
             {
@@ -280,6 +297,7 @@ namespace NFL2K5Tool
                 mTool.SaveFile(dlg.FileName);
                 StaticUtils.ShowErrors(false);
             }
+            dlg.Dispose();
         }
 
         private void ApplyTextToSave()
@@ -703,5 +721,141 @@ NFL 2K5 Discord Community: https://discord.gg/sBVXzYb
                 LoadSaveFile( files[0]);
             }
         }
+
+        private void resetKeyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mTool != null)
+            {
+                Console.WriteLine("Resetting Key");
+                mTool.SetKey("Key=");
+            }
+        }
+
+
+        private void CheckFaces()
+        {
+            string prevKey = mTool.GetKey(true, true).Replace("#", "Key=");
+            FaceForm ff = new FaceForm();
+            StringBuilder sb = new StringBuilder();
+
+            mTool.SetKey("Key=Position,fname,lname,Photo,Skin");
+            sb.Append(mTool.GetKey(true, true).Replace("#", "Key="));
+            sb.Append("\nLookupAndModify\n#Team=FreeAgents   (This line is a comment, but allows the player editor to work)\n\n");
+
+            string skin = "";
+            string face = "";
+            int faceInt = 0;
+            int playerLimit = 1928;
+            for (int player = 0; player < playerLimit; player++)
+            {
+                skin = mTool.GetPlayerField(player, "Skin");
+                face = mTool.GetAttribute(player, PlayerOffsets.Photo);
+                faceInt = Int32.Parse(face);
+                switch (skin)
+                {
+                    case "Skin1":   // white guys
+                    case "Skin9":
+                    case "Skin17":
+                        if (!ff.CheckFace(faceInt, "lightPlayers"))
+                        {
+                            sb.Append(mTool.GetPlayerData(player, true, true));
+                            sb.Append("\n");
+                        }
+                        break;
+                    case "Skin2":  // mixed White&black(light) guys, Samoans
+                    case "Skin18": // mixed White&black(light) guys, Samoans, Latino, White,
+                        break;
+                    // dark guys 
+                    case "Skin3": // inconsistently assigned 
+                    case "Skin4":
+                    case "Skin5":
+                    case "Skin6":
+                    case "Skin10":
+                    case "Skin11":
+                    case "Skin12":
+                    case "Skin13":
+                    case "Skin14":
+                    case "Skin19":
+                    case "Skin20":
+                    case "Skin21":
+                    case "Skin22":
+                        if (!ff.CheckFace(faceInt, "darkPlayers"))
+                        {
+                            sb.Append(mTool.GetPlayerData(player, true, true));
+                            sb.Append("\n");
+                        }
+                        break;
+                }
+            }
+            MessageForm.ShowMessage("Results", sb.ToString(), SystemIcons.Information, false, false);
+            ff.Dispose();
+            mTool.SetKey(prevKey);
+        }
+
+
+        private void CheckDreads()
+        {
+            string prevKey = mTool.GetKey(true, true).Replace("#", "Key=");
+            StringBuilder sb = new StringBuilder();
+            FaceForm ff = new FaceForm();
+            string dreads, photo;
+            int photo_i = 0;
+            int playerLimit = 1928;
+
+            for (int i = 0; i < playerLimit; i++)
+            {
+                photo = mTool.GetPlayerField(i, "Photo");
+                photo_i = Int32.Parse(photo);
+                if (ff.CheckFace(photo_i, "Dreads"))
+                {
+                    dreads = mTool.GetPlayerField(i, "Dreads");
+                    if (dreads != "Yes")
+                    {
+                        sb.Append(
+                            String.Format("{0},{1},{2},Yes\n",
+                                mTool.GetPlayerField(i, "Position"),
+                                mTool.GetPlayerName(i, ','),
+                                photo
+                        ));
+                    }
+                }
+            }
+            if (sb.Length > 0)
+            {
+                sb.Insert(0, "#Check these players\n\nLookupAndModify\nKey=Position,fname,lname,Photo,Dreads\n\n#Team=FreeAgents    (This line is a comment, but allows the player editor to work)\n");
+                MessageForm.ShowMessage("Verify Theese", sb.ToString());
+            }
+            ff.Dispose();
+            mTool.SetKey(prevKey);
+        }
+
+        private void checkFacesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckFaces();
+        }
+
+        private void checkDreadsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckDreads();
+        }
+
+        private void aboutCheckOperationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string message =
+@"The 'check' operation results are crafted to be pasted into the main text area.
+They are built to be 'LookupAndModify' Commands and editable with the Player Edit Form.
+Intended workflow:
+1. <check operation>
+2. Copy results message
+3. Paste into Main Text area
+4. Double click first player
+5. Change/verify player attributes
+6. Use 'Next Player' button to go through all the players.
+7. Press 'Ok' once all desired changes are made
+8. Apply data to gamesave ('Save' button or File->Apply data without saving).
+";
+            MessageForm.ShowMessage("About Check operations", message, SystemIcons.Question, false, false);
+        }
+
     }
 }

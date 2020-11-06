@@ -184,6 +184,22 @@ namespace NFL2K5Tool
             return retVal;
         }
 
+        public byte[] GetCoachBytes(int teamIndex)
+        {
+            List<Byte> coachBytes = new List<byte>();
+            if (teamIndex < 32)
+            {
+                int coachPointer = GetCoachPointer(teamIndex);
+                int coach_ptr = GetPointerDestination(coachPointer);
+                int end = coach_ptr + ((int)CoachOffsets.EmptyPass) + 1;
+                for (int i = coach_ptr; i < end; i++)
+                {
+                    coachBytes.Add(GameSaveData[i]);
+                }
+            }
+            return coachBytes.ToArray();
+        }
+
         /// <summary>
         /// All the coach attributes.
         /// </summary>
@@ -717,7 +733,7 @@ namespace NFL2K5Tool
         /// </summary>
         public void AutoUpdatePBP()
         {
-            Console.WriteLine("AutoUpdatePBP");
+            Console.WriteLine("#AutoUpdatePBP");
             string key, firstName, lastName, number, val;
             for (int player = 0; player < MaxPlayers; player++)
             {
@@ -745,7 +761,7 @@ namespace NFL2K5Tool
         /// </summary>
         public void AutoUpdatePhoto()
         {
-            Console.WriteLine("AutoUpdatePhoto");
+            Console.WriteLine("#AutoUpdatePhoto");
             string key, firstName, lastName, number, val;
             for (int player = 0; player < MaxPlayers; player++)
             {
@@ -897,7 +913,7 @@ namespace NFL2K5Tool
         /// </summary>
         public void AutoUpdateDepthChart()
         {
-            Console.WriteLine("AutoUpdateDepthChart");
+            Console.WriteLine("#AutoUpdateDepthChart");
             for (int i = 0; i < 32; i++)
             {
                 AutoUpdateDepthChartForTeam(mTeamsDataOrder[i]);
@@ -1370,6 +1386,7 @@ namespace NFL2K5Tool
         {
             if ( !string.IsNullOrEmpty(line) && line.StartsWith("KEY=", StringComparison.InvariantCultureIgnoreCase))
                 line = line.Substring(4);
+            line = line.TrimEnd(",".ToCharArray());
             mCustomKey = line;
             int tmp = 0;
             if (!string.IsNullOrEmpty(mCustomKey))
@@ -1736,9 +1753,9 @@ namespace NFL2K5Tool
                     if (m != Match.Empty)
                     {
                         int month = Int32.Parse(m.Groups[1].Value);
-                        int day   = Int32.Parse(m.Groups[2].Value);
-                        int year  = Int32.Parse(m.Groups[3].Value);
-                        
+                        int day = Int32.Parse(m.Groups[2].Value);
+                        int year = Int32.Parse(m.Groups[3].Value);
+
                         if (year < 1954)
                             year = 1954;
                         else if (year > 2050)
@@ -1754,12 +1771,15 @@ namespace NFL2K5Tool
                         v2 += ((year & 7) << 5);
                         v3 = GameSaveData[loc + 2] & 0xf0;
                         v3 += (year >> 3);
-                        SetByte(loc,   (byte)v1);
-                        SetByte(loc+1, (byte)v2);
-                        SetByte(loc+2, (byte)v3);
+                        SetByte(loc, (byte)v1);
+                        SetByte(loc + 1, (byte)v2);
+                        SetByte(loc + 2, (byte)v3);
                     }
                     else
+                    {
+                        Console.WriteLine("#Note: DOB format = 'dd/mm/yyyy'");
                         throw new FormatException(String.Format("Error! DOB incorrectly formatted '{0}'", stringVal));
+                    }
                     break;
                 case PlayerOffsets.Weight:
                     val = Int32.Parse(stringVal);
@@ -2812,9 +2832,18 @@ namespace NFL2K5Tool
         {
             int loc = GetPlayerDataStart(player);
             int pointerDest = GetPointerDestination(loc);
-            string retVal = GetName( pointerDest);
-            if (retVal.IndexOf(',') > -1)
-                retVal = String.Concat("\"", retVal, "\"");
+            string retVal = "None";
+            try
+            {
+                retVal = GetName(pointerDest);
+                if (retVal.IndexOf(',') > -1)
+                    retVal = String.Concat("\"", retVal, "\"");
+            }
+            catch (Exception )
+            {
+                Console.WriteLine("Invalid college detected for player {0}, on team {1}; Returning 'None'.",
+                    GetPlayerName(player,' '), GetPlayerTeam(player) );
+            }
             return retVal;
         }
 

@@ -775,7 +775,7 @@ namespace NFL2K5Tool
             mImageCaptureForm.Show(this);
         }
 
-        private void apperanceToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void getCoachItem_Click(object sender, EventArgs e)
         {
             string number = StringInputDlg.GetString("Enter Coach number", "(0-31", "0");
             try
@@ -789,6 +789,31 @@ namespace NFL2K5Tool
             }
             catch { 
                 
+            }
+        }
+
+
+        private void getCoachBytesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string number = StringInputDlg.GetString("Enter Coach number", "(0-31", "0");
+            try
+            {
+                int num = Int32.Parse(number);
+                if (num > -1 && num < 32)
+                {
+                    byte[] data = Tool.GetCoachBytes(num);
+                    StringBuilder sb = new StringBuilder(data.Length * 2 + 4);
+                    sb.Append("0x");
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        sb.Append(String.Format("{0:x2}", data[i]));
+                    }
+                    mResultsTextBox.Text = num + ": Coach Bytes\n" + sb.ToString();
+                }
+            }
+            catch
+            {
+
             }
         }
 
@@ -867,72 +892,113 @@ namespace NFL2K5Tool
         private void listDepthChartsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             MessageForm.ShowMessage("Results", Tool.GetDepthCharts(), SystemIcons.Information, false, false);
-            
         }
 
         private void checkFacesskinMismatchToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FaceForm ff = new FaceForm();
-            string[] teams = {
-                 "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
-                 "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
-                 "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
-                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings", "FreeAgents" };
-
-            List<int> playerIndexes = null;
-            int yearsPro = 0;
-            StringBuilder sb = new StringBuilder();
-            Tool.SetKey("Key=Position,fname,lname,Photo,Skin");
-            sb.Append(Tool.GetKey(true, true));
-            sb.Append("\n");
-
-            for (int t = 0; t < teams.Length; t++)
-            {
-                playerIndexes = Tool.GetPlayerIndexesForTeam(teams[t]);
-                string skin = "";
-                string face = "";
-                int faceInt = 0;
-                for (int player = 0; player < playerIndexes.Count; player++)
-                {
-                    skin = Tool.GetPlayerField(playerIndexes[player], "Skin");
-                    face = Tool.GetAttribute(playerIndexes[player], PlayerOffsets.Photo);
-                    faceInt = Int32.Parse(face);
-                    switch (skin)
-                    {
-                        case "Skin1":   // white guys
-                        case "Skin9":
-                        case "Skin17":
-                            if (!ff.CheckFace(faceInt, "lightPlayers"))
-                            {
-                                sb.Append(Tool.GetPlayerData(playerIndexes[player], true, true));
-                                sb.Append("\n");
-                            }
-                            break;
-                        case "Skin2":  // mixed White&black(light) guys, Samoans
-                        case "Skin18": // mixed White&black(light) guys, Samoans, Latino, White,
-                            break;
-                        // dark guys 
-                        case "Skin3": // inconsistently assigned 
-                        case "Skin4":  case "Skin5":  case "Skin6":
-                        case "Skin10": case "Skin11": case "Skin12":
-                        case "Skin13": case "Skin14": case "Skin19":
-                        case "Skin20": case "Skin21": case "Skin22":
-                            if (!ff.CheckFace(faceInt, "darkPlayers"))
-                            {
-                                sb.Append(Tool.GetPlayerData(playerIndexes[player], true, true));
-                                sb.Append("\n");
-                            }
-                            break;
-                    }
-                }
-            }
-            MessageForm.ShowMessage("Results", sb.ToString(), SystemIcons.Information, false, false);
+            CheckFaces();
         }
 
         private void tryPS2FileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ARMaxTestForm form = new ARMaxTestForm();
             form.Show();
+        }
+
+        private void checkDreadsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckDreads();
+        }
+
+        private void CheckFaces()
+        {
+            FaceForm ff = new FaceForm();
+            StringBuilder sb = new StringBuilder();
+
+            Tool.SetKey("Key=Position,fname,lname,Photo,Skin");
+            sb.Append(Tool.GetKey(true, true).Replace("#", "Key="));
+            sb.Append("\nLookupAndModify\n#Team=FreeAgents   (This line is a comment, but allows the player editor to work)\n\n");
+
+            string skin = "";
+            string face = "";
+            int faceInt = 0;
+            int playerLimit = 1928;
+            for (int player = 0; player < playerLimit; player++)
+            {
+                skin = Tool.GetPlayerField(player, "Skin");
+                face = Tool.GetAttribute(player, PlayerOffsets.Photo);
+                faceInt = Int32.Parse(face);
+                switch (skin)
+                {
+                    case "Skin1":   // white guys
+                    case "Skin9":
+                    case "Skin17":
+                        if (!ff.CheckFace(faceInt, "lightPlayers"))
+                        {
+                            sb.Append(Tool.GetPlayerData(player, true, true));
+                            sb.Append("\n");
+                        }
+                        break;
+                    case "Skin2":  // mixed White&black(light) guys, Samoans
+                    case "Skin18": // mixed White&black(light) guys, Samoans, Latino, White,
+                        break;
+                    // dark guys 
+                    case "Skin3": // inconsistently assigned 
+                    case "Skin4":
+                    case "Skin5":
+                    case "Skin6":
+                    case "Skin10":
+                    case "Skin11":
+                    case "Skin12":
+                    case "Skin13":
+                    case "Skin14":
+                    case "Skin19":
+                    case "Skin20":
+                    case "Skin21":
+                    case "Skin22":
+                        if (!ff.CheckFace(faceInt, "darkPlayers"))
+                        {
+                            sb.Append(Tool.GetPlayerData(player, true, true));
+                            sb.Append("\n");
+                        }
+                        break;
+                }
+            }
+            MessageForm.ShowMessage("Results", sb.ToString(), SystemIcons.Information, false, false);
+        }
+
+
+        private void CheckDreads()
+        {
+            StringBuilder sb = new StringBuilder();
+            FaceForm ff = new FaceForm();
+            string dreads, photo;
+            int photo_i = 0;
+            int playerLimit = 1928;
+
+            for(int i=0; i < playerLimit; i++)
+            {
+                photo = Tool.GetPlayerField(i, "Photo");
+                photo_i = Int32.Parse(photo);
+                if (ff.CheckFace(photo_i, "Dreads"))
+                {
+                    dreads = Tool.GetPlayerField(i, "Dreads");
+                    if (dreads != "Yes")
+                    {
+                        sb.Append(
+                            String.Format("{0},{1},{2},Yes\n",
+                                Tool.GetPlayerField(i, "Position"),
+                                Tool.GetPlayerName(i, ','),
+                                photo
+                        ));
+                    }
+                }
+            }
+            if (sb.Length > 0)
+            {
+                sb.Insert(0, "#Check these players\n\nLookupAndModify\nKey=Position,fname,lname,Photo,Dreads\n\n#Team=FreeAgents    (This line is a comment, but allows the player editor to work)\n");
+                MessageForm.ShowMessage("Verify Theese", sb.ToString());
+            }
         }
 
     }

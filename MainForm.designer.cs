@@ -39,6 +39,7 @@
             this.loadSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.applyDataWithoutSavingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,7 +80,12 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
+            this.resetKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkFacesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkDreadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
+            this.aboutCheckOperationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -159,6 +165,7 @@
             this.viewToolStripMenuItem,
             this.editToolStripMenuItem,
             this.uIToolStripMenuItem,
+            this.checkToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -172,6 +179,8 @@
             this.loadSaveToolStripMenuItem,
             this.loadTextFileToolStripMenuItem,
             this.applyDataWithoutSavingToolStripMenuItem,
+            this.resetKeyToolStripMenuItem,
+            this.saveTextToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -198,6 +207,13 @@
             this.applyDataWithoutSavingToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.applyDataWithoutSavingToolStripMenuItem.Text = "Apply data without saving";
             this.applyDataWithoutSavingToolStripMenuItem.Click += new System.EventHandler(this.applyDataWithoutSavingToolStripMenuItem_Click);
+            // 
+            // saveTextToolStripMenuItem
+            // 
+            this.saveTextToolStripMenuItem.Name = "saveTextToolStripMenuItem";
+            this.saveTextToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.saveTextToolStripMenuItem.Text = "Save &Text";
+            this.saveTextToolStripMenuItem.Click += new System.EventHandler(this.saveTextToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
@@ -269,7 +285,7 @@
             this.listAttributesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.listAttributesToolStripMenuItem.Name = "listAttributesToolStripMenuItem";
             this.listAttributesToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.listAttributesToolStripMenuItem.Text = "List Attributes";
+            this.listAttributesToolStripMenuItem.Text = "List Skills";
             this.listAttributesToolStripMenuItem.Click += new System.EventHandler(this.listAttributesToolStripMenuItem_Click);
             // 
             // listSpecialTeamsToolStripMenuItem
@@ -478,14 +494,14 @@
             // aboutNFL2K5ToolToolStripMenuItem
             // 
             this.aboutNFL2K5ToolToolStripMenuItem.Name = "aboutNFL2K5ToolToolStripMenuItem";
-            this.aboutNFL2K5ToolToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.aboutNFL2K5ToolToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.aboutNFL2K5ToolToolStripMenuItem.Text = "About NFL2K5Tool";
             this.aboutNFL2K5ToolToolStripMenuItem.Click += new System.EventHandler(this.aboutNFL2K5ToolToolStripMenuItem_Click);
             // 
             // textCommandsToolStripMenuItem
             // 
             this.textCommandsToolStripMenuItem.Name = "textCommandsToolStripMenuItem";
-            this.textCommandsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.textCommandsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.textCommandsToolStripMenuItem.Text = "Text Commands";
             this.textCommandsToolStripMenuItem.Click += new System.EventHandler(this.textCommandsToolStripMenuItem_Click);
             // 
@@ -536,6 +552,37 @@
             this.mLoadTextFileButton.UseVisualStyleBackColor = true;
             this.mLoadTextFileButton.Click += new System.EventHandler(this.mLoadTextFileButton_Click);
             // 
+            // resetKeyToolStripMenuItem
+            // 
+            this.resetKeyToolStripMenuItem.Name = "resetKeyToolStripMenuItem";
+            this.resetKeyToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.resetKeyToolStripMenuItem.Text = "Reset &Key";
+            this.resetKeyToolStripMenuItem.Click += new System.EventHandler(this.resetKeyToolStripMenuItem_Click);
+            // 
+            // checkToolStripMenuItem
+            // 
+            this.checkToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.checkFacesToolStripMenuItem,
+            this.checkDreadsToolStripMenuItem,
+            this.aboutCheckOperationsToolStripMenuItem});
+            this.checkToolStripMenuItem.Name = "checkToolStripMenuItem";
+            this.checkToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.checkToolStripMenuItem.Text = "Check";
+            // 
+            // checkFacesToolStripMenuItem
+            // 
+            this.checkFacesToolStripMenuItem.Name = "checkFacesToolStripMenuItem";
+            this.checkFacesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.checkFacesToolStripMenuItem.Text = "Check Faces/skin";
+            this.checkFacesToolStripMenuItem.Click += new System.EventHandler(this.checkFacesToolStripMenuItem_Click);
+            // 
+            // checkDreadsToolStripMenuItem
+            // 
+            this.checkDreadsToolStripMenuItem.Name = "checkDreadsToolStripMenuItem";
+            this.checkDreadsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.checkDreadsToolStripMenuItem.Text = "Check Dreads";
+            this.checkDreadsToolStripMenuItem.Click += new System.EventHandler(this.checkDreadsToolStripMenuItem_Click);
+            // 
             // mTextBox
             // 
             this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -551,6 +598,13 @@
             this.mTextBox.TabIndex = 0;
             this.mTextBox.Text = "";
             this.mTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TextBox_MouseDown);
+            // 
+            // aboutCheckOperationsToolStripMenuItem
+            // 
+            this.aboutCheckOperationsToolStripMenuItem.Name = "aboutCheckOperationsToolStripMenuItem";
+            this.aboutCheckOperationsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.aboutCheckOperationsToolStripMenuItem.Text = "About Check operations";
+            this.aboutCheckOperationsToolStripMenuItem.Click += new System.EventHandler(this.aboutCheckOperationsToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -633,6 +687,12 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutNFL2K5ToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textCommandsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveTextToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetKeyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkFacesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkDreadsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutCheckOperationsToolStripMenuItem;
     }
 }
 

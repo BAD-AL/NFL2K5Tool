@@ -33,7 +33,13 @@ namespace NFL2K5Tool
         {
             if (source == mCutMenuItem)
                 this.Cut();
-            else if( source == this.mClearMenuItem)
+            else if (source == mCopyAllMenuItem)
+            {
+                this.SelectAll();  // this is to cue the user that all the text was coppied
+                Clipboard.SetText(this.Text);
+                this.Focus();
+            }
+            else if (source == this.mClearMenuItem)
                 this.Clear();
             else if (source == mCopyMenuItem)
                 this.Copy();
@@ -47,7 +53,6 @@ namespace NFL2K5Tool
                 this.SelectAll();
             else if (source == mFindMenuItem)
                 if (SetSearchString()) FindNextMatch();
-
         }
 
         /// <summary>
@@ -69,6 +74,7 @@ namespace NFL2K5Tool
                     this.Paste(DataFormats.GetFormat(DataFormats.Text));
                     e.Handled = true;
                 }
+                    //else if( e.Ke
             }
             else if (e.Shift)
             {
