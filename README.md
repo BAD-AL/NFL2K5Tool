@@ -48,7 +48,8 @@ Markdown cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheat
 20. Resizable face form
 21. PS2 .max support https://github.com/PMStanley/ARMax (PS2 Save Tools: http://www.ps2savetools.com/)
 22. Check skin/face & Dreads menu items
-23. SearchTextBox.CopyAll menu item
+23. SearchTextBox.CopyAll context menu item
+24. Reset key menu item.
 
 ### Next features:  
 * Salary Cap 
