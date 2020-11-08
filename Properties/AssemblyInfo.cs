@@ -33,7 +33,8 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 //[assembly: AssemblyVersion("0.9.0.1")] // bug fixes 
 //[assembly: AssemblyVersion("0.9.0.2")] // Face Form improvements
-[assembly: AssemblyVersion("0.9.0.7")]  // check faces, dreads menus; SearchTextBox.CopyAll; resetKey menuItem; autoSelect apperance (when skills are blank);
+[assembly: AssemblyVersion("0.9.0.8")]  // Face form scrollbar (paging) fix; List Depth charts (better) from Debug Dialog ; Better Error handling in main form ; Check Special teams (menu item)
+//[assembly: AssemblyVersion("0.9.0.7")]  // check faces, dreads menus; SearchTextBox.CopyAll; resetKey menuItem; autoSelect apperance (when skills are blank);
 //[assembly: AssemblyVersion("0.9.0.6")]   // Updated menus
 //[assembly: AssemblyVersion("0.9.0.5")] // Updated links...
 //[assembly: AssemblyVersion("0.9.0.4")] // PS2 File Support - fixed issue with saving files

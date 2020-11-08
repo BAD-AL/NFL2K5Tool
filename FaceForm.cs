@@ -54,6 +54,7 @@ namespace NFL2K5Tool
                 mAllPhotoFiles = System.IO.Directory.GetFiles(sFaceDir, "*.jpg");
                 mPhotoFiles = mAllPhotoFiles;
                 PopulatePhotosBoxes();
+                UpdateScrollbarLargeChange();
                 mPhotoScrollBar.ValueChanged += new EventHandler(mPhotoScrollBar_ValueChanged);
                 StartingPictureIndex = 0;
             }
@@ -73,6 +74,11 @@ namespace NFL2K5Tool
                 mCategories = GenericArrayArray.FromFile(sCategoryFile);
                 PopulateCategories();
             }
+        }
+
+        private void UpdateScrollbarLargeChange()
+        {
+            mPhotoScrollBar.LargeChange = mPhotoScrollBar.Height / pbHeight;
         }
 
         public int[] GetFacesFromCategory(string key)
@@ -285,6 +291,7 @@ namespace NFL2K5Tool
                 System.Diagnostics.Debugger.Log(1, "Resize", resizeAmount++ + "Resizing & re-populating...\n");
                 ReleasePictureBoxes();
                 PopulatePhotosBoxes();
+                UpdateScrollbarLargeChange();
                 OnStartingPictureIndexChanged();
             }
         }
