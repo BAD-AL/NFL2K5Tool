@@ -1,32 +1,26 @@
 # NFL2K5Tool
 Program for modifying NFL2K5 gamesaves
-To Build, use Visual studio. A free version is here: https://www.visualstudio.com/en-us/products/visual-studio-express-vs.aspx
-Double click on the NFL2K5Tool.sln file to open the project.
-Hit the "F5" key (or press the play button) to start a debugging session (Which also places the .exe at /bin/Debug/)
+#### Related Links
+1. YouTube Tutorial: https://youtu.be/NCqsq_2GqYs 
+2. GitHub: https://github.com/BAD-AL/NFL2K5Tool 
+3. Forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/881901-nfl2k5tool.html
 
-It's purpose is to make it super easy to apply data to NFL2K5 gamesave files. As it will allow you to store 
-the data in text format.
-Simply copy and paste text into the program.
-
-YouTube Tutorial: https://youtu.be/NCqsq_2GqYs 
-GitHub: https://github.com/BAD-AL/NFL2K5Tool 
-Forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/881901-nfl2k5tool.html
+#### It's goals are:
+1. Make it super easy to extract data from NFL2K5 gamesave files.
+2. Make it super easy to modify NFL2K5 gamesave files (by simply applying text).
+3. Make it super easy to modify the Text data extracted from gamesave files (Double click text line to bring up GUI editor).
+4. Make it super easy to work with the extracted data (as text and .csv; .csv files can be treated as spreadsheets with Excel)
 
 ### Project Status:
-Can read and write player data successfully! 
-Can read all 2317 players from save file and write them back with no file differences!
-Can Schedule games; Specifying a year will auto update the dates in the Game (to 'close' dates, not the exact dates the games are actually played)
-Can load and save XBOX gamesave files.
-Can load and save (.max) PS2 gamesave files.
+1. Can extract data from XBOX & PS2 NFL2K5 gamesave files (.zip, .DAT, .max)
+2. Can apply data to base (Roster and Franchise) NFL2K5 gamesave files.
 
-Currently works well in the following use cases:
-1. Extracting text data from gamesaves.
-2. Applying data to Base gamesave files.
-
-Markdown cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+### Notes
+When working with files that have been modified by Flying Finn's NFL2K5 editor this program can be used to extract the player data, but do not modify the (FlyingFinn edited) gamesave file with this program. Player names can be shared using Flying Finn's tool. NFL2K5Tool assumes no names are shared. To work around this issue, I recommend simply extracting the data from the gamesave and applying to a new gamesave.
 
 ### Implemented features:
-1. Auto update depth chart. 
+0. Extract & Modify player data (32 teams + Free agents + Draft class)
+1. Auto update depth chart (depth order will be according to team player list order ).
 2. Auto update PBP   (text only option, text command, menu option in DebugDialog) 
 3. Auto update Photo (text only option, text command, menu option in DebugDialog) 
 4. Roster & Franchise Supported
@@ -52,9 +46,6 @@ Markdown cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheat
 24. Reset key menu item.
 
 ### Next features:  
-* Salary Cap 
-	# Set Salary Cap -> 198.2M
-	SET(0x9ACCC, 0x38060300)
 * Editing coaches (currently limited support) 
 * Editing playbooks. 
 
@@ -82,51 +73,12 @@ Markdown cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheat
 The input parser gathers lines like "WEEK x" and "teamA at teamB" and runs them through the scheduler.
 When scheduling the games, you just need to make sure the teams are spelled corrrectly. Junk in front and at the end of line is ignored.
 So a line like: "1 Sun September 11 vikings at titans 1:00 PM" will end up working just fine, the parser sees "vikings at titans" and ignores the rest of the line.
-This is helpful when copying and pasting schedules from websites online.
+This is helpful when copying and pasting schedules from websites.
 
-
-### Menus
-#### File
-##### Load Save
-Loads a Roster or Franchise file into program memory.
-##### Load Text File
-Loads a text file into the text area
-##### Apply data without saving
-Apply the data currently in the text area to the current gamesave loaded in memory.
-##### Save
-Applies the data currently in the text area, prompts the user to save to a file.
-##### Exit
-Exits the program.
-#### View
-#####Find
-Enter text to search for
-##### Debug Dialog
-Launches a special dialog that I use to search through the gamesave file (pretty complicated)
-##### List 'x'
-Will list the selection when the 'List Contents' button is pressed.
-#### Edit
-##### Show Schedule now
-Appends the schedule to the text box
-##### Auto Correct schedule
-Split up the listed schedule into the correct number of games per week for NFL2K5 franchise.
-##### Show team players now
-List the teams out now (overwrites text box text)
-##### Validate Players
-Checks through the players and shows warnings based on player weight and body type.
-##### Sort Players
-Sorts the currently listed players based on 'SortFormulas.csv'
-##### Edit Sort formulas
-Lets the user edit the formulas used to sort players
-##### Auto Update Special teams depth
-Assigns fast (non-starting) RB,CB or WR to return punts and kicks. Assigns a Center to be long snapper. (works on gamesave data in memory, not the text)
-Use this option after you have applied data to a gamesave, before saving to a file.
-##### Auto Update Depth chart
-Automatically updates the teams' depth charts (in program memory) based on player index and position.
-Players listed higher will be at the top of the depth chart, players listed lower will be lower on the depth chart.
-##### Auto update Photo
-Automatically update the 'Photo' attribute of each player based on name. (uses ''ENFPhotoIndex.txt' file, operates on text )
-##### Auto Update PBP
-Automatically Update what name gets called for a player (operates on text)
+### Building 
+To Build, use Visual studio. A free version is here: https://www.visualstudio.com/en-us/products/visual-studio-express-vs.aspx
+Double click on the NFL2K5Tool.sln file to open the project.
+Hit the "F5" key (or press the play button) to start a debugging session (Which also places the .exe at /bin/Debug/)
 
 
 ## Uses solutions from Projects:
@@ -135,4 +87,6 @@ https://github.com/PMStanley/ARMax
 
 ## Stats Link
 https://somsubhra.com/github-release-stats/?username=BAD-AL&repository=NFL2K5Tool
+
+Markdown cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 
