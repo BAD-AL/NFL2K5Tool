@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace NFL2K5Tool
 {
@@ -121,6 +122,22 @@ namespace NFL2K5Tool
         {
             System.Diagnostics.Process.Start(e.LinkText);
         }
+
+        public void Colorize(Regex reg, Color color)
+        {
+            mTextBox.Visible = false;
+            mTextBox.SelectionLength = 0;
+            MatchCollection mc = reg.Matches(mTextBox.Text);
+            foreach (Match m in mc)
+            {
+                mTextBox.SelectionStart = m.Index;
+                mTextBox.SelectionLength = m.Length;// -1;
+                mTextBox.SelectionColor = color;
+            }
+            mTextBox.Visible = true;
+        }
+
+        /* Regex mColorizeRegex = new Regex("^[A-Z]+,[A-Za-z \\.']+,[A-Z,a-z ']+,", RegexOptions.Multiline); */
     }
 
     public class StringEventArgs : EventArgs

@@ -18,7 +18,7 @@ namespace NFL2K5Tool
         /// <param name="key"></param>
         public PlayerParser(string key)
         {
-            mKey = key.Replace("#", "");
+            mKey = key.Replace("#", "").Replace("Key=","");
             mKeyParts = mKey.Split(new char[] { ',' });
         }
 

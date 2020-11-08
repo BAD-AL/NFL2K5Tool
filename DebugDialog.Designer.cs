@@ -70,12 +70,14 @@
             this.getPlayerBytesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.coachToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.apperanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getCoachBytesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miscToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageCaptureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.replaceStringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fixupRookieYearsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findPlayersMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listDepthChartsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkDreadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkFacesskinMismatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aRMaxFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updatePlayerAppearanceFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,9 +100,7 @@
             this.mSetByteValTextBox = new System.Windows.Forms.TextBox();
             this.mFindBytesButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
-            this.checkDreadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
-            this.getCoachBytesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -506,6 +506,13 @@
             this.apperanceToolStripMenuItem.Text = "GetCoach";
             this.apperanceToolStripMenuItem.Click += new System.EventHandler(this.getCoachItem_Click);
             // 
+            // getCoachBytesToolStripMenuItem
+            // 
+            this.getCoachBytesToolStripMenuItem.Name = "getCoachBytesToolStripMenuItem";
+            this.getCoachBytesToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.getCoachBytesToolStripMenuItem.Text = "Get Coach Bytes";
+            this.getCoachBytesToolStripMenuItem.Click += new System.EventHandler(this.getCoachBytesToolStripMenuItem_Click);
+            // 
             // miscToolStripMenuItem
             // 
             this.miscToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -555,6 +562,13 @@
             this.listDepthChartsToolStripMenuItem1.Size = new System.Drawing.Size(307, 22);
             this.listDepthChartsToolStripMenuItem1.Text = "List Depth Charts";
             this.listDepthChartsToolStripMenuItem1.Click += new System.EventHandler(this.listDepthChartsToolStripMenuItem1_Click);
+            // 
+            // checkDreadsToolStripMenuItem
+            // 
+            this.checkDreadsToolStripMenuItem.Name = "checkDreadsToolStripMenuItem";
+            this.checkDreadsToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.checkDreadsToolStripMenuItem.Text = "Check Dreads";
+            this.checkDreadsToolStripMenuItem.Click += new System.EventHandler(this.checkDreadsToolStripMenuItem_Click);
             // 
             // checkFacesskinMismatchToolStripMenuItem
             // 
@@ -818,13 +832,6 @@
             this.label6.TabIndex = 23;
             this.label6.Text = "input (hex)";
             // 
-            // checkDreadsToolStripMenuItem
-            // 
-            this.checkDreadsToolStripMenuItem.Name = "checkDreadsToolStripMenuItem";
-            this.checkDreadsToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
-            this.checkDreadsToolStripMenuItem.Text = "Check Dreads";
-            this.checkDreadsToolStripMenuItem.Click += new System.EventHandler(this.checkDreadsToolStripMenuItem_Click);
-            // 
             // mResultsTextBox
             // 
             this.mResultsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -839,13 +846,6 @@
             this.mResultsTextBox.StatusControl = null;
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
-            // 
-            // getCoachBytesToolStripMenuItem
-            // 
-            this.getCoachBytesToolStripMenuItem.Name = "getCoachBytesToolStripMenuItem";
-            this.getCoachBytesToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.getCoachBytesToolStripMenuItem.Text = "Get Coach Bytes";
-            this.getCoachBytesToolStripMenuItem.Click += new System.EventHandler(this.getCoachBytesToolStripMenuItem_Click);
             // 
             // DebugDialog
             // 
@@ -868,6 +868,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(548, 497);
             this.Name = "DebugDialog";
             this.Text = "Debug Dialog";
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).EndInit();

@@ -58,7 +58,10 @@ Example:
 	#"St. Louis" -> "L.A.     "
 	SET(0x7633e,0x4C002E0041002E0020002000200020002000)
 	SET(0x79898,0x4C002E0041002E0020002000200020002000)
-
+    
+    # Set Salary Cap -> 198.2M
+    SET(0x9ACCC, 0x38060300)
+    
 In the above example the intent is to set the string "St. Louis" to "L.A.     ".
 The locations of strings changes with each gamesave file. You can find string and their 
 locations in the DebugDialog.

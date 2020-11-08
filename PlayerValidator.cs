@@ -30,18 +30,26 @@ namespace NFL2K5Tool
             string line;
             for (int i = 0; i < lines.Length; i++)
             {
-                line = lines[i];
-                if (line.StartsWith("#"))
+                line = lines[i].Trim();
+                if (line.StartsWith("#") || line.StartsWith("Key="))
                 {
                 }
-                else if (line.IndexOf(",") > -1 && line.Length > 60)
+                else if (line.IndexOf(",") > -1 && !(  // don't check the following lines
+                          line.StartsWith("Coach")
+                       || line.StartsWith("SET")
+                       || line.StartsWith("ApplyFormula")
+                    ))
                 {
-                    builder.Append( ValidatePlayer(line) );
+                    try {                builder.Append(ValidatePlayer(line));                 } 
+                    catch (Exception) { Console.WriteLine("# issue validating line: " + line); }
                 }
             }
             if (builder.Length > 0)
             {
-                builder.Insert(0, "Key=Position,fname,lname,BodyType,Height,Weight\n");
+                builder.Insert(0, "LookupAndModify\n"+
+                    "Key=Position,fname,lname,BodyType,Height,Weight\n"+
+                    "#Team = FreeAgents  (this is a comment but allows player editor to function on this data)\n"
+                    );
             }
             return builder.ToString();
         }

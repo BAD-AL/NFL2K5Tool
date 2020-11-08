@@ -77,6 +77,8 @@ namespace NFL2K5Tool
             }
             else
             {
+                statusBar1.Text = "Unable to load: " + filename;
+                EnableControls(false);
                 mTool = null;
                 MessageBox.Show("Is the requested file a .txt, .csv, .zip or .dat file?","Error!");
             }
@@ -179,9 +181,14 @@ namespace NFL2K5Tool
 
         private void scheduleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SchedulerHelper helper = new SchedulerHelper(mTool);
-            mTextBox.AppendText("\n\n#Schedule\n");
-            mTextBox.AppendText(helper.GetSchedule());
+            if (mTool.SaveType == SaveType.Franchise)
+            {
+                SchedulerHelper helper = new SchedulerHelper(mTool);
+                mTextBox.AppendText("\n\n#Schedule\n");
+                mTextBox.AppendText(helper.GetSchedule());
+            }
+            else
+                MessageBox.Show(this, "Load a franchise file to see schedule.", "A roster file currently loaded");
         }
 
         private void teamPlayersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -396,23 +403,49 @@ namespace NFL2K5Tool
             statusBar1.Text = "Player PBPs updated";
         }
 
+        private string GetKey(string text)
+        {
+            string retVal = null;
+            Regex keyReg = new Regex("[\\s]*([#|Key=](.*lname,.*))", RegexOptions.IgnoreCase);
+            Match m = keyReg.Match(text);
+            if (m != Match.Empty)
+            {
+                retVal = m.Groups[1].Value.Replace("Key=","");
+            }
+            return retVal;
+        }
+
         private void ValidatePlayers()
         {
-            PlayerValidator v = new PlayerValidator(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
-            string results =  v.ValidatePlayers(mTextBox.Text);
-            if (results.Length > 0)
+            string key = GetKey(mTextBox.Text);
+            if( key == null)
+                key = mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked);
+
+            PlayerValidator v = new PlayerValidator(key);
+            if (mTextBox.Text.Length > 100)
             {
-                MessageForm ef = new MessageForm(SystemIcons.Warning);
-                ef.TextClicked += new EventHandler(validatorForm_TextClicked);
-                ef.ShowCancelButton = false;
-                ef.MessageText = results;
-                ef.Text = "Warning, verify player attributes";
-                ef.Closed += new EventHandler(validatorForm_Closed);
-                ef.Show(this);
+                string results = v.ValidatePlayers(mTextBox.Text);
+                if (results.Length > 0)
+                {
+                    MessageForm ef = new MessageForm(SystemIcons.Warning);
+                    ef.TextClicked += new EventHandler(validatorForm_TextClicked);
+                    ef.ShowCancelButton = false;
+                    ef.MessageText = results;
+                    ef.Text = "Warning, verify player attributes";
+                    ef.Closed += new EventHandler(validatorForm_Closed);
+                    ef.Show(this);
+                }
+                else
+                {
+                    statusBar1.Text = "No Issues Found with Height/Weight/Body type";
+                }
             }
             else
             {
-                MessageBox.Show("No Issues Found", "Player Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    "This function will validate the player Height, Weight and BodyType base on the text in the main text area.\n" +
+                    "List the players in order to use it"
+                    , "Player Validation", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -593,21 +626,35 @@ namespace NFL2K5Tool
         {
             if (mTool != null)
             {
-                PlayerEditForm form = new PlayerEditForm();
-                form.Colleges = mTool.GetColleges();
-                form.PBPs = DataMap.PBPMap;
-                form.Photos = DataMap.PhotoMap;
-                form.ReversePBPs = DataMap.ReversePBPMap;
-                form.ReversePhotos = DataMap.ReversePhotoMap;                
-                form.Data = mTextBox.Text;
-                form.SelectionStart = mTextBox.SelectionStart;
-                if (form.ShowDialog(this) == DialogResult.OK)
+                if (mTextBox.Text.Length > 22)
                 {
-                    SetText(form.Data);
-                    mTextBox.SelectionStart = form.SelectionStart;
-                    mTextBox.ScrollToCaret();
+                    try
+                    {
+                        PlayerEditForm form = new PlayerEditForm();
+                        form.Colleges = mTool.GetColleges();
+                        form.PBPs = DataMap.PBPMap;
+                        form.Photos = DataMap.PhotoMap;
+                        form.ReversePBPs = DataMap.ReversePBPMap;
+                        form.ReversePhotos = DataMap.ReversePhotoMap;
+                        form.Data = mTextBox.Text;
+                        form.SelectionStart = mTextBox.SelectionStart;
+                        if (form.ShowDialog(this) == DialogResult.OK)
+                        {
+                            SetText(form.Data);
+                            mTextBox.SelectionStart = form.SelectionStart;
+                            mTextBox.ScrollToCaret();
+                        }
+                        form.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
-                form.Dispose();
+                else
+                {
+                    MessageBox.Show("List contents first.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
@@ -740,7 +787,8 @@ NFL 2K5 Discord Community: https://discord.gg/sBVXzYb
 
             mTool.SetKey("Key=Position,fname,lname,Photo,Skin");
             sb.Append(mTool.GetKey(true, true).Replace("#", "Key="));
-            sb.Append("\nLookupAndModify\n#Team=FreeAgents   (This line is a comment, but allows the player editor to work)\n\n");
+            sb.Append("\nLookupAndModify\n"+
+                "#Team=FreeAgents   (This line is a comment, but allows the player editor to function on this data)\n\n");
 
             string skin = "";
             string face = "";
@@ -822,7 +870,10 @@ NFL 2K5 Discord Community: https://discord.gg/sBVXzYb
             }
             if (sb.Length > 0)
             {
-                sb.Insert(0, "#Check these players\n\nLookupAndModify\nKey=Position,fname,lname,Photo,Dreads\n\n#Team=FreeAgents    (This line is a comment, but allows the player editor to work)\n");
+                sb.Insert(0, 
+                    "#Check these players\n\nLookupAndModify\n"+
+                    "Key=Position,fname,lname,Photo,Dreads\n\n"+
+                    "#Team=FreeAgents    (This line is a comment, but allows the player editor to work)\n");
                 MessageForm.ShowMessage("Verify Theese", sb.ToString());
             }
             ff.Dispose();
@@ -843,7 +894,9 @@ NFL 2K5 Discord Community: https://discord.gg/sBVXzYb
         {
             string message =
 @"The 'check' operation results are crafted to be pasted into the main text area.
-They are built to be 'LookupAndModify' Commands and editable with the Player Edit Form.
+They are built to be 'LookupAndModify' Commands and editable with the 
+Player Edit Form (unless otherwise stated).
+
 Intended workflow:
 1. <check operation>
 2. Copy results message
@@ -857,5 +910,40 @@ Intended workflow:
             MessageForm.ShowMessage("About Check operations", message, SystemIcons.Question, false, false);
         }
 
+        private void checkSpecialTeamsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StringBuilder warnings = new StringBuilder();
+            string goodReturners = "WR,RB,FB,CB,SS,FS";
+            string[] teams = GamesaveTool.Teams;
+            string kr1 = "";
+            string kr2 = "";
+            string pr = "";
+            for (int i = 0; i < teams.Length; i++)
+            {
+                kr1 = mTool.GetSpecialTeamPosition(teams[i], SpecialTeamer.KR1).Replace("KR1,","").TrimEnd("0123456789".ToCharArray());
+                kr2 = mTool.GetSpecialTeamPosition(teams[i], SpecialTeamer.KR2).Replace("KR2,","").TrimEnd("0123456789".ToCharArray());
+                pr  = mTool.GetSpecialTeamPosition(teams[i], SpecialTeamer.PR ).Replace("PR,", "").TrimEnd("0123456789".ToCharArray());
+                if (goodReturners.IndexOf(kr1) < 0) kr1 = "bad";
+                if (goodReturners.IndexOf(kr2) < 0) kr2 = "bad";
+                if (goodReturners.IndexOf(pr)  < 0) pr  = "bad";
+
+                if (kr1 == "bad" || kr2 == "bad" || pr == "bad")
+                {
+                    warnings.Append("Team = ");
+                    warnings.Append(teams[i]);
+                    warnings.Append("\n");
+                    if (kr1 == "bad") warnings.Append(mTool.GetSpecialTeamPosition(teams[i], SpecialTeamer.KR1) +"\n");
+                    if (kr2 == "bad") warnings.Append(mTool.GetSpecialTeamPosition(teams[i], SpecialTeamer.KR2) + "\n");
+                    if (pr == "bad")  warnings.Append(mTool.GetSpecialTeamPosition(teams[i], SpecialTeamer.PR) + "\n");
+                }
+            }
+            if (warnings.Length > 0)
+            {
+                warnings.Append("\nTry running   Edit -> AutoUpdateDepthChart or manually edit to fix");
+                MessageForm.ShowMessage("Check these", warnings.ToString(), SystemIcons.Warning, false, false);
+            }
+            else
+                statusBar1.Text = "No special teams issues found";
+        }
     }
 }

@@ -286,7 +286,7 @@ namespace NFL2K5Tool
                             SetByte(loc, (byte)mCoachMap[strVal]);
                         else
                             StaticUtils.AddError(String.Format("Error Setting Body '{0}' value for {1} Coach ",
-                                value, mTeamsDataOrder[teamIndex]));
+                                value, sTeamsDataOrder[teamIndex]));
                         break;
                     default:
                         v1 = Int32.Parse(value);
@@ -354,7 +354,7 @@ namespace NFL2K5Tool
             if (teamIndex < 32)
             {
                 StringBuilder builder = new StringBuilder("Coach,");
-                builder.Append(mTeamsDataOrder[teamIndex]);
+                builder.Append(sTeamsDataOrder[teamIndex]);
                 builder.Append(",");
                 string key = CoachKey.ToLower().Replace("fname", "FirstName").Replace("lname", "LastName");
                 string[] parts = key.Split(",".ToCharArray());
@@ -411,7 +411,7 @@ namespace NFL2K5Tool
             string team = "";
             for (int t = 0; t < 33; t++)
             {
-                team = mTeamsDataOrder[t];
+                team = sTeamsDataOrder[t];
                 int teamIndex = GetTeamIndex(team);
                 int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
                 if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase))
@@ -485,7 +485,7 @@ namespace NFL2K5Tool
         private int FirstPlayerFnamePointerLoc { get  { return mPlayerStart + 0x10; } }
 
 		// The team data is ordered like this:
-        private string[] mTeamsDataOrder =  {
+        private static string[] sTeamsDataOrder =  {
                  "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
                  "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
                  "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
@@ -494,6 +494,15 @@ namespace NFL2K5Tool
                  // these guys aren't really teams, investigate deleting these 2 from the array
                  "FreeAgents", "DraftClass" 
                  };
+        public static string[] Teams
+        {
+            get
+            {
+                string[] retVal = new string[32];
+                Array.Copy(sTeamsDataOrder, retVal, retVal.Length);
+                return retVal;
+            }
+        }
         
         //Players are listed in this order in the original 2004 season; No longer used
         //private string[] mTeamsPlayerOrder = {
@@ -526,7 +535,7 @@ namespace NFL2K5Tool
             StringBuilder builder = new StringBuilder(300 * 55 * 35);
             for (int i = 0; i < 32; i++)
             {
-                builder.Append(GetTeamPlayers(mTeamsDataOrder[i], attributes, appearance, specialTeamers));
+                builder.Append(GetTeamPlayers(sTeamsDataOrder[i], attributes, appearance, specialTeamers));
             }
             return builder.ToString();
         }
@@ -667,7 +676,7 @@ namespace NFL2K5Tool
         public string GetNumberOfPlayersOnAllTeams()
         {
             StringBuilder builder = new StringBuilder();
-            foreach (string team in mTeamsDataOrder)
+            foreach (string team in sTeamsDataOrder)
             {
                 builder.Append(team);
                 builder.Append(" Count = ");
@@ -702,8 +711,8 @@ namespace NFL2K5Tool
         /// <returns></returns>
         public int GetTeamIndex(string team)
         {
-            for (int i = 0; i < mTeamsDataOrder.Length; i++)
-                if (mTeamsDataOrder[i].Equals(team, StringComparison.OrdinalIgnoreCase))
+            for (int i = 0; i < sTeamsDataOrder.Length; i++)
+                if (sTeamsDataOrder[i].Equals(team, StringComparison.OrdinalIgnoreCase))
                     return i;
             return -1;
         }
@@ -716,13 +725,13 @@ namespace NFL2K5Tool
             int playerLocation = GetPlayerDataStart(player);
             List<int> players;
             //GetPointerDestination
-            for (int i = 0; i < mTeamsDataOrder.Length -1; i++) // hmm... this isn't going to work for draft class...
+            for (int i = 0; i < sTeamsDataOrder.Length -1; i++) // hmm... this isn't going to work for draft class...
             {
-                players = GetPlayerIndexesForTeam(mTeamsDataOrder[i]);
+                players = GetPlayerIndexesForTeam(sTeamsDataOrder[i]);
                 for (int j = 0; j < players.Count; j++)
                 {
                     if (players[j] == player)
-                        return mTeamsDataOrder[i];
+                        return sTeamsDataOrder[i];
                 }
             }
             return "DraftClass";
@@ -835,9 +844,12 @@ namespace NFL2K5Tool
             StringBuilder sb = new StringBuilder(1000);
             for (int i = 0; i < 32; i++)
             {
-                sb.Append(mTeamsDataOrder[i]);
+                sb.Append("#");
+                sb.Append(sTeamsDataOrder[i]);
                 sb.Append(" DepthChart:\n");
-                sb.Append(GetDepthChartForTeam(mTeamsDataOrder[i]));
+                sb.Append(GetDepthChartForTeam(sTeamsDataOrder[i]));
+                sb.Append("\n#Special Teams\n");
+                sb.Append(GetSpecialTeamDepthChart(sTeamsDataOrder[i]));
                 sb.Append("\n\n");
             }
             return sb.ToString();
@@ -846,24 +858,23 @@ namespace NFL2K5Tool
         public string GetDepthChartForTeam(string team)
         {
             // QB = 0, K, P, WR, CB, FS, SS, RB, FB, TE, OLB, ILB, C, G, T, DT, DE
-            byte[] positions = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             int teamIndex = GetTeamIndex(team);
             int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
-            if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase) || "DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase))
-                return "" ;
+            if ("FreeAgents".Equals(team, StringComparison.InvariantCultureIgnoreCase) ||
+                "DraftClass".Equals(team, StringComparison.InvariantCultureIgnoreCase)   )
+                return "";
             List<int> playerIndexes = GetPlayerIndexesForTeam(team);
-            List<string> depthChart = new List<string>(55);
-
-            for (int i = 0; i <playerIndexes.Count; i++)
+            DepthChart depthChart = new DepthChart();
+            for (int i = 0; i < playerIndexes.Count; i++)
             {
-                depthChart.Add(string.Format("{0}{1},{2}", 
-                    GetPlayerPosition(playerIndexes[i]),
-                    GetHumanReadablePositionDepth(playerIndexes[i]),
-                    GetPlayerName(playerIndexes[i], ',')
-                    ));
+                depthChart.AddPlayer(
+                    GetPlayerFirstName(playerIndexes[i]), 
+                    GetPlayerLastName(playerIndexes[i]), 
+                    GetPlayerPosition(playerIndexes[i]), 
+                    GetHumanReadablePositionDepth(playerIndexes[i])
+                    );
             }
-            depthChart.Sort();
-            return String.Join("\n", depthChart.ToArray());
+            return  depthChart.ToString();
         }
 
         public int GetHumanReadablePositionDepth(int player)
@@ -916,8 +927,9 @@ namespace NFL2K5Tool
             Console.WriteLine("#AutoUpdateDepthChart");
             for (int i = 0; i < 32; i++)
             {
-                AutoUpdateDepthChartForTeam(mTeamsDataOrder[i]);
+                AutoUpdateDepthChartForTeam(sTeamsDataOrder[i]);
             }
+            AutoUpdateSpecialteamsDepth();
         }
 
         // Maybe make this one configurable?
@@ -986,7 +998,7 @@ namespace NFL2K5Tool
             string team;
             for(int i = 0; i < 32; i++)
             {
-                team = mTeamsDataOrder[i];
+                team = sTeamsDataOrder[i];
                 AutoUpdateSpecialTeams(team);
             }
         }
@@ -1185,14 +1197,17 @@ namespace NFL2K5Tool
                 {
                     return false;
                 }
-                mColleges.Clear();
-                if (GameSaveData[0] == (byte)'R' && GameSaveData[1] == (byte)'O' &&
-                    GameSaveData[2] == (byte)'S' && GameSaveData[3] == (byte)'T')
-                    InitializeForRoster();
-                else
-                    InitializeForFranchise();
+                if (GameSaveData != null)
+                {
+                    mColleges.Clear();
+                    if (GameSaveData[0] == (byte)'R' && GameSaveData[1] == (byte)'O' &&
+                        GameSaveData[2] == (byte)'S' && GameSaveData[3] == (byte)'T')
+                        InitializeForRoster();
+                    else
+                        InitializeForFranchise();
 
-                retVal = true;
+                    retVal = true;
+                }
             }
             return retVal;
         }
@@ -3105,11 +3120,11 @@ namespace NFL2K5Tool
                 {
                     playerTeam = ""+GetTeamIndex(GetPlayerTeam(playerIndex));
                     retVal = retVal.Replace("Team", playerTeam);
-                    for (int j = 0; j < mTeamsDataOrder.Length; j++)
+                    for (int j = 0; j < sTeamsDataOrder.Length; j++)
                     {
-                        if( retVal.IndexOf(mTeamsDataOrder[j]) > -1)
+                        if( retVal.IndexOf(sTeamsDataOrder[j]) > -1)
                         {
-                            retVal = retVal.Replace(mTeamsDataOrder[j], "" + j);
+                            retVal = retVal.Replace(sTeamsDataOrder[j], "" + j);
                         }
                     }
                 }
@@ -3178,5 +3193,4 @@ namespace NFL2K5Tool
         };
         #endregion
     }
-
 }

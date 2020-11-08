@@ -39,6 +39,7 @@
             this.loadSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.applyDataWithoutSavingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +60,6 @@
             this.scheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCorrectScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.teamPlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.validateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortPlayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editSortFormulasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoUpdateSpecialTeamsDepthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,6 +73,10 @@
             this.increaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.decreaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkFacesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkDreadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutCheckOperationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutNFL2K5ToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textCommandsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,12 +84,9 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
-            this.resetKeyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkFacesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkDreadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
-            this.aboutCheckOperationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkSpecialTeamsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.validateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -207,6 +208,13 @@
             this.applyDataWithoutSavingToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.applyDataWithoutSavingToolStripMenuItem.Text = "Apply data without saving";
             this.applyDataWithoutSavingToolStripMenuItem.Click += new System.EventHandler(this.applyDataWithoutSavingToolStripMenuItem_Click);
+            // 
+            // resetKeyToolStripMenuItem
+            // 
+            this.resetKeyToolStripMenuItem.Name = "resetKeyToolStripMenuItem";
+            this.resetKeyToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.resetKeyToolStripMenuItem.Text = "Reset &Key";
+            this.resetKeyToolStripMenuItem.Click += new System.EventHandler(this.resetKeyToolStripMenuItem_Click);
             // 
             // saveTextToolStripMenuItem
             // 
@@ -345,7 +353,6 @@
             this.scheduleToolStripMenuItem,
             this.autoCorrectScheduleToolStripMenuItem,
             this.teamPlayersToolStripMenuItem,
-            this.validateToolStripMenuItem,
             this.sortPlayersToolStripMenuItem,
             this.editSortFormulasToolStripMenuItem,
             this.autoUpdateSpecialTeamsDepthToolStripMenuItem,
@@ -379,13 +386,6 @@
             this.teamPlayersToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
             this.teamPlayersToolStripMenuItem.Text = "Show &Team Players Now";
             this.teamPlayersToolStripMenuItem.Click += new System.EventHandler(this.teamPlayersToolStripMenuItem_Click);
-            // 
-            // validateToolStripMenuItem
-            // 
-            this.validateToolStripMenuItem.Name = "validateToolStripMenuItem";
-            this.validateToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
-            this.validateToolStripMenuItem.Text = "&Validate Players (Text Operation)";
-            this.validateToolStripMenuItem.Click += new System.EventHandler(this.validateToolStripMenuItem_Click);
             // 
             // sortPlayersToolStripMenuItem
             // 
@@ -482,6 +482,39 @@
             this.nameColorToolStripMenuItem.Text = "&Name Color";
             this.nameColorToolStripMenuItem.Click += new System.EventHandler(this.nameColorToolStripMenuItem_Click);
             // 
+            // checkToolStripMenuItem
+            // 
+            this.checkToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.checkFacesToolStripMenuItem,
+            this.checkDreadsToolStripMenuItem,
+            this.validateToolStripMenuItem,
+            this.checkSpecialTeamsToolStripMenuItem,
+            this.aboutCheckOperationsToolStripMenuItem});
+            this.checkToolStripMenuItem.Name = "checkToolStripMenuItem";
+            this.checkToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.checkToolStripMenuItem.Text = "Check";
+            // 
+            // checkFacesToolStripMenuItem
+            // 
+            this.checkFacesToolStripMenuItem.Name = "checkFacesToolStripMenuItem";
+            this.checkFacesToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.checkFacesToolStripMenuItem.Text = "Check Faces/skin";
+            this.checkFacesToolStripMenuItem.Click += new System.EventHandler(this.checkFacesToolStripMenuItem_Click);
+            // 
+            // checkDreadsToolStripMenuItem
+            // 
+            this.checkDreadsToolStripMenuItem.Name = "checkDreadsToolStripMenuItem";
+            this.checkDreadsToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.checkDreadsToolStripMenuItem.Text = "Check Dreads";
+            this.checkDreadsToolStripMenuItem.Click += new System.EventHandler(this.checkDreadsToolStripMenuItem_Click);
+            // 
+            // aboutCheckOperationsToolStripMenuItem
+            // 
+            this.aboutCheckOperationsToolStripMenuItem.Name = "aboutCheckOperationsToolStripMenuItem";
+            this.aboutCheckOperationsToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.aboutCheckOperationsToolStripMenuItem.Text = "About Check operations";
+            this.aboutCheckOperationsToolStripMenuItem.Click += new System.EventHandler(this.aboutCheckOperationsToolStripMenuItem_Click);
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -552,37 +585,6 @@
             this.mLoadTextFileButton.UseVisualStyleBackColor = true;
             this.mLoadTextFileButton.Click += new System.EventHandler(this.mLoadTextFileButton_Click);
             // 
-            // resetKeyToolStripMenuItem
-            // 
-            this.resetKeyToolStripMenuItem.Name = "resetKeyToolStripMenuItem";
-            this.resetKeyToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.resetKeyToolStripMenuItem.Text = "Reset &Key";
-            this.resetKeyToolStripMenuItem.Click += new System.EventHandler(this.resetKeyToolStripMenuItem_Click);
-            // 
-            // checkToolStripMenuItem
-            // 
-            this.checkToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.checkFacesToolStripMenuItem,
-            this.checkDreadsToolStripMenuItem,
-            this.aboutCheckOperationsToolStripMenuItem});
-            this.checkToolStripMenuItem.Name = "checkToolStripMenuItem";
-            this.checkToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.checkToolStripMenuItem.Text = "Check";
-            // 
-            // checkFacesToolStripMenuItem
-            // 
-            this.checkFacesToolStripMenuItem.Name = "checkFacesToolStripMenuItem";
-            this.checkFacesToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.checkFacesToolStripMenuItem.Text = "Check Faces/skin";
-            this.checkFacesToolStripMenuItem.Click += new System.EventHandler(this.checkFacesToolStripMenuItem_Click);
-            // 
-            // checkDreadsToolStripMenuItem
-            // 
-            this.checkDreadsToolStripMenuItem.Name = "checkDreadsToolStripMenuItem";
-            this.checkDreadsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.checkDreadsToolStripMenuItem.Text = "Check Dreads";
-            this.checkDreadsToolStripMenuItem.Click += new System.EventHandler(this.checkDreadsToolStripMenuItem_Click);
-            // 
             // mTextBox
             // 
             this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -599,12 +601,19 @@
             this.mTextBox.Text = "";
             this.mTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TextBox_MouseDown);
             // 
-            // aboutCheckOperationsToolStripMenuItem
+            // checkSpecialTeamsToolStripMenuItem
             // 
-            this.aboutCheckOperationsToolStripMenuItem.Name = "aboutCheckOperationsToolStripMenuItem";
-            this.aboutCheckOperationsToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.aboutCheckOperationsToolStripMenuItem.Text = "About Check operations";
-            this.aboutCheckOperationsToolStripMenuItem.Click += new System.EventHandler(this.aboutCheckOperationsToolStripMenuItem_Click);
+            this.checkSpecialTeamsToolStripMenuItem.Name = "checkSpecialTeamsToolStripMenuItem";
+            this.checkSpecialTeamsToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.checkSpecialTeamsToolStripMenuItem.Text = "Check Special Teams";
+            this.checkSpecialTeamsToolStripMenuItem.Click += new System.EventHandler(this.checkSpecialTeamsToolStripMenuItem_Click);
+            // 
+            // validateToolStripMenuItem
+            // 
+            this.validateToolStripMenuItem.Name = "validateToolStripMenuItem";
+            this.validateToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.validateToolStripMenuItem.Text = "Check Players Ht/Wt/Bt(Text Operation)";
+            this.validateToolStripMenuItem.Click += new System.EventHandler(this.validateToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -668,7 +677,6 @@
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scheduleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem teamPlayersToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem validateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sortPlayersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editSortFormulasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem uIToolStripMenuItem;
@@ -693,6 +701,8 @@
         private System.Windows.Forms.ToolStripMenuItem checkFacesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkDreadsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutCheckOperationsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkSpecialTeamsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem validateToolStripMenuItem;
     }
 }
 

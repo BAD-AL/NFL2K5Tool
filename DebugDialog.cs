@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace NFL2K5Tool
 {
@@ -423,11 +424,7 @@ namespace NFL2K5Tool
         private void extractTeamSectionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             byte[] teamBytes;
-            string[] teams = {
-                 "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
-                 "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
-                 "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
-                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings"};
+            string[] teams = GamesaveTool.Teams;
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < teams.Length; i++)
             {
@@ -465,11 +462,7 @@ namespace NFL2K5Tool
 
         private void listDepthChartsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string[] teams = {
-                 "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
-                 "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
-                 "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
-                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings"};
+            string[] teams = GamesaveTool.Teams;
 
             StringBuilder builder = new StringBuilder();
             foreach(string team in teams)
@@ -484,23 +477,19 @@ namespace NFL2K5Tool
         {
             string baseYear = StringInputDlg.GetString("Base year:", "Enter the year for the season", "2004");
             string teamsString = StringInputDlg.GetString("Teams:", "Enter the teams you wish to update (seperated by comma), blank for all teams", "");
-            string[] teams = teamsString.Split(new char[] { ',' });
-            if (teamsString == "" || teams.Length < 1)
+            List<string> teams = new List<string>(teamsString.Split(new char[] { ',' }));
+            if (teamsString == "" || teams.Count < 1)
             {
-                teams =  new string[]  {
-                 "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
-                 "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
-                 "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
-                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings", 
-                 "FreeAgents", "DraftClass" 
-                 };
+                teams = new List<string>(GamesaveTool.Teams);
+                teams.Add("FreeAgents");
+                teams.Add("DraftClass");
             }
             
             if (!String.IsNullOrEmpty(baseYear))
             {
                 int year = 0;
                 Int32.TryParse(baseYear, out year);
-                Tool.AutoUpdateYearsProFromYear(year, teams);
+                Tool.AutoUpdateYearsProFromYear(year, teams.ToArray() );
 			}
 		}
 		
@@ -799,7 +788,23 @@ namespace NFL2K5Tool
             try
             {
                 int num = Int32.Parse(number);
-                if (num > -1 && num < 32)
+                if (num > 31)
+                {
+                    StringBuilder sb = new StringBuilder(5000);
+                    for (int t = 0; t < 32; t++)
+                    {
+                        byte[] data = Tool.GetCoachBytes(t);
+                        sb.Append(String.Format("Coach {0:d2}:",t));
+                        sb.Append("0x");
+                        for (int i = 0; i < data.Length; i++)
+                        {
+                            sb.Append(String.Format("{0:x2}", data[i]));
+                        }
+                        sb.Append("\n");
+                    }
+                    mResultsTextBox.Text = sb.ToString();
+                }
+                else if (num > -1 && num < 32)
                 {
                     byte[] data = Tool.GetCoachBytes(num);
                     StringBuilder sb = new StringBuilder(data.Length * 2 + 4);
@@ -845,16 +850,12 @@ namespace NFL2K5Tool
 
         private void fixupRookieYearsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string[] teams = {
-                 "49ers", "Bears","Bengals", "Bills", "Broncos", "Browns","Buccaneers", "Cardinals", 
-                 "Chargers", "Chiefs","Colts","Cowboys",  "Dolphins", "Eagles","Falcons","Giants","Jaguars",
-                 "Jets","Lions","Packers", "Panthers", "Patriots","Raiders","Rams","Ravens","Redskins",
-                 "Saints","Seahawks","Steelers", "Texans", "Titans",  "Vikings", "FreeAgents" };
-
+            List<string> teams = new List<string>( GamesaveTool.Teams);
+            teams.Add("FreeAgents" );
             List<int> playerPointers = null;
             int yearsPro =0;
 
-            for (int t = 0; t < teams.Length; t++)
+            for (int t = 0; t < teams.Count; t++)
             {
                 playerPointers = Tool.GetPlayerIndexesForTeam(teams[t]);
                 for (int player = 0; player < playerPointers.Count; player++)
@@ -891,7 +892,19 @@ namespace NFL2K5Tool
 
         private void listDepthChartsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            MessageForm.ShowMessage("Results", Tool.GetDepthCharts(), SystemIcons.Information, false, false);
+            //MessageForm.ShowMessage("Results", Tool.GetDepthCharts(), SystemIcons.Information, false, false);
+            Regex reg = new Regex("(QB),|(RB),|(FB),|(WR),|(TE),|(C),|(G),|(T),|(DE),|(DT),|(OLB),|(ILB),|(CB),|(FS),|(SS),|(K),|(P),|(KR1),|(KR2),|(PR),|(LS),");
+            MessageForm mf = new MessageForm(SystemIcons.Information);
+            mf.MessageEditable = false;
+            mf.Text = "Results";
+            mf.MessageText = Tool.GetDepthCharts();
+            mf.Colorize(reg, Color.Blue);
+            mf.Colorize(new Regex("(#.*)\\n"), Color.Green);
+            mf.Colorize(new Regex("(,)"), Color.Fuchsia);
+            mf.ShowCancelButton = false;
+            mf.ShowDialog();
+
+            mf.Dispose();
         }
 
         private void checkFacesskinMismatchToolStripMenuItem_Click(object sender, EventArgs e)
@@ -917,7 +930,8 @@ namespace NFL2K5Tool
 
             Tool.SetKey("Key=Position,fname,lname,Photo,Skin");
             sb.Append(Tool.GetKey(true, true).Replace("#", "Key="));
-            sb.Append("\nLookupAndModify\n#Team=FreeAgents   (This line is a comment, but allows the player editor to work)\n\n");
+            sb.Append("\nLookupAndModify\n"+
+                "#Team=FreeAgents   (This line is a comment, but allows the player editor to function on this data)\n\n");
 
             string skin = "";
             string face = "";
@@ -976,7 +990,7 @@ namespace NFL2K5Tool
             int photo_i = 0;
             int playerLimit = 1928;
 
-            for(int i=0; i < playerLimit; i++)
+            for (int i = 0; i < playerLimit; i++)
             {
                 photo = Tool.GetPlayerField(i, "Photo");
                 photo_i = Int32.Parse(photo);
@@ -996,10 +1010,12 @@ namespace NFL2K5Tool
             }
             if (sb.Length > 0)
             {
-                sb.Insert(0, "#Check these players\n\nLookupAndModify\nKey=Position,fname,lname,Photo,Dreads\n\n#Team=FreeAgents    (This line is a comment, but allows the player editor to work)\n");
+                sb.Insert(0,
+                    "#Check these players\n\nLookupAndModify\n" +
+                    "Key=Position,fname,lname,Photo,Dreads\n\n" +
+                    "#Team=FreeAgents    (This line is a comment, but allows the player editor to function on this data)\n");
                 MessageForm.ShowMessage("Verify Theese", sb.ToString());
             }
         }
-
     }
 }
