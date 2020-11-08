@@ -18,6 +18,9 @@ Program for modifying NFL2K5 gamesaves
 ### Notes
 When working with files that have been modified by Flying Finn's NFL2K5 editor this program can be used to extract the player data, but do not modify the (FlyingFinn edited) gamesave file with this program. Player names can be shared using Flying Finn's tool. NFL2K5Tool assumes no names are shared. To work around this issue, I recommend simply extracting the data from the gamesave and applying to a new gamesave.
 
+### Menus
+ See Wiki page: https://github.com/BAD-AL/NFL2K5Tool/wiki/Menus
+
 ### Implemented features:
 0. Extract & Modify player data (32 teams + Free agents + Draft class)
 1. Auto update depth chart (depth order will be according to team player list order ).
@@ -83,10 +86,12 @@ Hit the "F5" key (or press the play button) to start a debugging session (Which 
 
 ## Uses solutions from Projects:
 https://github.com/icsharpcode/SharpZipLib
+
 https://github.com/PMStanley/ARMax
 
 ## Stats Link
 https://somsubhra.com/github-release-stats/?username=BAD-AL&repository=NFL2K5Tool
 
-Markdown cheatsheet: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+#### Markdown cheatsheet:
+https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 
