@@ -47,6 +47,7 @@ When working with files that have been modified by Flying Finn's NFL2K5 editor t
 22. Check skin/face & Dreads menu items
 23. SearchTextBox.CopyAll context menu item
 24. Reset key menu item.
+25. Cross-save between Xbox and PS2 files.
 
 ### Next features:  
 * Editing coaches (currently limited support) 

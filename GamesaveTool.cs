@@ -1013,9 +1013,9 @@ namespace NFL2K5Tool
             int teamIndex = GetTeamIndex(team);
             int teamPlayerPointersStart = teamIndex * cTeamDiff + m49ersPlayerPointersStart;
             List<int> playerIndexes = GetPlayerIndexesForTeam(team);
-            //GetPlayerPositionDepth
-            byte fast1 = 0;
-            byte fast2 = 0;
+            
+            byte fast1 = (byte) (playerIndexes.Count - 1);
+            byte fast2 = (byte) (playerIndexes.Count - 2);
             byte center = 0;
             int speedTest1 = 0;
             int speedTest2 = 0;
@@ -1024,18 +1024,21 @@ namespace NFL2K5Tool
             for(byte i = (byte)(playerIndexes.Count-1) ; i > 0 ; i--)
             {
                 playerPosition = GetPlayerPosition(playerIndexes[i]) + ",";
-                if ("CB,WR,RB,".IndexOf(playerPosition) > -1)
+                if (",WR,RB,".IndexOf(playerPosition) > -1)
                 {
                     Int32.TryParse(GetAttribute(playerIndexes[i], PlayerOffsets.Speed), out speedTest1);
                     Int32.TryParse(GetAttribute(playerIndexes[fast1], PlayerOffsets.Speed), out speedTest2);
-                    if (speedTest1 > speedTest2 && GetPlayerPositionDepth(playerIndexes[i]) > 2)
+                    if (!IsStarter((byte)GetPlayerPositionDepth(playerIndexes[i])))
                     {
-                        fast2 = fast1;
-                        fast1 = i;
-                    }
-                    else if (fast2 == 0)
-                    {
-                        fast2 = i;
+                        if (speedTest1 > speedTest2)
+                        {
+                            fast2 = fast1;
+                            fast1 = i;
+                        }
+                        else if (fast2 == 0)
+                        {
+                            fast2 = i;
+                        }
                     }
                 }
                 else if (playerPosition == "C," && center == 0)
@@ -1047,6 +1050,14 @@ namespace NFL2K5Tool
             SetByte(teamPlayerPointersStart + (int)SpecialTeamer.KR2, fast2);
             SetByte(teamPlayerPointersStart + (int)SpecialTeamer.PR, fast1);
             SetByte(teamPlayerPointersStart + (int)SpecialTeamer.LS, center);
+        }
+
+        private bool IsStarter(byte depth)
+        {
+            bool retVal = false;
+            if (depth == 0 || depth == 0x60 || depth == 0x10)
+                retVal = true;
+            return retVal;
         }
 
         /// <summary>
@@ -1240,9 +1251,9 @@ namespace NFL2K5Tool
                 }
                 Console.WriteLine("# Data successfully written to file: {0}.", fileName);
             }
-            else if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) && mZipFile.Length > 4)
+            else if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase) )
             {
-                if( mZipFile != fileName)
+                if (!String.IsNullOrEmpty(mZipFile) && mZipFile != fileName)
                     File.Copy(mZipFile, fileName, true);
                 string tmpFile = Path.GetTempFileName();
                 File.WriteAllBytes(tmpFile, GameSaveData);
@@ -1256,7 +1267,7 @@ namespace NFL2K5Tool
             }
             else if (fileName.EndsWith(".max", StringComparison.InvariantCultureIgnoreCase) )
             {
-                if (mPS2SaveFile != fileName)
+                if (!String.IsNullOrEmpty( mPS2SaveFile) && mPS2SaveFile != fileName)
                     File.Copy(mPS2SaveFile, fileName, true);
                 PS2FileHelper helper = null;
                 
