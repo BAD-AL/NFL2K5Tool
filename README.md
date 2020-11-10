@@ -2,6 +2,7 @@
 Program for modifying NFL2K5 gamesaves
 #### Related Links
 1. YouTube Tutorial: https://youtu.be/NCqsq_2GqYs 
+3. New features https://www.youtube.com/watch?v=0QkMhf44q9g
 2. GitHub: https://github.com/BAD-AL/NFL2K5Tool 
 3. Forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/881901-nfl2k5tool.html
 
