@@ -1035,10 +1035,8 @@ namespace NFL2K5Tool
                             fast2 = fast1;
                             fast1 = i;
                         }
-                        else if (fast2 == 0)
-                        {
+                        else if(",WR,RB,".IndexOf( GetPlayerPosition(playerIndexes[fast2])) == -1)
                             fast2 = i;
-                        }
                     }
                 }
                 else if (playerPosition == "C," && center == 0)
