@@ -108,6 +108,8 @@ namespace NFL2K5Tool
             debugDialogMenuItem.Enabled = 
             resetKeyToolStripMenuItem.Enabled =
             checkToolStripMenuItem.Enabled = 
+            pCSX2PhotoBatchFileToolStripMenuItem.Enabled =
+            pCSX2PhotoYAMLToolStripMenuItem.Enabled =
                 enable;
         }
 
@@ -126,6 +128,10 @@ namespace NFL2K5Tool
                 builder.Append(mTool.GetKey(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked));
                 builder.Append("\n");
             }
+
+
+            builder.Append("\n# Uncomment line below to Set Salary Cap -> 198.2M\n");
+            builder.Append("# SET(0x9ACCC, 0x38060300)\n\n");
 
             if (listTeamsToolStripMenuItem.Checked)
                 builder.Append(mTool.GetLeaguePlayers(listAttributesToolStripMenuItem.Checked, listApperanceToolStripMenuItem.Checked, listSpecialTeamsToolStripMenuItem.Checked));
@@ -736,10 +742,13 @@ YouTube Tutorial: https://youtu.be/NCqsq_2GqYs
 GitHub: https://github.com/BAD-AL/NFL2K5Tool 
 Forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/881901-nfl2k5tool.html
 
-====== NFL2K5 Related Sites ====== 
+================== NFL2K5 Related Sites ==================
 NFL2K5 Rosters site: http://nfl2k5rosters.com/
 Operation Sports NFL2K5 forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/
 NFL 2K5 Discord Community: https://discord.gg/sBVXzYb
+
+======= Transfer Saves from USB to PS2 Memory card =======
+https://www.youtube.com/watch?v=u_lYjJEi-Gg
 
 ", version);
                 ;
@@ -944,6 +953,44 @@ Intended workflow:
             }
             else
                 statusBar1.Text = "No special teams issues found";
+        }
+
+        private void pCSX2PhotoYAMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mTool != null)
+            {
+                PCSX2TextureForm form = new PCSX2TextureForm(this.mTool);
+                form.ShowYaml();
+                form.Show();
+                //string results = mTool.GetPlayerPhotoPCSX2Yaml();
+                //MessageForm.ShowMessage("PCSX2 Photo data", results);
+            }
+        }
+
+        private void deleteTrailingCommasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string output = DeleteTrailingCommas( mTextBox.Text);
+            mTextBox.Text = output;
+        }
+
+        public static string DeleteTrailingCommas(string text)
+        {
+            Regex rs = new Regex(",+\n");
+            Regex rrs = new Regex(",+$");
+            string ret = rs.Replace(text, "\n");
+            ret = rrs.Replace(ret, "");
+
+            return ret;
+        }
+
+        private void pCSX2PhotoBatchFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mTool != null)
+            {
+                PCSX2TextureForm form = new PCSX2TextureForm(this.mTool);
+                form.ShowBatchFile();
+                form.Show();
+            }
         }
     }
 }

@@ -37,7 +37,7 @@ namespace NFL2K5Tool
             StringSelectionControl sc = FindControl(mAppearanceTab, "Skin") as StringSelectionControl;
             StringSelectionControl fc = FindControl(mAppearanceTab, "Face") as StringSelectionControl;
 
-            if (pc != null && pc.Value == "NoPhoto")
+            /*if (pc != null && pc.Value == "NoPhoto")
             {
                 mGenericFacePictureBox.Visible = true;
                 if (pc != null && sc != null && fc != null)
@@ -51,6 +51,27 @@ namespace NFL2K5Tool
             else
             {
                 mGenericFacePictureBox.Visible = false;
+            }*/
+            mGenericFacePictureBox.ImageLocation = null;
+            if ( fc.Value.Length > 1)
+            {
+                mGenericFacePictureBox.Visible = true;
+                try
+                {
+                    Face f = (Face)Enum.Parse(typeof(Face), fc.Value);
+                    Skin s = (Skin)Enum.Parse(typeof(Skin), sc.Value);
+                    FaceData data = GetFace(s, f);
+                    if (data != null)
+                    {
+                        string path = String.Format(
+                            "PlayerData\\PlayerModelFaces\\Generic\\{0:x8}.jpg",
+                            data.faceModelTexture);
+                        mGenericFacePictureBox.ImageLocation = path;
+                        if (mGenericFacePictureBox.Parent == null)
+                            mGenericFacePictureBox.Parent = mAppearanceTab;
+                    }
+                }
+                catch { }
             }
         }
 
@@ -151,7 +172,24 @@ namespace NFL2K5Tool
                 {
                     tabControl1.SelectedIndex = 1;
                 }
+                
+                
             }
+        }
+        List<FaceData> mGenericFaces = null;
+
+        private FaceData GetFace(Skin s, Face f)
+        {
+            FaceData retVal = null;
+            if( mGenericFaces == null )
+                mGenericFaces = FaceData.GetGenericFaces();
+
+            foreach (FaceData data in mGenericFaces)
+            {
+                if (data.skin == s && data.face == f)
+                    return data;
+            }
+            return null;
         }
 
         /// <summary>

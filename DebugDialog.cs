@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.Runtime.Serialization;
 
 namespace NFL2K5Tool
 {
@@ -1017,5 +1019,274 @@ namespace NFL2K5Tool
                 MessageForm.ShowMessage("Verify Theese", sb.ToString());
             }
         }
+
+        private void getPlayerUnknownBytesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int playerLimit = 1928;
+            StringBuilder sb = new StringBuilder(5000);
+            for (int i = 0; i < playerLimit; i++)
+            {
+                Tool.GetPlayerDataUnknownData(i, sb);
+            }
+            MessageForm.ShowMessage("Unknown stuff", sb.ToString());
+        }
+
+        private void zeroPlayerUnkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string number = StringInputDlg.GetString("Enter player number", "(0-1928)", "0");
+            int num = Int32.Parse(number);
+            Tool.ZeroUnknownPlayerStuff(num, 2);
+
+        }
+
+        /// <summary>
+        /// goals
+        /// 1. get list of unmapped photos
+        /// 2. map them (format fname, lname=photo, photo)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkPhotosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //string ShowMessage(string title, string message, Icon icon, bool editable, bool showCancelButton)
+            //List<string> photos = new List<string>(System.IO.Directory.GetFiles("PlayerData\\PlayerPhotos\\", "*.jpg"));
+            StringBuilder builder = new StringBuilder();
+            string fileName = "";
+            builder.Append("Key=lname,Photo\n");
+            int key = 0;
+            //foreach (int key in Tool.PhotoHashMap.Keys())
+            //foreach(KeyValuePair<int,string> entry in Tool.PhotoHashMap)
+            for(int i =0; i < 9999; i++)
+            {
+                fileName = String.Format("PlayerData\\PlayerPhotos\\{0:0000}.jpg", i);
+                if (System.IO.File.Exists(fileName) && !Tool.PhotoHashMap.ContainsKey(i) )
+                //if(photos.IndexOf(fileName) == -1) 
+                {
+                    builder.Append(string.Format("{0:0000},{0:0000}\n",i));
+                }
+            }
+            MessageForm.ShowMessage("results", builder.ToString(), SystemIcons.Information, false, false);
+        }
+        List<FaceData> mFaceData = null;
+        private void uniqueFacesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mFaceData == null)
+            {
+                mFaceData = FaceData.ParseCsvFile("PlayerData\\NFL2K5FaceTextures.csv");
+            }
+            List<FaceData> uniqueFaces = FaceData.GetUniqueFaces();
+            List<FaceData> genericFaces = FaceData.GetGenericFaces();
+            /*
+            Console.WriteLine("============== Generic Faces ========================================");
+            foreach(FaceData dude in genericFaces)
+            {
+                Console.WriteLine("{0},{1},0x{2:x}",
+                    dude.skin, dude.face, dude.faceModelTexture);
+            }
+            Console.WriteLine("=====================================================================");
+            Console.WriteLine("============== Unique Faces ========================================");
+            foreach (FaceData dude in uniqueFaces)
+            {
+                Console.WriteLine("{0},{1},0x{2:x}",
+                    dude.skin, dude.face, dude.faceModelTexture);
+            }
+            Console.WriteLine("=====================================================================");
+            */
+
+            DirectoryInfo info = new DirectoryInfo(@"J:\NFL2K5\EMU\PCSX2-EX.v2.25.5\textures\@DUMP\42F9D5AF");
+            String imageName;
+            string destImage;
+            string sourceImage;
+            DirectoryInfo dest = new DirectoryInfo("PlayerData\\PlayerModelFaces\\Unique\\");
+            Console.WriteLine("============== Unique Faces ========================================");
+            foreach (FaceData dude in uniqueFaces)
+            {
+                imageName = String.Format("{0:x8}.dds", dude.faceModelTexture);
+                destImage = dest.FullName + "\\" + imageName;
+                sourceImage = info.FullName + "\\" + imageName;
+                if (!File.Exists(destImage) && File.Exists(sourceImage))
+                {
+                    File.Copy(sourceImage, destImage);
+                }
+                else if (!File.Exists(sourceImage))
+                {
+                    Console.WriteLine("Couldn't find '{0}' ({1} {2} {3})", 
+                        sourceImage, dude.position, dude.fname, dude.lname);
+                }
+            }
+        
+        }
+
+        private void genericFacesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mFaceData == null)
+            {
+                mFaceData = FaceData.ParseCsvFile("PlayerData\\NFL2K5FaceTextures.csv");
+            }
+            Console.WriteLine("============== Generic Faces ========================================");
+            List<FaceData> genericFaces = FaceData.GetGenericFaces();
+
+            DirectoryInfo info = new DirectoryInfo(@"J:\NFL2K5\EMU\PCSX2-EX.v2.25.5\textures\@DUMP\42F9D5AF");
+            String imageName;
+            string destImage;
+            string sourceImage;
+            DirectoryInfo dest = new DirectoryInfo("PlayerData\\PlayerModelFaces\\Generic\\");
+            //F5DB8477
+            foreach (FaceData dude in genericFaces)
+            {
+                imageName = String.Format("{0:x8}.dds", dude.faceModelTexture);
+                destImage = dest.FullName + "\\" + imageName;
+                sourceImage = info.FullName + "\\" + imageName;
+                if (!File.Exists(destImage) && File.Exists(sourceImage))
+                {
+                    File.Copy(sourceImage, destImage);
+                }
+                else if (!File.Exists(sourceImage))
+                {
+                    Console.WriteLine("Couldn't find '{0}'", sourceImage);
+                }
+            }
+        }
+
+        private void genPhotoMapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mResultsTextBox.Text = Tool.GenPlayerPhotoPCSX2_data_2022_BatchFile();
+        }
     }
+
+    [DataContract]
+    public class FaceData
+    {
+        private static Dictionary<uint, List<FaceData>> repo = new Dictionary<uint, List<FaceData>>();
+
+        public static void AddFaceData(FaceData data)
+        {
+            if (!repo.ContainsKey(data.faceModelTexture))
+                repo.Add(data.faceModelTexture, new List<FaceData>());
+            repo[data.faceModelTexture].Add(data);
+        }
+
+        public static int NumFaces(uint faceTextureId)
+        {
+            int retVal = -1;
+            if (repo.ContainsKey(faceTextureId))
+                retVal = repo[faceTextureId].Count;
+            return retVal;
+        }
+
+        public static List<FaceData> GetUniqueFaces()
+        {
+            if (repo.Count == 0) ParseCsvFile("PlayerData\\NFL2K5FaceTextures.csv");
+            List<FaceData> current = null;
+            List<FaceData> retVal = new List<FaceData>();
+            foreach (uint key in repo.Keys)
+            {
+                current = repo[key];
+                if (current.Count == 1)
+                    retVal.Add(current[0]);
+            }
+            return retVal;
+        }
+
+        public static List<FaceData> GetGenericFaces()
+        {
+            if (repo.Count == 0) ParseCsvFile("PlayerData\\NFL2K5FaceTextures.csv");
+            List<FaceData> current = null;
+            List<FaceData> retVal = new List<FaceData>();
+            foreach (uint key in repo.Keys)
+            {
+                current = repo[key];
+                if (current.Count > 1)
+                    retVal.Add(current[0]);
+            }
+            return retVal;
+        }
+
+        [DataMember]
+        public String fname { get; set; }
+        [DataMember]
+        public String lname { get; set; }
+        [DataMember]
+        public String position { get; set; }
+        [DataMember]
+        public Face   face  { get; set; }
+        [DataMember]
+        public Skin   skin  { get; set; }
+        [DataMember]
+        public int    photo { get; set; }
+        [DataMember]
+        public uint    photoTexture { get; set; }
+        [DataMember]
+        public uint    faceModelTexture { get; set; }
+
+        private static char[] sep = { ',' };
+        /// <summary>
+        /// Input is like:
+        /// #Position, fname, lname, Skin, Face,  Photo, PhotoTexture, FaceModelTexture,
+        /// "CB,       Rashad,Holman,Skin5,Face13,3103,  3AC1766F,     0xCF53B2D9,      0x800029C9,,,"
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
+        public static FaceData ParseLine(string line)
+        {
+            FaceData retVal = null;
+            if (line.IndexOf(',') > -1)
+            {
+                try
+                {
+                    string[] parts = line.Split(sep);
+                    uint photoTexture = 0;
+                    if( parts[6].IndexOf("photo",  StringComparison.InvariantCultureIgnoreCase)==-1)
+                        photoTexture =  ParseHexString(parts[6]);
+                    FaceData dude = new FaceData()
+                    {
+                        position = parts[0],
+                        skin = (Skin)Enum.Parse(typeof(Skin), parts[3]),
+                        face = (Face)Enum.Parse(typeof(Face), parts[4]),
+                        photo = Int32.Parse(parts[5]),
+                        photoTexture = photoTexture,
+                        faceModelTexture = ParseHexString(parts[7]),
+                        fname = parts[1],
+                        lname = parts[2],
+                    };
+                    retVal = dude;
+                }
+                catch {
+                    //Console.WriteLine("Error parsing: '{0}'", line);
+                }
+            }
+            return retVal;
+        }
+
+        private static uint ParseHexString(string input)
+        {
+            string thing = input.Replace("0x", "");
+            thing = thing.Replace("0X", "");
+            uint retVal = UInt32.Parse(thing, System.Globalization.NumberStyles.AllowHexSpecifier);
+            return retVal;
+        }
+
+        public static List<FaceData> ParseCsvFile(string fileName)
+        {
+            String[] lines = File.ReadAllLines(fileName);
+            List<FaceData> retVal = new List<FaceData>(lines.Length);
+            FaceData current = null;
+            foreach (string line in lines)
+            {
+                current = ParseLine(line);
+                if (current != null)
+                {
+                    retVal.Add(current);
+                    AddFaceData(current);
+                }
+            }
+            return retVal;
+        }
+    }
+
+    [DataContract]
+    public class FaceDataArray
+    {
+    }
+
 }

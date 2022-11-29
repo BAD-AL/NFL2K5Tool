@@ -71,6 +71,48 @@ namespace NFL2K5Tool
             return ret;
         }
 
+        /// <summary>
+        /// Gets an embedded text file.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static byte[] GetEmbeddedFile(string file)
+        {
+            byte[] retVal = null;
+            try
+            {
+                if (pp == null)
+                    pp = new PlayerParser("");
+                System.IO.Stream s = null;
+                try
+                {
+                    string[] embeddedFiles = pp.GetType().Assembly.GetManifestResourceNames();
+                    for (int i = 0; i < embeddedFiles.Length; i++)
+                    {
+                        if (embeddedFiles[i].EndsWith(file, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            s = pp.GetType().Assembly.GetManifestResourceStream(embeddedFiles[i]);
+                            break;
+                        }
+                    }
+                    if (s != null)
+                    {
+                        retVal = new byte[(int)s.Length];
+                        s.Read(retVal, 0, (int)s.Length);
+                    }
+                }
+                finally
+                {
+                    if (s != null) s.Dispose();
+                }
+            }
+            catch (Exception)
+            {
+                AddError("Error getting file " + file);
+            }
+            return retVal;
+        }
+
 
         private static PlayerParser pp = null;
         /// <summary>

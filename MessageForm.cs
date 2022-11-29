@@ -115,7 +115,7 @@ namespace NFL2K5Tool
         /// <param name="message">the message to show</param>
         public static void ShowMessage(string title, string message)
         {
-            ShowMessage(title, message, SystemIcons.Hand, false, false);
+            ShowMessage(title, message, SystemIcons.Information, false, false);
         }
 
         private void mTextBox_LinkClicked(object sender, LinkClickedEventArgs e)

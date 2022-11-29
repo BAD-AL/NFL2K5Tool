@@ -12,7 +12,7 @@
     <AssemblyName>NFL2K5Tool</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <ApplicationIcon>Images\logo.ico</ApplicationIcon>
     <StartupObject>
     </StartupObject>
   </PropertyGroup>
@@ -115,6 +115,12 @@
     </Compile>
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PCSX2TextureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PCSX2TextureForm.Designer.cs">
+      <DependentUpon>PCSX2TextureForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PictureChooser.cs">
       <SubType>UserControl</SubType>
@@ -223,6 +229,7 @@
     <EmbeddedResource Include="PlayerData\FaceFormCategories.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Images\PS2\icon.sys" />
     <None Include="NFL2K5Tool_Usage.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -275,12 +282,17 @@
       <DependentUpon>ARMaxTestForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="PCSX2TextureForm.resx">
+      <DependentUpon>PCSX2TextureForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="PlayerData\ENFNameIndex.txt" />
     <EmbeddedResource Include="PlayerData\ENFPhotoIndex.txt" />
     <Content Include="ICSharpCode.SharpZipLib.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="logo.ico" />
+    <Content Include="Images\logo.ico" />
+    <EmbeddedResource Include="Images\PS2\VIEW.ICO" />
     <Content Include="NFL2K5Info.txt">
     </Content>
     <Content Include="BaseTeamData.txt" />

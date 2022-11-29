@@ -115,3 +115,15 @@ SplitbackPass= 0x89,
 IFormPass= 0x8A,
 LoneBackPass= 0x8B,
 EmptyPass= 0x8C
+
+====================== Face info ===========================
+The player's model face texture is controlled by 3 things.
+  1. Photo
+  2. Face
+  3. Skin
+
+Many of the players from the 2004 base roster have unique face textures applied to the player models in-game.
+This association is done through 'Photo ID'.
+If there is not a unique texture related to the player's 'Photo ID', then a generic face is used.
+The generic face is a combination of Face and skin. There are only 42 Generic faces. 
+

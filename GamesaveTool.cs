@@ -2925,6 +2925,66 @@ namespace NFL2K5Tool
                 builder.Append("],\r\n");
             }
         }
+        // this stuff isn't all unknown
+        Dictionary<int, int> unknownStuff = new Dictionary<int, int> {
+                {0x08,4}, 
+                {0x0d, 11},  // break it up, 4,4,3?
+                {0x1A, 2},
+                {0x23,2}, // after face 
+                //0x25 YearsPro
+                {0x26, 3}, //0x26 0x27 0x28
+                //Depth 0x29, Height 0x2B
+                {0x2c, 9},// 2c,2d,2e,2f,30,31,32,33,34
+            };
+
+        public void GetPlayerDataUnknownData(int player, StringBuilder sb)
+        {
+            int loc = GetPlayerDataStart(player);
+            int offset = 0;
+            int length = 0;
+            int num = 0;
+            //for (int i = 0; i < unknownStuff.Count; i++)
+            foreach( int i in unknownStuff.Keys)
+            {
+                offset = loc + unknownStuff[i];
+                length = unknownStuff[i];
+                sb.Append(++num);
+                sb.Append(":");
+                for (int j = offset; j < offset + length; j++)
+                {
+                    sb.Append(String.Format("{0:x2}",GameSaveData[j]));
+                }
+                sb.Append(",");
+            }
+            sb.Append(GetPlayerTeam(player));
+            sb.Append(",");
+            sb.Append(GetPlayerPosition(player));
+            sb.Append(",");
+            sb.Append(GetPlayerName(player, ','));
+            sb.Append("\n");
+        }
+
+        public void ZeroUnknownPlayerStuff(int player, int unkGrp)
+        {
+            int loc = GetPlayerDataStart(player);
+            int offset = 0;
+            int length = 0;
+            int num = 0;
+            //for (int i = 0; i < unknownStuff.Count; i++)
+            foreach (int i in unknownStuff.Keys)
+            {
+                offset = loc + unknownStuff[i];
+                length = unknownStuff[i];
+                ++num;
+                if (unkGrp == num)
+                {
+                    for (int j = offset; j < offset + length; j++)
+                    {
+                        GameSaveData[j] = (byte)0;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// returns a list of ints representing the players with the given firstName, lastName & position
@@ -3203,5 +3263,191 @@ namespace NFL2K5Tool
 	            {"PowerRunStyle", typeof(PowerRunStyle)}
         };
         #endregion
+
+        // in 2022 PCSX2 supports a new way of doing texture replacement.
+        private static string sPhotoHashMapPath_2022 = "PlayerData\\photo_map_new_emu_2022.csv";
+
+        private string LookupPhotoHash_2022(int playerIndex)
+        {
+            string retVal = null;
+            string photo_str = GetAttribute(playerIndex, PlayerOffsets.Photo);
+            int photo_number = Int32.Parse(photo_str);
+            if (PhotoHashMap_2022.ContainsKey(photo_number))
+                retVal = PhotoHashMap_2022[photo_number];
+            return retVal;
+        }
+        public Dictionary<int, string> mPhotoHashMap_2022 = null;
+        public Dictionary<int, string> PhotoHashMap_2022
+        {
+            get
+            {
+                if (mPhotoHashMap_2022 == null)
+                {
+                    if (File.Exists(sPhotoHashMapPath_2022))
+                    {
+                        string[] lines = File.ReadAllLines(sPhotoHashMapPath_2022);
+                        mPhotoHashMap_2022 = new Dictionary<int, string>(lines.Length);
+
+                        char[] seps = ",".ToCharArray();
+                        string[] parts = null;
+                        int key = 0;
+                        foreach (string line in lines)
+                        {
+                            if (!line.StartsWith("#"))
+                            {
+                                parts = line.Split(seps);
+                                if (parts.Length == 2 && line.Length > 4)
+                                {
+                                    key = Int32.Parse(parts[0]);
+                                    mPhotoHashMap_2022[key] = parts[1];
+                                    //Console.WriteLine("key: {0}\tvalue:{1}", parts[0], parts[1]);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new FileNotFoundException("Path '" + sPhotoHashMapPath_2022 + "' not found!");
+                    }
+                }
+                return mPhotoHashMap_2022;
+            }
+        }
+
+        public string GenPlayerPhotoPCSX2_data_2022_BatchFile()
+        {
+            StringBuilder sb = new StringBuilder(2000);
+            string path = "";
+            string hash = "";
+            sb.Append(":: Photo map located at:\r\n");
+            sb.Append(":: " + sPhotoHashMapPath_2022 + "\r\n");
+            sb.Append("if not exist replacements\\portraits\\ (\r\n");
+            sb.Append("    md replacements \r\n");
+            sb.Append("    md replacements\\portraits\\ \r\n");
+            sb.Append(")\r\n");
+
+            for (int i = 0; i < mMaxPlayers; i++)
+            {
+                hash = LookupPhotoHash_2022(i);
+                if (hash != null)
+                {
+                    //path = String.Format("@COM/2k5/photos_dds/{0}_{1}{2}.dds", GetPlayerPosition(i), GetPlayerFirstName(i), GetPlayerLastName(i));
+                    path = String.Format("copy /Y madden_photos\\{0}_{1}{2}.png replacements\\portraits\\{3}.png\r\n", 
+                        GetPlayerPosition(i), GetPlayerFirstName(i), GetPlayerLastName(i), hash);
+                    //sb.Append("  "); // 2 spaces 
+                    //sb.Append(hash);
+                    //sb.Append(": \"");
+                    sb.Append(path);
+                    //sb.Append("\"\n");
+                }
+                else
+                {
+                    sb.Append(string.Format("::  Photo '{0}' is not mapped; '{1} {2} {3}'\r\n", GetAttribute(i, PlayerOffsets.Photo),
+                        GetPlayerPosition(i), GetPlayerFirstName(i), GetPlayerLastName(i)));
+                }
+            }
+            string result = sb.ToString();
+            return result;
+        }
+        
+
+        public string GetPlayerPhotoPCSX2Yaml()
+        {
+            StringBuilder sb = new StringBuilder(2000);
+            string path = "";
+            string hash = "";
+            sb.Append("# Photo map located at:\n");
+            sb.Append("# " + sPhotoHashMapPath +"\n");
+
+            for (int i = 0; i < mMaxPlayers; i++)
+            {
+                hash = LookupPhotoHash(i);
+                if (hash != null)
+                {
+                    path = String.Format("@COM/2k5/photos_dds/{0}_{1}{2}.dds", GetPlayerPosition(i), GetPlayerFirstName(i), GetPlayerLastName(i));
+                    sb.Append("  "); // 2 spaces 
+                    sb.Append(hash);
+                    sb.Append(": \"");
+                    sb.Append(path);
+                    sb.Append("\"\n");
+                }
+                else
+                {
+                    sb.Append(string.Format("  # Photo '{0}' not assignable; '{1} {2} {3}'\n", GetAttribute(i, PlayerOffsets.Photo),
+                        GetPlayerPosition(i), GetPlayerFirstName(i), GetPlayerLastName(i)));
+                }
+            }
+            string result = sb.ToString();
+            return result;
+        }
+
+        private string LookupPhotoHash(int playerIndex)
+        {
+            string retVal = null;
+            string photo_str = GetAttribute(playerIndex, PlayerOffsets.Photo);
+            int photo_number = Int32.Parse(photo_str);
+            if (PhotoHashMap.ContainsKey(photo_number))
+                retVal = PhotoHashMap[photo_number];
+            return retVal;
+        }
+
+        private static  string sPhotoHashMapPath = "PlayerData\\Photo_Hash_Map.csv";
+
+        private Dictionary<int, string> mPhotoHashMap = null;
+        private Regex sHashRegex = new Regex("[0-9A-Fx]+", RegexOptions.Compiled);
+
+        public Dictionary<int, string> PhotoHashMap
+        {
+            get
+            {
+                if (mPhotoHashMap == null)
+                {
+                    if (File.Exists(sPhotoHashMapPath))
+                    {
+                        string[] lines = File.ReadAllLines(sPhotoHashMapPath);
+                        mPhotoHashMap = new Dictionary<int, string>(lines.Length);
+
+                        char[] seps = ",".ToCharArray();
+                        string[] parts = null;
+                        int key = 0;
+                        foreach (string line in lines)
+                        {
+                            parts = line.Split(seps);
+                            if (parts.Length == 2 && line.Length > 4)
+                            {
+                                if (sHashRegex.Match(parts[1]) == Match.Empty)
+                                {
+                                    System.Diagnostics.Debugger.Log(1, "debug", "Skipping: " + line +"\n");
+                                    continue;
+                                }
+
+                                if (!parts[1].StartsWith("0x")) // prepend the '0x' if its not there
+                                    parts[1] = "0x" + parts[1];
+                                key = Int32.Parse(parts[0]);
+                                mPhotoHashMap[key] = parts[1];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new FileNotFoundException("Path '" + sPhotoHashMapPath + "' not found!");
+                    }
+                }
+                return mPhotoHashMap;
+            }
+        }
+
+        /*
+        public string GetPlayerPhotoYamlLine(int playerIndex)
+        {
+            int i = playerIndex;
+            // create string like "@COM/2k5/Photo/<Position>_<FirstName><LastName>"
+            string photoPath = String.Format("@COM/2k5/photo_dds/{0}_{1}{2}.dds", GetPlayerPosition(i), GetFirstName(i), GetLastName(i));
+            string photoHash = LookupHash(GetPhoto(i)); // mapped in spreadsheet at:
+            // https://docs.google.com/spreadsheets/d/1_CNoTn3rac7nxL5M2AqNCe2GB3D3J6Y4/edit#gid=1565593330
+
+            string yamlLine = string.Format("  {0}: \"{1}\"", photoHash, photoPath);
+            return yamlLine;
+        }*/
     }
 }

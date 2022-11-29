@@ -203,5 +203,66 @@ namespace NFL2K5Tool
         }
 
         #endregion
+
+        public static void ConvertXboxSaveToPS2Max(string xboxSaveFile)
+        {
+            string dirName = Path.GetTempPath() + "NFL2K5ToolTmpZipUnpack\\";
+            StaticUtils.ExtractZipFile(xboxSaveFile, null, dirName);
+            string[] files = Directory.GetFiles(dirName, "*", SearchOption.AllDirectories);
+            // xbox 'SaveMeta.xbx' contains name of the save
+            string saveName = null;
+            string extraFile = null;
+            string saveGameFile = null;
+            string typeFile = null;
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].EndsWith("SaveMeta.xbx", StringComparison.InvariantCultureIgnoreCase))
+                    saveName = "BASLUS-20919" + File.ReadAllText(files[i]).TrimEnd().Replace("Name=", "");
+                else if (files[i].EndsWith("EXTRA", StringComparison.InvariantCultureIgnoreCase))
+                    extraFile = files[i];
+                else if (files[i].EndsWith("SAVEGAME.DAT", StringComparison.InvariantCultureIgnoreCase))
+                    saveGameFile = files[i];
+                else if (files[i].EndsWith("TYPE", StringComparison.InvariantCultureIgnoreCase))
+                    typeFile = files[i];
+            }
+            if (saveName != null && typeFile != null && extraFile != null && saveGameFile != null)
+            {
+                string dataFileName = dirName + saveName;
+                File.Copy(saveGameFile, dataFileName);
+                byte[] icon_sys = StaticUtils.GetEmbeddedFile("icon.sys");
+                byte[] view_ico = StaticUtils.GetEmbeddedFile("VIEW.ICO");
+                File.WriteAllBytes(dirName + "icon.sys", icon_sys);
+                File.WriteAllBytes(dirName + "VIEW.ICO", view_ico);
+                // create max file
+                ARMaxNativeMethods.InitMaxSave();
+                ARMaxNativeMethods.SetRootDir(saveName);
+                ARMaxNativeMethods.AddFileToSave(dataFileName);
+                ARMaxNativeMethods.AddFileToSave(typeFile);
+                ARMaxNativeMethods.AddFileToSave(extraFile);
+                ARMaxNativeMethods.AddFileToSave(dirName + "icon.sys");
+                ARMaxNativeMethods.AddFileToSave(dirName + "VIEW.ICO");
+                string filename = ".\\BASLUS-20919" + saveName + ".max";
+                ARMaxNativeMethods.SaveMaxFile(filename);
+                ARMaxNativeMethods.FreeMaxSave();
+                // cleanup
+                Directory.Delete(dirName, true);
+                // message to user
+                Console.WriteLine("Converted {0}; Saved to {1}", xboxSaveFile, filename);
+            }
+        }
+
+        /*
+         XBOX file content:
+            53450030\<save-id>\EXTRA
+            53450030\<save-id>\SAVEGAME.DAT
+            53450030\<save-id>\SaveMeta.xbx
+            53450030\<save-id>\TYPE
+         PS2 file content:
+            icon.sys
+            VIEW.ICO
+            TYPE
+            BASLUS-20919<save-name>
+            EXTRA
+         */
     }
 }

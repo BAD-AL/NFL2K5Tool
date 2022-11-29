@@ -128,7 +128,7 @@
             this.mGenericFacePictureBox.BackColor = System.Drawing.Color.MistyRose;
             this.mGenericFacePictureBox.Location = new System.Drawing.Point(3, 293);
             this.mGenericFacePictureBox.Name = "mGenericFacePictureBox";
-            this.mGenericFacePictureBox.Size = new System.Drawing.Size(220, 109);
+            this.mGenericFacePictureBox.Size = new System.Drawing.Size(128, 128);
             this.mGenericFacePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.mGenericFacePictureBox.TabIndex = 1;
             this.mGenericFacePictureBox.TabStop = false;

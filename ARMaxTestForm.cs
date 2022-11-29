@@ -53,14 +53,17 @@ namespace NFL2K5Tool
                 e.Effect = DragDropEffects.None;
         }
 
-        private void mSaveFileNameTextBox_DragDrop(object sender, DragEventArgs e)
+        private void TextBox_DragDrop(object sender, DragEventArgs e)
         {
-            Control tb = sender as Control;
+            TextBox tb = sender as TextBox;
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files != null && files.Length == 1 && tb != null )
+            if (files != null && files.Length == 1 && tb != null)
             {
-                mSaveFileNameTextBox.Text = files[0];
-                ShowContants(mSaveFileNameTextBox.Text);
+                tb.Text = files[0];
+                if (tb == mSaveFileNameTextBox)
+                {
+                    ShowContants(tb.Text);
+                }
             }
         }
 
@@ -151,7 +154,7 @@ namespace NFL2K5Tool
             StringBuilder rootDirName= new StringBuilder(256);
             ARMaxNativeMethods.GetRootDir(rootDirName, 256);
             rootDirName.Append("\\");
-            string dirName = ".\\UnpackFolder_" + rootDirName.ToString();
+            string dirName = ".\\" + rootDirName.ToString();
 
             if (Directory.Exists(dirName))
                 Directory.Delete(dirName, true);
@@ -247,5 +250,19 @@ namespace NFL2K5Tool
                 helper.Dispose();
             }
         }
+
+        private void mConvertButton_Click(object sender, EventArgs e)
+        {
+            if (mXboxFileTextBox.Text.Length > 0)
+            {
+                PS2FileHelper.ConvertXboxSaveToPS2Max(mXboxFileTextBox.Text);
+            }
+            else
+            {
+                MessageBox.Show("Drag file into xbox file text box");
+            }
+        }
+
+
     }
 }

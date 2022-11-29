@@ -42,6 +42,8 @@
 
             this.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 
+            this.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+
             // 
             // mCutMenuItem
             // 

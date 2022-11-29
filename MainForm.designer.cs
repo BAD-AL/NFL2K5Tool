@@ -56,6 +56,7 @@
             this.coachOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listCoachesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.fullCoachAttributesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pCSX2PhotoYAMLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCorrectScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,6 +70,7 @@
             this.formatScheduleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.playerEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.globalEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteTrailingCommasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.increaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.decreaseFontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,6 +78,8 @@
             this.checkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkFacesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkDreadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.validateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkSpecialTeamsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutCheckOperationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutNFL2K5ToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -84,9 +88,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.mSaveButton = new System.Windows.Forms.Button();
             this.mLoadTextFileButton = new System.Windows.Forms.Button();
+            this.pCSX2PhotoBatchFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mTextBox = new NFL2K5Tool.SearchTextBox();
-            this.checkSpecialTeamsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.validateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -249,7 +252,9 @@
             this.listScheduleToolStripMenuItem,
             this.listFreeAgentsToolStripMenuItem,
             this.listDraftClassToolStripMenuItem,
-            this.coachOptionsToolStripMenuItem});
+            this.coachOptionsToolStripMenuItem,
+            this.pCSX2PhotoYAMLToolStripMenuItem,
+            this.pCSX2PhotoBatchFileToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "&View";
@@ -257,7 +262,7 @@
             // findToolStripMenuItem
             // 
             this.findToolStripMenuItem.Name = "findToolStripMenuItem";
-            this.findToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.findToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.findToolStripMenuItem.Text = "F&ind";
             this.findToolStripMenuItem.Click += new System.EventHandler(this.findToolStripMenuItem_Click);
             // 
@@ -265,7 +270,7 @@
             // 
             this.debugDialogMenuItem.Enabled = false;
             this.debugDialogMenuItem.Name = "debugDialogMenuItem";
-            this.debugDialogMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.debugDialogMenuItem.Size = new System.Drawing.Size(195, 22);
             this.debugDialogMenuItem.Text = "&Debug Dialog";
             this.debugDialogMenuItem.Click += new System.EventHandler(this.debugDialogMenuItem_Click);
             // 
@@ -274,7 +279,7 @@
             this.listTeamsToolStripMenuItem.Checked = true;
             this.listTeamsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.listTeamsToolStripMenuItem.Name = "listTeamsToolStripMenuItem";
-            this.listTeamsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.listTeamsToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.listTeamsToolStripMenuItem.Text = "List Teams";
             this.listTeamsToolStripMenuItem.Click += new System.EventHandler(this.listTeamsToolStripMenuItem_Click);
             // 
@@ -283,7 +288,7 @@
             this.listApperanceToolStripMenuItem.Checked = true;
             this.listApperanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.listApperanceToolStripMenuItem.Name = "listApperanceToolStripMenuItem";
-            this.listApperanceToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.listApperanceToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.listApperanceToolStripMenuItem.Text = "List Apperance";
             this.listApperanceToolStripMenuItem.Click += new System.EventHandler(this.listApperanceToolStripMenuItem_Click);
             // 
@@ -292,35 +297,35 @@
             this.listAttributesToolStripMenuItem.Checked = true;
             this.listAttributesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.listAttributesToolStripMenuItem.Name = "listAttributesToolStripMenuItem";
-            this.listAttributesToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.listAttributesToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.listAttributesToolStripMenuItem.Text = "List Skills";
             this.listAttributesToolStripMenuItem.Click += new System.EventHandler(this.listAttributesToolStripMenuItem_Click);
             // 
             // listSpecialTeamsToolStripMenuItem
             // 
             this.listSpecialTeamsToolStripMenuItem.Name = "listSpecialTeamsToolStripMenuItem";
-            this.listSpecialTeamsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.listSpecialTeamsToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.listSpecialTeamsToolStripMenuItem.Text = "List Special teams";
             this.listSpecialTeamsToolStripMenuItem.Click += new System.EventHandler(this.listSpecialTeamsToolStripMenuItem_Click);
             // 
             // listScheduleToolStripMenuItem
             // 
             this.listScheduleToolStripMenuItem.Name = "listScheduleToolStripMenuItem";
-            this.listScheduleToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.listScheduleToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.listScheduleToolStripMenuItem.Text = "List Schedule";
             this.listScheduleToolStripMenuItem.Click += new System.EventHandler(this.listScheduleToolStripMenuItem_Click);
             // 
             // listFreeAgentsToolStripMenuItem
             // 
             this.listFreeAgentsToolStripMenuItem.Name = "listFreeAgentsToolStripMenuItem";
-            this.listFreeAgentsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.listFreeAgentsToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.listFreeAgentsToolStripMenuItem.Text = "List Free Agents";
             this.listFreeAgentsToolStripMenuItem.Click += new System.EventHandler(this.listFreeAgentsToolStripMenuItem_Click);
             // 
             // listDraftClassToolStripMenuItem
             // 
             this.listDraftClassToolStripMenuItem.Name = "listDraftClassToolStripMenuItem";
-            this.listDraftClassToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.listDraftClassToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.listDraftClassToolStripMenuItem.Text = "List Draft Class";
             this.listDraftClassToolStripMenuItem.Click += new System.EventHandler(this.listDraftClassToolStripMenuItem_Click);
             // 
@@ -330,7 +335,7 @@
             this.listCoachesToolStripMenuItem1,
             this.fullCoachAttributesToolStripMenuItem});
             this.coachOptionsToolStripMenuItem.Name = "coachOptionsToolStripMenuItem";
-            this.coachOptionsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.coachOptionsToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.coachOptionsToolStripMenuItem.Text = "Coach Options";
             // 
             // listCoachesToolStripMenuItem1
@@ -347,6 +352,14 @@
             this.fullCoachAttributesToolStripMenuItem.Text = "Full Coach Attributes";
             this.fullCoachAttributesToolStripMenuItem.Click += new System.EventHandler(this.fullCoachAttributesToolStripMenuItem_Click);
             // 
+            // pCSX2PhotoYAMLToolStripMenuItem
+            // 
+            this.pCSX2PhotoYAMLToolStripMenuItem.Name = "pCSX2PhotoYAMLToolStripMenuItem";
+            this.pCSX2PhotoYAMLToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.pCSX2PhotoYAMLToolStripMenuItem.Text = "PCSX2 YAML";
+            this.pCSX2PhotoYAMLToolStripMenuItem.Visible = false;
+            this.pCSX2PhotoYAMLToolStripMenuItem.Click += new System.EventHandler(this.pCSX2PhotoYAMLToolStripMenuItem_Click);
+            // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -361,7 +374,8 @@
             this.autoUpdatePBPToolStripMenuItem,
             this.formatScheduleToolStripMenuItem,
             this.playerEditorToolStripMenuItem,
-            this.globalEditorToolStripMenuItem});
+            this.globalEditorToolStripMenuItem,
+            this.deleteTrailingCommasToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "&Edit";
@@ -451,6 +465,13 @@
             this.globalEditorToolStripMenuItem.Text = "&Global Editor";
             this.globalEditorToolStripMenuItem.Click += new System.EventHandler(this.globalEditorToolStripMenuItem_Click);
             // 
+            // deleteTrailingCommasToolStripMenuItem
+            // 
+            this.deleteTrailingCommasToolStripMenuItem.Name = "deleteTrailingCommasToolStripMenuItem";
+            this.deleteTrailingCommasToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
+            this.deleteTrailingCommasToolStripMenuItem.Text = "Delete Trailing Commas";
+            this.deleteTrailingCommasToolStripMenuItem.Click += new System.EventHandler(this.deleteTrailingCommasToolStripMenuItem_Click);
+            // 
             // uIToolStripMenuItem
             // 
             this.uIToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -508,6 +529,20 @@
             this.checkDreadsToolStripMenuItem.Text = "Check Dreads";
             this.checkDreadsToolStripMenuItem.Click += new System.EventHandler(this.checkDreadsToolStripMenuItem_Click);
             // 
+            // validateToolStripMenuItem
+            // 
+            this.validateToolStripMenuItem.Name = "validateToolStripMenuItem";
+            this.validateToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.validateToolStripMenuItem.Text = "Check Players Ht/Wt/Bt(Text Operation)";
+            this.validateToolStripMenuItem.Click += new System.EventHandler(this.validateToolStripMenuItem_Click);
+            // 
+            // checkSpecialTeamsToolStripMenuItem
+            // 
+            this.checkSpecialTeamsToolStripMenuItem.Name = "checkSpecialTeamsToolStripMenuItem";
+            this.checkSpecialTeamsToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
+            this.checkSpecialTeamsToolStripMenuItem.Text = "Check Special Teams";
+            this.checkSpecialTeamsToolStripMenuItem.Click += new System.EventHandler(this.checkSpecialTeamsToolStripMenuItem_Click);
+            // 
             // aboutCheckOperationsToolStripMenuItem
             // 
             this.aboutCheckOperationsToolStripMenuItem.Name = "aboutCheckOperationsToolStripMenuItem";
@@ -527,14 +562,14 @@
             // aboutNFL2K5ToolToolStripMenuItem
             // 
             this.aboutNFL2K5ToolToolStripMenuItem.Name = "aboutNFL2K5ToolToolStripMenuItem";
-            this.aboutNFL2K5ToolToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.aboutNFL2K5ToolToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.aboutNFL2K5ToolToolStripMenuItem.Text = "About NFL2K5Tool";
             this.aboutNFL2K5ToolToolStripMenuItem.Click += new System.EventHandler(this.aboutNFL2K5ToolToolStripMenuItem_Click);
             // 
             // textCommandsToolStripMenuItem
             // 
             this.textCommandsToolStripMenuItem.Name = "textCommandsToolStripMenuItem";
-            this.textCommandsToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.textCommandsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
             this.textCommandsToolStripMenuItem.Text = "Text Commands";
             this.textCommandsToolStripMenuItem.Click += new System.EventHandler(this.textCommandsToolStripMenuItem_Click);
             // 
@@ -585,6 +620,13 @@
             this.mLoadTextFileButton.UseVisualStyleBackColor = true;
             this.mLoadTextFileButton.Click += new System.EventHandler(this.mLoadTextFileButton_Click);
             // 
+            // pCSX2PhotoBatchFileToolStripMenuItem
+            // 
+            this.pCSX2PhotoBatchFileToolStripMenuItem.Name = "pCSX2PhotoBatchFileToolStripMenuItem";
+            this.pCSX2PhotoBatchFileToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
+            this.pCSX2PhotoBatchFileToolStripMenuItem.Text = "PCSX2 Photo Batch file";
+            this.pCSX2PhotoBatchFileToolStripMenuItem.Click += new System.EventHandler(this.pCSX2PhotoBatchFileToolStripMenuItem_Click);
+            // 
             // mTextBox
             // 
             this.mTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -600,20 +642,6 @@
             this.mTextBox.TabIndex = 0;
             this.mTextBox.Text = "";
             this.mTextBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TextBox_MouseDown);
-            // 
-            // checkSpecialTeamsToolStripMenuItem
-            // 
-            this.checkSpecialTeamsToolStripMenuItem.Name = "checkSpecialTeamsToolStripMenuItem";
-            this.checkSpecialTeamsToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
-            this.checkSpecialTeamsToolStripMenuItem.Text = "Check Special Teams";
-            this.checkSpecialTeamsToolStripMenuItem.Click += new System.EventHandler(this.checkSpecialTeamsToolStripMenuItem_Click);
-            // 
-            // validateToolStripMenuItem
-            // 
-            this.validateToolStripMenuItem.Name = "validateToolStripMenuItem";
-            this.validateToolStripMenuItem.Size = new System.Drawing.Size(284, 22);
-            this.validateToolStripMenuItem.Text = "Check Players Ht/Wt/Bt(Text Operation)";
-            this.validateToolStripMenuItem.Click += new System.EventHandler(this.validateToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -703,6 +731,9 @@
         private System.Windows.Forms.ToolStripMenuItem aboutCheckOperationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkSpecialTeamsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem validateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pCSX2PhotoYAMLToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteTrailingCommasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pCSX2PhotoBatchFileToolStripMenuItem;
     }
 }
 

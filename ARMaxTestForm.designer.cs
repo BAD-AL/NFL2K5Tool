@@ -39,6 +39,9 @@
             this.mFileExistsLabel = new System.Windows.Forms.Label();
             this.mAddFileButton = new System.Windows.Forms.Button();
             this.mDeleteFileBuggon = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.mXboxFileTextBox = new System.Windows.Forms.TextBox();
+            this.mConvertButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // mInternalFilesListBox
@@ -59,7 +62,7 @@
             this.mSaveFileNameTextBox.Name = "mSaveFileNameTextBox";
             this.mSaveFileNameTextBox.Size = new System.Drawing.Size(428, 20);
             this.mSaveFileNameTextBox.TabIndex = 1;
-            this.mSaveFileNameTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.mSaveFileNameTextBox_DragDrop);
+            this.mSaveFileNameTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.TextBox_DragDrop);
             this.mSaveFileNameTextBox.DragOver += new System.Windows.Forms.DragEventHandler(this.mSaveFileNameTextBox_DragOver);
             // 
             // label1
@@ -146,11 +149,43 @@
             this.mDeleteFileBuggon.UseVisualStyleBackColor = true;
             this.mDeleteFileBuggon.Click += new System.EventHandler(this.mDeleteFileButton_Click);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(299, 136);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(167, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Xbox File to Convert (drag .zip file)";
+            // 
+            // mXboxFileTextBox
+            // 
+            this.mXboxFileTextBox.AllowDrop = true;
+            this.mXboxFileTextBox.Location = new System.Drawing.Point(295, 152);
+            this.mXboxFileTextBox.Name = "mXboxFileTextBox";
+            this.mXboxFileTextBox.Size = new System.Drawing.Size(207, 20);
+            this.mXboxFileTextBox.TabIndex = 12;
+            this.mXboxFileTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.TextBox_DragDrop);
+            this.mXboxFileTextBox.DragOver += new System.Windows.Forms.DragEventHandler(this.mSaveFileNameTextBox_DragOver);
+            // 
+            // mConvertButton
+            // 
+            this.mConvertButton.Location = new System.Drawing.Point(295, 178);
+            this.mConvertButton.Name = "mConvertButton";
+            this.mConvertButton.Size = new System.Drawing.Size(202, 23);
+            this.mConvertButton.TabIndex = 14;
+            this.mConvertButton.Text = "Convert to .max";
+            this.mConvertButton.UseVisualStyleBackColor = true;
+            this.mConvertButton.Click += new System.EventHandler(this.mConvertButton_Click);
+            // 
             // ARMaxTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(665, 487);
+            this.Controls.Add(this.mConvertButton);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.mXboxFileTextBox);
             this.Controls.Add(this.mDeleteFileBuggon);
             this.Controls.Add(this.mAddFileButton);
             this.Controls.Add(this.mFileExistsLabel);
@@ -182,6 +217,9 @@
         private System.Windows.Forms.Label mFileExistsLabel;
         private System.Windows.Forms.Button mAddFileButton;
         private System.Windows.Forms.Button mDeleteFileBuggon;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox mXboxFileTextBox;
+        private System.Windows.Forms.Button mConvertButton;
     }
 }
 
