@@ -743,9 +743,10 @@ GitHub: https://github.com/BAD-AL/NFL2K5Tool
 Forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/881901-nfl2k5tool.html
 
 ================== NFL2K5 Related Sites ==================
-NFL2K5 Rosters site: http://nfl2k5rosters.com/
+NFL2K5 Rosters site: http://nfl2k5rosters.com/  (internet archive)
 Operation Sports NFL2K5 forum: https://forums.operationsports.com/forums/espn-nfl-2k5-football/
 NFL 2K5 Discord Community: https://discord.gg/sBVXzYb
+MOD 2K5 Discord Community: https://discord.gg/DQtGbdfG
 
 ======= Transfer Saves from USB to PS2 Memory card =======
 https://www.youtube.com/watch?v=u_lYjJEi-Gg

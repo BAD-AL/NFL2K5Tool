@@ -42,6 +42,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.mXboxFileTextBox = new System.Windows.Forms.TextBox();
             this.mConvertButton = new System.Windows.Forms.Button();
+            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.SuspendLayout();
             // 
             // mInternalFilesListBox
@@ -178,11 +179,19 @@
             this.mConvertButton.UseVisualStyleBackColor = true;
             this.mConvertButton.Click += new System.EventHandler(this.mConvertButton_Click);
             // 
+            // vScrollBar1
+            // 
+            this.vScrollBar1.Location = new System.Drawing.Point(511, 319);
+            this.vScrollBar1.Name = "vScrollBar1";
+            this.vScrollBar1.Size = new System.Drawing.Size(13, 129);
+            this.vScrollBar1.TabIndex = 15;
+            // 
             // ARMaxTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(665, 487);
+            this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.mConvertButton);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.mXboxFileTextBox);
@@ -220,6 +229,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox mXboxFileTextBox;
         private System.Windows.Forms.Button mConvertButton;
+        private System.Windows.Forms.VScrollBar vScrollBar1;
     }
 }
 

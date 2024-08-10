@@ -43,6 +43,7 @@ namespace NFL2K5Tool
         public ARMaxTestForm()
         {
             InitializeComponent();
+            
         }
 
         private void mSaveFileNameTextBox_DragOver(object sender, DragEventArgs e)
@@ -153,8 +154,9 @@ namespace NFL2K5Tool
 
             StringBuilder rootDirName= new StringBuilder(256);
             ARMaxNativeMethods.GetRootDir(rootDirName, 256);
-            rootDirName.Append("\\");
-            string dirName = ".\\" + rootDirName.ToString();
+            rootDirName.Append(Path.DirectorySeparatorChar);
+            FileInfo fileInfo = new FileInfo( mSaveFileNameTextBox.Text);
+            string dirName = fileInfo.Directory.ToString() + Path.DirectorySeparatorChar + rootDirName.ToString();
 
             if (Directory.Exists(dirName))
                 Directory.Delete(dirName, true);

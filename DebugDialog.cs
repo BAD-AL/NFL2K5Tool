@@ -1053,7 +1053,7 @@ namespace NFL2K5Tool
             StringBuilder builder = new StringBuilder();
             string fileName = "";
             builder.Append("Key=lname,Photo\n");
-            int key = 0;
+
             //foreach (int key in Tool.PhotoHashMap.Keys())
             //foreach(KeyValuePair<int,string> entry in Tool.PhotoHashMap)
             for(int i =0; i < 9999; i++)

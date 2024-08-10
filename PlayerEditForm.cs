@@ -180,7 +180,6 @@ namespace NFL2K5Tool
 
         private FaceData GetFace(Skin s, Face f)
         {
-            FaceData retVal = null;
             if( mGenericFaces == null )
                 mGenericFaces = FaceData.GetGenericFaces();
 
