@@ -430,19 +430,23 @@ namespace NFL2K5Tool
         /// <param name="password">the password for the file</param>
         /// <param name="fileToExtract">the name of the fuile to extract.</param>
         /// <returns>null if file was not found, byte array if it was successfully extracted.</returns>
-        public static byte[] ExtractFileFromPS2Save(string archiveFilenameIn)
+        public static byte[] ExtractFileFromPS2Save(string archiveFilenameIn, out string saveName)
         {
             byte[] retVal = null;
             string dirName = UnpackMaxToTempFolder(archiveFilenameIn);
             string[] files = Directory.GetFiles(dirName);
+            saveName = "";
             foreach (string file in files)
             {
                 if (file.Contains("\\BASLUS"))
                 {
                     retVal = File.ReadAllBytes(file);
+                    FileInfo fi = new FileInfo(file);
+                    saveName = fi.Name.Replace("BASLUS-", "");
                     break;
                 }
             }
+
             if (Directory.Exists(dirName))
                 Directory.Delete(dirName, true);
             
@@ -456,13 +460,22 @@ namespace NFL2K5Tool
         /// <param name="password">the password for the file</param>
         /// <param name="fileToExtract">the name of the fuile to extract.</param>
         /// <returns>null if file was not found, byte array if it was successfully extracted.</returns>
-        public static byte[] ExtractFileFromZip(string archiveFilenameIn, string password, string fileToExtract)
+        public static byte[] ExtractFileFromZip(string archiveFilenameIn, string password, string fileToExtract, out string saveMetaName)
         {
             byte[] retVal = null;
             string dirName = UnzipToTempFolder(archiveFilenameIn, password);
             string[] files = Directory.GetFiles(dirName, fileToExtract, SearchOption.AllDirectories);
             if (files.Length > 0)
                 retVal = File.ReadAllBytes(files[0]);
+            files = Directory.GetFiles(dirName, "SaveMeta.xbx", SearchOption.AllDirectories);
+            saveMetaName = "";
+            if (files.Length > 0)
+            {
+                string content = File.ReadAllText(files[0]);
+                int index = content.IndexOf('=');
+                if (index > -1)
+                    saveMetaName = content.Substring(index + 1).Trim();
+            }
             
             if (Directory.Exists(dirName))
                 Directory.Delete(dirName, true);
@@ -543,7 +556,7 @@ namespace NFL2K5Tool
         }
         #endregion
 
-        #region save signing
+        #region XBOX save signing
         // http://www.gothi.co.uk/2010/06/xbox-save-resigning-a-technical-overview/
 
         //"722E7565FB841B09E938DA756393FF80"
@@ -579,5 +592,6 @@ namespace NFL2K5Tool
             }
         }
         #endregion
+
     }
 }

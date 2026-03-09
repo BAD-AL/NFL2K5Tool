@@ -217,6 +217,17 @@ namespace NFL2K5Tool
             mPictureBoxList.Clear();
         }
 
+        private static bool IsUnknown(string text)
+        {
+            bool retVal = true;
+            if (DataMap.ReversePhotoMap.ContainsKey(text))
+            {
+                if (!DataMap.ReversePhotoMap[text].Contains("UNK"))
+                    retVal = false;
+            }
+            return retVal;
+        }
+
         void box_Paint(object sender, PaintEventArgs e)
         {
             if (mShowNumbersCheckbox.Checked)
@@ -226,6 +237,8 @@ namespace NFL2K5Tool
                 if (tag != null && tag.Length > 25)
                 {
                     string text = tag.Substring(24, 4);
+                    if (IsUnknown(text))
+                        text += " (unk)";
                     SizeF sz = e.Graphics.MeasureString(text, this.Font);
                     e.Graphics.FillRectangle(Brushes.Beige, 0, 0, sz.Width, sz.Height);
                     e.Graphics.DrawString(text, this.Font, Brushes.Black, 0, 0);
@@ -310,10 +323,16 @@ namespace NFL2K5Tool
         private void mSkinComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             string choice = mCategoryComboBox.SelectedItem.ToString();
+            bool onlyUnknowns = mOnlyUnknownsCheckBox.Checked;
             if (choice == "All")
-                mPhotoFiles = mAllPhotoFiles;
+            {
+                if (onlyUnknowns)
+                    mPhotoFiles = mCategories.GetPhotos("Unknown", onlyUnknowns).ToArray();
+                else
+                    mPhotoFiles = mAllPhotoFiles;
+            }
             else
-                mPhotoFiles = mCategories.GetPhotos(choice);
+                mPhotoFiles = mCategories.GetPhotos(choice, onlyUnknowns).ToArray();
 
             if (mPhotoScrollBar.Value != 0)
                 mPhotoScrollBar.Value = 0;
@@ -348,8 +367,8 @@ namespace NFL2K5Tool
             foreach( GenericArrayObj dude in mCategories.categories)
                 classifiedPlayers.AddRange(dude.values);
             FaceForm.RemoveDups(classifiedPlayers);
-
-            List<string> classifiedPlayerPics = new List<string>(FaceForm.GetPictures(classifiedPlayers));
+            bool onlyUnk = false;
+            List<string> classifiedPlayerPics = new List<string>(FaceForm.GetPictures(classifiedPlayers, onlyUnk));
             StringBuilder builder = new StringBuilder();
 
             foreach (string pfile in mAllPhotoFiles)
@@ -443,12 +462,24 @@ namespace NFL2K5Tool
             }
         }/**/
 
-        public static string[] GetPictures(List<int> nums)
+        public static List<string> GetPictures(List<int> nums, bool onlyUnknowns)
         {
-            string[] retVal = new string[nums.Count];
-            for (int i = 0; i < retVal.Length; i++)
+            List<string> retVal = new List<string>(nums.Count);
+            string currentKey;
+            for (int i = 0; i < nums.Count; i++)
             {
-                retVal[i] = String.Format("{0}\\{1:D4}.jpg", FaceForm.sFaceDir, nums[i]);
+                if (onlyUnknowns)
+                {
+                    currentKey = String.Format("{0:D4}", nums[i]);
+                    if (IsUnknown(currentKey))
+                    {
+                        retVal.Add(String.Format("{0}\\{1:D4}.jpg", FaceForm.sFaceDir, nums[i]));
+                    }
+                }
+                else
+                {
+                    retVal.Add(String.Format("{0}\\{1:D4}.jpg", FaceForm.sFaceDir, nums[i]));
+                }
             }
             return retVal;
         }
@@ -464,6 +495,11 @@ namespace NFL2K5Tool
                         dude.RemoveAt(i);
                 }
             }
+        }
+
+        private void mOnlyUnknownsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            mSkinComboBox_SelectedIndexChanged(sender, e);
         }
     }
 
@@ -508,9 +544,9 @@ namespace NFL2K5Tool
             return retVal;
         }
 
-        public string[] GetPhotos(string key)
+        public List<string> GetPhotos(string key, bool onlyUnknowns)
         {
-            string[] retVal = null;
+            List<string> retVal = null;
             GenericArrayObj target = null;
             foreach (GenericArrayObj current in this.categories)
             {
@@ -524,7 +560,21 @@ namespace NFL2K5Tool
             {
                 List<int> pictures = new List<int>(target.values);
                 FaceForm.RemoveDups(pictures);
-                retVal = FaceForm.GetPictures(pictures);
+                retVal = FaceForm.GetPictures(pictures, onlyUnknowns);
+            }
+            else if (key.StartsWith("Unknown", StringComparison.InvariantCultureIgnoreCase))
+                retVal = FaceForm.GetPictures(GetUnknowns(), false);
+            return retVal;
+        }
+
+        private List<int> GetUnknowns()
+        {
+            List<int> retVal = new List<int>();
+            retVal.Add(4); // 0004 = no photo
+            foreach (var kvp in DataMap.ReversePhotoMap)
+            {
+                if (kvp.Value.IndexOf("UNK") > -1)
+                    retVal.Add(Int32.Parse( kvp.Key ));
             }
             return retVal;
         }

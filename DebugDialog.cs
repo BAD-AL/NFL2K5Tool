@@ -1067,90 +1067,11 @@ namespace NFL2K5Tool
             }
             MessageForm.ShowMessage("results", builder.ToString(), SystemIcons.Information, false, false);
         }
-        List<FaceData> mFaceData = null;
-        private void uniqueFacesToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void showUserControlToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (mFaceData == null)
-            {
-                mFaceData = FaceData.ParseCsvFile("PlayerData\\NFL2K5FaceTextures.csv");
-            }
-            List<FaceData> uniqueFaces = FaceData.GetUniqueFaces();
-            List<FaceData> genericFaces = FaceData.GetGenericFaces();
-            /*
-            Console.WriteLine("============== Generic Faces ========================================");
-            foreach(FaceData dude in genericFaces)
-            {
-                Console.WriteLine("{0},{1},0x{2:x}",
-                    dude.skin, dude.face, dude.faceModelTexture);
-            }
-            Console.WriteLine("=====================================================================");
-            Console.WriteLine("============== Unique Faces ========================================");
-            foreach (FaceData dude in uniqueFaces)
-            {
-                Console.WriteLine("{0},{1},0x{2:x}",
-                    dude.skin, dude.face, dude.faceModelTexture);
-            }
-            Console.WriteLine("=====================================================================");
-            */
-
-            DirectoryInfo info = new DirectoryInfo(@"J:\NFL2K5\EMU\PCSX2-EX.v2.25.5\textures\@DUMP\42F9D5AF");
-            String imageName;
-            string destImage;
-            string sourceImage;
-            DirectoryInfo dest = new DirectoryInfo("PlayerData\\PlayerModelFaces\\Unique\\");
-            Console.WriteLine("============== Unique Faces ========================================");
-            foreach (FaceData dude in uniqueFaces)
-            {
-                imageName = String.Format("{0:x8}.dds", dude.faceModelTexture);
-                destImage = dest.FullName + "\\" + imageName;
-                sourceImage = info.FullName + "\\" + imageName;
-                if (!File.Exists(destImage) && File.Exists(sourceImage))
-                {
-                    File.Copy(sourceImage, destImage);
-                }
-                else if (!File.Exists(sourceImage))
-                {
-                    Console.WriteLine("Couldn't find '{0}' ({1} {2} {3})", 
-                        sourceImage, dude.position, dude.fname, dude.lname);
-                }
-            }
-        
-        }
-
-        private void genericFacesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (mFaceData == null)
-            {
-                mFaceData = FaceData.ParseCsvFile("PlayerData\\NFL2K5FaceTextures.csv");
-            }
-            Console.WriteLine("============== Generic Faces ========================================");
-            List<FaceData> genericFaces = FaceData.GetGenericFaces();
-
-            DirectoryInfo info = new DirectoryInfo(@"J:\NFL2K5\EMU\PCSX2-EX.v2.25.5\textures\@DUMP\42F9D5AF");
-            String imageName;
-            string destImage;
-            string sourceImage;
-            DirectoryInfo dest = new DirectoryInfo("PlayerData\\PlayerModelFaces\\Generic\\");
-            //F5DB8477
-            foreach (FaceData dude in genericFaces)
-            {
-                imageName = String.Format("{0:x8}.dds", dude.faceModelTexture);
-                destImage = dest.FullName + "\\" + imageName;
-                sourceImage = info.FullName + "\\" + imageName;
-                if (!File.Exists(destImage) && File.Exists(sourceImage))
-                {
-                    File.Copy(sourceImage, destImage);
-                }
-                else if (!File.Exists(sourceImage))
-                {
-                    Console.WriteLine("Couldn't find '{0}'", sourceImage);
-                }
-            }
-        }
-
-        private void genPhotoMapToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            mResultsTextBox.Text = Tool.GenPlayerPhotoPCSX2_data_2022_BatchFile();
+            mResultsTextBox.Text = Tool.GetPlayerControlledTeams();
+                
         }
     }
 
@@ -1238,18 +1159,21 @@ namespace NFL2K5Tool
                     uint photoTexture = 0;
                     if( parts[6].IndexOf("photo",  StringComparison.InvariantCultureIgnoreCase)==-1)
                         photoTexture =  ParseHexString(parts[6]);
-                    FaceData dude = new FaceData()
+                    if (parts[7].Length > 2)
                     {
-                        position = parts[0],
-                        skin = (Skin)Enum.Parse(typeof(Skin), parts[3]),
-                        face = (Face)Enum.Parse(typeof(Face), parts[4]),
-                        photo = Int32.Parse(parts[5]),
-                        photoTexture = photoTexture,
-                        faceModelTexture = ParseHexString(parts[7]),
-                        fname = parts[1],
-                        lname = parts[2],
-                    };
-                    retVal = dude;
+                        FaceData dude = new FaceData()
+                        {
+                            position = parts[0],
+                            skin = (Skin)Enum.Parse(typeof(Skin), parts[3]),
+                            face = (Face)Enum.Parse(typeof(Face), parts[4]),
+                            photo = Int32.Parse(parts[5]),
+                            photoTexture = photoTexture,
+                            faceModelTexture = ParseHexString(parts[7]),
+                            fname = parts[1],
+                            lname = parts[2],
+                        };
+                        retVal = dude;
+                    }
                 }
                 catch {
                     //Console.WriteLine("Error parsing: '{0}'", line);
@@ -1273,6 +1197,10 @@ namespace NFL2K5Tool
             FaceData current = null;
             foreach (string line in lines)
             {
+                if (line.StartsWith("#") || line.StartsWith("Team") || line.StartsWith(","))
+                {
+                    continue;
+                }
                 current = ParseLine(line);
                 if (current != null)
                 {

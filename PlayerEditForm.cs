@@ -13,6 +13,7 @@ namespace NFL2K5Tool
     {
         private string[] mKeyParts;
         private bool mInitializing = true;
+        ToolTip mToolTip = new ToolTip();
 
         /// <summary>
         /// Constructor.
@@ -53,7 +54,7 @@ namespace NFL2K5Tool
                 mGenericFacePictureBox.Visible = false;
             }*/
             mGenericFacePictureBox.ImageLocation = null;
-            if ( fc.Value.Length > 1)
+            if (fc != null && fc.Value.Length > 1)
             {
                 mGenericFacePictureBox.Visible = true;
                 try
@@ -66,6 +67,7 @@ namespace NFL2K5Tool
                         string path = String.Format(
                             "PlayerData\\PlayerModelFaces\\Generic\\{0:x8}.jpg",
                             data.faceModelTexture);
+                        mToolTip.SetToolTip(mGenericFacePictureBox, path);
                         mGenericFacePictureBox.ImageLocation = path;
                         if (mGenericFacePictureBox.Parent == null)
                             mGenericFacePictureBox.Parent = mAppearanceTab;

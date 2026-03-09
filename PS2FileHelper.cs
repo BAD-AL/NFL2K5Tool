@@ -189,9 +189,91 @@ namespace NFL2K5Tool
             return (result == 0);
         }
 
+
+        /// <summary>
+        /// Signs a PS2 NFL2K5 save file.
+        /// The PS2 uses a CRC32 checksum (little-endian, 4 bytes) of the main save data,
+        /// written to the "EXTRA" file -- NOT the HMAC-SHA1 used for Xbox saves.
+        /// </summary>
+        public static void SignPS2Nfl2K5Save(string fileToSign, byte[] dataToHash)
+        {
+            try
+            {
+                uint crc = Crc32.Compute(dataToHash);
+                File.WriteAllBytes(fileToSign, BitConverter.GetBytes(crc));
+            }
+            catch (Exception)
+            {
+                StaticUtils.AddError("Error signing PS2 file! " + fileToSign);
+            }
+        }
+
+        private static class Crc32
+        {
+            private static readonly uint[] Table = BuildTable();
+
+            private static uint[] BuildTable()
+            {
+                uint[] table = new uint[256];
+                for (uint i = 0; i < 256; i++)
+                {
+                    uint entry = i;
+                    for (int j = 0; j < 8; j++)
+                        entry = (entry & 1) == 1 ? (entry >> 1) ^ 0xEDB88320u : entry >> 1;
+                    table[i] = entry;
+                }
+                return table;
+            }
+
+            public static uint Compute(byte[] data)
+            {
+                uint crc = 0xFFFFFFFF;
+                foreach (byte b in data)
+                    crc = (crc >> 8) ^ Table[(crc ^ b) & 0xFF];
+                return crc ^ 0xFFFFFFFF;
+            }
+        }
+        
+        /// <summary>
+        /// Patches a .max file saved by ARMaxDLL so that mymc and the PS2 can import it.
+        ///
+        /// ARMaxDLL stores origSize inside the 92-byte header (offset 0x58) but sets
+        /// compressedSize to the raw LZARI byte count. The original PS2/mymc format
+        /// expects compressedSize to include those 4 origSize bytes, because the
+        /// consumer reads `compressedSize` bytes starting at offset 0x58 (not 0x5C).
+        /// Adding 4 restores that expectation, then we recompute the header CRC32.
+        /// </summary>
+        public static void FixPS2MaxFileCompressedSize(string maxFilePath)
+        {
+            try
+            {
+                byte[] data = File.ReadAllBytes(maxFilePath);
+                if (data.Length < 0x60)
+                    return;
+
+                // Patch compressedSize at offset 0x50: add 4
+                uint compressedSize = BitConverter.ToUInt32(data, 0x50);
+                compressedSize += 4;
+                byte[] sizeBytes = BitConverter.GetBytes(compressedSize);
+                sizeBytes.CopyTo(data, 0x50);
+
+                // Recompute header CRC32: zero the field first, then CRC32 whole file
+                data[0x0C] = 0; data[0x0D] = 0; data[0x0E] = 0; data[0x0F] = 0;
+                uint crc = Crc32.Compute(data);
+                BitConverter.GetBytes(crc).CopyTo(data, 0x0C);
+
+                File.WriteAllBytes(maxFilePath, data);
+            }
+            catch (Exception)
+            {
+                StaticUtils.AddError("Error patching .max file header! " + maxFilePath);
+            }
+        }
+
         public bool SaveMaxFileAs(string filename)
         {
             int result = ARMaxNativeMethods.SaveMaxFile(filename);
+            FixPS2MaxFileCompressedSize(filename);
             return result == 0;
         }
 
@@ -204,8 +286,10 @@ namespace NFL2K5Tool
 
         #endregion
 
-        public static void ConvertXboxSaveToPS2Max(string xboxSaveFile)
+        public static string ConvertXboxSaveToPS2Max(string xboxSaveFile)
         {
+            string retVal = null;
+            FileInfo fi = new FileInfo(xboxSaveFile);
             string dirName = Path.GetTempPath() + "NFL2K5ToolTmpZipUnpack\\";
             StaticUtils.ExtractZipFile(xboxSaveFile, null, dirName);
             string[] files = Directory.GetFiles(dirName, "*", SearchOption.AllDirectories);
@@ -233,6 +317,10 @@ namespace NFL2K5Tool
                 byte[] view_ico = StaticUtils.GetEmbeddedFile("VIEW.ICO");
                 File.WriteAllBytes(dirName + "icon.sys", icon_sys);
                 File.WriteAllBytes(dirName + "VIEW.ICO", view_ico);
+
+                // Convert EXTRA sig
+                byte[] hashThis = File.ReadAllBytes(saveGameFile);
+                SignPS2Nfl2K5Save(extraFile, hashThis);
                 // create max file
                 ARMaxNativeMethods.InitMaxSave();
                 ARMaxNativeMethods.SetRootDir(saveName);
@@ -241,14 +329,17 @@ namespace NFL2K5Tool
                 ARMaxNativeMethods.AddFileToSave(extraFile);
                 ARMaxNativeMethods.AddFileToSave(dirName + "icon.sys");
                 ARMaxNativeMethods.AddFileToSave(dirName + "VIEW.ICO");
-                string filename = ".\\BASLUS-20919" + saveName + ".max";
+                string filename = fi.Directory.FullName+ "\\BASLUS-20919" + saveName + ".max";
                 ARMaxNativeMethods.SaveMaxFile(filename);
+                FixPS2MaxFileCompressedSize(filename);
                 ARMaxNativeMethods.FreeMaxSave();
                 // cleanup
                 Directory.Delete(dirName, true);
+                retVal = filename;
                 // message to user
                 Console.WriteLine("Converted {0}; Saved to {1}", xboxSaveFile, filename);
             }
+            return retVal;
         }
 
         /*

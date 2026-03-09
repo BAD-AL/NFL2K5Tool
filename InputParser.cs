@@ -243,6 +243,11 @@ namespace NFL2K5Tool
                 Console.WriteLine("LookupAndModifyMode");
                 mCurrentState = ParsingStates.PlayerLookupAndApply;
             }
+            else if (line.IndexOf("LookupAndVerify", StringComparison.InvariantCultureIgnoreCase) > -1)
+            {
+                Console.WriteLine("LookupAndVerifyMode");
+                mCurrentState = ParsingStates.PlayerLookupAndVerify;
+            }
             else if ((mTeamMatch = mTeamRegex.Match(line)) != Match.Empty)
             {
                 //Console.WriteLine("'{0}' ", line);
@@ -296,6 +301,14 @@ namespace NFL2K5Tool
             {
                 ApplyFormula(line);
             }
+            else if (line.StartsWith("PlayerControlled"))
+            {
+                Tool.SetPlayerControlledTeams(line);
+            }
+            else if (line.StartsWith("AutoFixSkinFromPhoto"))
+            {
+                Tool.AutoFixSkinFromPhoto();
+            }
             else
             {
                 switch (mCurrentState)
@@ -312,6 +325,9 @@ namespace NFL2K5Tool
                         break;
                     case ParsingStates.PlayerLookupAndApply:
                         retVal = LookupPlayerAndApply(line);
+                        break;
+                    case ParsingStates.PlayerLookupAndVerify:
+                        retVal = LookupPlayerAndVerify(line);
                         break;
                 }
             }
@@ -426,6 +442,53 @@ namespace NFL2K5Tool
             else
             {
                 StaticUtils.AddError("In 'LookupAndModify' mode, you must specify fname and lname in the 'Key' for proper lookup:" + line);
+            }
+
+            return retVal;
+        }
+
+        private bool LookupPlayerAndVerify(string line)
+        {
+            bool retVal = false;
+            List<string> attributes = ParsePlayerLine(line);
+
+            // find first name position (-1); last name position (-2)
+            int firstNameIndex = -1;
+            int lastNameIndex = -1;
+            int positionIndex = -1;
+            for (int i = 0; i < Tool.Order.Length; i++)
+            {
+                if (Tool.Order[i] == -1)
+                    firstNameIndex = i;
+                else if (Tool.Order[i] == -2)
+                    lastNameIndex = i;
+                else if (Tool.Order[i] == (int)PlayerOffsets.Position)
+                    positionIndex = i;
+                if (firstNameIndex > -1 && lastNameIndex > -1 && positionIndex > -1)
+                    break;
+            }
+            if (firstNameIndex > -1 && lastNameIndex > -1)
+            {
+                string pos = null;
+                if (positionIndex > -1)
+                    pos = attributes[positionIndex];
+                string firstName = attributes[firstNameIndex];
+                string lastName = attributes[lastNameIndex];
+
+                List<int> playersToVerify = Tool.FindPlayer(pos, firstName, lastName);
+                if (playersToVerify.Count > 0)
+                {
+                    //retVal = SetPlayerData(playersToApplyTo[0], line, false);
+                    string playerData = Tool.GetPlayerData(playersToVerify[0], true, true);
+                    if (playerData.IndexOf(line, StringComparison.InvariantCultureIgnoreCase) == -1)
+                    {
+                        StaticUtils.AddError( String.Format("Fail! LookupAndVerify: {0} != {1}", line, playerData));
+                    }
+                }
+            }
+            else
+            {
+                StaticUtils.AddError("In 'LookupAndVerify' mode, you must specify fname and lname in the 'Key' for proper lookup:" + line);
             }
 
             return retVal;
@@ -952,6 +1015,7 @@ namespace NFL2K5Tool
     {
         PlayerModification,
         PlayerLookupAndApply,
+        PlayerLookupAndVerify,
         PlayerLookup,
         Schedule
     }

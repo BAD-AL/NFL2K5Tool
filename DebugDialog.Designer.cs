@@ -83,9 +83,7 @@
             this.checkFacesskinMismatchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aRMaxFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkPhotosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.faceStuffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uniqueFacesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.genericFacesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showUserControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updatePlayerAppearanceFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mGetTeamButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -107,7 +105,6 @@
             this.mFindBytesButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.mResultsTextBox = new NFL2K5Tool.SearchTextBox();
-            this.genPhotoMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.mPlayerUpDown)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -548,8 +545,7 @@
             this.checkFacesskinMismatchToolStripMenuItem,
             this.aRMaxFormToolStripMenuItem,
             this.checkPhotosToolStripMenuItem,
-            this.faceStuffToolStripMenuItem,
-            this.genPhotoMapToolStripMenuItem});
+            this.showUserControlToolStripMenuItem});
             this.miscToolStripMenuItem.Name = "miscToolStripMenuItem";
             this.miscToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.miscToolStripMenuItem.Text = "&Misc";
@@ -617,28 +613,12 @@
             this.checkPhotosToolStripMenuItem.Text = "Check Photos";
             this.checkPhotosToolStripMenuItem.Click += new System.EventHandler(this.checkPhotosToolStripMenuItem_Click);
             // 
-            // faceStuffToolStripMenuItem
+            // showUserControlToolStripMenuItem
             // 
-            this.faceStuffToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.uniqueFacesToolStripMenuItem,
-            this.genericFacesToolStripMenuItem});
-            this.faceStuffToolStripMenuItem.Name = "faceStuffToolStripMenuItem";
-            this.faceStuffToolStripMenuItem.Size = new System.Drawing.Size(308, 22);
-            this.faceStuffToolStripMenuItem.Text = "Face Stuff";
-            // 
-            // uniqueFacesToolStripMenuItem
-            // 
-            this.uniqueFacesToolStripMenuItem.Name = "uniqueFacesToolStripMenuItem";
-            this.uniqueFacesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.uniqueFacesToolStripMenuItem.Text = "Unique Faces";
-            this.uniqueFacesToolStripMenuItem.Click += new System.EventHandler(this.uniqueFacesToolStripMenuItem_Click);
-            // 
-            // genericFacesToolStripMenuItem
-            // 
-            this.genericFacesToolStripMenuItem.Name = "genericFacesToolStripMenuItem";
-            this.genericFacesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.genericFacesToolStripMenuItem.Text = "Generic Faces";
-            this.genericFacesToolStripMenuItem.Click += new System.EventHandler(this.genericFacesToolStripMenuItem_Click);
+            this.showUserControlToolStripMenuItem.Name = "showUserControlToolStripMenuItem";
+            this.showUserControlToolStripMenuItem.Size = new System.Drawing.Size(308, 22);
+            this.showUserControlToolStripMenuItem.Text = "Show User Control";
+            this.showUserControlToolStripMenuItem.Click += new System.EventHandler(this.showUserControlToolStripMenuItem_Click);
             // 
             // updatePlayerAppearanceFromFileToolStripMenuItem
             // 
@@ -903,13 +883,6 @@
             this.mResultsTextBox.TabIndex = 3;
             this.mResultsTextBox.Text = "";
             // 
-            // genPhotoMapToolStripMenuItem
-            // 
-            this.genPhotoMapToolStripMenuItem.Name = "genPhotoMapToolStripMenuItem";
-            this.genPhotoMapToolStripMenuItem.Size = new System.Drawing.Size(308, 22);
-            this.genPhotoMapToolStripMenuItem.Text = "Gen Photo Map";
-            this.genPhotoMapToolStripMenuItem.Click += new System.EventHandler(this.genPhotoMapToolStripMenuItem_Click);
-            // 
             // DebugDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1029,9 +1002,6 @@
         private System.Windows.Forms.ToolStripMenuItem getPlayerUnknownBytesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem zeroPlayerUnkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkPhotosToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem faceStuffToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem uniqueFacesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem genericFacesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem genPhotoMapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showUserControlToolStripMenuItem;
     }
 }

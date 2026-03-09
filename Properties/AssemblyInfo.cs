@@ -33,7 +33,6 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 //[assembly: AssemblyVersion("0.9.0.1")] // bug fixes 
 //[assembly: AssemblyVersion("0.9.0.2")] // Face Form improvements
-[assembly: AssemblyVersion("0.9.1.0")]   // bug fix for KR1, KR2
 //[assembly: AssemblyVersion("0.9.0.9")] // Bug fix for SutoUpdate_ST; allow cross save between XBOX & PS2 save files.
 //[assembly: AssemblyVersion("0.9.0.8")] // Face form scrollbar (paging) fix; List Depth charts (better) from Debug Dialog ; Better Error handling in main form ; Check Special teams (menu item)
 //[assembly: AssemblyVersion("0.9.0.7")] // check faces, dreads menus; SearchTextBox.CopyAll; resetKey menuItem; autoSelect apperance (when skills are blank);
@@ -44,4 +43,8 @@ using System.Runtime.InteropServices;
 //[assembly: AssemblyVersion("0.9.0.0")] //
 //[assembly: AssemblyVersion("0.1.0.2")]
 //[assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyFileVersion("0.9.0.0")]
+//[assembly: AssemblyFileVersion("0.9.0.0")]
+//[assembly: AssemblyVersion("0.9.1.0")]   // bug fix for KR1, KR2
+//[assembly: AssemblyVersion("0.9.1.1")]   // bug fix for PS2 'EXTRA' file
+//[assembly: AssemblyVersion("0.9.1.2")]   // PCSX2 Batch file generation
+[assembly: AssemblyVersion("0.9.1.3")]   //TeamControl; LookupAndVerify feature; FaceForm [List unknowns];  

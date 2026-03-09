@@ -16,8 +16,14 @@ Modification Commands:
 	AutoUpdateDepthChart
 	AutoUpdatePBP
 	AutoUpdatePhoto
+	PlayerControlled=[49ers,Bears, ...]
+	PlayerControlled=All
+	AutoFixSkinFromPhoto
 	ApplyFormula(<arguments>)
 
+
+Verify Commands:
+	LookupAndVerify  --> Verifies the given attributes are set.
 	
 Note: 
 To Apply Data without saving to the gamesave file.
@@ -116,6 +122,27 @@ Example:
 	AutoUpdatePhoto
 	<apply data without saving>
 
+====== LookupAndVerify ======
+Example:
+	LookupAndVerify
+	Key= Position,fname,lname,Photo
+	QB,Jimmy,Garoppolo,0481,
+	QB,Nick,Mullens,0799,
+	RB,Tevin,Coleman,0187,
+	RB,Matt,Breida,0242,
+# Will produce error message for differences
+	
+====== PlayerControlled ====== 
+	PlayerControlled=All
+	PlayerControlled=49ers
+	PlayerControl=[49ers, Bears, ...]
+Set Player controlled teams for a franchise file.
+
+====== AutoFixSkinFromPhoto ====== 
+AutoFixSkinFromPhoto
+Directive to Auto update Skin & face data from the player photo.
+Only works on photos from the base gamesave.
+	
 ====== ApplyFormula ======
 Can be used to modify players meeting specified attributes.
 The 'Global Edit Form' Can be used to craft and apply formulas.

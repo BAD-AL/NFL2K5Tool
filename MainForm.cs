@@ -70,8 +70,14 @@ namespace NFL2K5Tool
             mTool = new GamesaveTool();
             if (mTool.LoadSaveFile(filename))
             {
-                string shortName = filename.Substring(filename.LastIndexOf(Path.DirectorySeparatorChar) + 1);
-                Text = "NFL2K5Tool - " + shortName;
+                FileInfo fi = new FileInfo(filename);
+                string shortName = fi.Name;
+                if (!String.IsNullOrEmpty(mTool.MetaName))
+                    shortName = string.Format("{0} ({1})", fi.Name, mTool.MetaName);
+
+                Text = string.Format("NFL2K5Tool {0} - {1}", 
+                    System.Reflection.Assembly.GetCallingAssembly().GetName().Version, 
+                    shortName);
                 statusBar1.Text = filename + " loaded";
                 EnableControls(true);
             }
@@ -108,8 +114,6 @@ namespace NFL2K5Tool
             debugDialogMenuItem.Enabled = 
             resetKeyToolStripMenuItem.Enabled =
             checkToolStripMenuItem.Enabled = 
-            pCSX2PhotoBatchFileToolStripMenuItem.Enabled =
-            pCSX2PhotoYAMLToolStripMenuItem.Enabled =
                 enable;
         }
 
@@ -147,6 +151,12 @@ namespace NFL2K5Tool
                 builder.Append(mTool.GetCoachData());
             }
 
+            if (playerControlledTeamsToolStripMenuItem.Checked && mTool.SaveType == SaveType.Franchise)
+            {
+                builder.Append("\n\n");
+                builder.Append(mTool.GetPlayerControlledTeams());
+                builder.Append("\n\n");
+            }
             if (listScheduleToolStripMenuItem.Checked  )
             {
                 if (mTool.SaveType == SaveType.Franchise)
@@ -729,6 +739,11 @@ namespace NFL2K5Tool
             form.Show();
         }
 
+        private void checkScheduleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckSchedule();
+        }
+
         private void aboutNFL2K5ToolToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string version = 
@@ -788,7 +803,7 @@ https://www.youtube.com/watch?v=u_lYjJEi-Gg
             }
         }
 
-
+        
         private void CheckFaces()
         {
             string prevKey = mTool.GetKey(true, true).Replace("#", "Key=");
@@ -798,6 +813,7 @@ https://www.youtube.com/watch?v=u_lYjJEi-Gg
             mTool.SetKey("Key=Position,fname,lname,Photo,Skin");
             sb.Append(mTool.GetKey(true, true).Replace("#", "Key="));
             sb.Append("\nLookupAndModify\n"+
+                "#This is a reflection of what is present in the Gamesave file; check/change the results as needed\n"+
                 "#Team=FreeAgents   (This line is a comment, but allows the player editor to function on this data)\n\n");
 
             string skin = "";
@@ -845,11 +861,28 @@ https://www.youtube.com/watch?v=u_lYjJEi-Gg
                         break;
                 }
             }
-            MessageForm.ShowMessage("Results", sb.ToString(), SystemIcons.Information, false, false);
+            //MessageForm.ShowMessage("Results", sb.ToString(), SystemIcons.Information, false, false);
             ff.Dispose();
+            MessageForm mf = new MessageForm(this.Icon);
+            mf.Text = "Results";
+            mf.MessageText = sb.ToString();
+            mf.ShowCancelButton = false;
+            mf.Show();
+
             mTool.SetKey(prevKey);
         }
 
+        private void CheckSchedule()
+        {
+            if (mTool.SaveType == SaveType.Franchise)
+            {
+                MessageForm mf = new MessageForm(this.Icon);
+                mf.Text = "Schedule data";
+                mf.MessageText = mTool.CheckSchedule(); ;
+                mf.ShowCancelButton = false;
+                mf.Show();
+            }
+        }
 
         private void CheckDreads()
         {
@@ -903,7 +936,7 @@ https://www.youtube.com/watch?v=u_lYjJEi-Gg
         private void aboutCheckOperationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string message =
-@"The 'check' operation results are crafted to be pasted into the main text area.
+@"The 'check' operation results are crafted to be pasted into the main text area (except for 'check schedule').
 They are built to be 'LookupAndModify' Commands and editable with the 
 Player Edit Form (unless otherwise stated).
 
@@ -956,18 +989,6 @@ Intended workflow:
                 statusBar1.Text = "No special teams issues found";
         }
 
-        private void pCSX2PhotoYAMLToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (mTool != null)
-            {
-                PCSX2TextureForm form = new PCSX2TextureForm(this.mTool);
-                form.ShowYaml();
-                form.Show();
-                //string results = mTool.GetPlayerPhotoPCSX2Yaml();
-                //MessageForm.ShowMessage("PCSX2 Photo data", results);
-            }
-        }
-
         private void deleteTrailingCommasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string output = DeleteTrailingCommas( mTextBox.Text);
@@ -984,14 +1005,32 @@ Intended workflow:
             return ret;
         }
 
-        private void pCSX2PhotoBatchFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void playerControlledTeamsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (mTool != null)
-            {
-                PCSX2TextureForm form = new PCSX2TextureForm(this.mTool);
-                form.ShowBatchFile();
-                form.Show();
-            }
+            playerControlledTeamsToolStripMenuItem.Checked = !playerControlledTeamsToolStripMenuItem.Checked;
         }
+
+        private void autoFixSkinFaceFromPhotoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTool.AutoFixSkinFromPhoto();
+        }
+
+        private void convertXboxSavePS2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "XBOX Save files (*.zip)|*.zip";
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string ps2File =  PS2FileHelper.ConvertXboxSaveToPS2Max(dlg.FileName);
+                if(File.Exists(ps2File))
+                    MessageBox.Show( "Converted file saved to: " + ps2File, "Success!");
+                else
+                    MessageBox.Show("Could not save to: " + ps2File, "Fail!");
+            }
+            dlg.Dispose();
+
+        }
+
+
     }
 }

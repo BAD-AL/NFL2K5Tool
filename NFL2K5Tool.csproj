@@ -77,12 +77,6 @@
       <DependentUpon>DateValueControl.cs</DependentUpon>
     </Compile>
     <Compile Include="DepthChart.cs" />
-    <Compile Include="EnhancedPlayerEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="EnhancedPlayerEditor.Designer.cs">
-      <DependentUpon>EnhancedPlayerEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="EnumDefinitions.cs" />
     <Compile Include="FaceForm.cs">
       <SubType>Form</SubType>
@@ -115,12 +109,6 @@
     </Compile>
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PCSX2TextureForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PCSX2TextureForm.Designer.cs">
-      <DependentUpon>PCSX2TextureForm.cs</DependentUpon>
     </Compile>
     <Compile Include="PictureChooser.cs">
       <SubType>UserControl</SubType>
@@ -158,10 +146,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DateValueControl.resx">
       <DependentUpon>DateValueControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EnhancedPlayerEditor.resx">
-      <DependentUpon>EnhancedPlayerEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FaceForm.resx">
@@ -230,6 +214,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Images\PS2\icon.sys" />
+    <EmbeddedResource Include="BaseRoster.DAT" />
     <None Include="NFL2K5Tool_Usage.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -280,10 +265,6 @@
     </Content>
     <EmbeddedResource Include="ARMaxTestForm.resx">
       <DependentUpon>ARMaxTestForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PCSX2TextureForm.resx">
-      <DependentUpon>PCSX2TextureForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PlayerData\ENFNameIndex.txt" />

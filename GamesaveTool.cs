@@ -62,6 +62,9 @@ namespace NFL2K5Tool
 
         private string mZipFile = "";
         private string mPS2SaveFile = "";
+        private string mMetaName = "";
+
+        public string MetaName { get { return mMetaName; } }
 
         public GamesaveTool()
         {
@@ -1173,6 +1176,15 @@ namespace NFL2K5Tool
                 throw new InvalidOperationException("Error setting special teamer! '"+ theName + "' is not on the team!");
             }
         }
+        // inside SaveMeta.xbx
+        private string GetMetaName(string content)
+        {
+            string retVal = "";
+            int index = content.IndexOf("=");
+            if (index > -1)
+                retVal = content.Substring(index + 1).Trim();
+            return retVal;
+        }
 
         /// <summary>
         /// Loads the gamesave fle
@@ -1189,17 +1201,23 @@ namespace NFL2K5Tool
                     mZipFile = "";
                     mPS2SaveFile = "";
                     GameSaveData = File.ReadAllBytes(fileName);
+                    FileInfo info = new FileInfo(fileName);
+                    FileInfo[] files = info.Directory.GetFiles("SaveMeta.xbx");
+                    if (files.Length > 0)
+                    {
+                        mMetaName = GetMetaName(File.ReadAllText(files[0].FullName));
+                    }
                 }
                 else if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase))
                 {
                     mPS2SaveFile = "";
-                    GameSaveData = StaticUtils.ExtractFileFromZip(fileName, null, "SAVEGAME.DAT");
+                    GameSaveData = StaticUtils.ExtractFileFromZip(fileName, null, "SAVEGAME.DAT", out mMetaName);
                     mZipFile = fileName;
                 }
                 else if (fileName.EndsWith(".max", StringComparison.InvariantCultureIgnoreCase))
                 {
                     mZipFile = "";
-                    GameSaveData = StaticUtils.ExtractFileFromPS2Save(fileName);
+                    GameSaveData = StaticUtils.ExtractFileFromPS2Save(fileName, out mMetaName);
                     mPS2SaveFile = fileName;
                 }
                 else
@@ -1208,17 +1226,21 @@ namespace NFL2K5Tool
                 }
                 if (GameSaveData != null)
                 {
-                    mColleges.Clear();
-                    if (GameSaveData[0] == (byte)'R' && GameSaveData[1] == (byte)'O' &&
-                        GameSaveData[2] == (byte)'S' && GameSaveData[3] == (byte)'T')
-                        InitializeForRoster();
-                    else
-                        InitializeForFranchise();
-
+                    SetupForSaveType();
                     retVal = true;
                 }
             }
             return retVal;
+        }
+
+        internal void SetupForSaveType()
+        {
+            mColleges.Clear();
+            if (GameSaveData[0] == (byte)'R' && GameSaveData[1] == (byte)'O' &&
+                GameSaveData[2] == (byte)'S' && GameSaveData[3] == (byte)'T')
+                InitializeForRoster();
+            else
+                InitializeForFranchise();
         }
 
         public void SaveFile(string fileName)
@@ -1277,7 +1299,7 @@ namespace NFL2K5Tool
                 if (helper.HasFile("EXTRA"))
                 {
                     tmpFile = Path.GetTempFileName();
-                    StaticUtils.SignNfl2K5Save(tmpFile, GameSaveData);
+                    PS2FileHelper.SignPS2Nfl2K5Save(tmpFile, GameSaveData);
                     helper.ReplaceFile("EXTRA", tmpFile);
                 }
                 helper.SaveMaxFileAs(fileName);
@@ -1325,6 +1347,16 @@ namespace NFL2K5Tool
             SchedulerHelper helper = new SchedulerHelper(this);
             helper.FranchiseScheduleMode = true;
             return helper.GetSchedule();
+        }
+
+        /// <summary>
+        /// Gets a message regarding schedule correctness
+        /// </summary>
+        public string CheckSchedule()
+        {
+            SchedulerHelper helper = new SchedulerHelper(this);
+            helper.FranchiseScheduleMode = true;
+            return helper.CheckSchedule();
         }
 
         /// <summary>
@@ -1483,7 +1515,7 @@ namespace NFL2K5Tool
                     GetPlayerAppearanceAttribute(player, (AppearanceAttributes)attr, builder);
                 else
                     builder.Append(GetAttribute(player, (PlayerOffsets)attr));
-                if( builder[builder.Length -1] != ',')
+                if(builder.Length > 0 && builder[builder.Length -1] != ',')
                     builder.Append(",");
             }
             return builder.ToString();
@@ -2266,7 +2298,7 @@ namespace NFL2K5Tool
         }
 
 
-        private string GetPlayerPosition(int player)
+        public string GetPlayerPosition(int player)
         {
             int loc = GetPlayerDataStart(player);
             loc += (int)PlayerOffsets.Position;
@@ -3262,122 +3294,6 @@ namespace NFL2K5Tool
         };
         #endregion
 
-        // in 2022 PCSX2 supports a new way of doing texture replacement.
-        private static string sPhotoHashMapPath_2022 = "PlayerData\\photo_map_new_emu_2022.csv";
-
-        private string LookupPhotoHash_2022(int playerIndex)
-        {
-            string retVal = null;
-            string photo_str = GetAttribute(playerIndex, PlayerOffsets.Photo);
-            int photo_number = Int32.Parse(photo_str);
-            if (PhotoHashMap_2022.ContainsKey(photo_number))
-                retVal = PhotoHashMap_2022[photo_number];
-            return retVal;
-        }
-        public Dictionary<int, string> mPhotoHashMap_2022 = null;
-        public Dictionary<int, string> PhotoHashMap_2022
-        {
-            get
-            {
-                if (mPhotoHashMap_2022 == null)
-                {
-                    if (File.Exists(sPhotoHashMapPath_2022))
-                    {
-                        string[] lines = File.ReadAllLines(sPhotoHashMapPath_2022);
-                        mPhotoHashMap_2022 = new Dictionary<int, string>(lines.Length);
-
-                        char[] seps = ",".ToCharArray();
-                        string[] parts = null;
-                        int key = 0;
-                        foreach (string line in lines)
-                        {
-                            if (!line.StartsWith("#"))
-                            {
-                                parts = line.Split(seps);
-                                if (parts.Length == 2 && line.Length > 4)
-                                {
-                                    key = Int32.Parse(parts[0]);
-                                    mPhotoHashMap_2022[key] = parts[1];
-                                    //Console.WriteLine("key: {0}\tvalue:{1}", parts[0], parts[1]);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        throw new FileNotFoundException("Path '" + sPhotoHashMapPath_2022 + "' not found!");
-                    }
-                }
-                return mPhotoHashMap_2022;
-            }
-        }
-
-        public string GenPlayerPhotoPCSX2_data_2022_BatchFile()
-        {
-            StringBuilder sb = new StringBuilder(2000);
-            string path = "";
-            string hash = "";
-            sb.Append(":: Photo map located at:\r\n");
-            sb.Append(":: " + sPhotoHashMapPath_2022 + "\r\n");
-            sb.Append("if not exist replacements\\portraits\\ (\r\n");
-            sb.Append("    md replacements \r\n");
-            sb.Append("    md replacements\\portraits\\ \r\n");
-            sb.Append(")\r\n");
-
-            for (int i = 0; i < mMaxPlayers; i++)
-            {
-                hash = LookupPhotoHash_2022(i);
-                if (hash != null)
-                {
-                    //path = String.Format("@COM/2k5/photos_dds/{0}_{1}{2}.dds", GetPlayerPosition(i), GetPlayerFirstName(i), GetPlayerLastName(i));
-                    path = String.Format("copy /Y madden_photos\\{0}_{1}{2}.png replacements\\portraits\\{3}.png\r\n", 
-                        GetPlayerPosition(i), GetPlayerFirstName(i), GetPlayerLastName(i), hash);
-                    //sb.Append("  "); // 2 spaces 
-                    //sb.Append(hash);
-                    //sb.Append(": \"");
-                    sb.Append(path);
-                    //sb.Append("\"\n");
-                }
-                else
-                {
-                    sb.Append(string.Format("::  Photo '{0}' is not mapped; '{1} {2} {3}'\r\n", GetAttribute(i, PlayerOffsets.Photo),
-                        GetPlayerPosition(i), GetPlayerFirstName(i), GetPlayerLastName(i)));
-                }
-            }
-            string result = sb.ToString();
-            return result;
-        }
-        
-
-        public string GetPlayerPhotoPCSX2Yaml()
-        {
-            StringBuilder sb = new StringBuilder(2000);
-            string path = "";
-            string hash = "";
-            sb.Append("# Photo map located at:\n");
-            sb.Append("# " + sPhotoHashMapPath +"\n");
-
-            for (int i = 0; i < mMaxPlayers; i++)
-            {
-                hash = LookupPhotoHash(i);
-                if (hash != null)
-                {
-                    path = String.Format("@COM/2k5/photos_dds/{0}_{1}{2}.dds", GetPlayerPosition(i), GetPlayerFirstName(i), GetPlayerLastName(i));
-                    sb.Append("  "); // 2 spaces 
-                    sb.Append(hash);
-                    sb.Append(": \"");
-                    sb.Append(path);
-                    sb.Append("\"\n");
-                }
-                else
-                {
-                    sb.Append(string.Format("  # Photo '{0}' not assignable; '{1} {2} {3}'\n", GetAttribute(i, PlayerOffsets.Photo),
-                        GetPlayerPosition(i), GetPlayerFirstName(i), GetPlayerLastName(i)));
-                }
-            }
-            string result = sb.ToString();
-            return result;
-        }
 
         private string LookupPhotoHash(int playerIndex)
         {
@@ -3435,17 +3351,137 @@ namespace NFL2K5Tool
             }
         }
 
-        /*
-        public string GetPlayerPhotoYamlLine(int playerIndex)
-        {
-            int i = playerIndex;
-            // create string like "@COM/2k5/Photo/<Position>_<FirstName><LastName>"
-            string photoPath = String.Format("@COM/2k5/photo_dds/{0}_{1}{2}.dds", GetPlayerPosition(i), GetFirstName(i), GetLastName(i));
-            string photoHash = LookupHash(GetPhoto(i)); // mapped in spreadsheet at:
-            // https://docs.google.com/spreadsheets/d/1_CNoTn3rac7nxL5M2AqNCe2GB3D3J6Y4/edit#gid=1565593330
+        const int TeamControlStartLoc = 0x913CC;
 
-            string yamlLine = string.Format("  {0}: \"{1}\"", photoHash, photoPath);
-            return yamlLine;
-        }*/
+        public bool IsTeamPlayerControlled(string team)
+        {
+            bool retVal = false;
+            int teamIndex = GetTeamIndex(team);
+            int location = TeamControlStartLoc + teamIndex * 4;
+            if (GameSaveData[location] == (byte)1)
+            {
+                retVal = true;
+            }
+            return retVal;
+        }
+
+        public void SetAllTeamsPlayerControlled()
+        {
+            for (int i = 0; i < 32; i++)
+                SetTeamPlayerControlled(sTeamsDataOrder[i], true);
+        }
+
+        /// <summary>
+        /// Expects a line containing open [ and close ] containing team names.
+        /// </summary>
+        /// <param name="line"></param>
+        public void SetPlayerControlledTeams(string line)
+        {
+            int index1 = line.IndexOf("[");
+            int index2 = line.IndexOf("]");
+            string team;
+            int count = 0;
+            if (line.IndexOf("All", StringComparison.InvariantCultureIgnoreCase) > -1)
+            {
+                SetAllTeamsPlayerControlled();
+                return;
+            }
+            if (index1 > -1 && index2 > index1)
+            {
+                for (int i = 0; i < 32; i++)
+                {
+                    team = sTeamsDataOrder[i];
+                    if (line.IndexOf(team, StringComparison.InvariantCultureIgnoreCase) == -1)
+                        SetTeamPlayerControlled(team, false);
+                    else
+                    {
+                        SetTeamPlayerControlled(team, true);
+                        count++;
+                    }
+                }
+            }
+            Console.WriteLine("SetTeamsPlayerControlled: {0} teams", count);
+        }
+
+        public void SetTeamPlayerControlled(string team, bool userControlled)
+        {
+            int teamIndex = GetTeamIndex(team);
+            int location = TeamControlStartLoc + teamIndex * 4;
+            byte setTo = 0;
+            if (userControlled)
+                setTo = 1;
+            GameSaveData[location] = setTo;
+        }
+
+        public string GetPlayerControlledTeams()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("PlayerControlled=[");
+            string team;
+            int count = 0;
+            if (this.mSaveType == SaveType.Franchise)
+            {
+                for (int i = 0; i < 32; i++)
+                {
+                    team = sTeamsDataOrder[i];
+                    if (IsTeamPlayerControlled(team))
+                    {
+                        count++;
+                        sb.Append(String.Format("{0},", team));
+                    }
+                }
+            }
+            sb.Append("]\n");
+            sb.Append(String.Format("# PlayerControlledTeams={0}\n", count));
+            if (this.mSaveType == SaveType.Roster)
+                sb.Append("#PlayerControlledTeams not applicable to Type = Roster");
+            return sb.ToString();
+        }
+
+        public void AutoFixSkinFromPhoto()
+        {
+            Console.WriteLine("AutoFixSkinFromPhoto");
+            int playerLimit = 1928;
+            GamesaveTool baseTool = new GamesaveTool();
+            baseTool.GameSaveData = StaticUtils.GetEmbeddedFile("BaseRoster.DAT");
+            baseTool.SetupForSaveType();
+            Dictionary<String, String> photoSkinMap = new Dictionary<string, string>();
+            Dictionary<string, String> photoFaceMap = new Dictionary<string, string>();
+            string photo;
+            string skin = "";
+            string face = "";
+            for (int player = 0; player < playerLimit; player++)
+            {
+                photo = baseTool.GetPlayerField(player, "Photo");
+                face = baseTool.GetPlayerField(player, "Face");
+                skin = baseTool.GetPlayerField(player, "Skin");
+                if (photo != "0004" && !photoSkinMap.ContainsKey(photo))
+                {
+                    photoSkinMap.Add(photo, skin);
+                    photoFaceMap.Add(photo, face);
+                }
+            }
+
+            for (int player = 0; player < playerLimit; player++)
+            {
+                photo = GetPlayerField(player, "Photo");
+                face = GetPlayerField(player, "Face");
+                skin = GetPlayerField(player, "Skin");
+                if (photo != "0004" && photoSkinMap.ContainsKey(photo))
+                {
+                    if (face != photoFaceMap[photo] || skin != photoSkinMap[photo])
+                    {
+                        SetAttribute(player, PlayerOffsets.Face, photoFaceMap[photo]);
+                        SetPlayerField(player, "Skin", photoSkinMap[photo]);
+                        Console.WriteLine("Updated Player {0} {1} Photo={2};-> {3} {4}",
+                            GetPlayerPosition(player),
+                            GetPlayerName(player, ' '),
+                            photo,
+                            photoSkinMap[photo],
+                            photoFaceMap[photo]);
+                    }
+                }
+            }
+        }
     }
 }

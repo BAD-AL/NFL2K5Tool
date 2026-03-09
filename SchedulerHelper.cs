@@ -457,6 +457,42 @@ namespace NFL2K5Tool
             return sb.ToString();
         }
 
+        public String CheckSchedule()
+        {
+            /*
+             * Get the current text schedule, breakup into lines, go through each line
+             */
+            String[] theSchedule = GetSchedule().Replace("\r\n", "\n").Split("\n".ToCharArray());
+            Dictionary<string, int> gameCounts = new Dictionary<string, int>();
+            Match m = Match.Empty;
+            string awayTeam, homeTeam;
+            int totalGameCount = 0;
+            foreach (string line in theSchedule)
+            {
+                m = mGameRegex.Match(line);
+                if (m != Match.Empty)
+                {
+                    totalGameCount++;
+                    awayTeam = m.Groups[1].ToString();
+                    homeTeam = m.Groups[2].ToString();
+                    if (!gameCounts.ContainsKey(awayTeam))  gameCounts.Add(awayTeam, 0);
+                    if (!gameCounts.ContainsKey(homeTeam))  gameCounts.Add(homeTeam, 0);
+                    gameCounts[awayTeam]++;
+                    gameCounts[homeTeam]++;
+                }
+            }
+            StringBuilder result = new StringBuilder();
+            result.Append("#Each team should have 16 games; total game count should be 256\n");
+            result.Append(String.Format("Total Game Count = {0}\n", totalGameCount ));
+            string team;
+            for (int i = 0; i < mTeams.Length - 1; i++)
+            {
+                team = mTeams[i];
+                result.Append(String.Format("{0}; {1} games\n", team, gameCounts[team]));
+            }
+            return result.ToString();
+        }
+
         private int GameLocation(int week, int gameOfweek)
         {
             if (week < 0 || week > mGamesPerWeek.Length - 1 ||

@@ -40,6 +40,7 @@
             this.runSpecialActionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.classifyMode = new System.Windows.Forms.ToolStripMenuItem();
             this.showUnclassifiedPhotosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mOnlyUnknownsCheckBox = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -113,7 +114,7 @@
             this.classifyMode,
             this.showUnclassifiedPhotosToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(210, 70);
             // 
             // runSpecialActionToolStripMenuItem
             // 
@@ -136,11 +137,24 @@
             this.showUnclassifiedPhotosToolStripMenuItem.Text = "Show Unclassified Photos";
             this.showUnclassifiedPhotosToolStripMenuItem.Click += new System.EventHandler(this.showUnclassifiedPhotosToolStripMenuItem_Click);
             // 
+            // mOnlyUnknownsCheckBox
+            // 
+            this.mOnlyUnknownsCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.mOnlyUnknownsCheckBox.AutoSize = true;
+            this.mOnlyUnknownsCheckBox.Location = new System.Drawing.Point(588, 478);
+            this.mOnlyUnknownsCheckBox.Name = "mOnlyUnknownsCheckBox";
+            this.mOnlyUnknownsCheckBox.Size = new System.Drawing.Size(101, 17);
+            this.mOnlyUnknownsCheckBox.TabIndex = 6;
+            this.mOnlyUnknownsCheckBox.Text = "Only Unknowns";
+            this.mOnlyUnknownsCheckBox.UseVisualStyleBackColor = true;
+            this.mOnlyUnknownsCheckBox.CheckedChanged += new System.EventHandler(this.mOnlyUnknownsCheckBox_CheckedChanged);
+            // 
             // FaceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(805, 509);
+            this.Controls.Add(this.mOnlyUnknownsCheckBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.mShowNumbersCheckbox);
             this.Controls.Add(this.mLastNameTextBox);
@@ -169,5 +183,6 @@
         private System.Windows.Forms.ToolStripMenuItem runSpecialActionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem classifyMode;
         private System.Windows.Forms.ToolStripMenuItem showUnclassifiedPhotosToolStripMenuItem;
+        private System.Windows.Forms.CheckBox mOnlyUnknownsCheckBox;
     }
 }
